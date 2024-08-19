@@ -3,6 +3,9 @@ import LoginComponent from '../../components/Login/Login';
 
 
 const mode = "login";
+
+
+
 const LoginPage = () => (
     <div className={`app app--is-${mode}`}>
         <LoginComponent
