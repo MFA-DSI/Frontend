@@ -1,17 +1,28 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { Route, Routes } from 'react-router-dom'
 import './App.css'
 
+import { AuthWrapper, PrivateWrapper } from './components/Auth'
+import Home from './pages/HomePage'
+import LoginPage from './pages/LoginPage'
+
+
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <>
-      <p>
-        Hello world
-      </p>
-    </>
+    <Routes>
+        <Route path='/' element={<AuthWrapper/>}>
+            <Route index Component={Home}/>
+        </Route>
+        <Route path='/login'
+            element={
+              <PrivateWrapper>
+                   <LoginPage/>
+              </PrivateWrapper>
+            }
+        >
+        </Route>
+
+    </Routes>
   )
 }
 
