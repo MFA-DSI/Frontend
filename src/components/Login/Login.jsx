@@ -1,7 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import { authProvider } from '../../providers/auth-provider';
 import { userProvider } from '../../providers/user-provider';
 import './assets/index.scss';
 import React, { useState } from 'react';
+import { resetValues } from '../../lib/reset';
 
 
 const {login} = authProvider;
@@ -10,6 +12,7 @@ const  {save} = userProvider;
 const LoginComponent = ({ mode: initialMode }) => {
     const [mode, setMode] = useState(initialMode);
     const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
     const toggleMode = () => {
         setMode(prevMode => prevMode === 'login' ? 'signup' : 'login');
@@ -28,6 +31,7 @@ const LoginComponent = ({ mode: initialMode }) => {
             if (mode === 'login') {
                 await login({ email : data.email, password: data.password });
                 console.log("Logged in successfully");
+                navigate("/")
             } else {
                 await save({
                     fullname: data.fullname,
@@ -35,6 +39,8 @@ const LoginComponent = ({ mode: initialMode }) => {
                     password: data.createpassword,
                 });
                 console.log("Signed up successfully");
+                navigate("/")
+                resetValues([data.email,data.fullname,data.createpassword])
                 setMode('login'); // Switch back to login after successful signup
             }
         } catch (error) {
