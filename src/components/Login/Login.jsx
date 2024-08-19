@@ -12,7 +12,7 @@ const LoginComponent = ({ mode: initialMode }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const toggleMode = () => {
-        setMode(prevMode => prevMode === 'login' ? 'save' : 'login');
+        setMode(prevMode => prevMode === 'login' ? 'signup' : 'login');
     };   
 
 
@@ -26,7 +26,7 @@ const LoginComponent = ({ mode: initialMode }) => {
 
         try {
             if (mode === 'login') {
-                await login({ email : data.username, password: data.password });
+                await login({ email : data.email, password: data.password });
                 console.log("Logged in successfully");
             } else {
                 await save({
@@ -68,7 +68,7 @@ const LoginForm = ({ mode, onSubmit, isLoading }) => (
     <form onSubmit={onSubmit}>
         <div className="form-block__input-wrapper">
             <div className="form-group form-group--login">
-                <Input type="text" id="username" label="User Name" name="username" disabled={mode === 'signup'} />
+                <Input type="email" id="email" label="User Name" name="email" disabled={mode === 'signup'} />
                 <Input type="password" id="password" label="Password" name="password" disabled={mode === 'signup'} />
             </div>
             <div className="form-group form-group--signup">

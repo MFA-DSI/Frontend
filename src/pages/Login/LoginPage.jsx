@@ -1,17 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import LoginComponent from '../../components/Login/Login';
 
 
-const mode = "login";
 
+const LoginPage = () => {
+    const [mode, setMode] = useState('login');
 
-
-const LoginPage = () => (
-    <div className={`app app--is-${mode}`}>
-        <LoginComponent
-            mode={mode}
-            onSubmit={() => console.log('submit')}
-        />
-    </div>
-);
+    return (
+        <div className={`app app--is-${mode}`}>
+            <LoginComponent
+                mode={mode}
+            />
+        </div>
+    );
+};
 export default LoginPage;
