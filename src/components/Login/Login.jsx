@@ -26,7 +26,7 @@ const LoginComponent = ({ mode: initialMode }) => {
 
         try {
             if (mode === 'login') {
-                await login({ username: data.username, password: data.password });
+                await login({ email : data.username, password: data.password });
                 console.log("Logged in successfully");
             } else {
                 await save({
