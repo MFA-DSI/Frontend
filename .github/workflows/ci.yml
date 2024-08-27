@@ -5,13 +5,12 @@ name: CI
 
 on:
   push:
-    branches: [ "prod","preprod" ]
+    branches: ["prod", "preprod"]
   pull_request:
-    branches: [ "prod","preprod" ]
+    branches: ["prod", "preprod"]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -20,21 +19,20 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-   ## Install npm dependencies ##
-    - name: Install npm dependencies
-      run: npm ci
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      ## Install npm dependencies ##
+      - name: Install npm dependencies
+        run: npm ci
 
-    ## Build the application with vite and typescript ##
-    - name: Build app
-      run: npm run build
+      ## Build the application with vite and typescript ##
+      - name: Build app
+        run: npm run build
 
-     ## Run prettier to check code style ##
-    - name: Check style
-      run: npm run format:check
-
+      ## Run prettier to check code style ##
+      - name: Check style
+        run: npm run format:check
