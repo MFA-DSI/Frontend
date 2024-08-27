@@ -1,10 +1,9 @@
 export type AuthLogin = {
-    email: string;
-    password: string;
-  };
+  email: string;
+  password: string;
+};
 
-
-export type AuthToSignUp={
+export type AuthToSignUp = {
   id: string;
   firstname: string;
   lastname: string;
@@ -12,6 +11,5 @@ export type AuthToSignUp={
   email: string;
   password: string;
   directionId: string;
-  post: string
-}
-  
+  post: string;
+};

@@ -1,5 +1,5 @@
-export type AuthReponse {
-    token : string,
-    userId : string,
-    directionId:string
-}
+export type AuthReponse = {
+  token: string;
+  userId: string;
+  directionId: string;
+};

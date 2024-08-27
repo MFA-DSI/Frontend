@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
-import { AutoComplete, Input } from 'antd';
-import type { AutoCompleteProps } from 'antd';
+import React, {useState} from "react";
+import {AutoComplete, Input} from "antd";
+import type {AutoCompleteProps} from "antd";
 
-const getRandomInt = (max: number, min = 0) => Math.floor(Math.random() * (max - min + 1)) + min;
+const getRandomInt = (max: number, min = 0) =>
+  Math.floor(Math.random() * (max - min + 1)) + min;
 
 const searchResult = (query: string) =>
   new Array(getRandomInt(5))
-    .join('.')
-    .split('.')
+    .join(".")
+    .split(".")
     .map((_, idx) => {
       const category = `${query}${idx}`;
       return {
@@ -15,12 +16,12 @@ const searchResult = (query: string) =>
         label: (
           <div
             style={{
-              display: 'flex',
-              justifyContent: 'space-between',
+              display: "flex",
+              justifyContent: "space-between",
             }}
           >
             <span>
-              Found {query} on{' '}
+              Found {query} on{" "}
               <a
                 href={`https://s.taobao.com/search?q=${query}`}
                 target="_blank"
@@ -36,20 +37,20 @@ const searchResult = (query: string) =>
     });
 
 const SearchBar: React.FC = () => {
-  const [options, setOptions] = useState<AutoCompleteProps['options']>([]);
+  const [options, setOptions] = useState<AutoCompleteProps["options"]>([]);
 
   const handleSearch = (value: string) => {
     setOptions(value ? searchResult(value) : []);
   };
 
   const onSelect = (value: string) => {
-    console.log('onSelect', value);
+    console.log("onSelect", value);
   };
 
   return (
     <AutoComplete
       popupMatchSelectWidth={252}
-      style={{ width: 300 }}
+      style={{width: 300}}
       options={options}
       onSelect={onSelect}
       onSearch={handleSearch}

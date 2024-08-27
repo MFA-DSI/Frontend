@@ -1,4 +1,4 @@
-export type  Direction = {
-    id: string;
-    name: string;
-}
+export type Direction = {
+  id: string;
+  name: string;
+};
