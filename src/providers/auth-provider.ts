@@ -1,5 +1,6 @@
 import axios from "axios";
 import { AuthLogin } from "../types/Auth";
+import { AuthReponse } from "../types/AuthReponse";
 
 const API_URL: string = import.meta.env.VITE_API_URL;
 
@@ -9,8 +10,12 @@ export const authProvider = {
         if(response.status !== 200){
             Promise.reject(response.statusText)
         }
-        const token : string =response.data;
-        sessionStorage.setItem("token",token);
+        const token : AuthReponse =response.data;
+        console.log(token);
+        
+        sessionStorage.setItem("token", token.token)
+        sessionStorage.setItem("directionId", token.directionId)
+        sessionStorage.setItem("userId", token.userId)
         Promise.resolve();
     },
     

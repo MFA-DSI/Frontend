@@ -11,7 +11,7 @@ export type AuthToSignUp={
   username: string;
   email: string;
   password: string;
-  departements: string;
+  directionId: string;
   post: string
 }
   

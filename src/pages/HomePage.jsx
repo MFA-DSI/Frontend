@@ -84,7 +84,7 @@ const Home = () => {
             background: 'white',
           }}
         >
-          <SearchBar/>
+          <SearchBar />
          
         </Header>
         <Content

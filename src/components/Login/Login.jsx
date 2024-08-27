@@ -4,6 +4,7 @@ import { userProvider } from '../../providers/user-provider';
 import './assets/index.scss';
 import React, { useState } from 'react';
 import { resetValues } from '../../lib/reset';
+import { useDirectionsContext } from '../../providers/context/DirectionContext';
 
 
 const {login} = authProvider;
@@ -13,6 +14,9 @@ const LoginComponent = ({ mode: initialMode }) => {
     const [mode, setMode] = useState(initialMode);
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const { data , isLoading:isDirectionsLoading, isError } = useDirectionsContext();
+
+
 
     const toggleMode = () => {
         setMode(prevMode => prevMode === 'login' ? 'signup' : 'login');
@@ -32,10 +36,13 @@ const LoginComponent = ({ mode: initialMode }) => {
                 await login({ email : data.email, password: data.password });
                 console.log("Logged in successfully");
                 navigate("/")
-            } else {
+            } else {                
                 await save({
-                    fullname: data.fullname,
+                    username: data.username,
+                    firstname: data.firstname,
+                    lastname: data.lastname,
                     email: data.email,
+                    directionId: data.directionId,
                     password: data.createpassword,
                 });
                 console.log("Signed up successfully");
@@ -78,10 +85,20 @@ const LoginForm = ({ mode, onSubmit, isLoading }) => (
                 <Input type="password" id="password" label="Password" name="password" disabled={mode === 'signup'} />
             </div>
             <div className="form-group form-group--signup">
-                <Input type="text" id="fullname" label="Full Name" name="fullname" disabled={mode === 'login'} />
+                <Input type="text" id="firstname" label="firstname" name="firstname" disabled={mode === 'login'} />
+                <Input type="text" id="lastname" label="lastname" name="lastname" disabled={mode === 'login'} />
+                <Input type="text" id="username" label="username" name="username" disabled={mode === 'login'} />
                 <Input type="email" id="email" label="Email" name="email" disabled={mode === 'login'} />
+                <DropdownInput
+                        id="direction"
+                        label="Direction"
+                        name="directionId"
+                        options={useDirectionsContext().data}
+                        disabled={useDirectionsContext().isDirectionsLoading || mode === 'login'}
+                    />
                 <Input type="password" id="createpassword" label="Password" name="createpassword" disabled={mode === 'login'} />
                 <Input type="password" id="repeatpassword" label="Repeat Password" name="repeatpassword" disabled={mode === 'login'} />
+               
             </div>
         </div>
         <button className="button button--primary full-width" type="submit" disabled={isLoading}>
@@ -95,6 +112,15 @@ const Input = ({ id, type, label, name, disabled }) => (
 );
 
 
-
+const DropdownInput = ({ id, label, name, options, disabled }) => (
+    <select className="form-group__input" id={id} name={name} disabled={disabled}>
+        <option value="">{label}</option>
+        {options && options.map(option => (
+            <option key={option.id} value={option.id}>
+                {option.name}
+            </option>
+        ))}
+    </select>
+);
 
 export default LoginComponent;

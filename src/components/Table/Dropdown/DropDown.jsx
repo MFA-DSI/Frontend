@@ -18,16 +18,16 @@ const items = [
     key: '3',
   },
 ];
-const DropdownComponent = () => (
+const DropdownComponent = ({defaultValue,elements}) => (
   <Dropdown
     menu={{
-      items,
+     elements
     }}
     trigger={['click']}
   >
     <a onClick={(e) => e.preventDefault()}>
       <Space>
-        Click me
+        {defaultValue}
         <DownOutlined />
       </Space>
     </a>
