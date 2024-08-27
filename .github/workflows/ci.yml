@@ -33,6 +33,6 @@ jobs:
       - name: Build app
         run: npm run build
 
-        ## Run prettier to check code style ##
+      ## Run prettier to check code style ##
       - name: Check style
         run: npm run format:check
