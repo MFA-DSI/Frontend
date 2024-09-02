@@ -8,9 +8,9 @@ import {
 import {AiOutlineBarChart} from "react-icons/ai";
 import {RiNotification3Fill} from "react-icons/ri";
 import {Layout, Menu, theme, Avatar} from "antd";
-import "./assets/index.css";
-import SearchBar from "../components/SearchBar/SearchBar";
-import TableComponent from "../components/Table/Table";
+import "../assets/index.css";
+import SearchBar from "../../components/SearchBar/SearchBar";
+import TableComponent from "../../components/Table/Table";
 const {Header, Content, Footer, Sider} = Layout;
 const siderStyle = {
   overflow: "auto",
@@ -76,6 +76,7 @@ const Home = () => {
           items={items}
         />
       </Sider>
+
       <Layout
         style={{
           marginInlineStart: 200,

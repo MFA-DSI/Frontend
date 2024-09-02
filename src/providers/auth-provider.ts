@@ -11,11 +11,11 @@ export const authProvider = {
       Promise.reject(response.statusText);
     }
     const token: AuthReponse = response.data;
-    console.log(token);
 
-    sessionStorage.setItem("token", token.token);
+    sessionStorage.setItem("token", token.token.accessToken);
     sessionStorage.setItem("directionId", token.directionId);
     sessionStorage.setItem("userId", token.userId);
+
     Promise.resolve();
   },
 
