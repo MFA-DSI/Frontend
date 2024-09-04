@@ -1,8 +1,7 @@
 import React, {useState} from "react";
 import LoginComponent from "../../components/Login/Login";
 import {DirectionProvider} from "../../providers/context/DirectionContext";
-import { ToastContainer } from "react-toastify";
-
+import {ToastContainer} from "react-toastify";
 
 const mode = "login";
 const LoginPage = () => {

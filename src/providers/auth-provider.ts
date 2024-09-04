@@ -1,22 +1,21 @@
 import axios from "axios";
 import {AuthLogin} from "../types/Auth";
 import {AuthReponse} from "../types/AuthReponse";
-import { toast } from 'react-toastify';
+import {toast} from "react-toastify";
 import environment from "../conf/environment";
-import { errorTranslations } from "./utils/translator/translator";
+import {errorTranslations} from "./utils/translator/translator";
 
 const API_URL: string = import.meta.env.VITE_API_URL;
 
-
- // Assurez-vous de bien importer votre environnement
+// Assurez-vous de bien importer votre environnement
 export const authProvider = {
   login: async (auth: AuthLogin): Promise<void> => {
     try {
       const response = await toast.promise(
         axios.post(`${environment.apiBaseUrl}/users/login`, auth),
         {
-          pending: 'Connexion en cours...',
-          success: 'Connexion réussie 👌',
+          pending: "Connexion en cours...",
+          success: "Connexion réussie 👌",
         }
       );
 
@@ -25,16 +24,14 @@ export const authProvider = {
       }
 
       const token: AuthReponse = response.data;
-      sessionStorage.setItem('token', token.token.accessToken);
-      sessionStorage.setItem('directionId', token.directionId);
-      sessionStorage.setItem('userId', token.userId);
-
-      
+      sessionStorage.setItem("token", token.token.accessToken);
+      sessionStorage.setItem("directionId", token.directionId);
+      sessionStorage.setItem("userId", token.userId);
 
       return Promise.resolve();
     } catch (error) {
       const errorCode = error.response.data.message;
-      const language = 'mg'; 
+      const language = "mg";
 
       const translatedError = errorTranslations[language][errorCode];
 

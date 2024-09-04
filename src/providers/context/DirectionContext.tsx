@@ -2,7 +2,6 @@
 import React, {createContext, useContext, ReactNode, FC} from "react";
 import {useDirections} from "../../hooks/useDirection";
 
-
 interface DirectionContextProps {
   data: unknown;
   isLoading: boolean;

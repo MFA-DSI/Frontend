@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-const Input = ({ id, type, label, name, disabled }) => (
+const Input = ({id, type, label, name, disabled}) => (
   <input
     className="form-group__input"
     type={type}

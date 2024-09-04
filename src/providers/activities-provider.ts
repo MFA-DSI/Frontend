@@ -11,18 +11,23 @@ export const fetchActivities = async (filterParams: {
   };
   userDirectionId?: string; // Add the user's direction ID if fetching for a specific department
 }) => {
-  const { filterPeriod, filterDirection, dateRange, userDirectionId } = filterParams;
-  let url = '/activities/all';
+  const {filterPeriod, filterDirection, dateRange, userDirectionId} =
+    filterParams;
+  let url = "/activities/all";
   const params: any = {};
 
-  if (filterPeriod === 'weekly' && dateRange.startDate) {
+  if (filterPeriod === "weekly" && dateRange.startDate) {
     url = `/activities/weekly`;
     params.weekStartDate = dateRange.startDate;
-  } else if (filterPeriod === 'monthly' && dateRange.year && dateRange.month) {
+  } else if (filterPeriod === "monthly" && dateRange.year && dateRange.month) {
     url = `/activities/monthly`;
     params.year = dateRange.year;
     params.month = dateRange.month;
-  } else if (filterPeriod === 'quarter' && dateRange.year && dateRange.quarter) {
+  } else if (
+    filterPeriod === "quarter" &&
+    dateRange.year &&
+    dateRange.quarter
+  ) {
     url = `/activities/quarter`;
     params.year = dateRange.year;
     params.quarter = dateRange.quarter;
@@ -36,6 +41,6 @@ export const fetchActivities = async (filterParams: {
     params.directionId = userDirectionId;
   }
 
-  const response = await axiosInstance.get(url, { params });
+  const response = await axiosInstance.get(url, {params});
   return response.data;
 };
