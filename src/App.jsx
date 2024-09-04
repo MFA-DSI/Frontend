@@ -1,7 +1,8 @@
 import {Route, Routes} from "react-router-dom";
 import {AuthWrapper, PrivateWrapper} from "./components/Auth";
-import Home from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
+import Home from "./pages/Home/HomePage";
+import LoginPage from "./pages/Login/LoginPage";
+
 import "./App.css";
 
 function App() {

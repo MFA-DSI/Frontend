@@ -1,6 +1,6 @@
 import {useNavigate} from "react-router-dom";
 import {authProvider} from "../../providers/auth-provider";
-import {userProvider} from "../../providers/user-provider";
+import userProvider from "../../providers/user-provider";
 import "./assets/index.scss";
 import React, {useState} from "react";
 import {resetValues} from "../../lib/reset";
@@ -44,7 +44,7 @@ const LoginComponent = ({mode: initialMode}) => {
           directionId: data.directionId,
           password: data.createpassword,
         });
-        console.log("Signed up successfully");
+
         navigate("/");
         resetValues([data.email, data.fullname, data.createpassword]);
         setMode("login"); // Switch back to login after successful signup

@@ -5,7 +5,7 @@ import {AuthReponse} from "../types/AuthReponse";
 
 const API_URL: string = import.meta.env.VITE_API_URL;
 
-export const userProvider = {
+export default {
   save: async (user: User): Promise<void> => {
     try {
       const response = await axios.post(`${API_URL}/users/signup`, user);
@@ -13,7 +13,7 @@ export const userProvider = {
         Promise.reject(response.statusText);
       }
       const token: AuthReponse = response.data;
-      sessionStorage.setItem("token", token.token);
+      sessionStorage.setItem("token", token.token.accessToken);
       sessionStorage.setItem("directionId", token.directionId);
       sessionStorage.setItem("userId", token.userId);
       Promise.resolve();
