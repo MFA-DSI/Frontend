@@ -1,6 +1,6 @@
 import {useNavigate} from "react-router-dom";
 import {authProvider} from "../../providers/auth-provider";
-import {userProvider} from "../../providers/user-provider";
+import userProvider from "../../providers/user-provider";
 import "./assets/index.scss";
 import React, {useState} from "react";
 import {resetValues} from "../../lib/reset";
@@ -33,8 +33,10 @@ const LoginComponent = ({mode: initialMode}) => {
     try {
       if (mode === "login") {
         await login({email: data.email, password: data.password});
-        console.log("Logged in successfully");
-        navigate("/");
+
+        setTimeout(() => {
+          navigate("/");
+        }, 500);
       } else {
         await save({
           username: data.username,
@@ -44,7 +46,7 @@ const LoginComponent = ({mode: initialMode}) => {
           directionId: data.directionId,
           password: data.createpassword,
         });
-        console.log("Signed up successfully");
+
         navigate("/");
         resetValues([data.email, data.fullname, data.createpassword]);
         setMode("login"); // Switch back to login after successful signup
@@ -57,25 +59,27 @@ const LoginComponent = ({mode: initialMode}) => {
   };
 
   return (
-    <div>
-      <div
-        className={`form-block-wrapper form-block-wrapper--is-${mode}`}
-      ></div>
-      <section className={`form-block form-block--is-${mode}`}>
-        <header className="form-block__header">
-          <h1>{mode === "login" ? "Welcome back!" : "Sign up"}</h1>
-          <div className="form-block__toggle-block">
-            <span>
-              {mode === "login" ? "Don't" : "Already"} have an account? Click
-              here &#8594;
-            </span>
-            <input id="form-toggler" type="checkbox" onClick={toggleMode} />
-            <label htmlFor="form-toggler"></label>
-          </div>
-        </header>
-        <LoginForm mode={mode} onSubmit={onSubmit} />
-      </section>
-    </div>
+    <>
+      <div>
+        <div
+          className={`form-block-wrapper form-block-wrapper--is-${mode}`}
+        ></div>
+        <section className={`form-block form-block--is-${mode}`}>
+          <header className="form-block__header">
+            <h1>{mode === "login" ? "Welcome back!" : "Sign up"}</h1>
+            <div className="form-block__toggle-block">
+              <span>
+                {mode === "login" ? "Don't" : "Already"} have an account? Click
+                here &#8594;
+              </span>
+              <input id="form-toggler" type="checkbox" onClick={toggleMode} />
+              <label htmlFor="form-toggler"></label>
+            </div>
+          </header>
+          <LoginForm mode={mode} onSubmit={onSubmit} />
+        </section>
+      </div>
+    </>
   );
 };
 

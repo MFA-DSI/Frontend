@@ -67,6 +67,7 @@ const TableComponent = () => {
         <DropdownComponent></DropdownComponent>
       </div>
 
+      <p></p>
       <Space
         align="center"
         style={{

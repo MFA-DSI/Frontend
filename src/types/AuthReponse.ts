@@ -1,5 +1,9 @@
 export type AuthReponse = {
-  token: string;
+  token: Jwttoken;
   userId: string;
   directionId: string;
+};
+
+type Jwttoken = {
+  accessToken: string;
 };
