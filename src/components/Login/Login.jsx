@@ -33,8 +33,10 @@ const LoginComponent = ({mode: initialMode}) => {
     try {
       if (mode === "login") {
         await login({email: data.email, password: data.password});
-        console.log("Logged in successfully");
-        navigate("/");
+        
+        setTimeout(() => {
+          navigate("/");
+        }, 500);
       } else {
         await save({
           username: data.username,
@@ -45,9 +47,10 @@ const LoginComponent = ({mode: initialMode}) => {
           password: data.createpassword,
         });
 
-        navigate("/");
-        resetValues([data.email, data.fullname, data.createpassword]);
-        setMode("login"); // Switch back to login after successful signup
+       
+          navigate("/");
+          resetValues([data.email, data.fullname, data.createpassword]);
+          setMode("login"); // Switch back to login after successful signup
       }
     } catch (error) {
       console.error("Authentication failed:", error);
@@ -57,7 +60,9 @@ const LoginComponent = ({mode: initialMode}) => {
   };
 
   return (
-    <div>
+    <>
+   
+      <div>
       <div
         className={`form-block-wrapper form-block-wrapper--is-${mode}`}
       ></div>
@@ -76,6 +81,8 @@ const LoginComponent = ({mode: initialMode}) => {
         <LoginForm mode={mode} onSubmit={onSubmit} />
       </section>
     </div>
+    </>
+    
   );
 };
 
