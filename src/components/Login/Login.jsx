@@ -1,13 +1,14 @@
 import {useNavigate} from "react-router-dom";
 import {authProvider} from "../../providers/auth-provider";
-import userProvider from "../../providers/user-provider";
 import "./assets/index.scss";
 import React, {useState} from "react";
 import {resetValues} from "../../lib/reset";
 import {useDirectionsContext} from "../../providers/context/DirectionContext";
+import { DropdownInput } from "../Input/DropDown";
+import { signInProvider } from "../../providers/user-provider";
 
 const {login} = authProvider;
-const {save} = userProvider;
+const {save} = signInProvider;
 
 const LoginComponent = ({mode: initialMode}) => {
   const [mode, setMode] = useState(initialMode);
@@ -177,16 +178,6 @@ const Input = ({id, type, label, name, disabled}) => (
   />
 );
 
-const DropdownInput = ({id, label, name, options, disabled}) => (
-  <select className="form-group__input" id={id} name={name} disabled={disabled}>
-    <option value="">{label}</option>
-    {options &&
-      options.map((option) => (
-        <option key={option.id} value={option.id}>
-          {option.name}
-        </option>
-      ))}
-  </select>
-);
+
 
 export default LoginComponent;
