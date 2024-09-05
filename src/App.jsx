@@ -3,15 +3,16 @@ import React, { lazy, Suspense } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { AuthWrapper } from './components/Auth/auth-wrapper';
 import { PrivateWrapper } from './components/Auth/private-wrapper';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import './App.css'; // Import your CSS for animations
+import './App.css'; 
 import { Skeleton} from 'antd';
 import HomePage from './pages/Home/HomePage';
 import MyDirection from './pages/MyDirection/MyDirection';
 import Notification from './pages/Notification/Notification';
-import Profile from './pages/UserInformation/UserInformation';
+import Profile from './pages/Profile/Profile';
 import LoginPage from './pages/Login/LoginPage';
 const queryClient = new QueryClient();
 

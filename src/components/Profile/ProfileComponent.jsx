@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Typography } from 'antd';
 
-const Profile = () => {
+export const ProfileComponent = () => {
     const [userInfo, setUserInfo] = useState({
         username: 'Utilisateur',
         email: 'user@example.com',
@@ -45,5 +45,3 @@ const Profile = () => {
         </div>
     );
 };
-
-export default Profile;
