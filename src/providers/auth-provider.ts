@@ -4,8 +4,7 @@ import {AuthReponse} from "../types/AuthReponse";
 import {toast} from "react-toastify";
 import environment from "../conf/environment";
 import {errorTranslations} from "./utils/translator/translator";
-import { useAuthStore } from "../hooks";
-
+import {useAuthStore} from "../hooks";
 
 export const authProvider = {
   login: async (auth: AuthLogin): Promise<void> => {
@@ -32,7 +31,7 @@ export const authProvider = {
         userId: token.userId,
         token: token.token.accessToken,
       });
-      
+
       return Promise.resolve();
     } catch (error) {
       const errorCode = error.response.data.message;

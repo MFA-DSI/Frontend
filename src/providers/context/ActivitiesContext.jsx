@@ -1,6 +1,6 @@
 // ActivityContext.js
-import React, { createContext, useContext, useState } from "react";
-import { useQuery } from "react-query";
+import React, {createContext, useContext, useState} from "react";
+import {useQuery} from "react-query";
 
 // Sample activities data
 const activityData = [
@@ -48,7 +48,8 @@ const activityData = [
     observation: "Review all financial statements.",
     type: "quarterly",
     direction: "Finance",
-  },{
+  },
+  {
     id: 6,
     mission: "Mission 4",
     activity: "Quarterly financial review",
@@ -56,7 +57,8 @@ const activityData = [
     observation: "Review all financial statements.",
     type: "quarterly",
     direction: "Finance",
-  },{
+  },
+  {
     id: 7,
     mission: "Mission 4",
     activity: "Quarterly financial review",
@@ -64,7 +66,7 @@ const activityData = [
     observation: "Review all financial statements.",
     type: "quarterly",
     direction: "Finance",
-  }
+  },
 ];
 
 // Function to simulate fetching activities from an API
@@ -78,22 +80,30 @@ const fetchActivities = async () => {
 
 const ActivityContext = createContext();
 
-export const ActivityProvider = ({ children }) => {
-  const { data: activities, isLoading } = useQuery("activities", fetchActivities);
+export const ActivityProvider = ({children}) => {
+  const {data: activities, isLoading} = useQuery("activities", fetchActivities);
   const [filterType, setFilterType] = useState("all");
   const [directionFilter, setDirectionFilter] = useState("all");
 
   const filteredActivities = () => {
     if (!activities) return [];
-    return activities.filter(activity => {
+    return activities.filter((activity) => {
       const typeMatch = filterType === "all" || activity.type === filterType;
-      const directionMatch = directionFilter === "all" || activity.direction === directionFilter;
+      const directionMatch =
+        directionFilter === "all" || activity.direction === directionFilter;
       return typeMatch && directionMatch;
     });
   };
 
   return (
-    <ActivityContext.Provider value={{ filteredActivities: filteredActivities(), isLoading, setFilterType, setDirectionFilter }}>
+    <ActivityContext.Provider
+      value={{
+        filteredActivities: filteredActivities(),
+        isLoading,
+        setFilterType,
+        setDirectionFilter,
+      }}
+    >
       {children}
     </ActivityContext.Provider>
   );

@@ -1,8 +1,8 @@
 // ModalComponent.js
 import React from "react";
-import { Modal } from "antd";
+import {Modal} from "antd";
 
-const ModalComponent = ({ visible, onCancel, activity }) => {
+const ModalComponent = ({visible, onCancel, activity}) => {
   if (!activity) return null;
 
   return (
@@ -12,10 +12,19 @@ const ModalComponent = ({ visible, onCancel, activity }) => {
       onCancel={onCancel}
       footer={null}
     >
-      <p><strong>Misson:</strong> {activity.mission}</p>
-      <p><strong>Activité:</strong> {activity.activity}</p>
-      <p><strong>Date Limite:</strong> {new Date(activity.dueDatetime).toLocaleString()}</p>
-      <p><strong>Observations:</strong> {activity.observation}</p>
+      <p>
+        <strong>Misson:</strong> {activity.mission}
+      </p>
+      <p>
+        <strong>Activité:</strong> {activity.activity}
+      </p>
+      <p>
+        <strong>Date Limite:</strong>{" "}
+        {new Date(activity.dueDatetime).toLocaleString()}
+      </p>
+      <p>
+        <strong>Observations:</strong> {activity.observation}
+      </p>
       {/* Add more detailed information as needed */}
     </Modal>
   );

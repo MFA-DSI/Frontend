@@ -1,13 +1,14 @@
 // TableComponent.js
-import React, { useState } from "react";
-import { Table, Select, Spin, Button } from "antd";
-import { useActivityContext } from "../../providers/context/ActivitiesContext";
+import React, {useState} from "react";
+import {Table, Select, Spin, Button} from "antd";
+import {useActivityContext} from "../../providers/context/ActivitiesContext";
 import ModalComponent from "../Modal/Modal"; // Import the new modal component
 
-const { Option } = Select;
+const {Option} = Select;
 
 const TableComponent = () => {
-  const { filteredActivities, isLoading, setFilterType, setDirectionFilter } = useActivityContext();
+  const {filteredActivities, isLoading, setFilterType, setDirectionFilter} =
+    useActivityContext();
   const [dateFilter, setDateFilter] = useState({
     month: null,
     week: null,
@@ -36,7 +37,7 @@ const TableComponent = () => {
     const endDate = lastDay.getDate();
 
     for (let i = startDate; i <= endDate; i += 7) {
-      weeks.push(`Semaine du ${(new Date(year, month, i)).toLocaleDateString()}`);
+      weeks.push(`Semaine du ${new Date(year, month, i).toLocaleDateString()}`);
     }
     return weeks;
   };
@@ -77,18 +78,39 @@ const TableComponent = () => {
 
   return (
     <>
-      <div style={{ padding: '20px', marginBottom: '16px', backgroundColor: '#f9f9f9', borderRadius: '4px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h2 style={{ margin: 0 }}>Liste des Activités</h2>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Select defaultValue="all" style={{ width: 120, marginRight: '8px' }} onChange={setFilterType}>
+      <div
+        style={{
+          padding: "20px",
+          marginBottom: "16px",
+          backgroundColor: "#f9f9f9",
+          borderRadius: "4px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <h2 style={{margin: 0}}>Liste des Activités</h2>
+          <div style={{display: "flex", alignItems: "center"}}>
+            <Select
+              defaultValue="all"
+              style={{width: 120, marginRight: "8px"}}
+              onChange={setFilterType}
+            >
               <Option value="all">Toutes les Activités</Option>
               <Option value="weekly">Hebdomadaire</Option>
               <Option value="monthly">Mensuel</Option>
               <Option value="quarterly">Trimestriel</Option>
             </Select>
 
-            <Select defaultValue="all" style={{ width: 120, marginRight: '8px' }} onChange={setDirectionFilter}>
+            <Select
+              defaultValue="all"
+              style={{width: 120, marginRight: "8px"}}
+              onChange={setDirectionFilter}
+            >
               <Option value="all">Toutes les Directions</Option>
               <Option value="Sales">Sales</Option>
               <Option value="HR">HR</Option>
@@ -96,8 +118,6 @@ const TableComponent = () => {
               <Option value="Finance">Finance</Option>
             </Select>
 
-            
-            
             {/* Month and Week Filters */}
             {filteredActivities.length > 0 && (
               <>
@@ -105,8 +125,10 @@ const TableComponent = () => {
                   <>
                     <Select
                       placeholder="Mois"
-                      style={{ width: 100, marginRight: '8px' }}
-                      onChange={(value) => setDateFilter({ ...dateFilter, month: value })}
+                      style={{width: 100, marginRight: "8px"}}
+                      onChange={(value) =>
+                        setDateFilter({...dateFilter, month: value})
+                      }
                     >
                       <Option value={0}>Janvier</Option>
                       <Option value={1}>Février</Option>
@@ -124,14 +146,20 @@ const TableComponent = () => {
 
                     <Select
                       placeholder="Semaine"
-                      style={{ width: 200 }}
-                      onChange={(value) => setDateFilter({ ...dateFilter, week: value })}
+                      style={{width: 200}}
+                      onChange={(value) =>
+                        setDateFilter({...dateFilter, week: value})
+                      }
                     >
-                      {dateFilter.month !== null && (
-                        getWeeksInMonth(dateFilter.month, new Date().getFullYear()).map((week, index) => (
-                          <Option key={index} value={week}>{week}</Option>
-                        ))
-                      )}
+                      {dateFilter.month !== null &&
+                        getWeeksInMonth(
+                          dateFilter.month,
+                          new Date().getFullYear()
+                        ).map((week, index) => (
+                          <Option key={index} value={week}>
+                            {week}
+                          </Option>
+                        ))}
                     </Select>
                   </>
                 )}
@@ -140,8 +168,10 @@ const TableComponent = () => {
                   <>
                     <Select
                       placeholder="Mois"
-                      style={{ width: 100, marginRight: '8px' }}
-                      onChange={(value) => setDateFilter({ ...dateFilter, month: value })}
+                      style={{width: 100, marginRight: "8px"}}
+                      onChange={(value) =>
+                        setDateFilter({...dateFilter, month: value})
+                      }
                     >
                       <Option value={0}>Janvier</Option>
                       <Option value={1}>Février</Option>
@@ -158,8 +188,10 @@ const TableComponent = () => {
                     </Select>
                     <Select
                       placeholder="Année"
-                      style={{ width: 100 }}
-                      onChange={(value) => setDateFilter({ ...dateFilter, year: value })}
+                      style={{width: 100}}
+                      onChange={(value) =>
+                        setDateFilter({...dateFilter, year: value})
+                      }
                     >
                       <Option value="2023">2023</Option>
                       <Option value="2024">2024</Option>
@@ -172,8 +204,10 @@ const TableComponent = () => {
                   <>
                     <Select
                       placeholder="Trimestre"
-                      style={{ width: 100, marginRight: '8px' }}
-                      onChange={(value) => setDateFilter({ ...dateFilter, quarter: value })}
+                      style={{width: 100, marginRight: "8px"}}
+                      onChange={(value) =>
+                        setDateFilter({...dateFilter, quarter: value})
+                      }
                     >
                       <Option value="Q1">Q1</Option>
                       <Option value="Q2">Q2</Option>
@@ -182,8 +216,10 @@ const TableComponent = () => {
                     </Select>
                     <Select
                       placeholder="Année"
-                      style={{ width: 100 }}
-                      onChange={(value) => setDateFilter({ ...dateFilter, year: value })}
+                      style={{width: 100}}
+                      onChange={(value) =>
+                        setDateFilter({...dateFilter, year: value})
+                      }
                     >
                       <Option value="2023">2023</Option>
                       <Option value="2024">2024</Option>
@@ -198,16 +234,22 @@ const TableComponent = () => {
       </div>
 
       {/* Table with fixed height and scrollable body */}
-      <div style={{ height: 'calc(100vh - 200px)', overflow: 'auto', paddingRight:'9px'}}>
+      <div
+        style={{
+          height: "calc(100vh - 200px)",
+          overflow: "auto",
+          paddingRight: "9px",
+        }}
+      >
         <Table
           columns={columns}
           dataSource={filteredActivities}
           pagination={{
             pageSize,
             showSizeChanger: true,
-            pageSizeOptions: ['10', '20', '50', '100'],
+            pageSizeOptions: ["10", "20", "50", "100"],
           }}
-          scroll={{ y: 290 }} // Scrollable height for the table body
+          scroll={{y: 290}} // Scrollable height for the table body
         />
       </div>
 

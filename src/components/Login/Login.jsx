@@ -4,8 +4,8 @@ import "./assets/index.scss";
 import React, {useState} from "react";
 import {resetValues} from "../../lib/reset";
 import {useDirectionsContext} from "../../providers/context/DirectionContext";
-import { DropdownInput } from "../Input/DropDown";
-import { signInProvider } from "../../providers/user-provider";
+import {DropdownInput} from "../Input/DropDown";
+import {signInProvider} from "../../providers/user-provider";
 
 const {login} = authProvider;
 const {save} = signInProvider;
@@ -177,7 +177,5 @@ const Input = ({id, type, label, name, disabled}) => (
     disabled={disabled}
   />
 );
-
-
 
 export default LoginComponent;
