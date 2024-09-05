@@ -1,17 +1,17 @@
 // MainLayout.js
-import React from "react";
+import React, { Suspense } from "react";
 import {
   BarChartOutlined,
   CloudOutlined,
   UserOutlined,
-  BellOutlined,
 } from "@ant-design/icons";
 import { RiNotification3Fill } from "react-icons/ri";
-import { Layout, Menu, theme } from "antd";
+import { Layout, Menu, theme, Skeleton } from "antd";
+import { Link, useLocation } from 'react-router-dom';
 import SearchBar from "../../components/SearchBar/SearchBar";
 import { ActivityProvider } from "../../providers/context/ActivitiesContext";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Sider } = Layout;
 
 const siderStyle = {
   overflow: "auto",
@@ -30,30 +30,28 @@ const MainLayout = ({ children }) => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
+  const location = useLocation();
+
   const items = [
     {
-      key: "1",
+      key: "/",
       icon: React.createElement(BarChartOutlined),
-      label: "Toutes les départements",
-      className: "side__text__first",
+      label: <Link to="/">Toutes les départements</Link>,
     },
     {
-      key: "2",
+      key: "/myDirection",
       icon: React.createElement(CloudOutlined),
-      label: "Mon département",
-      className: "side__text",
+      label: <Link to="/myDirection">Ma direction</Link>,
     },
     {
-      key: "3",
+      key: "/notifications",
       icon: React.createElement(RiNotification3Fill),
-      label: "Notification(s)",
-      className: "side__text",
+      label: <Link to="/notifications">Notification(s)</Link>,
     },
     {
-      key: "4",
+      key: "/profile",
       icon: React.createElement(UserOutlined),
-      label: "Mon profil",
-      className: "side__text",
+      label: <Link to="/profile">Mon profil</Link>,
     },
   ];
 
@@ -68,7 +66,7 @@ const MainLayout = ({ children }) => {
             style={{ maxWidth: "100%", maxHeight: "90px" }}
           />
         </div>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={["4"]} items={items} />
+        <Menu theme="dark" mode="inline" selectedKeys={[location.pathname]} items={items} />
       </Sider>
 
       <Layout style={{ marginInlineStart: 200 }}>
@@ -78,7 +76,9 @@ const MainLayout = ({ children }) => {
         <Content style={{ margin: "24px", overflow: "initial" }}>
           <div style={{ textAlign: "center", background: colorBgContainer, borderRadius: borderRadiusLG }}>
             <ActivityProvider>
-              {children}
+              <Suspense fallback={<Skeleton active />}>
+                {children}
+              </Suspense>
             </ActivityProvider>
           </div>
         </Content>
