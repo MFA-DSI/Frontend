@@ -93,8 +93,8 @@ const TableComponent = () => {
             alignItems: "center",
           }}
         >
-          <h2 style={{margin: 0}}>Liste des Activités</h2>
-          <div style={{display: "flex", alignItems: "center"}}>
+          <h2 style={{marginTop: 50}}>Liste des Activités</h2>
+          <div style={{display: "flex", alignItems: "center",marginTop: 50}}>
             <Select
               defaultValue="all"
               style={{width: 120, marginRight: "8px"}}
