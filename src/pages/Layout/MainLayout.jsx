@@ -1,13 +1,13 @@
 // MainLayout.js
-import React, { Suspense } from "react";
-import { BarChartOutlined, CloudOutlined, UserOutlined } from "@ant-design/icons";
-import { RiNotification3Fill } from "react-icons/ri";
-import { Layout, Menu, theme, Skeleton } from "antd";
-import { Link, useLocation } from "react-router-dom";
+import React, {Suspense} from "react";
+import {BarChartOutlined, CloudOutlined, UserOutlined} from "@ant-design/icons";
+import {RiNotification3Fill} from "react-icons/ri";
+import {Layout, Menu, theme, Skeleton} from "antd";
+import {Link, useLocation} from "react-router-dom";
 import SearchBar from "../../components/SearchBar/SearchBar";
-import { ActivityProvider } from "../../providers/context/ActivitiesContext";
+import {ActivityProvider} from "../../providers/context/ActivitiesContext";
 
-const { Header, Content, Sider } = Layout;
+const {Header, Content, Sider} = Layout;
 
 const siderStyle = {
   overflow: "auto",
@@ -21,9 +21,9 @@ const siderStyle = {
   scrollbarColor: "unset",
 };
 
-const MainLayout = ({ children }) => {
+const MainLayout = ({children}) => {
   const {
-    token: { colorBgContainer, borderRadiusLG },
+    token: {colorBgContainer, borderRadiusLG},
   } = theme.useToken();
 
   const location = useLocation();
@@ -66,11 +66,13 @@ const MainLayout = ({ children }) => {
     <Layout hasSider>
       <Sider style={siderStyle}>
         <div className="demo-logo-vertical" />
-        <div style={{ marginBottom: "20px", textAlign: "center", marginTop: "40px" }}>
+        <div
+          style={{marginBottom: "20px", textAlign: "center", marginTop: "40px"}}
+        >
           <img
             src="src/assets/logo.jpg"
             alt="Logo"
-            style={{ maxWidth: "100%", maxHeight: "90px" }}
+            style={{maxWidth: "100%", maxHeight: "90px"}}
           />
         </div>
         <Menu
@@ -81,25 +83,24 @@ const MainLayout = ({ children }) => {
         />
       </Sider>
 
-      <Layout style={{ marginInlineStart: 200 }}>
+      <Layout style={{marginInlineStart: 200}}>
         <Header
           style={{
             padding: 0,
             background: "white",
             position: "fixed",
-            width: "100%", 
+            width: "100%",
             zIndex: 1, // Ensure it stays above content
             display: "flex",
             justifyContent: "space-between", // Space between search bar and profile dropdown
             alignItems: "center", // Center vertically
           }}
         >
-          <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+          <div style={{flex: 1, display: "flex", justifyContent: "center"}}>
             <SearchBar />
           </div>
-         
         </Header>
-        <Content style={{  overflow: "initial" }}>
+        <Content style={{overflow: "initial"}}>
           <div
             style={{
               textAlign: "center",

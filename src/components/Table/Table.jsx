@@ -1,8 +1,13 @@
 // TableComponent.js
 import React, {useState} from "react";
-import {Table, Select, Spin, Button} from "antd";
+import {Table, Select, Spin, Button, Checkbox} from "antd";
 import {useActivityContext} from "../../providers/context/ActivitiesContext";
-import ModalComponent from "../Modal/Modal"; // Import the new modal component
+import {
+  FilePdfOutlined,
+  FileExcelOutlined,
+  FileWordOutlined,
+} from "@ant-design/icons";
+import ModalComponent from "../Modal/Modal";
 
 const {Option} = Select;
 
@@ -17,7 +22,8 @@ const TableComponent = () => {
   });
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [pageSize, setPageSize] = useState(50); // Default page size
+  const [pageSize, setPageSize] = useState(50);
+  const [selectedIds, setSelectedIds] = useState([]);
 
   const showModal = (activity) => {
     setSelectedActivity(activity);
@@ -29,52 +35,151 @@ const TableComponent = () => {
     setSelectedActivity(null);
   };
 
+  const handleSelectChange = (id) => {
+    setSelectedIds((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((prevId) => prevId !== id);
+      } else {
+        return [...prev, id];
+      }
+    });
+  };
+
   const getWeeksInMonth = (month, year) => {
     const weeks = [];
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
-    const startDate = firstDay.getDate() - firstDay.getDay() + 1; // Get the first Monday
+    const startDate = firstDay.getDate() - firstDay.getDay() + 1;
     const endDate = lastDay.getDate();
-
     for (let i = startDate; i <= endDate; i += 7) {
       weeks.push(`Semaine du ${new Date(year, month, i).toLocaleDateString()}`);
     }
     return weeks;
   };
 
-  const columns = [
-    {
-      title: "Activités",
-      dataIndex: "activity",
-      width: 250,
-    },
-    {
-      title: "Sous-Activités Réalisées",
-      dataIndex: "description", // Optional: if you have this field
-      width: 250,
-    },
-    {
-      title: "Sous-Activités à Réaliser",
-      dataIndex: "dueDatetime",
-      width: 150,
-    },
-    {
-      title: "Observations",
-      dataIndex: "observation",
-      width: 200,
-    },
-    {
-      title: "Voir Plus",
-      dataIndex: "id",
-      render: (id, record) => (
-        <Button onClick={() => showModal(record)} type="link">
-          Voir Plus
-        </Button>
-      ),
-    },
-  ];
+  const groupActivities = (activities) => {
+    const grouped = {};
+    activities.forEach((activity) => {
+      const mission = activity.mission;
+      if (!grouped[mission]) {
+        grouped[mission] = {mission: mission, activities: []};
+      }
+      grouped[mission].activities.push(activity);
+    });
+    return Object.values(grouped).flatMap((group) => {
+      const activitiesGrouped = {};
+      group.activities.forEach((activity) => {
+        const activityName = activity.activity;
+        if (!activitiesGrouped[activityName]) {
+          activitiesGrouped[activityName] = {...activity, tasks: []};
+        }
+        activitiesGrouped[activityName].tasks.push(activity);
+      });
+      return Object.values(activitiesGrouped).map((activity) => ({
+        ...activity,
+        tasks: activity.tasks,
+      }));
+    });
+  };
+
+  const groupedActivities = groupActivities(filteredActivities);
+
+  const getColumns = (activityType) => {
+    const columns = [
+      {
+        title: "",
+        dataIndex: "id",
+        render: (id, record) => (
+          <Checkbox
+            onChange={() => handleSelectChange(id)}
+            checked={selectedIds.includes(id)}
+          />
+        ),
+        width: 50,
+      },
+    ];
+
+    if (activityType === "weekly") {
+      columns.push(
+        {
+          title: "Activités Mensuelles Prévues",
+          dataIndex: "activity",
+          render: (text, record) =>
+            record.tasks.map((task) => (
+              <div key={task.id}>{task.activity}</div>
+            )),
+          width: 250,
+        },
+        {
+          title: "Sous-Activités Réalisées (ou Tâches) Hebdomadaires",
+          dataIndex: "description",
+          render: (text, record) =>
+            record.tasks.map((task) => (
+              <div key={task.id}>{task.description}</div>
+            )),
+          width: 250,
+        },
+        {
+          title: "Sous-Activités à Réaliser pour la Semaine Prochaine",
+          dataIndex: "dueDatetime",
+          render: (text, record) =>
+            record.tasks.map((task) => (
+              <div key={task.id}>{task.dueDatetime}</div>
+            )),
+          width: 250,
+        },
+        {
+          title: "Observations",
+          dataIndex: "observation",
+          render: (text, record) =>
+            record.tasks.map((task) => (
+              <div key={task.id}>{task.observation}</div>
+            )),
+          width: 200,
+        },
+        {
+          title: "",
+          dataIndex: "id",
+          render: (id, record) => (
+            <Button onClick={() => showModal(record)} type="link">
+              Voir Plus
+            </Button>
+          ),
+        }
+      );
+    } else if (activityType === "monthly" || activityType === "quarterly") {
+      columns.push(
+        {title: "Missions", dataIndex: "mission", width: 250},
+        {title: "Activités", dataIndex: "activity", width: 250},
+        {
+          title: "Indicateur de Performance",
+          dataIndex: "performanceIndicator",
+          width: 200,
+        },
+        {title: "Réalisation", dataIndex: "realization", width: 200},
+        {
+          title: "Voir Plus",
+          dataIndex: "id",
+          render: (id, record) => (
+            <Button onClick={() => showModal(record)} type="link">
+              Voir Plus
+            </Button>
+          ),
+        }
+      );
+    }
+
+    return columns;
+  };
+
+  const handleExport = (format) => {
+    console.log(`Exporting to ${format} for IDs: `, selectedIds);
+  };
 
   if (isLoading) return <Spin />;
+
+  const activityType =
+    groupedActivities.length > 0 ? groupedActivities[0].tasks[0].type : "all";
 
   return (
     <>
@@ -94,7 +199,7 @@ const TableComponent = () => {
           }}
         >
           <h2 style={{marginTop: 50}}>Liste des Activités</h2>
-          <div style={{display: "flex", alignItems: "center",marginTop: 50}}>
+          <div style={{display: "flex", alignItems: "center", marginTop: 50}}>
             <Select
               defaultValue="all"
               style={{width: 120, marginRight: "8px"}}
@@ -105,7 +210,6 @@ const TableComponent = () => {
               <Option value="monthly">Mensuel</Option>
               <Option value="quarterly">Trimestriel</Option>
             </Select>
-
             <Select
               defaultValue="all"
               style={{width: 120, marginRight: "8px"}}
@@ -117,7 +221,6 @@ const TableComponent = () => {
               <Option value="IT">IT</Option>
               <Option value="Finance">Finance</Option>
             </Select>
-
             {/* Month and Week Filters */}
             {filteredActivities.length > 0 && (
               <>
@@ -130,20 +233,8 @@ const TableComponent = () => {
                         setDateFilter({...dateFilter, month: value})
                       }
                     >
-                      <Option value={0}>Janvier</Option>
-                      <Option value={1}>Février</Option>
-                      <Option value={2}>Mars</Option>
-                      <Option value={3}>Avril</Option>
-                      <Option value={4}>Mai</Option>
-                      <Option value={5}>Juin</Option>
-                      <Option value={6}>Juillet</Option>
-                      <Option value={7}>Août</Option>
-                      <Option value={8}>Septembre</Option>
-                      <Option value={9}>Octobre</Option>
-                      <Option value={10}>Novembre</Option>
-                      <Option value={11}>Décembre</Option>
+                      {/* Month options */}
                     </Select>
-
                     <Select
                       placeholder="Semaine"
                       style={{width: 200}}
@@ -163,7 +254,6 @@ const TableComponent = () => {
                     </Select>
                   </>
                 )}
-
                 {filteredActivities[0].type === "monthly" && (
                   <>
                     <Select
@@ -173,18 +263,7 @@ const TableComponent = () => {
                         setDateFilter({...dateFilter, month: value})
                       }
                     >
-                      <Option value={0}>Janvier</Option>
-                      <Option value={1}>Février</Option>
-                      <Option value={2}>Mars</Option>
-                      <Option value={3}>Avril</Option>
-                      <Option value={4}>Mai</Option>
-                      <Option value={5}>Juin</Option>
-                      <Option value={6}>Juillet</Option>
-                      <Option value={7}>Août</Option>
-                      <Option value={8}>Septembre</Option>
-                      <Option value={9}>Octobre</Option>
-                      <Option value={10}>Novembre</Option>
-                      <Option value={11}>Décembre</Option>
+                      {/* Month options */}
                     </Select>
                     <Select
                       placeholder="Année"
@@ -195,11 +274,9 @@ const TableComponent = () => {
                     >
                       <Option value="2023">2023</Option>
                       <Option value="2024">2024</Option>
-                      {/* Add more years */}
                     </Select>
                   </>
                 )}
-
                 {filteredActivities[0].type === "quarterly" && (
                   <>
                     <Select
@@ -223,7 +300,6 @@ const TableComponent = () => {
                     >
                       <Option value="2023">2023</Option>
                       <Option value="2024">2024</Option>
-                      {/* Add more years */}
                     </Select>
                   </>
                 )}
@@ -231,9 +307,53 @@ const TableComponent = () => {
             )}
           </div>
         </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            marginTop: "16px",
+          }}
+        >
+          {selectedIds.length > 0 && (
+            <>
+              <span style={{marginRight: "8px", alignSelf: "center"}}>
+                Exporter en :
+              </span>
+              <Button
+                type="default"
+                icon={<FilePdfOutlined style={{color: "red"}} />}
+                style={{
+                  marginRight: "8px",
+                  backgroundColor: "white",
+                  color: "black",
+                }}
+                onClick={() => handleExport("PDF")}
+              >
+                PDF
+              </Button>
+              <Button
+                type="primary"
+                icon={<FileExcelOutlined />}
+                style={{
+                  marginRight: "8px",
+                  backgroundColor: "green",
+                  color: "white",
+                }}
+                onClick={() => handleExport("Excel")}
+              >
+                Excel
+              </Button>
+              <Button
+                type="primary"
+                icon={<FileWordOutlined />}
+                onClick={() => handleExport("DOC")}
+              >
+                DOC
+              </Button>
+            </>
+          )}
+        </div>
       </div>
-
-      {/* Table with fixed height and scrollable body */}
       <div
         style={{
           height: "calc(100vh - 200px)",
@@ -242,17 +362,17 @@ const TableComponent = () => {
         }}
       >
         <Table
-          columns={columns}
-          dataSource={filteredActivities}
+          columns={getColumns(activityType)}
+          dataSource={groupedActivities}
           pagination={{
             pageSize,
             showSizeChanger: true,
             pageSizeOptions: ["10", "20", "50", "100"],
           }}
-          scroll={{y: 290}} // Scrollable height for the table body
+          scroll={{y: 290}}
+          locale={{emptyText: "Aucune donnée à afficher"}}
         />
       </div>
-
       <ModalComponent
         visible={isModalVisible}
         onCancel={handleCancel}

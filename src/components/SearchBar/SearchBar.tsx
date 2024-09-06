@@ -1,8 +1,8 @@
 // SearchBar.tsx
-import React, { useState } from "react";
-import { AutoComplete, Input, Button, Dropdown, Menu } from "antd";
-import type { AutoCompleteProps } from "antd";
-import { SearchOutlined } from '@ant-design/icons';
+import React, {useState} from "react";
+import {AutoComplete, Input, Button, Dropdown, Menu} from "antd";
+import type {AutoCompleteProps} from "antd";
+import {SearchOutlined} from "@ant-design/icons";
 
 const getRandomInt = (max: number, min = 0) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
@@ -16,7 +16,7 @@ const searchResult = (query: string) =>
       return {
         value: category,
         label: (
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div style={{display: "flex", justifyContent: "space-between"}}>
             <span>
               Found {query} on{" "}
               <a
@@ -47,7 +47,7 @@ const SearchBar: React.FC = () => {
   };
 
   const handleButtonClick = () => {
-    console.log('Search button clicked with value:', searchValue);
+    console.log("Search button clicked with value:", searchValue);
     // You can implement any additional search logic here
   };
 
@@ -68,9 +68,9 @@ const SearchBar: React.FC = () => {
           style={styles.input}
         />
       </AutoComplete>
-      <Button 
-        type="primary" 
-        icon={<SearchOutlined />} 
+      <Button
+        type="primary"
+        icon={<SearchOutlined />}
         onClick={handleButtonClick}
         style={styles.button}
       >
@@ -82,23 +82,23 @@ const SearchBar: React.FC = () => {
 
 const styles = {
   searchWrapper: {
-    display: 'flex',
-    alignItems: 'center',
-    border: '1px solid #d9d9d9',
-    borderRadius: '5px',
-    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-    backgroundColor: '#fff',
-    padding: '0 0px',
-    width: '600px', // Adjust width as needed
+    display: "flex",
+    alignItems: "center",
+    border: "1px solid #d9d9d9",
+    borderRadius: "5px",
+    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+    backgroundColor: "#fff",
+    padding: "0 0px",
+    width: "400px",
   },
   autoComplete: {
     flex: 1,
   },
   input: {
-    border: 'none',
+    border: "none",
   },
   button: {
-    borderRadius: '0',
+    borderRadius: "0",
   },
 };
 

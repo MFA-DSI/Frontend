@@ -1,15 +1,15 @@
-import axiosInstance from "../lib/axiosInstance"; // Importez votre instance Axios
+import axiosInstance from "../lib/axiosInstance";
 
 export const fetchActivities = async (filterParams: {
   filterPeriod: string;
-  filterDirection?: string; // Optional since directionId might come from the session
+  filterDirection?: string;
   dateRange: {
     startDate?: string;
     month?: number;
     quarter?: number;
     year?: number;
   };
-  userDirectionId?: string; // Add the user's direction ID if fetching for a specific department
+  userDirectionId?: string;
 }) => {
   const {filterPeriod, filterDirection, dateRange, userDirectionId} =
     filterParams;
