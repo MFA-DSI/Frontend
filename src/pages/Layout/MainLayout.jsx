@@ -2,7 +2,7 @@
 import React, { Suspense } from "react";
 import { BarChartOutlined, CloudOutlined, UserOutlined } from "@ant-design/icons";
 import { RiNotification3Fill } from "react-icons/ri";
-import { Layout, Menu, theme, Skeleton, Dropdown, Avatar } from "antd";
+import { Layout, Menu, theme, Skeleton } from "antd";
 import { Link, useLocation } from "react-router-dom";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import { ActivityProvider } from "../../providers/context/ActivitiesContext";
@@ -87,7 +87,7 @@ const MainLayout = ({ children }) => {
             padding: 0,
             background: "white",
             position: "fixed",
-            width: "100%", // Ensure the header spans the full width
+            width: "100%", 
             zIndex: 1, // Ensure it stays above content
             display: "flex",
             justifyContent: "space-between", // Space between search bar and profile dropdown
@@ -97,14 +97,9 @@ const MainLayout = ({ children }) => {
           <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
             <SearchBar />
           </div>
-          <Dropdown overlay={menu} trigger={['click']}>
-            <Avatar 
-              src="https://via.placeholder.com/40" 
-              style={{ cursor: 'pointer', marginLeft: '20px' }} 
-            />
-          </Dropdown>
+         
         </Header>
-        <Content style={{ margin: "64px 24px 24px", overflow: "initial" }}>
+        <Content style={{  overflow: "initial" }}>
           <div
             style={{
               textAlign: "center",
