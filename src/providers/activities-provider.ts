@@ -1,46 +1,61 @@
-import axiosInstance from "../lib/axiosInstance";
+import { toast } from "react-toastify";
+import environment from "../conf/environment"; // Adjust the path as necessary
 
-export const fetchActivities = async (filterParams: {
-  filterPeriod: string;
-  filterDirection?: string;
-  dateRange: {
-    startDate?: string;
-    month?: number;
-    quarter?: number;
-    year?: number;
-  };
-  userDirectionId?: string;
-}) => {
-  const {filterPeriod, filterDirection, dateRange, userDirectionId} =
-    filterParams;
-  let url = "/activities/all";
-  const params: any = {};
+// Define the type for Activity
+export interface Activity {
+    id: string;
+    description: string;
+    activityList: ActivityItem[];
+}
 
-  if (filterPeriod === "weekly" && dateRange.startDate) {
-    url = `/activities/weekly`;
-    params.weekStartDate = dateRange.startDate;
-  } else if (filterPeriod === "monthly" && dateRange.year && dateRange.month) {
-    url = `/activities/monthly`;
-    params.year = dateRange.year;
-    params.month = dateRange.month;
-  } else if (
-    filterPeriod === "quarter" &&
-    dateRange.year &&
-    dateRange.quarter
-  ) {
-    url = `/activities/quarter`;
-    params.year = dateRange.year;
-    params.quarter = dateRange.quarter;
-  }
+export interface ActivityItem {
+    id: string;
+    description: string;
+    performanceRealization: PerformanceRealization[];
+}
 
-  if (filterDirection) {
-    url = `/direction${url}`;
-    params.directionId = filterDirection;
-  } else if (userDirectionId) {
-    url = `/mydirection${url}`;
-    params.directionId = userDirectionId;
-  }
+export interface PerformanceRealization {
+    id: string;
+    indicators: number;
+    realization: string;
+}
 
-  const response = await axiosInstance.get(url, {params});
-  return response.data;
+// Fetching activities from an API
+export const fetchActivities = async (): Promise<unknown> => {
+    try {
+        const url = "http://localhost:8080/direction/mission/all";
+
+
+        // Manually retrieve the token from session storage
+        const token = sessionStorage.getItem('token'); // Adjust as needed
+        const directionId = sessionStorage.getItem('directionId');
+        const urlWithParams = `${url}?directionId=${directionId}`;
+
+        console.log('Fetching from URL:', urlWithParams);
+
+        console.log(token);
+        
+        // Set up the request options
+        const response = await fetch(urlWithParams  , {
+            method: 'GET'
+        });
+       
+        if (!response.ok) {
+            const errorData = await response.json();
+            const errorMessage = errorData.message || "Erreur inconnue lors de la récupération des activités";
+            toast.error(errorMessage);
+            throw new Error(errorMessage);
+        }
+
+        // Parse the JSON response
+        const data: Activity[] = await response.json();
+        console.log('Response:', data);
+
+        return data; // Return the parsed data
+    } catch (error) {
+        // Handle any other errors
+        console.error('Error fetching activities:', error);
+        toast.error("Une erreur inattendue est survenue.");
+        throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+    }
 };
