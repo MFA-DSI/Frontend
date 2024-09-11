@@ -2,17 +2,17 @@
 import React, { createContext, useContext, useState } from "react";
 import { useMissions } from "../../hooks/useMissions";
 
-const ActivityContext = createContext();
+const MissionContext = createContext();
 
-export const ActivityProvider = ({ children }) => {
-  const { data: activities, isLoading } = useMissions(); // Fetch activities here
+export const MissionProvider = ({ children }) => {
+  const { data: missions, isLoading } = useMissions(); 
   const [filterType, setFilterType] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredActivities = () => {
-    if (!activities) return [];
+    if (!missions) return [];
     
-    let filtered = activities;
+    let filtered = missions;
 
     // Filter by description or performance realization based on the search term
     if (searchTerm) {
@@ -32,7 +32,7 @@ export const ActivityProvider = ({ children }) => {
   };
 
   return (
-    <ActivityContext.Provider
+    <MissionContext.Provider
       value={{
         filteredActivities: filteredActivities(),
         isLoading,
@@ -41,10 +41,10 @@ export const ActivityProvider = ({ children }) => {
       }}
     >
       {children}
-    </ActivityContext.Provider>
+    </MissionContext.Provider>
   );
 };
 
-export const useActivityContext = () => {
-  return useContext(ActivityContext);
+export const useMissionContext = () => {
+  return useContext(MissionContext);
 };

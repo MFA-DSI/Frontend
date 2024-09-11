@@ -5,7 +5,8 @@ import {RiNotification3Fill} from "react-icons/ri";
 import {Layout, Menu, theme, Skeleton} from "antd";
 import {Link, useLocation} from "react-router-dom";
 import SearchBar from "../../components/SearchBar/SearchBar";
-import {ActivityProvider} from "../../providers/context/ActivitiesContext";
+import { MissionProvider } from "../../providers/context/ActivitiesContext";
+
 
 const {Header, Content, Sider} = Layout;
 
@@ -108,9 +109,9 @@ const MainLayout = ({children}) => {
               borderRadius: borderRadiusLG,
             }}
           >
-            <ActivityProvider>
+            <MissionProvider>
               <Suspense fallback={<Skeleton active />}>{children}</Suspense>
-            </ActivityProvider>
+            </MissionProvider>
           </div>
         </Content>
       </Layout>

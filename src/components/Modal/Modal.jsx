@@ -25,7 +25,6 @@ const ModalComponent = ({visible, onCancel, activity}) => {
       <p>
         <strong>Observations:</strong> {activity.observation}
       </p>
-      {/* Add more detailed information as needed */}
     </Modal>
   );
 };

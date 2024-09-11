@@ -27,7 +27,7 @@ export const fetchMissions = async (): Promise<unknown> => {
 
 
         // Manually retrieve the token from session storage
-        const token = sessionStorage.getItem('token'); // Adjust as needed
+        const token = sessionStorage.getItem('token'); 
         const directionId = sessionStorage.getItem('directionId');
         const urlWithParams = `${url}?directionId=${directionId}`;
 

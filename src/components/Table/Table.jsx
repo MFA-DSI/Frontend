@@ -1,7 +1,7 @@
 // TableComponent.js
 import React, { useState } from "react";
 import { Table, Select, Spin, Button, Checkbox, Badge } from "antd";
-import { useActivityContext } from "../../providers/context/ActivitiesContext";
+import {useMissionContext } from "../../providers/context/ActivitiesContext";
 import {
   FilePdfOutlined,
   FileExcelOutlined,
@@ -13,7 +13,7 @@ const { Option } = Select;
 
 const TableComponent = () => {
   const { filteredActivities, isLoading, setFilterType, setDirectionFilter } =
-    useActivityContext();
+    useMissionContext();
 
   const [activityType, setActivityType] = useState("all");
   const [dateFilter, setDateFilter] = useState({
@@ -124,13 +124,13 @@ const TableComponent = () => {
           width: 50,
         },
         {
-          title: "Mission",
+          title: "Missions",
           dataIndex: "description", 
           render: (description) => <div>{description}</div>,
           width: 250,
         },
         {
-          title: "Activité",
+          title: "Activités",
           dataIndex: "activityList",
           render: (activityList) => {
             const firstActivity = activityList[0];
@@ -140,7 +140,7 @@ const TableComponent = () => {
               <div>
                 {firstActivity ? firstActivity.description : "Aucune activité"}
                 {otherActivitiesCount > 0 && (
-                  <Badge count={`${otherActivitiesCount} autres`} style={{ marginLeft: 8 }} />
+                  <Badge count={`${otherActivitiesCount} autres`} color={"green"} style={{ marginLeft: 8 }} />
                 )}
               </div>
             );
@@ -157,15 +157,15 @@ const TableComponent = () => {
             return (
               <div>
                 {performanceRealizations && performanceRealizations.length > 0
-                  ? performanceRealizations[0].indicators
+                  ? performanceRealizations[0].realization
                   : "Aucun indicateur"}
                 {otherIndicatorsCount > 0 && (
-                  <Badge count={`${otherIndicatorsCount} autres`} style={{ marginLeft: 8 }} />
+                  <Badge count={`${otherIndicatorsCount} autres`} color={"blue"} style={{ marginLeft: 8 }} />
                 )}
               </div>
             );
           },
-          width: 150,
+          width: 250,
         },
         {
           title: "Réalisation",
@@ -177,15 +177,15 @@ const TableComponent = () => {
             return (
               <div>
                 {performanceRealizations && performanceRealizations.length > 0
-                  ? performanceRealizations[0].realization
+                  ? performanceRealizations[0].indicators
                   : "Aucune réalisation"}
                 {otherRealizationsCount > 0 && (
-                  <Badge count={`${otherRealizationsCount} autres`} style={{ marginLeft: 8 }} />
+                  <Badge count={`${otherRealizationsCount} autres`} color={"green"} style={{ marginLeft: 8 }} />
                 )}
               </div>
             );
           },
-          width: 250,
+          width: 150,
         },
         {
           title: "Voir Plus",
@@ -248,7 +248,6 @@ const TableComponent = () => {
               <Option value="Finance">Finance</Option>
             </Select>
 
-            {/* Dropdown pour filtrer par mois et semaine */}
             {activityType === "weekly" && (
               <>
                 <Select
