@@ -1,20 +1,19 @@
+// ActivityContext.js
 import React, { createContext, useContext, useState } from "react";
-import { useActivities } from "../../hooks";
+import { useMissions } from "../../hooks/useMissions";
 
-const ActivityContext = createContext();
+const MissionContext = createContext();
 
-export const ActivitieProvider = ({ children }) => {
-  const { data: activities, isLoading } = useActivities(); 
+export const MissionProvider = ({ children }) => {
+  const { data: missions, isLoading } = useMissions(); 
   const [filterType, setFilterType] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredActivities = () => {
-    if (!activities) return [];
+  const filteredMissions = () => {
+    if (!missions) return [];
     
-    let filtered = activities;
+    let filtered = missions;
 
-    console.log("filtered: "+filtered);
-    
     // Filter by description or performance realization based on the search term
     if (searchTerm) {
       filtered = filtered.filter(activity =>
@@ -27,24 +26,25 @@ export const ActivitieProvider = ({ children }) => {
       );
     }
 
+    // Additional filter logic could be applied here based on filterType
 
     return filtered;
   };
 
   return (
-    <ActivityContext.Provider
+    <MissionContext.Provider
       value={{
-        filteredActivities: filteredActivities(),
+        filteredMissions: filteredMissions(),
         isLoading,
         setFilterType,
         setSearchTerm,
       }}
     >
       {children}
-    </ActivityContext.Provider>
+    </MissionContext.Provider>
   );
 };
 
-export const useActivitiesContext = () => {
-  return useContext(ActivityContext);
+export const useMissionContext = () => {
+  return useContext(MissionContext);
 };

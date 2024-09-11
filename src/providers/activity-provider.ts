@@ -1,17 +1,20 @@
 import { toast } from "react-toastify";
 import environment from "../conf/environment"; // Adjust the path as necessary
 
-// Define the type for Activity
-export interface Mission {
+export interface Activity {
     id: string;
     description: string;
-    activityList: ActivityItem[];
+    observation: string;
+    dueDatetime: string;
+    task: ActivityItem[];
+    nextTask: ActivityItem[];
+    performanceRealizationDTO: PerformanceRealization[];
 }
 
 export interface ActivityItem {
     id: string;
     description: string;
-    performanceRealization: PerformanceRealization[];
+    dueDatetime: string;
 }
 
 export interface PerformanceRealization {
@@ -20,10 +23,9 @@ export interface PerformanceRealization {
     realization: string;
 }
 
-// Fetching missions from an API
-export const fetchMissions = async (): Promise<unknown> => {
+export const fetchActivities = async (): Promise<unknown> => {
     try {
-        const url = "http://localhost:8080/direction/mission/all?page=1&page_size=10";
+        const url = "http://localhost:8080/direction/activities/all?page=1&page_size=10";
 
 
         // Manually retrieve the token from session storage
@@ -44,7 +46,7 @@ export const fetchMissions = async (): Promise<unknown> => {
         }
 
         // Parse the JSON response
-        const data: Mission[] = await response.json();
+        const data: Activity[] = await response.json();
         console.log('Response:', data);
 
         return data; // Return the parsed data

@@ -1,7 +1,8 @@
 // TableComponent.js
 import React, { useState } from "react";
 import { Table, Select, Spin, Button, Checkbox, Badge } from "antd";
-import {useMissionContext } from "../../providers/context/ActivitiesContext";
+import { useActivitiesContext } from "../../providers/context/ActivitiesContext";
+import { useMissionContext } from "../../providers/context/MissionsContext";
 import {
   FilePdfOutlined,
   FileExcelOutlined,
@@ -12,8 +13,8 @@ import ModalComponent from "../Modal/Modal";
 const { Option } = Select;
 
 const TableComponent = () => {
-  const { filteredActivities, isLoading, setFilterType, setDirectionFilter } =
-    useMissionContext();
+  const { filteredActivities, isLoading: isActivityLoading } = useActivitiesContext();
+  const { filteredMissions, isLoading: isMissionLoading, setFilterType, setDirectionFilter } = useMissionContext();
 
   const [activityType, setActivityType] = useState("all");
   const [dateFilter, setDateFilter] = useState({
@@ -52,9 +53,9 @@ const TableComponent = () => {
     const weeks = [];
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
-    const startDate = firstDay.getDate() - firstDay.getDay(); 
+    const startDate = firstDay.getDate() - firstDay.getDay();
     const endDate = lastDay.getDate();
-    
+
     for (let i = startDate; i <= endDate; i += 7) {
       const weekStartDate = new Date(year, month, i);
       const weekEndDate = new Date(year, month, i + 6);
@@ -81,22 +82,34 @@ const TableComponent = () => {
         },
         {
           title: "Activités Mensuelles Prévues",
-          dataIndex: "monthlyActivities",
+          dataIndex: "description", // Mapped to description
           width: 250,
         },
         {
           title: "Tâches Hebdomadaires",
-          dataIndex: "weeklyTasks",
+          dataIndex: "task", // Mapped to task
+          render: (taskList) => (
+            <div>
+              {taskList.length > 0 ? taskList.map(task => (
+                <div key={task.id}>{task.description}</div>
+              )) : "Aucune tâche"}
+            </div>
+          ),
           width: 250,
         },
         {
           title: "Tâche Prochaine",
-          dataIndex: "nextTask",
+          dataIndex: "nextTask", // Mapped to nextTask
+          render: (nextTaskList) => (
+            <div>
+              {nextTaskList.length > 0 ? nextTaskList[0].description : "Aucune tâche prochaine"}
+            </div>
+          ),
           width: 250,
         },
         {
           title: "Observations",
-          dataIndex: "observations",
+          dataIndex: "observation", // Mapped to observation
           width: 150,
         },
         {
@@ -125,7 +138,7 @@ const TableComponent = () => {
         },
         {
           title: "Missions",
-          dataIndex: "description", 
+          dataIndex: "description",
           render: (description) => <div>{description}</div>,
           width: 250,
         },
@@ -201,7 +214,9 @@ const TableComponent = () => {
     }
   };
 
-  if (isLoading) return <Spin />;
+  if (isMissionLoading || (activityType === "weekly" && isActivityLoading)) return <Spin />;
+
+  const dataSource = activityType === "weekly" ? filteredActivities : filteredMissions;
 
   return (
     <>
@@ -382,7 +397,7 @@ const TableComponent = () => {
       >
         <Table
           columns={getColumns()}
-          dataSource={filteredActivities}
+          dataSource={activityType === "weekly" ? filteredActivities : filteredMissions}
           pagination={{
             pageSize,
             showSizeChanger: true,

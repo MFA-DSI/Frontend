@@ -5,7 +5,8 @@ import {RiNotification3Fill} from "react-icons/ri";
 import {Layout, Menu, theme, Skeleton} from "antd";
 import {Link, useLocation} from "react-router-dom";
 import SearchBar from "../../components/SearchBar/SearchBar";
-import { MissionProvider } from "../../providers/context/ActivitiesContext";
+import { ActivitieProvider} from "../../providers/context/ActivitiesContext";
+import { MissionProvider } from "../../providers/context/MissionsContext";
 
 
 const {Header, Content, Sider} = Layout;
@@ -91,10 +92,10 @@ const MainLayout = ({children}) => {
             background: "white",
             position: "fixed",
             width: "100%",
-            zIndex: 1, // Ensure it stays above content
+            zIndex: 1,
             display: "flex",
-            justifyContent: "space-between", // Space between search bar and profile dropdown
-            alignItems: "center", // Center vertically
+            justifyContent: "space-between",
+            alignItems: "center", 
           }}
         >
           <div style={{flex: 1, display: "flex", justifyContent: "center"}}>
@@ -110,7 +111,10 @@ const MainLayout = ({children}) => {
             }}
           >
             <MissionProvider>
+              <ActivitieProvider>
               <Suspense fallback={<Skeleton active />}>{children}</Suspense>
+              </ActivitieProvider>
+            
             </MissionProvider>
           </div>
         </Content>
