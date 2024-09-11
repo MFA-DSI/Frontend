@@ -1,11 +1,11 @@
 import { useQuery } from "react-query";
-import { Activity, fetchActivities } from "../providers/activities-provider";
+import {fetchMissions } from "../providers/mission-provider";
 
 // Custom hook for using activities
-export const useActivities = () => {
+export const useMissions = () => {
     return useQuery({
       queryKey : ["directionId"], 
-      queryFn : fetchActivities
+      queryFn : fetchMissions
     }
       );
 };

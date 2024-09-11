@@ -21,9 +21,9 @@ export interface PerformanceRealization {
 }
 
 // Fetching activities from an API
-export const fetchActivities = async (): Promise<unknown> => {
+export const fetchMissions = async (): Promise<unknown> => {
     try {
-        const url = "http://localhost:8080/direction/mission/all";
+        const url = "http://localhost:8080/direction/mission/all?page=1&pageSize=20";
 
 
         // Manually retrieve the token from session storage
