@@ -1,11 +1,11 @@
 // AddActivityModal.js
-import React, { useState } from "react";
-import { Modal, Input, Button, Form, Steps, Select, DatePicker } from "antd";
+import React, {useState} from "react";
+import {Modal, Input, Button, Form, Steps, Select, DatePicker} from "antd";
 
-const { Step } = Steps;
-const { Option } = Select;
+const {Step} = Steps;
+const {Option} = Select;
 
-const AddActivityModal = ({ visible, onCancel }) => {
+const AddActivityModal = ({visible, onCancel}) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [activityDescription, setActivityDescription] = useState("");
   const [tasks, setTasks] = useState([]);
@@ -17,7 +17,7 @@ const AddActivityModal = ({ visible, onCancel }) => {
   const [taskDueDate, setTaskDueDate] = useState(null);
   const [nextTaskDescription, setNextTaskDescription] = useState("");
   const [nextTaskDueDate, setNextTaskDueDate] = useState(null);
-  
+
   const next = () => {
     setCurrentStep(currentStep + 1);
   };
@@ -50,7 +50,8 @@ const AddActivityModal = ({ visible, onCancel }) => {
     // Logic to submit the activity data
     const activityData = {
       description: activityDescription,
-      mission: selectedMission === "new" ? newMissionDescription : selectedMission,
+      mission:
+        selectedMission === "new" ? newMissionDescription : selectedMission,
       tasks,
       nextTasks,
       performanceIndicators,
@@ -110,10 +111,13 @@ const AddActivityModal = ({ visible, onCancel }) => {
             </Button>
             <ul>
               {tasks.map((task, index) => (
-                <li key={index}>{task.description} (Due: {task.dueDate ? task.dueDate.format('DD/MM/YYYY') : 'N/A'})</li>
+                <li key={index}>
+                  {task.description} (Due:{" "}
+                  {task.dueDate ? task.dueDate.format("DD/MM/YYYY") : "N/A"})
+                </li>
               ))}
             </ul>
-            <Button onClick={prev} style={{ marginRight: 8 }}>
+            <Button onClick={prev} style={{marginRight: 8}}>
               Précédent
             </Button>
             <Button type="primary" onClick={next}>
@@ -145,10 +149,16 @@ const AddActivityModal = ({ visible, onCancel }) => {
             </Button>
             <ul>
               {nextTasks.map((nextTask, index) => (
-                <li key={index}>{nextTask.description} (Due: {nextTask.dueDate ? nextTask.dueDate.format('DD/MM/YYYY') : 'N/A'})</li>
+                <li key={index}>
+                  {nextTask.description} (Due:{" "}
+                  {nextTask.dueDate
+                    ? nextTask.dueDate.format("DD/MM/YYYY")
+                    : "N/A"}
+                  )
+                </li>
               ))}
             </ul>
-            <Button onClick={prev} style={{ marginRight: 8 }}>
+            <Button onClick={prev} style={{marginRight: 8}}>
               Précédent
             </Button>
             <Button type="primary" onClick={next}>
@@ -168,7 +178,7 @@ const AddActivityModal = ({ visible, onCancel }) => {
               onChange={(e) => setPerformanceIndicators(e.target.value)}
             />
           </Form.Item>
-          <Button onClick={prev} style={{ marginRight: 8 }}>
+          <Button onClick={prev} style={{marginRight: 8}}>
             Précédent
           </Button>
           <Button type="primary" onClick={handleSubmit}>
@@ -192,7 +202,7 @@ const AddActivityModal = ({ visible, onCancel }) => {
           <Step key={item.title} title={item.title} />
         ))}
       </Steps>
-      <div style={{ marginTop: 20 }}>{steps[currentStep].content}</div>
+      <div style={{marginTop: 20}}>{steps[currentStep].content}</div>
     </Modal>
   );
 };

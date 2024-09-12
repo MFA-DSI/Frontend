@@ -5,9 +5,9 @@ import {RiNotification3Fill} from "react-icons/ri";
 import {Layout, Menu, theme, Skeleton} from "antd";
 import {Link, useLocation} from "react-router-dom";
 import SearchBar from "../../components/SearchBar/SearchBar";
-import { ActivitieProvider} from "../../providers/context/ActivitiesContext";
-import { MissionProvider } from "../../providers/context/MissionsContext";
-
+import {ActivitieProvider} from "../../providers/context/ActivitiesContext";
+import {MissionProvider} from "../../providers/context/MissionsContext";
+import {HackWebProviders} from "../../providers";
 
 const {Header, Content, Sider} = Layout;
 
@@ -95,7 +95,7 @@ const MainLayout = ({children}) => {
             zIndex: 1,
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "center", 
+            alignItems: "center",
           }}
         >
           <div style={{flex: 1, display: "flex", justifyContent: "center"}}>
@@ -110,12 +110,9 @@ const MainLayout = ({children}) => {
               borderRadius: borderRadiusLG,
             }}
           >
-            <MissionProvider>
-              <ActivitieProvider>
+            <HackWebProviders>
               <Suspense fallback={<Skeleton active />}>{children}</Suspense>
-              </ActivitieProvider>
-            
-            </MissionProvider>
+            </HackWebProviders>
           </div>
         </Content>
       </Layout>

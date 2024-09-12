@@ -155,7 +155,7 @@ const LoginForm = ({mode, onSubmit, isLoading}) => {
             id="grade-select"
             label="Select Grade"
             name="grade"
-            options={grades.map((grade) => ({ name: grade.name}))}
+            options={grades.map((grade) => ({name: grade.name}))}
             disabled={mode === "login"}
           />
           <Input

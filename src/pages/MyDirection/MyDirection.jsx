@@ -1,12 +1,13 @@
 // MyDirection.js
-import React, { useState } from "react";
-import { Button } from "antd";
+import React, {useState} from "react";
+import {Button} from "antd";
 import MainLayout from "../Layout/MainLayout";
 import TableComponent from "../../components/Table/Table";
 import AddActivityModal from "../../components/Modal/addActivity";
 
 const MyDirection = () => {
-  const [isAddActivityModalVisible, setIsAddActivityModalVisible] = useState(false);
+  const [isAddActivityModalVisible, setIsAddActivityModalVisible] =
+    useState(false);
 
   const showAddActivityModal = () => {
     setIsAddActivityModalVisible(true);
@@ -18,12 +19,16 @@ const MyDirection = () => {
 
   return (
     <MainLayout>
-      <div >
+      <div>
         <h2>Mes Directions</h2>
-        <Button type="primary" style={{position : "fixed",left: "210px"}} onClick={showAddActivityModal}>
+        <Button
+          type="primary"
+          style={{position: "fixed", left: "210px"}}
+          onClick={showAddActivityModal}
+        >
           Ajouter une Activité
         </Button>
-        <TableComponent mode="mydirection"  />
+        <TableComponent mode="mydirection" />
       </div>
       <AddActivityModal
         visible={isAddActivityModalVisible}

@@ -1,28 +1,31 @@
 // ActivityContext.js
-import React, { createContext, useContext, useState } from "react";
-import { useMissions } from "../../hooks/useMissions";
+import React, {createContext, useContext, useState} from "react";
+import {useMissions} from "../../hooks/useMissions";
 
 const MissionContext = createContext();
 
-export const MissionProvider = ({ children }) => {
-  const { data: missions, isLoading } = useMissions(); 
+export const MissionProvider = ({children}) => {
+  const {data: missions, isLoading} = useMissions();
   const [filterType, setFilterType] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredMissions = () => {
     if (!missions) return [];
-    
+
     let filtered = missions;
 
     // Filter by description or performance realization based on the search term
     if (searchTerm) {
-      filtered = filtered.filter(activity =>
-        activity.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        activity.activityList.some(a =>
-          a.performanceRealization.some(r =>
-            r.realization.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        (activity) =>
+          activity.description
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          activity.activityList.some((a) =>
+            a.performanceRealization.some((r) =>
+              r.realization.toLowerCase().includes(searchTerm.toLowerCase())
+            )
           )
-        )
       );
     }
 

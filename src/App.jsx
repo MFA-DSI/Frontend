@@ -12,6 +12,7 @@ import MyDirection from "./pages/MyDirection/MyDirection";
 import Notification from "./pages/Notification/Notification";
 import Profile from "./pages/Profile/Profile";
 import LoginPage from "./pages/Login/LoginPage";
+import {HackWebProviders} from "./providers";
 
 const queryClient = new QueryClient();
 
@@ -21,22 +22,24 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ToastContainer />
-      <Routes location={location}>
-        <Route path="/" element={<AuthWrapper />}>
-          <Route index element={<HomePage />} />
-          <Route path="myDirection" element={<MyDirection />} />
-          <Route path="notifications" element={<Notification />} />
-          <Route path="profile" element={<Profile />} />
-        </Route>
-        <Route
-          path="/login"
-          element={
-            <PrivateWrapper>
-              <LoginPage />
-            </PrivateWrapper>
-          }
-        />
-      </Routes>
+      <HackWebProviders>
+        <Routes location={location}>
+          <Route path="/" element={<AuthWrapper />}>
+            <Route index element={<HomePage />} />
+            <Route path="myDirection" element={<MyDirection />} />
+            <Route path="notifications" element={<Notification />} />
+            <Route path="profile" element={<Profile />} />
+          </Route>
+          <Route
+            path="/login"
+            element={
+              <PrivateWrapper>
+                <LoginPage />
+              </PrivateWrapper>
+            }
+          />
+        </Routes>
+      </HackWebProviders>
     </QueryClientProvider>
   );
 }
