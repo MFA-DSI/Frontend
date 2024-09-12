@@ -12,7 +12,7 @@ import ModalComponent from "../Modal/Modal";
 
 const { Option } = Select;
 
-const TableComponent = () => {
+const TableComponent = ({mode}) => {
   const { filteredActivities, isLoading: isActivityLoading } = useActivitiesContext();
   const { filteredMissions, isLoading: isMissionLoading, setFilterType, setDirectionFilter } = useMissionContext();
 
@@ -99,7 +99,7 @@ const TableComponent = () => {
         },
         {
           title: "Tâche Prochaine",
-          dataIndex: "nextTask", // Mapped to nextTask
+          dataIndex: "nextTask", 
           render: (nextTaskList) => (
             <div>
               {nextTaskList.length > 0 ? nextTaskList[0].description : "Aucune tâche prochaine"}
@@ -109,7 +109,7 @@ const TableComponent = () => {
         },
         {
           title: "Observations",
-          dataIndex: "observation", // Mapped to observation
+          dataIndex: "observation", 
           width: 150,
         },
         {
@@ -222,7 +222,7 @@ const TableComponent = () => {
     <>
       <div
         style={{
-          padding: "20px",
+          padding: "10px",
           marginBottom: "16px",
           backgroundColor: "#f9f9f9",
           borderRadius: "4px",
@@ -390,7 +390,7 @@ const TableComponent = () => {
       </div>
       <div
         style={{
-          height: "calc(100vh - 200px)",
+          height: "calc(100vh - 210px)",
           overflow: "auto",
           paddingRight: "9px",
         }}
@@ -403,7 +403,7 @@ const TableComponent = () => {
             showSizeChanger: true,
             pageSizeOptions: ["10", "20", "50", "100"],
           }}
-          scroll={{ y: 290 }}
+          scroll={mode == "all"? { y: 290 } :{ y: 290 }}
           locale={{ emptyText: "Aucune donnée à afficher" }}
         />
       </div>

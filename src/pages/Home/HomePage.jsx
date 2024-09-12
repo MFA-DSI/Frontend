@@ -10,7 +10,7 @@ const TableComponent = lazy(() => import("../../components/Table/Table")); // La
 const HomePage = () => {
   return (
     <MainLayout>
-      <TableComponent />
+      <TableComponent mode="all" />
     </MainLayout>
   );
 };

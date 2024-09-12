@@ -1,5 +1,4 @@
-// AddActivityModal.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Input, Button, Form, Steps, Select, DatePicker } from "antd";
 
 const { Step } = Steps;
@@ -17,7 +16,14 @@ const AddActivityModal = ({ visible, onCancel }) => {
   const [taskDueDate, setTaskDueDate] = useState(null);
   const [nextTaskDescription, setNextTaskDescription] = useState("");
   const [nextTaskDueDate, setNextTaskDueDate] = useState(null);
-  
+
+  const existingMissions = [
+    // Example existing missions
+    { id: 1, description: "Mission A" },
+    { id: 2, description: "Mission B" },
+    { id: 3, description: "Mission C" },
+  ];
+
   const next = () => {
     setCurrentStep(currentStep + 1);
   };
@@ -74,6 +80,7 @@ const AddActivityModal = ({ visible, onCancel }) => {
               <Option value="new">Nouvelle Mission</Option>
             </Select>
           </Form.Item>
+         
           {selectedMission === "new" && (
             <Form.Item label="Description de la Mission">
               <Input
@@ -82,6 +89,28 @@ const AddActivityModal = ({ visible, onCancel }) => {
               />
             </Form.Item>
           )}
+          {selectedMission === "existing" && (
+            <Form.Item label="Sélectionner une Mission Existante">
+              <Select
+                placeholder="Choisissez une mission existante"
+                onChange={(value) => setSelectedMission(value)}
+              >
+                {existingMissions.map((mission) => (
+                  <Option key={mission.id} value={mission.description}>
+                    {mission.description}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            
+          )
+          }
+           <Form.Item label="Date de l'activité">
+              <DatePicker
+                value={nextTaskDueDate}
+                onChange={(date) => setNextTaskDueDate(date)}
+              />
+            </Form.Item>
           <Button type="primary" onClick={next} disabled={!selectedMission}>
             Suivant
           </Button>
@@ -110,7 +139,9 @@ const AddActivityModal = ({ visible, onCancel }) => {
             </Button>
             <ul>
               {tasks.map((task, index) => (
-                <li key={index}>{task.description} (Due: {task.dueDate ? task.dueDate.format('DD/MM/YYYY') : 'N/A'})</li>
+                <li key={index}>
+                  {task.description} (Due: {task.dueDate ? task.dueDate.format('DD/MM/YYYY') : 'N/A'})
+                </li>
               ))}
             </ul>
             <Button onClick={prev} style={{ marginRight: 8 }}>
@@ -145,7 +176,9 @@ const AddActivityModal = ({ visible, onCancel }) => {
             </Button>
             <ul>
               {nextTasks.map((nextTask, index) => (
-                <li key={index}>{nextTask.description} (Due: {nextTask.dueDate ? nextTask.dueDate.format('DD/MM/YYYY') : 'N/A'})</li>
+                <li key={index}>
+                  {nextTask.description} (Due: {nextTask.dueDate ? nextTask.dueDate.format('DD/MM/YYYY') : 'N/A'})
+                </li>
               ))}
             </ul>
             <Button onClick={prev} style={{ marginRight: 8 }}>
