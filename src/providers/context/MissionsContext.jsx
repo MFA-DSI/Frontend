@@ -1,11 +1,10 @@
-// ActivityContext.js
-import React, {createContext, useContext, useState} from "react";
-import {useMissions} from "../../hooks/useMissions";
+import React, { createContext, useContext, useState } from "react";
+import { useMissions } from "../../hooks/useMissions"; // Adjust the path as necessary
 
 const MissionContext = createContext();
 
-export const MissionProvider = ({children}) => {
-  const {data: missions, isLoading} = useMissions();
+export const MissionProvider = ({ children }) => {
+  const { missions, isLoading } = useMissions();
   const [filterType, setFilterType] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -14,22 +13,24 @@ export const MissionProvider = ({children}) => {
 
     let filtered = missions;
 
-    // Filter by description or performance realization based on the search term
     if (searchTerm) {
       filtered = filtered.filter(
-        (activity) =>
-          activity.description
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase()) ||
-          activity.activityList.some((a) =>
-            a.performanceRealization.some((r) =>
-              r.realization.toLowerCase().includes(searchTerm.toLowerCase())
+        (mission) =>
+          mission.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          mission.activityList.some((activity) =>
+            activity.performanceRealization.some((realization) =>
+              realization.realization.toLowerCase().includes(searchTerm.toLowerCase())
             )
           )
       );
     }
 
     // Additional filter logic could be applied here based on filterType
+    // Example: Implementing filterType logic (e.g., filtering by status)
+    if (filterType !== "all") {
+      // Apply filter based on filterType if needed
+      // This part can be customized based on the actual use case
+    }
 
     return filtered;
   };

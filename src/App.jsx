@@ -22,13 +22,15 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ToastContainer />
-      <HackWebProviders>
+    
         <Routes location={location}>
           <Route path="/" element={<AuthWrapper />}>
+          
             <Route index element={<HomePage />} />
             <Route path="myDirection" element={<MyDirection />} />
             <Route path="notifications" element={<Notification />} />
             <Route path="profile" element={<Profile />} />
+          
           </Route>
           <Route
             path="/login"
@@ -39,7 +41,7 @@ function App() {
             }
           />
         </Routes>
-      </HackWebProviders>
+     
     </QueryClientProvider>
   );
 }

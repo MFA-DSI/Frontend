@@ -5,9 +5,10 @@ import {RiNotification3Fill} from "react-icons/ri";
 import {Layout, Menu, theme, Skeleton} from "antd";
 import {Link, useLocation} from "react-router-dom";
 import SearchBar from "../../components/SearchBar/SearchBar";
-import {ActivitieProvider} from "../../providers/context/ActivitiesContext";
-import {MissionProvider} from "../../providers/context/MissionsContext";
-import {HackWebProviders} from "../../providers";
+import { ActivitieProvider} from "../../providers/context/ActivitiesContext";
+import { MissionProvider } from "../../providers/context/MissionsContext";
+import { HackWebProviders } from "../../providers";
+
 
 const {Header, Content, Sider} = Layout;
 
@@ -66,6 +67,7 @@ const MainLayout = ({children}) => {
 
   return (
     <Layout hasSider>
+      <HackWebProviders>
       <Sider style={siderStyle}>
         <div className="demo-logo-vertical" />
         <div
@@ -95,7 +97,7 @@ const MainLayout = ({children}) => {
             zIndex: 1,
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "center",
+            alignItems: "center", 
           }}
         >
           <div style={{flex: 1, display: "flex", justifyContent: "center"}}>
@@ -110,12 +112,11 @@ const MainLayout = ({children}) => {
               borderRadius: borderRadiusLG,
             }}
           >
-            <HackWebProviders>
-              <Suspense fallback={<Skeleton active />}>{children}</Suspense>
-            </HackWebProviders>
+           <Suspense fallback={<Skeleton active />}>{children}</Suspense>             
           </div>
         </Content>
       </Layout>
+      </HackWebProviders>
     </Layout>
   );
 };
