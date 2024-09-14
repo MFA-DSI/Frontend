@@ -24,7 +24,7 @@ export interface PerformanceRealization {
 export const fetchMissions = async (): Promise<Mission[]> => {
   try {
     const url =
-      "http://localhost:8080/direction/mission/all?page=1&page_size=50";
+      "http://localhost:8080/direction/mission/all?page=1&page_size=100";
     const response = await fetch(url, {
       method: "GET",
     });
@@ -53,7 +53,7 @@ export const getByDirectionId = async (
   directionId: string
 ): Promise<Mission[]> => {
   try {
-    const url = `http://localhost:8080/direction/mission/byDirectionId/${directionId}`;
+    const url = `http://localhost:8080/direction/mission/directions?directionId=${directionId}`;
     const response = await fetch(url, {
       method: "GET",
     });
@@ -68,6 +68,7 @@ export const getByDirectionId = async (
     }
 
     const data: Mission[] = await response.json();
+    
     return data;
   } catch (error) {
     console.error("Error fetching missions by directionId:", error);
@@ -79,7 +80,7 @@ export const getByDirectionId = async (
 // Save a new mission
 export const saveMission = async (mission: Mission): Promise<Mission> => {
   try {
-    const url = "http://localhost:8080/direction/mission/save";
+    const url = "http://localhost:8080/direction/mission/create";
     const response = await fetch(url, {
       method: "POST",
       headers: {

@@ -13,9 +13,6 @@ export const ActivitieProvider = ({children}) => {
 
     let filtered = activities;
 
-    console.log("filtered: " + filtered);
-
-    // Filter by description or performance realization based on the search term
     if (searchTerm) {
       filtered = filtered.filter(
         (activity) =>

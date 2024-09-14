@@ -48,7 +48,6 @@ export const fetchActivities = async (): Promise<unknown> => {
 
     // Parse the JSON response
     const data: Activity[] = await response.json();
-    console.log("Response:", data);
 
     return data; // Return the parsed data
   } catch (error) {

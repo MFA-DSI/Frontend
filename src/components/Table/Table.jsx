@@ -8,7 +8,7 @@ import {
   FileWordOutlined,
 } from "@ant-design/icons";
 import ModalComponent from "../Modal/Modal";
-import MissionModal from "../Modal/MissionModal"; // Import the MissionModal
+import MissionModal from "../Modal/MissionModal"; 
 
 const {Option} = Select;
 
@@ -18,6 +18,7 @@ const TableComponent = ({mode}) => {
   const {
     filteredMissions,
     isLoading: isMissionLoading,
+    MissionByDirectionId,
     setFilterType,
     setDirectionFilter,
   } = useMissionContext();
@@ -159,7 +160,7 @@ const TableComponent = ({mode}) => {
                 {firstActivity ? firstActivity.description : "Aucune activité"}
                 {otherActivitiesCount > 0 && (
                   <Badge
-                    count={`${otherActivitiesCount} autres`}
+                    count={`${otherActivitiesCount} autre(s)`}
                     color={"green"}
                     style={{marginLeft: 8}}
                   />
@@ -173,12 +174,13 @@ const TableComponent = ({mode}) => {
           title: "Indicateur",
           dataIndex: "activityList",
           render: (activityList) => {
-            const performanceRealizations =
-              activityList[0]?.performanceRealization;
-            const otherIndicatorsCount = performanceRealizations
-              ? performanceRealizations.length - 1
-              : 0;
 
+            const performanceRealizations =
+            activityList[0]?.performanceRealization;
+          const otherIndicatorsCount = performanceRealizations
+            ? performanceRealizations.length - 1
+            : 0;
+            
             return (
               <div>
                 {performanceRealizations && performanceRealizations.length > 0
@@ -186,7 +188,7 @@ const TableComponent = ({mode}) => {
                   : "Aucun indicateur"}
                 {otherIndicatorsCount > 0 && (
                   <Badge
-                    count={`${otherIndicatorsCount} autres`}
+                    count={`${otherIndicatorsCount} autre(s)`}
                     color={"blue"}
                     style={{marginLeft: 8}}
                   />
@@ -213,8 +215,8 @@ const TableComponent = ({mode}) => {
                   : "Aucune réalisation"}
                 {otherRealizationsCount > 0 && (
                   <Badge
-                    count={`${otherRealizationsCount} autres`}
-                    color={"green"}
+                    count={`${otherRealizationsCount} autre(s)`}
+                    color={"yellow"}
                     style={{marginLeft: 8}}
                   />
                 )}
@@ -239,16 +241,18 @@ const TableComponent = ({mode}) => {
 
   if (isMissionLoading || (activityType === "weekly" && isActivityLoading))
     return <Spin />;
-
+  
+  const layoutMode = mode === "mydirection" ? MissionByDirectionId : filteredMissions; 
   const dataSource =
-    activityType === "weekly" ? filteredActivities : filteredMissions;
+  activityType === "weekly" ? filteredActivities : layoutMode;
+
 
   return (
     <>
       <div
         style={{
           padding: "10px",
-          marginBottom: "16px",
+          marginBottom: "5px",
           backgroundColor: "#f9f9f9",
           borderRadius: "4px",
         }}
@@ -444,8 +448,7 @@ const TableComponent = ({mode}) => {
       >
         <Table
           columns={getColumns()}
-          dataSource={
-            activityType === "weekly" ? filteredActivities : filteredMissions
+          dataSource={dataSource
           }
           pagination={{
             pageSize,

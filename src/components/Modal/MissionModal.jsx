@@ -13,9 +13,12 @@ const MissionModal = ({visible, onCancel, mission}) => {
     >
       {mission ? (
         <div>
-          <h3>Description</h3>
-          <p>{mission.description}</p>
-          <h4>Activités</h4>
+          <div>
+          <h3>Désignation : </h3><p>{mission.description}</p>
+          </div>
+          
+          
+          <h4>Les Activités rattachées :</h4>
           {/* Container for the scrollable list */}
           <div style={{maxHeight: "300px", overflowY: "auto"}}>
             <List
@@ -30,7 +33,7 @@ const MissionModal = ({visible, onCancel, mission}) => {
                         {activity.performanceRealization.map((realization) => (
                           <li key={realization.id}>
                             Indicateurs : {realization.realization}{" "}
-                            (Réalizations : {realization.indicators})
+                            (Réalisations : {realization.indicators})
                           </li>
                         ))}
                       </ul>
