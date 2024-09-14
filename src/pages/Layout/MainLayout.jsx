@@ -5,10 +5,9 @@ import {RiNotification3Fill} from "react-icons/ri";
 import {Layout, Menu, theme, Skeleton} from "antd";
 import {Link, useLocation} from "react-router-dom";
 import SearchBar from "../../components/SearchBar/SearchBar";
-import { ActivitieProvider} from "../../providers/context/ActivitiesContext";
-import { MissionProvider } from "../../providers/context/MissionsContext";
-import { HackWebProviders } from "../../providers";
-
+import {ActivitieProvider} from "../../providers/context/ActivitiesContext";
+import {MissionProvider} from "../../providers/context/MissionsContext";
+import {HackWebProviders} from "../../providers";
 
 const {Header, Content, Sider} = Layout;
 
@@ -68,54 +67,58 @@ const MainLayout = ({children}) => {
   return (
     <Layout hasSider>
       <HackWebProviders>
-      <Sider style={siderStyle}>
-        <div className="demo-logo-vertical" />
-        <div
-          style={{marginBottom: "20px", textAlign: "center", marginTop: "40px"}}
-        >
-          <img
-            src="src/assets/logo.jpg"
-            alt="Logo"
-            style={{maxWidth: "100%", maxHeight: "90px"}}
-          />
-        </div>
-        <Menu
-          theme="dark"
-          mode="inline"
-          selectedKeys={[location.pathname]}
-          items={items}
-        />
-      </Sider>
-
-      <Layout style={{marginInlineStart: 200}}>
-        <Header
-          style={{
-            padding: 0,
-            background: "white",
-            position: "fixed",
-            width: "100%",
-            zIndex: 1,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center", 
-          }}
-        >
-          <div style={{flex: 1, display: "flex", justifyContent: "center"}}>
-            <SearchBar />
-          </div>
-        </Header>
-        <Content style={{overflow: "initial"}}>
+        <Sider style={siderStyle}>
+          <div className="demo-logo-vertical" />
           <div
             style={{
+              marginBottom: "20px",
               textAlign: "center",
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
+              marginTop: "40px",
             }}
           >
-           <Suspense fallback={<Skeleton active />}>{children}</Suspense>             
+            <img
+              src="src/assets/logo.jpg"
+              alt="Logo"
+              style={{maxWidth: "100%", maxHeight: "90px"}}
+            />
           </div>
-        </Content>
-      </Layout>
+          <Menu
+            theme="dark"
+            mode="inline"
+            selectedKeys={[location.pathname]}
+            items={items}
+          />
+        </Sider>
+
+        <Layout style={{marginInlineStart: 200}}>
+          <Header
+            style={{
+              padding: 0,
+              background: "white",
+              position: "fixed",
+              width: "100%",
+              zIndex: 1,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <div style={{flex: 1, display: "flex", justifyContent: "center"}}>
+              <SearchBar />
+            </div>
+          </Header>
+          <Content style={{overflow: "initial"}}>
+            <div
+              style={{
+                textAlign: "center",
+                background: colorBgContainer,
+                borderRadius: borderRadiusLG,
+              }}
+            >
+              <Suspense fallback={<Skeleton active />}>{children}</Suspense>
+            </div>
+          </Content>
+        </Layout>
       </HackWebProviders>
     </Layout>
   );

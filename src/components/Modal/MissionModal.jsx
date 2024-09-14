@@ -1,8 +1,8 @@
 // MissionModal.js
 import React from "react";
-import { Modal, List } from "antd";
+import {Modal, List} from "antd";
 
-const MissionModal = ({ visible, onCancel, mission }) => {
+const MissionModal = ({visible, onCancel, mission}) => {
   return (
     <Modal
       title="Détails de la Mission"
@@ -17,7 +17,7 @@ const MissionModal = ({ visible, onCancel, mission }) => {
           <p>{mission.description}</p>
           <h4>Activités</h4>
           {/* Container for the scrollable list */}
-          <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+          <div style={{maxHeight: "300px", overflowY: "auto"}}>
             <List
               itemLayout="vertical"
               dataSource={mission.activityList}
@@ -29,7 +29,8 @@ const MissionModal = ({ visible, onCancel, mission }) => {
                       <ul>
                         {activity.performanceRealization.map((realization) => (
                           <li key={realization.id}>
-                            Indicateurs : {realization.realization} (Réalizations : {realization.indicators})
+                            Indicateurs : {realization.realization}{" "}
+                            (Réalizations : {realization.indicators})
                           </li>
                         ))}
                       </ul>

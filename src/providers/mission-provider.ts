@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import {toast} from "react-toastify";
 import environment from "../conf/environment"; // Adjust the path as necessary
 
 // Define the type for Activity
@@ -23,7 +23,8 @@ export interface PerformanceRealization {
 // Fetching all missions from an API
 export const fetchMissions = async (): Promise<Mission[]> => {
   try {
-    const url = "http://localhost:8080/direction/mission/all?page=1&page_size=50";
+    const url =
+      "http://localhost:8080/direction/mission/all?page=1&page_size=50";
     const response = await fetch(url, {
       method: "GET",
     });
@@ -48,7 +49,9 @@ export const fetchMissions = async (): Promise<Mission[]> => {
 };
 
 // Fetching missions by directionId
-export const getByDirectionId = async (directionId: string): Promise<Mission[]> => {
+export const getByDirectionId = async (
+  directionId: string
+): Promise<Mission[]> => {
   try {
     const url = `http://localhost:8080/direction/mission/byDirectionId/${directionId}`;
     const response = await fetch(url, {
@@ -57,7 +60,9 @@ export const getByDirectionId = async (directionId: string): Promise<Mission[]> 
 
     if (!response.ok) {
       const errorData = await response.json();
-      const errorMessage = errorData.message || "Erreur inconnue lors de la récupération des missions par direction";
+      const errorMessage =
+        errorData.message ||
+        "Erreur inconnue lors de la récupération des missions par direction";
       toast.error(errorMessage);
       throw new Error(errorMessage);
     }
@@ -85,7 +90,9 @@ export const saveMission = async (mission: Mission): Promise<Mission> => {
 
     if (!response.ok) {
       const errorData = await response.json();
-      const errorMessage = errorData.message || "Erreur inconnue lors de l'enregistrement de la mission";
+      const errorMessage =
+        errorData.message ||
+        "Erreur inconnue lors de l'enregistrement de la mission";
       toast.error(errorMessage);
       throw new Error(errorMessage);
     }
@@ -109,7 +116,9 @@ export const deleteMission = async (id: string): Promise<void> => {
 
     if (!response.ok) {
       const errorData = await response.json();
-      const errorMessage = errorData.message || "Erreur inconnue lors de la suppression de la mission";
+      const errorMessage =
+        errorData.message ||
+        "Erreur inconnue lors de la suppression de la mission";
       toast.error(errorMessage);
       throw new Error(errorMessage);
     }

@@ -1,36 +1,47 @@
-import React, { useState } from "react";
-import { Modal, Input, Button, Form, Steps, Select, DatePicker, message } from "antd";
+import React, {useState} from "react";
+import {
+  Modal,
+  Input,
+  Button,
+  Form,
+  Steps,
+  Select,
+  DatePicker,
+  message,
+} from "antd";
 
-const { Step } = Steps;
-const { Option } = Select;
+const {Step} = Steps;
+const {Option} = Select;
 
-const ActivityDetailsForm = ({ activity, setActivity }) => {
-  const { description, date } = activity;
+const ActivityDetailsForm = ({activity, setActivity}) => {
+  const {description, date} = activity;
 
   return (
     <Form>
       <Form.Item label="Description de l'activité">
         <Input
           value={description}
-          onChange={(e) => setActivity({ ...activity, description: e.target.value })}
+          onChange={(e) =>
+            setActivity({...activity, description: e.target.value})
+          }
         />
       </Form.Item>
       <Form.Item label="Date de l'activité">
         <DatePicker
           value={date}
-          onChange={(date) => setActivity({ ...activity, date })}
+          onChange={(date) => setActivity({...activity, date})}
         />
       </Form.Item>
     </Form>
   );
 };
 
-const TaskForm = ({ tasks, setTasks }) => {
+const TaskForm = ({tasks, setTasks}) => {
   const [taskDescription, setTaskDescription] = useState("");
   const [taskDueDate, setTaskDueDate] = useState(null);
 
   const handleAddTask = () => {
-    const newTask = { description: taskDescription, dueDate: taskDueDate };
+    const newTask = {description: taskDescription, dueDate: taskDueDate};
     setTasks([...tasks, newTask]);
     setTaskDescription("");
     setTaskDueDate(null);
@@ -56,7 +67,8 @@ const TaskForm = ({ tasks, setTasks }) => {
       <ul>
         {tasks.map((task, index) => (
           <li key={index}>
-            {task.description} (Due: {task.dueDate ? task.dueDate.format("DD/MM/YYYY") : "N/A"})
+            {task.description} (Due:{" "}
+            {task.dueDate ? task.dueDate.format("DD/MM/YYYY") : "N/A"})
           </li>
         ))}
       </ul>
@@ -64,12 +76,15 @@ const TaskForm = ({ tasks, setTasks }) => {
   );
 };
 
-const NextTaskForm = ({ nextTasks, setNextTasks }) => {
+const NextTaskForm = ({nextTasks, setNextTasks}) => {
   const [nextTaskDescription, setNextTaskDescription] = useState("");
   const [nextTaskDueDate, setNextTaskDueDate] = useState(null);
 
   const handleAddNextTask = () => {
-    const newNextTask = { description: nextTaskDescription, dueDate: nextTaskDueDate };
+    const newNextTask = {
+      description: nextTaskDescription,
+      dueDate: nextTaskDueDate,
+    };
     setNextTasks([...nextTasks, newNextTask]);
     setNextTaskDescription("");
     setNextTaskDueDate(null);
@@ -95,7 +110,8 @@ const NextTaskForm = ({ nextTasks, setNextTasks }) => {
       <ul>
         {nextTasks.map((nextTask, index) => (
           <li key={index}>
-            {nextTask.description} (Due: {nextTaskDueDate ? nextTaskDueDate.format("DD/MM/YYYY") : "N/A"})
+            {nextTask.description} (Due:{" "}
+            {nextTaskDueDate ? nextTaskDueDate.format("DD/MM/YYYY") : "N/A"})
           </li>
         ))}
       </ul>
@@ -103,14 +119,17 @@ const NextTaskForm = ({ nextTasks, setNextTasks }) => {
   );
 };
 
-const PerformanceIndicatorForm = ({ performanceIndicators, setPerformanceIndicators }) => {
+const PerformanceIndicatorForm = ({
+  performanceIndicators,
+  setPerformanceIndicators,
+}) => {
   const [indicatorDescription, setIndicatorDescription] = useState("");
   const [realizationType, setRealizationType] = useState("number"); // Default to number
   const [realizationValue, setRealizationValue] = useState("");
 
   const handleValueChange = (value) => {
     // Remove non-numeric characters
-    const numericValue = value.replace(/[^0-9.]/g, '');
+    const numericValue = value.replace(/[^0-9.]/g, "");
     setRealizationValue(numericValue);
 
     // Validate if the type is percentage
@@ -139,16 +158,20 @@ const PerformanceIndicatorForm = ({ performanceIndicators, setPerformanceIndicat
         <Input
           value={realizationValue}
           onChange={(e) => handleValueChange(e.target.value)}
-          placeholder={realizationType === "number" ? "Entrez un chiffre" : "Entrez un pourcentage"}
+          placeholder={
+            realizationType === "number"
+              ? "Entrez un chiffre"
+              : "Entrez un pourcentage"
+          }
         />
       </Form.Item>
     </Form>
   );
 };
 
-const AddActivityModal = ({ visible, onCancel }) => {
+const AddActivityModal = ({visible, onCancel}) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [activity, setActivity] = useState({ description: "", date: null });
+  const [activity, setActivity] = useState({description: "", date: null});
   const [tasks, setTasks] = useState([]);
   const [nextTasks, setNextTasks] = useState([]);
   const [performanceIndicators, setPerformanceIndicators] = useState([]);
@@ -156,16 +179,16 @@ const AddActivityModal = ({ visible, onCancel }) => {
   const [newMissionDescription, setNewMissionDescription] = useState("");
 
   const existingMissions = [
-    { id: 1, description: "Mission A" },
-    { id: 2, description: "Mission B" },
-    { id: 3, description: "Mission C" },
+    {id: 1, description: "Mission A"},
+    {id: 2, description: "Mission B"},
+    {id: 3, description: "Mission C"},
   ];
 
   const next = () => setCurrentStep(currentStep + 1);
   const prev = () => setCurrentStep(currentStep - 1);
   const addAnotherActivity = () => {
     // Reset state for adding another activity
-    setActivity({ description: "", date: null });
+    setActivity({description: "", date: null});
     setTasks([]);
     setNextTasks([]);
     setPerformanceIndicators([]);
@@ -175,7 +198,8 @@ const AddActivityModal = ({ visible, onCancel }) => {
   const handleSubmit = () => {
     const activityData = {
       ...activity,
-      mission: selectedMission === "new" ? newMissionDescription : selectedMission,
+      mission:
+        selectedMission === "new" ? newMissionDescription : selectedMission,
       tasks,
       nextTasks,
       performanceIndicators,
@@ -190,14 +214,20 @@ const AddActivityModal = ({ visible, onCancel }) => {
       content: (
         <Form>
           <Form.Item label="Mission">
-            <Select value={selectedMission} onChange={setSelectedMission} placeholder="Sélectionnez une mission">
+            <Select
+              value={selectedMission}
+              onChange={setSelectedMission}
+              placeholder="Sélectionnez une mission"
+            >
               <Option value="existing">Mission Existante</Option>
               <Option value="new">Nouvelle Mission</Option>
             </Select>
           </Form.Item>
           {selectedMission === "new" && (
             <Form.Item label="Description de la Mission">
-              <Input onChange={(e) => setNewMissionDescription(e.target.value)} />
+              <Input
+                onChange={(e) => setNewMissionDescription(e.target.value)}
+              />
             </Form.Item>
           )}
           {selectedMission === "existing" && (
@@ -212,7 +242,13 @@ const AddActivityModal = ({ visible, onCancel }) => {
             </Form.Item>
           )}
           <ActivityDetailsForm activity={activity} setActivity={setActivity} />
-          <Button type="primary" onClick={next} disabled={!selectedMission || !activity.description || !activity.date}>
+          <Button
+            type="primary"
+            onClick={next}
+            disabled={
+              !selectedMission || !activity.description || !activity.date
+            }
+          >
             Suivant
           </Button>
         </Form>
@@ -223,10 +259,10 @@ const AddActivityModal = ({ visible, onCancel }) => {
       content: (
         <>
           <TaskForm tasks={tasks} setTasks={setTasks} />
-          <Button type="primary" onClick={next} style={{ marginTop: 16 }}>
+          <Button type="primary" onClick={next} style={{marginTop: 16}}>
             Suivant
           </Button>
-          <Button onClick={prev} style={{ marginTop: 16, marginLeft: 8 }}>
+          <Button onClick={prev} style={{marginTop: 16, marginLeft: 8}}>
             Précédent
           </Button>
         </>
@@ -237,10 +273,10 @@ const AddActivityModal = ({ visible, onCancel }) => {
       content: (
         <>
           <NextTaskForm nextTasks={nextTasks} setNextTasks={setNextTasks} />
-          <Button type="primary" onClick={next} style={{ marginTop: 16 }}>
+          <Button type="primary" onClick={next} style={{marginTop: 16}}>
             Suivant
           </Button>
-          <Button onClick={prev} style={{ marginTop: 16, marginLeft: 8 }}>
+          <Button onClick={prev} style={{marginTop: 16, marginLeft: 8}}>
             Précédent
           </Button>
         </>
@@ -250,8 +286,11 @@ const AddActivityModal = ({ visible, onCancel }) => {
       title: "Indicateurs de Performance",
       content: (
         <>
-          <PerformanceIndicatorForm performanceIndicators={performanceIndicators} setPerformanceIndicators={setPerformanceIndicators} />
-          <Button onClick={prev} style={{ marginRight: 8 }}>
+          <PerformanceIndicatorForm
+            performanceIndicators={performanceIndicators}
+            setPerformanceIndicators={setPerformanceIndicators}
+          />
+          <Button onClick={prev} style={{marginRight: 8}}>
             Précédent
           </Button>
           <Button type="primary" onClick={handleSubmit}>
@@ -263,15 +302,25 @@ const AddActivityModal = ({ visible, onCancel }) => {
   ];
 
   return (
-    <Modal title="Ajouter une Activité" visible={visible} onCancel={onCancel} footer={null} width={600}>
+    <Modal
+      title="Ajouter une Activité"
+      visible={visible}
+      onCancel={onCancel}
+      footer={null}
+      width={600}
+    >
       <Steps current={currentStep}>
         {steps.map((item) => (
           <Step key={item.title} title={item.title} />
         ))}
       </Steps>
-      <div style={{ marginTop: 20 }}>{steps[currentStep].content}</div>
-      {currentStep === 3 && ( 
-        <Button type="default" onClick={addAnotherActivity} style={{ marginTop: 16 }}>
+      <div style={{marginTop: 20}}>{steps[currentStep].content}</div>
+      {currentStep === 3 && (
+        <Button
+          type="default"
+          onClick={addAnotherActivity}
+          style={{marginTop: 16}}
+        >
           Ajouter une autre activité
         </Button>
       )}

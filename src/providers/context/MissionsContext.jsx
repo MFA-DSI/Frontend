@@ -1,10 +1,10 @@
-import React, { createContext, useContext, useState } from "react";
-import { useMissions } from "../../hooks/useMissions"; // Adjust the path as necessary
+import React, {createContext, useContext, useState} from "react";
+import {useMissions} from "../../hooks/useMissions"; // Adjust the path as necessary
 
 const MissionContext = createContext();
 
-export const MissionProvider = ({ children }) => {
-  const { missions, isLoading } = useMissions();
+export const MissionProvider = ({children}) => {
+  const {missions, isLoading} = useMissions();
   const [filterType, setFilterType] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -16,10 +16,14 @@ export const MissionProvider = ({ children }) => {
     if (searchTerm) {
       filtered = filtered.filter(
         (mission) =>
-          mission.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          mission.description
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
           mission.activityList.some((activity) =>
             activity.performanceRealization.some((realization) =>
-              realization.realization.toLowerCase().includes(searchTerm.toLowerCase())
+              realization.realization
+                .toLowerCase()
+                .includes(searchTerm.toLowerCase())
             )
           )
       );
