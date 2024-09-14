@@ -1,14 +1,32 @@
 import React from "react";
+import {Select} from "antd";
+import "./assets/index.css";
 
-const DropdownInput = ({id, label, name, options, disabled}) => (
-  <select className="form-group__input" id={id} name={name} disabled={disabled}>
-    <option value="">{label}</option>
-    {options.map((option) => (
-      <option key={option.id} value={option.id}>
-        {option.name}
-      </option>
-    ))}
-  </select>
+const {Option} = Select;
+
+export const DropdownInput = ({
+  id,
+  label,
+  name,
+  options,
+  disabled,
+  selectedValue,
+  onChange,
+}) => (
+  <Select
+    id={id}
+    name={name}
+    disabled={disabled}
+    value={selectedValue}
+    onChange={onChange}
+    placeholder={label}
+    className="form-group__input"
+  >
+    {options &&
+      options.map((option) => (
+        <Option key={option.id} value={option.id}>
+          {option.name}
+        </Option>
+      ))}
+  </Select>
 );
-
-export default DropdownInput;

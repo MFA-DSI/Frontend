@@ -1,19 +1,10 @@
 import axios from "axios";
-import {useStore} from "zustand";
 
-const axiosInstance = axios.create();
-
-axiosInstance.interceptors.request.use(
-  (config) => {
-    const {accessToken, directionId, userId} = useStore.getState(); // Corrected to use useStore().getState()
-    if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
-    }
-    return config;
+const token = sessionStorage.getItem("token");
+export const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer " + token,
   },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-export default axiosInstance;
+});

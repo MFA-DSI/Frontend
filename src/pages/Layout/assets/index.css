@@ -1,0 +1,99 @@
+/* MainLayout.css */
+
+/* Base styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Styles for the Sider */
+.demo-logo-vertical {
+  height: 32px;
+  margin: 16px;
+}
+
+.side__text {
+  color: #ffffff;
+}
+
+.side__text__first {
+  font-weight: bold;
+  color: #ff4d4f; /* Example color (for the first item) */
+}
+
+/* Default styles for larger screens */
+@media (min-width: 768px) {
+  .menu-button {
+    display: none; /* Hide the button on larger screens */
+  }
+
+  .ant-layout-sider {
+    width: 200px; /* Set fixed width for the sidebar */
+  }
+
+  .ant-layout {
+    margin-left: 200px; /* Adjust layout margin */
+  }
+
+  .ant-layout-header {
+    padding: 0 16px; /* Header padding */
+  }
+
+  .ant-layout-content {
+    padding: 24px; /* Content padding */
+  }
+}
+
+/* Styles for tablet screens */
+@media (min-width: 576px) and (max-width: 767px) {
+  .menu-button {
+    display: block; /* Show the button on tablet screens */
+  }
+
+  .ant-layout-sider {
+    width: 60%; /* Sidebar takes 60% of the screen */
+    position: fixed; /* Fixed sidebar on the left */
+  }
+
+  .ant-layout {
+    margin-left: 60%; /* Adjust layout margin */
+  }
+
+  .ant-layout-header {
+    padding: 0 16px; /* Header padding */
+  }
+
+  .ant-layout-content {
+    padding: 16px; /* Content padding */
+  }
+}
+
+/* Styles for mobile screens */
+@media (max-width: 575px) {
+  .menu-button {
+    display: block; /* Show the button on mobile screens */
+    position: absolute; /* Position it at the top */
+    left: 16px; /* Align to the left */
+    top: 16px; /* Align to the top */
+    z-index: 1000; /* Ensure it appears above other elements */
+  }
+
+  .ant-layout-sider {
+    width: 80%; /* Sidebar takes 80% of the screen */
+    position: fixed; /* Fixed sidebar on the left */
+    transform: translateX(-100%); /* Initially hide the sidebar */
+    transition: transform 0.3s ease; /* Transition effect */
+  }
+
+  .ant-layout-sider.open {
+    transform: translateX(0); /* Show the sidebar when open */
+  }
+
+  .ant-layout {
+    margin-left: 0; /* Remove margin */
+  }
+
+  .ant-layout-content {
+    padding: 16px; /* Content padding */
+  }
+}

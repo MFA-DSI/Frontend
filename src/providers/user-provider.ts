@@ -5,7 +5,7 @@ import {AuthReponse} from "../types/AuthReponse";
 
 const API_URL: string = import.meta.env.VITE_API_URL;
 
-export default {
+export const signInProvider = {
   save: async (user: User): Promise<void> => {
     try {
       const response = await axios.post(`${API_URL}/users/signup`, user);

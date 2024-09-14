@@ -1,13 +1,15 @@
 import {useNavigate} from "react-router-dom";
 import {authProvider} from "../../providers/auth-provider";
-import userProvider from "../../providers/user-provider";
 import "./assets/index.scss";
 import React, {useState} from "react";
 import {resetValues} from "../../lib/reset";
 import {useDirectionsContext} from "../../providers/context/DirectionContext";
+import {DropdownInput} from "../Input/DropDown";
+import {signInProvider} from "../../providers/user-provider";
+import {grades} from "./utils/Grade";
 
 const {login} = authProvider;
-const {save} = userProvider;
+const {save} = signInProvider;
 
 const LoginComponent = ({mode: initialMode}) => {
   const [mode, setMode] = useState(initialMode);
@@ -43,6 +45,8 @@ const LoginComponent = ({mode: initialMode}) => {
           firstname: data.firstname,
           lastname: data.lastname,
           email: data.email,
+          grade: data.grade,
+          function: data.function,
           directionId: data.directionId,
           password: data.createpassword,
         });
@@ -83,88 +87,110 @@ const LoginComponent = ({mode: initialMode}) => {
   );
 };
 
-const LoginForm = ({mode, onSubmit, isLoading}) => (
-  <form onSubmit={onSubmit}>
-    <div className="form-block__input-wrapper">
-      <div className="form-group form-group--login">
-        <Input
-          type="email"
-          id="email"
-          label="User Name"
-          name="email"
-          disabled={mode === "signup"}
-        />
-        <Input
-          type="password"
-          id="password"
-          label="Password"
-          name="password"
-          disabled={mode === "signup"}
-        />
+const LoginForm = ({mode, onSubmit, isLoading}) => {
+  const [selectedGrade, setSelectedGrade] = useState("");
+  const [formValues, setFormValues] = React.useState({
+    directionId: "",
+    grade: "",
+  });
+
+  const handleDropdownChange = (field) => (value) => {
+    setFormValues((prevState) => ({
+      ...prevState,
+      [field]: value,
+    }));
+  };
+  return (
+    <form onSubmit={onSubmit}>
+      <div className="form-block__input-wrapper">
+        <div className="form-group form-group--login">
+          <Input
+            type="email"
+            id="email"
+            label="User Name"
+            name="email"
+            disabled={mode === "signup"}
+          />
+          <Input
+            type="password"
+            id="password"
+            label="Password"
+            name="password"
+            disabled={mode === "signup"}
+          />
+        </div>
+        <div className="form-group form-group--signup">
+          <Input
+            type="text"
+            id="firstname"
+            label="firstname"
+            name="firstname"
+            disabled={mode === "login"}
+          />
+          <Input
+            type="text"
+            id="lastname"
+            label="lastname"
+            name="lastname"
+            disabled={mode === "login"}
+          />
+          <Input
+            type="email"
+            id="email"
+            label="Email"
+            name="email"
+            disabled={mode === "login"}
+          />
+          <DropdownInput
+            id="direction"
+            label="Direction"
+            name="directionId"
+            options={useDirectionsContext().data}
+            disabled={
+              useDirectionsContext().isDirectionsLoading || mode === "login"
+            }
+          />
+
+          <DropdownInput
+            id="grade-select"
+            label="Select Grade"
+            name="grade"
+            options={grades.map((grade) => ({name: grade.name}))}
+            disabled={mode === "login"}
+          />
+          <Input
+            type="text"
+            id="function"
+            label="function"
+            name="function"
+            disabled={mode === "login"}
+          />
+          <Input
+            type="password"
+            id="createpassword"
+            label="Password"
+            name="createpassword"
+            disabled={mode === "login"}
+          />
+          <Input
+            type="password"
+            id="repeatpassword"
+            label="Repeat Password"
+            name="repeatpassword"
+            disabled={mode === "login"}
+          />
+        </div>
       </div>
-      <div className="form-group form-group--signup">
-        <Input
-          type="text"
-          id="firstname"
-          label="firstname"
-          name="firstname"
-          disabled={mode === "login"}
-        />
-        <Input
-          type="text"
-          id="lastname"
-          label="lastname"
-          name="lastname"
-          disabled={mode === "login"}
-        />
-        <Input
-          type="text"
-          id="username"
-          label="username"
-          name="username"
-          disabled={mode === "login"}
-        />
-        <Input
-          type="email"
-          id="email"
-          label="Email"
-          name="email"
-          disabled={mode === "login"}
-        />
-        <DropdownInput
-          id="direction"
-          label="Direction"
-          name="directionId"
-          options={useDirectionsContext().data}
-          disabled={
-            useDirectionsContext().isDirectionsLoading || mode === "login"
-          }
-        />
-        <Input
-          type="password"
-          id="createpassword"
-          label="Password"
-          name="createpassword"
-          disabled={mode === "login"}
-        />
-        <Input
-          type="password"
-          id="repeatpassword"
-          label="Repeat Password"
-          name="repeatpassword"
-          disabled={mode === "login"}
-        />
-      </div>
-    </div>
-    <button
-      className="button button--primary full-width"
-      type="submit"
-      disabled={isLoading}
-    >
-      {isLoading ? "Processing..." : mode === "login" ? "Log In" : "Sign Up"}
-    </button>
-  </form>
-);
+      <button
+        className="button button--primary full-width"
+        type="submit"
+        disabled={isLoading}
+      >
+        {isLoading ? "Processing..." : mode === "login" ? "Log In" : "Sign Up"}
+      </button>
+    </form>
+  );
+};
 
 const Input = ({id, type, label, name, disabled}) => (
   <input
@@ -175,18 +201,6 @@ const Input = ({id, type, label, name, disabled}) => (
     placeholder={label}
     disabled={disabled}
   />
-);
-
-const DropdownInput = ({id, label, name, options, disabled}) => (
-  <select className="form-group__input" id={id} name={name} disabled={disabled}>
-    <option value="">{label}</option>
-    {options &&
-      options.map((option) => (
-        <option key={option.id} value={option.id}>
-          {option.name}
-        </option>
-      ))}
-  </select>
 );
 
 export default LoginComponent;

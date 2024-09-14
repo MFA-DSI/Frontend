@@ -4,10 +4,8 @@ import {AuthReponse} from "../types/AuthReponse";
 import {toast} from "react-toastify";
 import environment from "../conf/environment";
 import {errorTranslations} from "./utils/translator/translator";
+import {useAuthStore} from "../hooks";
 
-const API_URL: string = import.meta.env.VITE_API_URL;
-
-// Assurez-vous de bien importer votre environnement
 export const authProvider = {
   login: async (auth: AuthLogin): Promise<void> => {
     try {
@@ -27,6 +25,12 @@ export const authProvider = {
       sessionStorage.setItem("token", token.token.accessToken);
       sessionStorage.setItem("directionId", token.directionId);
       sessionStorage.setItem("userId", token.userId);
+
+      useAuthStore.setState({
+        directionId: token.directionId,
+        userId: token.userId,
+        token: token.token.accessToken,
+      });
 
       return Promise.resolve();
     } catch (error) {

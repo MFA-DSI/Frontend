@@ -4,6 +4,8 @@ export type User = {
   lastname: string;
   username: string;
   email: string;
+  function: string;
+  grade: string;
   password: string;
   departementsId: string;
 };
