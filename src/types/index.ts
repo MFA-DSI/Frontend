@@ -3,3 +3,4 @@ export * from "./AuthReponse";
 export * from "./Direction";
 export * from "./User";
 export * from "./errorResponse";
+export * from "./Activity";

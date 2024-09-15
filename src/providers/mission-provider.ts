@@ -1,25 +1,31 @@
 import {toast} from "react-toastify";
 import environment from "../conf/environment"; // Adjust the path as necessary
+import { CreateMission } from "../types";
 
 // Define the type for Activity
-export interface Mission {
+ interface Mission {
   id: string;
   description: string;
   activityList: ActivityItem[];
 }
 
-export interface ActivityItem {
+interface ActivityItem {
   id: string;
   description: string;
   performanceRealization: PerformanceRealization[];
 }
 
-export interface PerformanceRealization {
+interface PerformanceRealization {
   id: string;
   indicators: number;
   realization: string;
 }
 
+
+interface MissionName {
+  id : string,
+  name : string
+}
 // Fetching all missions from an API
 export const fetchMissions = async (): Promise<Mission[]> => {
   try {
@@ -48,6 +54,32 @@ export const fetchMissions = async (): Promise<Mission[]> => {
   }
 };
 
+export const fetchMissionsName = async (directionId: string): Promise<MissionName[]> => {
+  try {
+    const url =
+      `http://localhost:8080/direction/mission/name?directionId=${directionId}` ;
+    const response = await fetch(url, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage =
+        errorData.message ||
+        "Erreur inconnue lors de la récupération des activités";
+      toast.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    const data: MissionName[] = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching missions:", error);
+    toast.error("Une erreur inattendue est survenue.");
+    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+  }
+};
+
 // Fetching missions by directionId
 export const getByDirectionId = async (
   directionId: string
@@ -68,6 +100,7 @@ export const getByDirectionId = async (
     }
 
     const data: Mission[] = await response.json();
+    console.log(data);
     
     return data;
   } catch (error) {
@@ -78,7 +111,7 @@ export const getByDirectionId = async (
 };
 
 // Save a new mission
-export const saveMission = async (mission: Mission): Promise<Mission> => {
+export const saveMission = async (mission: CreateMission): Promise<Mission> => {
   try {
     const url = "http://localhost:8080/direction/mission/create";
     const response = await fetch(url, {

@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { fetchMissions, getByDirectionId, saveMission, deleteMission } from "../providers/mission-provider";
+import { fetchMissions, getByDirectionId, saveMission, deleteMission, fetchMissionsName } from "../providers/mission-provider";
 
 export const useMissions = () => {
   const queryClient = useQueryClient();
@@ -13,6 +13,11 @@ export const useMissions = () => {
     queryKey: ["directionMissions", directionId],
     queryFn: () => getByDirectionId(directionId),
   });
+
+  const directionMissionsName = (directionId : string)=>useQuery({
+    queryKey: ["missionsName", directionId],
+    queryFn: () => fetchMissionsName(directionId),
+  })
 
   const saveMissionMutation = useMutation(saveMission, {
     onSuccess: () => {
@@ -29,6 +34,7 @@ export const useMissions = () => {
   return {
     missions: missionsQuery.data,
     directionIdQuery,
+    directionMissionsName,
     saveMission: saveMissionMutation.mutate,
     deleteMission: deleteMissionMutation.mutate,
     isLoading: missionsQuery.isLoading,

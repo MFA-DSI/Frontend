@@ -16,6 +16,7 @@
     "antd": "^5.20.5",
     "autoprefixer": "^10.4.20",
     "dotenv": "^16.4.5",
+    "moment": "^2.30.1",
     "postcss": "^8.4.41",
     "rc-virtual-list": "^3.14.5",
     "react": "^18.3.1",

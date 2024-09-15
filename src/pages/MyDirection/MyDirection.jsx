@@ -3,7 +3,7 @@ import React, {useState} from "react";
 import {Button} from "antd";
 import MainLayout from "../Layout/MainLayout";
 import TableComponent from "../../components/Table/Table";
-import AddActivityModal from "../../components/Modal/addActivity";
+import AddActivityModal from "../../components/Modal/addMission";
 
 const MyDirection = () => {
   const [isAddActivityModalVisible, setIsAddActivityModalVisible] =
