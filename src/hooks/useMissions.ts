@@ -1,23 +1,31 @@
-import { useQuery, useMutation, useQueryClient } from "react-query";
-import { fetchMissions, getByDirectionId, saveMission, deleteMission, fetchMissionsName } from "../providers/mission-provider";
+import {useQuery, useMutation, useQueryClient} from "react-query";
+import {
+  fetchMissions,
+  getByDirectionId,
+  saveMission,
+  deleteMission,
+  fetchMissionsName,
+} from "../providers/mission-provider";
 
 export const useMissions = () => {
   const queryClient = useQueryClient();
-  
+
   const missionsQuery = useQuery({
     queryKey: ["missions"],
     queryFn: fetchMissions,
   });
 
-  const directionIdQuery = (directionId: string) => useQuery({
-    queryKey: ["directionMissions", directionId],
-    queryFn: () => getByDirectionId(directionId),
-  });
+  const directionIdQuery = (directionId: string) =>
+    useQuery({
+      queryKey: ["directionMissions", directionId],
+      queryFn: () => getByDirectionId(directionId),
+    });
 
-  const directionMissionsName = (directionId : string)=>useQuery({
-    queryKey: ["missionsName", directionId],
-    queryFn: () => fetchMissionsName(directionId),
-  })
+  const directionMissionsName = (directionId: string) =>
+    useQuery({
+      queryKey: ["missionsName", directionId],
+      queryFn: () => fetchMissionsName(directionId),
+    });
 
   const saveMissionMutation = useMutation(saveMission, {
     onSuccess: () => {

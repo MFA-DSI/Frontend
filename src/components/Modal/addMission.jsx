@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
   Modal,
   Input,
@@ -9,14 +9,14 @@ import {
   DatePicker,
   message,
 } from "antd";
-import { useMissionContext } from "../../providers/context/MissionsContext";
-import moment from "moment"; 
+import {useMissionContext} from "../../providers/context/MissionsContext";
+import moment from "moment";
 
-const { Step } = Steps;
-const { Option } = Select;
+const {Step} = Steps;
+const {Option} = Select;
 
-const ActivityDetailsForm = ({ activity, setActivity }) => {
-  const { description, date } = activity;
+const ActivityDetailsForm = ({activity, setActivity}) => {
+  const {description, date} = activity;
 
   return (
     <Form>
@@ -24,26 +24,26 @@ const ActivityDetailsForm = ({ activity, setActivity }) => {
         <Input
           value={description}
           onChange={(e) =>
-            setActivity({ ...activity, description: e.target.value })
+            setActivity({...activity, description: e.target.value})
           }
         />
       </Form.Item>
       <Form.Item label="Date de l'activité">
         <DatePicker
           value={date}
-          onChange={(date) => setActivity({ ...activity, date })}
+          onChange={(date) => setActivity({...activity, date})}
         />
       </Form.Item>
     </Form>
   );
 };
 
-const TaskForm = ({ tasks, setTasks }) => {
+const TaskForm = ({tasks, setTasks}) => {
   const [taskDescription, setTaskDescription] = useState("");
   const [taskDueDate, setTaskDueDate] = useState(null);
 
   const handleAddTask = () => {
-    const newTask = { description: taskDescription, dueDate: taskDueDate };
+    const newTask = {description: taskDescription, dueDate: taskDueDate};
     setTasks([...tasks, newTask]);
     setTaskDescription("");
     setTaskDueDate(null);
@@ -78,7 +78,7 @@ const TaskForm = ({ tasks, setTasks }) => {
   );
 };
 
-const NextTaskForm = ({ nextTasks, setNextTasks }) => {
+const NextTaskForm = ({nextTasks, setNextTasks}) => {
   const [nextTaskDescription, setNextTaskDescription] = useState("");
   const [nextTaskDueDate, setNextTaskDueDate] = useState(null);
 
@@ -194,18 +194,17 @@ const PerformanceIndicatorForm = ({
   );
 };
 
-const AddActivityModal = ({ visible, onCancel }) => {
-
-  const{ MissionNameByDirectionId}  = useMissionContext()
+const AddActivityModal = ({visible, onCancel}) => {
+  const {MissionNameByDirectionId} = useMissionContext();
   const [currentStep, setCurrentStep] = useState(0);
-  
-  const [activity, setActivity] = useState({ description: "", date: null });
+
+  const [activity, setActivity] = useState({description: "", date: null});
   const [tasks, setTasks] = useState([]);
   const [nextTasks, setNextTasks] = useState([]);
   const [performanceIndicators, setPerformanceIndicators] = useState([]);
   const [selectedMission, setSelectedMission] = useState(null);
   const [newMissionDescription, setNewMissionDescription] = useState("");
-  const [mission,setMission] = useState();
+  const [mission, setMission] = useState();
 
   const existingMissions = MissionNameByDirectionId;
 
@@ -214,7 +213,7 @@ const AddActivityModal = ({ visible, onCancel }) => {
 
   const addAnotherActivity = () => {
     // Reset state for adding another activity
-    setActivity({ description: "", date: null });
+    setActivity({description: "", date: null});
     setTasks([]);
     setNextTasks([]);
     setPerformanceIndicators([]);
@@ -224,14 +223,17 @@ const AddActivityModal = ({ visible, onCancel }) => {
   const handleSubmit = () => {
     const activityData = {
       ...activity,
-     id: mission,
-    description:  selectedMission === "new"? newMissionDescription : existingMissions.find(
-      (e) => e.id === mission
-    )?.description,
+      id: mission,
+      description:
+        selectedMission === "new"
+          ? newMissionDescription
+          : existingMissions.find((e) => e.id === mission)?.description,
       activityList: [
         {
           description: activity.description,
-          date: activity.date ? moment(activity.date).format("DD-MM-YYYY") : null,
+          date: activity.date
+            ? moment(activity.date).format("DD-MM-YYYY")
+            : null,
           tasks,
           nextTasks,
           performanceIndicators,
@@ -267,9 +269,12 @@ const AddActivityModal = ({ visible, onCancel }) => {
           )}
           {selectedMission === "existing" && (
             <Form.Item label="Sélectionner une Mission Existante">
-              <Select placeholder="Choisissez une mission existante" onChange={(e) => setMission(e)}   >
+              <Select
+                placeholder="Choisissez une mission existante"
+                onChange={(e) => setMission(e)}
+              >
                 {existingMissions.map((mission) => (
-                  <Option key={mission.id} value={mission.id} >
+                  <Option key={mission.id} value={mission.id}>
                     {mission.description}
                   </Option>
                 ))}
@@ -294,10 +299,10 @@ const AddActivityModal = ({ visible, onCancel }) => {
       content: (
         <>
           <TaskForm tasks={tasks} setTasks={setTasks} />
-          <Button type="primary" onClick={next} style={{ marginTop: 16 }}>
+          <Button type="primary" onClick={next} style={{marginTop: 16}}>
             Suivant
           </Button>
-          <Button onClick={prev} style={{ marginTop: 16, marginLeft: 8 }}>
+          <Button onClick={prev} style={{marginTop: 16, marginLeft: 8}}>
             Précédent
           </Button>
         </>
@@ -308,10 +313,10 @@ const AddActivityModal = ({ visible, onCancel }) => {
       content: (
         <>
           <NextTaskForm nextTasks={nextTasks} setNextTasks={setNextTasks} />
-          <Button type="primary" onClick={next} style={{ marginTop: 16 }}>
+          <Button type="primary" onClick={next} style={{marginTop: 16}}>
             Suivant
           </Button>
-          <Button onClick={prev} style={{ marginTop: 16, marginLeft: 8 }}>
+          <Button onClick={prev} style={{marginTop: 16, marginLeft: 8}}>
             Précédent
           </Button>
         </>
@@ -325,7 +330,7 @@ const AddActivityModal = ({ visible, onCancel }) => {
             performanceIndicators={performanceIndicators}
             setPerformanceIndicators={setPerformanceIndicators}
           />
-          <Button onClick={prev} style={{ marginRight: 8 }}>
+          <Button onClick={prev} style={{marginRight: 8}}>
             Précédent
           </Button>
           <Button type="primary" onClick={handleSubmit}>
@@ -349,12 +354,12 @@ const AddActivityModal = ({ visible, onCancel }) => {
           <Step key={item.title} title={item.title} />
         ))}
       </Steps>
-      <div style={{ marginTop: 20 }}>{steps[currentStep].content}</div>
+      <div style={{marginTop: 20}}>{steps[currentStep].content}</div>
       {currentStep === 3 && (
         <Button
           type="default"
           onClick={addAnotherActivity}
-          style={{ marginTop: 16 }}
+          style={{marginTop: 16}}
         >
           Ajouter une autre activité
         </Button>

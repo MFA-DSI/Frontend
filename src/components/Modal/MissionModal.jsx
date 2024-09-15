@@ -14,10 +14,10 @@ const MissionModal = ({visible, onCancel, mission}) => {
       {mission ? (
         <div>
           <div>
-          <h3>Désignation : </h3><p>{mission.description}</p>
+            <h3>Désignation : </h3>
+            <p>{mission.description}</p>
           </div>
-          
-          
+
           <h4>Les Activités rattachées :</h4>
           {/* Container for the scrollable list */}
           <div style={{maxHeight: "300px", overflowY: "auto"}}>

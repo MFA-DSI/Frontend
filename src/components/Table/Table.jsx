@@ -8,7 +8,7 @@ import {
   FileWordOutlined,
 } from "@ant-design/icons";
 import ModalComponent from "../Modal/Modal";
-import MissionModal from "../Modal/MissionModal"; 
+import MissionModal from "../Modal/MissionModal";
 
 const {Option} = Select;
 
@@ -174,13 +174,12 @@ const TableComponent = ({mode}) => {
           title: "Indicateur",
           dataIndex: "activityList",
           render: (activityList) => {
-
             const performanceRealizations =
-            activityList[0]?.performanceRealization;
-          const otherIndicatorsCount = performanceRealizations
-            ? performanceRealizations.length - 1
-            : 0;
-            
+              activityList[0]?.performanceRealization;
+            const otherIndicatorsCount = performanceRealizations
+              ? performanceRealizations.length - 1
+              : 0;
+
             return (
               <div>
                 {performanceRealizations && performanceRealizations.length > 0
@@ -241,11 +240,11 @@ const TableComponent = ({mode}) => {
 
   if (isMissionLoading || (activityType === "weekly" && isActivityLoading))
     return <Spin />;
-  
-  const layoutMode = mode === "mydirection" ? MissionByDirectionId : filteredMissions; 
-  const dataSource =
-  activityType === "weekly" ? filteredActivities : layoutMode;
 
+  const layoutMode =
+    mode === "mydirection" ? MissionByDirectionId : filteredMissions;
+  const dataSource =
+    activityType === "weekly" ? filteredActivities : layoutMode;
 
   return (
     <>
@@ -448,8 +447,7 @@ const TableComponent = ({mode}) => {
       >
         <Table
           columns={getColumns()}
-          dataSource={dataSource
-          }
+          dataSource={dataSource}
           pagination={{
             pageSize,
             showSizeChanger: true,

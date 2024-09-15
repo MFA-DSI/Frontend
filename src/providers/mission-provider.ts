@@ -1,9 +1,9 @@
 import {toast} from "react-toastify";
 import environment from "../conf/environment"; // Adjust the path as necessary
-import { CreateMission } from "../types";
+import {CreateMission} from "../types";
 
 // Define the type for Activity
- interface Mission {
+interface Mission {
   id: string;
   description: string;
   activityList: ActivityItem[];
@@ -21,10 +21,9 @@ interface PerformanceRealization {
   realization: string;
 }
 
-
 interface MissionName {
-  id : string,
-  name : string
+  id: string;
+  name: string;
 }
 // Fetching all missions from an API
 export const fetchMissions = async (): Promise<Mission[]> => {
@@ -54,10 +53,11 @@ export const fetchMissions = async (): Promise<Mission[]> => {
   }
 };
 
-export const fetchMissionsName = async (directionId: string): Promise<MissionName[]> => {
+export const fetchMissionsName = async (
+  directionId: string
+): Promise<MissionName[]> => {
   try {
-    const url =
-      `http://localhost:8080/direction/mission/name?directionId=${directionId}` ;
+    const url = `http://localhost:8080/direction/mission/name?directionId=${directionId}`;
     const response = await fetch(url, {
       method: "GET",
     });
@@ -101,7 +101,7 @@ export const getByDirectionId = async (
 
     const data: Mission[] = await response.json();
     console.log(data);
-    
+
     return data;
   } catch (error) {
     console.error("Error fetching missions by directionId:", error);

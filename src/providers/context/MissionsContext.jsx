@@ -2,14 +2,15 @@ import React, {createContext, useContext, useState} from "react";
 import {useMissions} from "../../hooks/useMissions"; // Adjust the path as necessary
 
 const MissionContext = createContext();
-const directionId = sessionStorage.getItem("directionId")
+const directionId = sessionStorage.getItem("directionId");
 
 export const MissionProvider = ({children}) => {
-  const {missions, isLoading, directionIdQuery,directionMissionsName} = useMissions();
+  const {missions, isLoading, directionIdQuery, directionMissionsName} =
+    useMissions();
   const [filterType, setFilterType] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
-  const { data :directionMissions, isFetching } = directionIdQuery(directionId);
-  const { data : missionsName  , isFetched } = directionMissionsName(directionId);
+  const {data: directionMissions, isFetching} = directionIdQuery(directionId);
+  const {data: missionsName, isFetched} = directionMissionsName(directionId);
 
   const filteredMissions = () => {
     if (!missions) return [];
@@ -42,14 +43,14 @@ export const MissionProvider = ({children}) => {
     return filtered;
   };
 
-  const directionMission = ()=>{
-      if(!directionMissions) return [];
-      let missions = directionMissions;
-      return missions;
-  }
- const missionName = ()=>{      
-      return !missionsName ? [] : missionsName; 
- }
+  const directionMission = () => {
+    if (!directionMissions) return [];
+    let missions = directionMissions;
+    return missions;
+  };
+  const missionName = () => {
+    return !missionsName ? [] : missionsName;
+  };
   return (
     <MissionContext.Provider
       value={{
