@@ -195,7 +195,8 @@ const PerformanceIndicatorForm = ({
 };
 
 const AddActivityModal = ({visible, onCancel}) => {
-  const {MissionNameByDirectionId} = useMissionContext();
+  const {MissionNameByDirectionId,saveMission
+  } = useMissionContext();
   const [currentStep, setCurrentStep] = useState(0);
 
   const [activity, setActivity] = useState({description: "", date: null});
@@ -220,11 +221,11 @@ const AddActivityModal = ({visible, onCancel}) => {
     setCurrentStep(0); // Go back to the first step
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const activityData = {
       ...activity,
       id: mission,
-      description:
+      name:
         selectedMission === "new"
           ? newMissionDescription
           : existingMissions.find((e) => e.id === mission)?.description,
@@ -240,9 +241,17 @@ const AddActivityModal = ({visible, onCancel}) => {
         },
       ],
     };
-    console.log("Activity Submitted: ", activityData);
-    addAnotherActivity();
-    onCancel();
+    try {
+      console.log(activityData);
+      
+      await saveMission(activityData); 
+
+      addAnotherActivity();
+      onCancel();
+    } catch (error) {
+      console.error("Error saving mission: ", error);
+      toast.error("Failed to save the mission. Please try again."); // Notify the user of the error
+    }
   };
 
   const steps = [
