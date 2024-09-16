@@ -9,8 +9,6 @@ export const MissionProvider = ({children}) => {
     useMissions();
   const [filterType, setFilterType] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
-  const {data: directionMissions, isFetching} = directionIdQuery(directionId);
-  const {data: missionsName, isFetched} = directionMissionsName(directionId);
 
   const filteredMissions = () => {
     if (!missions) return [];
@@ -44,12 +42,10 @@ export const MissionProvider = ({children}) => {
   };
 
   const directionMission = () => {
-    if (!directionMissions) return [];
-    let missions = directionMissions;
-    return missions;
+   return directionIdQuery(directionId).data;
   };
   const missionName = () => {
-    return !missionsName ? [] : missionsName;
+    return directionMissionsName(directionId).data
   };
   return (
     <MissionContext.Provider

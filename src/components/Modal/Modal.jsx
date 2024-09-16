@@ -53,11 +53,11 @@ const ModalComponent = ({visible, onCancel, activity}) => {
       <div className="performance-recommendations">
         <div className="performance-indicators">
           <strong>Indicateurs de Performance:</strong>
-          {activity.perfRealizationDTO.length > 0 ? (
-            activity.perfRealizationDTO.map((realization) => (
+          {activity.performanceRealization.length > 0 ? (
+            activity.performanceRealization.map((realization) => (
               <p key={realization.id}>
                 - Indicateur : {realization.realization} (Réalisation:{" "}
-                {realization.performanceIndicators})
+                {realization.indicators})
               </p>
             ))
           ) : (
