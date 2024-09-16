@@ -117,7 +117,7 @@ export const saveMission = async (mission: CreateMission): Promise<Mission> => {
     const userId = sessionStorage.getItem("userId")
     const url = `http://localhost:8080/direction/mission/create?directionId=${directionId}&userId=${userId}`;
     const response = await fetch(url, {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },

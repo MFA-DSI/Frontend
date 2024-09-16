@@ -125,40 +125,39 @@ const PerformanceIndicatorForm = ({
   performanceIndicators,
   setPerformanceIndicators,
 }) => {
-  const [indicatorDescription, setIndicatorDescription] = useState("");
+  const [indicators, setIndicators] = useState("");
   const [realizationType, setRealizationType] = useState("number"); // Default to number
-  const [realizationValue, setRealizationValue] = useState("");
+  const [realization, setRealization] = useState("");
 
   const handleValueChange = (value) => {
     // Remove non-numeric characters
     const numericValue = value.replace(/[^0-9.]/g, "");
-    setRealizationValue(numericValue);
+    setRealization(numericValue);
 
     // Validate if the type is percentage
     if (realizationType === "percentage" && parseFloat(numericValue) > 100) {
       message.error("La valeur ne doit pas dépasser 100%.");
-      setRealizationValue(""); // Clear the input if it exceeds 100
+      setRealization(""); // Clear the input if it exceeds 100
     }
   };
 
   const handleAddIndicator = () => {
     const newIndicator = {
-      description: indicatorDescription,
-      realizationType,
-      realization: realizationValue,
+      indicators : indicators,
+      realization: realization,
     };
     setPerformanceIndicators([...performanceIndicators, newIndicator]);
-    setIndicatorDescription("");
+    setIndicators("");
     setRealizationType("number");
-    setRealizationValue("");
+    setRealization("");
   };
 
   return (
     <Form>
       <Form.Item label="Description de l'indicateur de performance">
         <Input
-          value={indicatorDescription}
-          onChange={(e) => setIndicatorDescription(e.target.value)}
+          value={indicators}
+          onChange={(e) => setIndicators(e.target.value)}
           placeholder="Entrez la description"
         />
       </Form.Item>
@@ -170,7 +169,7 @@ const PerformanceIndicatorForm = ({
       </Form.Item>
       <Form.Item label="Réalisation">
         <Input
-          value={realizationValue}
+          value={realization}
           onChange={(e) => handleValueChange(e.target.value)}
           placeholder={
             realizationType === "number"
