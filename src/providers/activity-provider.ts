@@ -1,5 +1,5 @@
 import {toast} from "react-toastify";
-import environment from "../conf/environment"; // Adjust the path as necessary
+import environment from "../conf/environment"; 
 
 export interface Activity {
   id: string;
@@ -56,4 +56,31 @@ export const fetchActivities = async (): Promise<unknown> => {
     toast.error("Une erreur inattendue est survenue.");
     throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
   }
-};
+}
+
+export const getActivityByDirectionId = async (directionId : string): Promise<unknown> => {
+    try {
+      const url = `http://localhost:8080/direction/activities/all?directionId=${directionId}`;
+      const response = await fetch(url, {
+        method: "GET",
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        const errorMessage =
+          errorData.message ||
+          "Erreur inconnue lors de la récupération des missions par direction";
+        toast.error(errorMessage);
+        throw new Error(errorMessage);
+      }
+  
+      const data: Activity[] = await response.json();
+  
+      return data;
+    } catch (error) {
+      console.error("Error fetching missions by directionId:", error);
+      toast.error("Une erreur inattendue est survenue.");
+      throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+    }
+  };
+  

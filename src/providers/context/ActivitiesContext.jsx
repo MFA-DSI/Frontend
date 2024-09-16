@@ -4,7 +4,7 @@ import {useActivities} from "../../hooks";
 const ActivityContext = createContext();
 
 export const ActivitieProvider = ({children}) => {
-  const {data: activities, isLoading} = useActivities();
+  const {activities,directionIdQuery, isLoading} = useActivities();
   const [filterType, setFilterType] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -34,6 +34,7 @@ export const ActivitieProvider = ({children}) => {
     <ActivityContext.Provider
       value={{
         filteredActivities: filteredActivities(),
+        directionIdQueryActvities : directionIdQuery().data,
         isLoading,
         setFilterType,
         setSearchTerm,

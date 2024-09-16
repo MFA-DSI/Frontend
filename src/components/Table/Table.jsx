@@ -13,7 +13,7 @@
   const {Option} = Select;
 
   const TableComponent = ({mode}) => {
-    const {filteredActivities, isLoading: isActivityLoading} =
+    const {filteredActivities, isLoading: isActivityLoading,directionIdQueryActvities} =
       useActivitiesContext();
     const {
       filteredMissions,
@@ -261,10 +261,11 @@
     if (isMissionLoading || (activityType === "weekly" && isActivityLoading))
       return <Spin />;
 
-    const layoutMode =
+    const layoutModeMissions =
       mode === "mydirection" ? MissionByDirectionId : filteredMissions;
+    const layoutModeActivities = mode == "mydirection" ? directionIdQueryActvities : filteredActivities;
     const dataSource =
-      activityType === "weekly" && mode ==="all" ? filteredActivities : layoutMode;
+      activityType === "weekly" ? layoutModeActivities: layoutModeMissions;
 
     return (
       <>
