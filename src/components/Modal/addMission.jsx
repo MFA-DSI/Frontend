@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {
   Modal,
   Input,
@@ -9,14 +9,14 @@ import {
   DatePicker,
   message,
 } from "antd";
-import {useMissionContext} from "../../providers/context/MissionsContext";
+import { useMissionContext } from "../../providers/context/MissionsContext";
 import moment from "moment";
 
-const {Step} = Steps;
-const {Option} = Select;
+const { Step } = Steps;
+const { Option } = Select;
 
-const ActivityDetailsForm = ({activity, setActivity}) => {
-  const {description, date} = activity;
+const ActivityDetailsForm = ({ activity, setActivity }) => {
+  const { description, observation, prediction, dueDatetime } = activity;
 
   return (
     <Form>
@@ -24,26 +24,44 @@ const ActivityDetailsForm = ({activity, setActivity}) => {
         <Input
           value={description}
           onChange={(e) =>
-            setActivity({...activity, description: e.target.value})
+            setActivity({ ...activity, description: e.target.value })
           }
         />
       </Form.Item>
-      <Form.Item label="Date de l'activité">
+      <Form.Item label="Observation">
+        <Input
+          value={observation}
+          onChange={(e) =>
+            setActivity({ ...activity, observation: e.target.value })
+          }
+        />
+      </Form.Item>
+      <Form.Item label="Prédiction">
+        <Input
+          value={prediction}
+          onChange={(e) =>
+            setActivity({ ...activity, prediction: e.target.value })
+          }
+        />
+      </Form.Item>
+      <Form.Item label="Date d'échéance">
         <DatePicker
-          value={date}
-          onChange={(date) => setActivity({...activity, date})}
+          value={dueDatetime ? moment(dueDatetime) : null}
+          onChange={(date) =>
+            setActivity({ ...activity, dueDatetime: date })
+          }
         />
       </Form.Item>
     </Form>
   );
 };
 
-const TaskForm = ({tasks, setTasks}) => {
+const TaskForm = ({ tasks, setTasks }) => {
   const [taskDescription, setTaskDescription] = useState("");
   const [taskDueDate, setTaskDueDate] = useState(null);
 
   const handleAddTask = () => {
-    const newTask = {description: taskDescription, dueDate: taskDueDate};
+    const newTask = { description: taskDescription, dueDatetime: taskDueDate };
     setTasks([...tasks, newTask]);
     setTaskDescription("");
     setTaskDueDate(null);
@@ -70,7 +88,10 @@ const TaskForm = ({tasks, setTasks}) => {
         {tasks.map((task, index) => (
           <li key={index}>
             {task.description} (Due:{" "}
-            {task.dueDate ? task.dueDate.format("DD/MM/YYYY") : "N/A"})
+            {task.dueDatetime
+              ? moment(task.dueDatetime).format("DD/MM/YYYY")
+              : "N/A"}
+            )
           </li>
         ))}
       </ul>
@@ -78,14 +99,14 @@ const TaskForm = ({tasks, setTasks}) => {
   );
 };
 
-const NextTaskForm = ({nextTasks, setNextTasks}) => {
+const NextTaskForm = ({ nextTasks, setNextTasks }) => {
   const [nextTaskDescription, setNextTaskDescription] = useState("");
   const [nextTaskDueDate, setNextTaskDueDate] = useState(null);
 
   const handleAddNextTask = () => {
     const newNextTask = {
       description: nextTaskDescription,
-      dueDate: nextTaskDueDate,
+      dueDatetime: nextTaskDueDate,
     };
     setNextTasks([...nextTasks, newNextTask]);
     setNextTaskDescription("");
@@ -113,7 +134,10 @@ const NextTaskForm = ({nextTasks, setNextTasks}) => {
         {nextTasks.map((nextTask, index) => (
           <li key={index}>
             {nextTask.description} (Due:{" "}
-            {nextTaskDueDate ? nextTaskDueDate.format("DD/MM/YYYY") : "N/A"})
+            {nextTask.dueDatetime
+              ? moment(nextTask.dueDatetime).format("DD/MM/YYYY")
+              : "N/A"}
+            )
           </li>
         ))}
       </ul>
@@ -126,30 +150,24 @@ const PerformanceIndicatorForm = ({
   setPerformanceIndicators,
 }) => {
   const [indicators, setIndicators] = useState("");
-  const [realizationType, setRealizationType] = useState("number"); // Default to number
   const [realization, setRealization] = useState("");
-
-  const handleValueChange = (value) => {
-    // Remove non-numeric characters
-    const numericValue = value.replace(/[^0-9.]/g, "");
-    setRealization(numericValue);
-
-    // Validate if the type is percentage
-    if (realizationType === "percentage" && parseFloat(numericValue) > 100) {
-      message.error("La valeur ne doit pas dépasser 100%.");
-      setRealization(""); // Clear the input if it exceeds 100
-    }
-  };
+  const [realizationType, setRealizationType] = useState("number");
+  const [errorMessage, setErrorMessage] = useState(""); // For validation error message
 
   const handleAddIndicator = () => {
+    if (realizationType === "percentage" && realization > 100) {
+      setErrorMessage("La valeur ne doit pas dépasser 100% pour un pourcentage.");
+      return;
+    }
     const newIndicator = {
-      indicators : indicators,
-      realization: realization,
+      indicators,
+      realization,
+      realizationType,
     };
     setPerformanceIndicators([...performanceIndicators, newIndicator]);
     setIndicators("");
-    setRealizationType("number");
     setRealization("");
+    setErrorMessage(""); // Clear error after successful addition
   };
 
   return (
@@ -161,31 +179,46 @@ const PerformanceIndicatorForm = ({
           placeholder="Entrez la description"
         />
       </Form.Item>
-      <Form.Item label="Type de réalisation">
-        <Select value={realizationType} onChange={setRealizationType}>
-          <Option value="number">Chiffre</Option>
-          <Option value="percentage">Pourcentage</Option>
-        </Select>
-      </Form.Item>
       <Form.Item label="Réalisation">
         <Input
           value={realization}
-          onChange={(e) => handleValueChange(e.target.value)}
+          onChange={(e) => {
+            setRealization(e.target.value);
+            if (realizationType === "percentage" && e.target.value > 100) {
+              setErrorMessage(
+                "La valeur ne doit pas dépasser 100% pour un pourcentage."
+              );
+            } else {
+              setErrorMessage("");
+            }
+          }}
           placeholder={
-            realizationType === "number"
-              ? "Entrez un chiffre"
-              : "Entrez un pourcentage"
+            realizationType === "percentage"
+              ? "Entrez la réalisation (0-100%)"
+              : "Entrez la réalisation (nombre)"
           }
+          type="number"
+          max={realizationType === "percentage" ? 100 : undefined} // Set max for percentage
         />
+        {errorMessage && <span style={{ color: "red" }}>{errorMessage}</span>}
       </Form.Item>
-      <Button type="primary" onClick={handleAddIndicator}>
+      <Form.Item label="Type de Réalisation">
+        <Select
+          value={realizationType}
+          onChange={(value) => setRealizationType(value)}
+        >
+          <Option value="number">Nombre</Option>
+          <Option value="percentage">Pourcentage</Option>
+        </Select>
+      </Form.Item>
+      <Button type="primary" onClick={handleAddIndicator} disabled={!!errorMessage}>
         Ajouter un indicateur
       </Button>
       <ul>
         {performanceIndicators.map((indicator, index) => (
           <li key={index}>
-            {indicator.description} - {indicator.realization} (
-            {indicator.realizationType === "percentage" ? "%" : ""})
+            {indicator.indicators} - {indicator.realization} (
+            {indicator.realizationType})
           </li>
         ))}
       </ul>
@@ -193,19 +226,23 @@ const PerformanceIndicatorForm = ({
   );
 };
 
-const AddActivityModal = ({visible, onCancel}) => {
-  const {MissionNameByDirectionId,saveMission
-  } = useMissionContext();
+const AddActivityModal = ({ visible, onCancel }) => {
+  const { MissionNameByDirectionId, saveMission } = useMissionContext();
   const [currentStep, setCurrentStep] = useState(0);
 
-  const [activity, setActivity] = useState({description: "", date: null});
+  const [activity, setActivity] = useState({
+    description: "",
+    observation: "",
+    prediction: "",
+    dueDatetime: null,
+  });
   const [tasks, setTasks] = useState([]);
   const [nextTasks, setNextTasks] = useState([]);
   const [performanceIndicators, setPerformanceIndicators] = useState([]);
   const [selectedMission, setSelectedMission] = useState(null);
   const [newMissionDescription, setNewMissionDescription] = useState("");
   const [mission, setMission] = useState();
-
+  const [missionType, setMissionType] = useState("");
   const existingMissions = MissionNameByDirectionId;
 
   const next = () => setCurrentStep(currentStep + 1);
@@ -213,7 +250,12 @@ const AddActivityModal = ({visible, onCancel}) => {
 
   const addAnotherActivity = () => {
     // Reset state for adding another activity
-    setActivity({description: "", date: null});
+    setActivity({
+      description: "",
+      observation: "",
+      prediction: "",
+      dueDatetime: null,
+    });
     setTasks([]);
     setNextTasks([]);
     setPerformanceIndicators([]);
@@ -222,156 +264,141 @@ const AddActivityModal = ({visible, onCancel}) => {
 
   const handleSubmit = async () => {
     const activityData = {
-      ...activity,
-      id: mission,
-      name:
-        selectedMission === "new"
-          ? newMissionDescription
-          : existingMissions.find((e) => e.id === mission)?.description,
+      name: missionType === "existing" ? selectedMission : newMissionDescription,
       activityList: [
         {
           description: activity.description,
-          date: activity.date
-            ? moment(activity.date).format("DD-MM-YYYY")
-            : null,
-          tasks,
-          nextTasks,
-          performanceIndicators,
+          observation: activity.observation,
+          prediction: activity.prediction,
+          dueDatetime: activity.dueDatetime ? moment(activity.dueDatetime).format("YYYY-MM-DD") : null,
+          task: tasks.map((task) => ({
+            description: task.description,
+            dueDatetime: task.dueDatetime ? moment(task.dueDatetime).format("YYYY-MM-DD") : null,
+          })),
+          nextTask: nextTasks.map((task) => ({
+            description: task.description,
+            dueDatetime: task.dueDatetime ? moment(task.dueDatetime).format("YYYY-MM-DD") : null,
+          })),
+          performanceRealization: performanceIndicators.map((indicator) => ({
+            indicators: indicator.realization,
+            realization: indicator.indicators,
+          })),
         },
       ],
     };
-    try {
-      console.log(activityData);
-      
-      await saveMission(activityData); 
 
-      addAnotherActivity();
-      onCancel();
-    } catch (error) {
-      console.error("Error saving mission: ", error);
-      toast.error("Failed to save the mission. Please try again."); // Notify the user of the error
-    }
+    try {
+      console.log("acaca"+activityData);
+      
+      await saveMission(activityData);
+      message.success("Activité ajoutée avec succès !");
+      setCurrentStep(0);} catch (error) {
+        message.error("Erreur lors de l'ajout de l'activité.");
+      } // Reset the stepper after successful submission
   };
 
   const steps = [
     {
-      title: "Sélectionner la Mission",
+      title: "Choix de la mission",
       content: (
         <Form>
-          <Form.Item label="Mission">
+          <Form.Item label="Type de mission">
             <Select
-              value={selectedMission}
-              onChange={setSelectedMission}
-              placeholder="Sélectionnez une mission"
+              value={missionType}
+              onChange={(value) => {
+                setMissionType(value);
+                setSelectedMission(null); // Reset when type changes
+                setNewMissionDescription(""); // Reset new mission description
+              }}
+              placeholder="Sélectionner un type de mission"
             >
-              <Option value="existing">Mission Existante</Option>
-              <Option value="new">Nouvelle Mission</Option>
+              <Option value="existing">Mission existante</Option>
+              <Option value="new">Nouvelle mission</Option>
             </Select>
           </Form.Item>
-          {selectedMission === "new" && (
-            <Form.Item label="Description de la Mission">
-              <Input
-                onChange={(e) => setNewMissionDescription(e.target.value)}
-              />
-            </Form.Item>
-          )}
-          {selectedMission === "existing" && (
-            <Form.Item label="Sélectionner une Mission Existante">
+
+          {missionType === "existing" && (
+            <Form.Item label="Sélectionner une mission">
               <Select
-                placeholder="Choisissez une mission existante"
-                onChange={(e) => setMission(e)}
+                value={selectedMission}
+                onChange={(value) => setSelectedMission(value)}
+                placeholder="Sélectionner une mission existante"
               >
-                {existingMissions.map((mission) => (
-                  <Option key={mission.id} value={mission.id}>
+                {existingMissions?.map((mission) => (
+                  <Option key={mission.id} value={mission.description}>
                     {mission.description}
                   </Option>
                 ))}
               </Select>
             </Form.Item>
           )}
-          <ActivityDetailsForm activity={activity} setActivity={setActivity} />
-          <Button
-            type="primary"
-            onClick={next}
-            disabled={
-              !selectedMission || !activity.description || !activity.date
-            }
-          >
-            Suivant
-          </Button>
+
+          {missionType === "new" && (
+            <Form.Item label="Nouvelle mission">
+              <Input
+                value={newMissionDescription}
+                onChange={(e) => setNewMissionDescription(e.target.value)}
+                placeholder="Entrer la description de la nouvelle mission"
+              />
+            </Form.Item>
+          )}
         </Form>
       ),
     },
     {
-      title: "Ajouter des Tâches",
+      title: "Informations sur l'activité",
       content: (
-        <>
-          <TaskForm tasks={tasks} setTasks={setTasks} />
-          <Button type="primary" onClick={next} style={{marginTop: 16}}>
-            Suivant
-          </Button>
-          <Button onClick={prev} style={{marginTop: 16, marginLeft: 8}}>
-            Précédent
-          </Button>
-        </>
+        <ActivityDetailsForm activity={activity} setActivity={setActivity} />
       ),
     },
     {
-      title: "Ajouter des Tâches Prochaines",
-      content: (
-        <>
-          <NextTaskForm nextTasks={nextTasks} setNextTasks={setNextTasks} />
-          <Button type="primary" onClick={next} style={{marginTop: 16}}>
-            Suivant
-          </Button>
-          <Button onClick={prev} style={{marginTop: 16, marginLeft: 8}}>
-            Précédent
-          </Button>
-        </>
-      ),
+      title: "Ajouter des tâches",
+      content: <TaskForm tasks={tasks} setTasks={setTasks} />,
     },
     {
-      title: "Indicateurs de Performance",
+      title: "Ajouter des prochaines tâches",
+      content: <NextTaskForm nextTasks={nextTasks} setNextTasks={setNextTasks} />,
+    },
+    {
+      title: "Indicateurs de performance",
       content: (
-        <>
-          <PerformanceIndicatorForm
-            performanceIndicators={performanceIndicators}
-            setPerformanceIndicators={setPerformanceIndicators}
-          />
-          <Button onClick={prev} style={{marginRight: 8}}>
-            Précédent
-          </Button>
-          <Button type="primary" onClick={handleSubmit}>
-            Soumettre
-          </Button>
-        </>
+        <PerformanceIndicatorForm
+          performanceIndicators={performanceIndicators}
+          setPerformanceIndicators={setPerformanceIndicators}
+        />
       ),
     },
   ];
 
   return (
     <Modal
-      title="Ajouter une Activité"
+      title="Ajouter une activité"
       visible={visible}
       onCancel={onCancel}
-      footer={null}
-      width={600}
+      footer={[
+        currentStep < steps.length - 1 && (
+          <Button key="next" type="primary" onClick={next}>
+            Suivant
+          </Button>
+        ),
+        currentStep > 0 && (
+          <Button key="prev" onClick={prev}>
+            Précédent
+          </Button>
+        ),
+        currentStep === steps.length - 1 && (
+          <Button key="submit" type="primary" onClick={handleSubmit}>
+            Valider
+          </Button>
+        ),
+      ]}
     >
       <Steps current={currentStep}>
-        {steps.map((item) => (
-          <Step key={item.title} title={item.title} />
+        {steps.map((step, index) => (
+          <Step key={index} title={step.title} />
         ))}
       </Steps>
-      <div style={{marginTop: 20}}>{steps[currentStep].content}</div>
-      {currentStep === 3 && (
-        <Button
-          type="default"
-          onClick={addAnotherActivity}
-          style={{marginTop: 16}}
-        >
-          Ajouter une autre activité
-        </Button>
-      )}
+      <div className="steps-content">{steps[currentStep].content}</div>
     </Modal>
   );
 };
