@@ -3,7 +3,7 @@ import {Modal} from "antd";
 import "./assets/index.css";
 import {dateFormatter} from "./utils/dateFormatter";
 
-const ModalComponent = ({visible, onCancel, activity}) => {
+const ActivityModal = ({visible, onCancel, activity}) => {
   if (!activity) return null;
 
   return (
@@ -79,4 +79,4 @@ const ModalComponent = ({visible, onCancel, activity}) => {
   );
 };
 
-export default ModalComponent;
+export default ActivityModal;

@@ -113,8 +113,8 @@ export const getByDirectionId = async (
 // Save a new mission
 export const saveMission = async (mission: CreateMission): Promise<Mission> => {
   try {
-    const directionId= sessionStorage.getItem("directionId")
-    const userId = sessionStorage.getItem("userId")
+    const directionId = sessionStorage.getItem("directionId");
+    const userId = sessionStorage.getItem("userId");
     const url = `http://localhost:8080/direction/mission/create?directionId=${directionId}&userId=${userId}`;
     const response = await fetch(url, {
       method: "PUT",

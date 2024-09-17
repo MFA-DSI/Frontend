@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "react-query";
+import {useQuery, useMutation, useQueryClient} from "react-query";
 import {
   fetchActivities,
   getActivityByDirectionId,

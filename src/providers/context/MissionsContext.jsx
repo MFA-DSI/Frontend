@@ -5,8 +5,13 @@ const MissionContext = createContext();
 const directionId = sessionStorage.getItem("directionId");
 
 export const MissionProvider = ({children}) => {
-  const {missions, isLoading, directionIdQuery, directionMissionsName,saveMission} =
-    useMissions();
+  const {
+    missions,
+    isLoading,
+    directionIdQuery,
+    directionMissionsName,
+    saveMission,
+  } = useMissions();
   const [filterType, setFilterType] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -42,10 +47,10 @@ export const MissionProvider = ({children}) => {
   };
 
   const directionMission = () => {
-   return directionIdQuery(directionId).data;
+    return directionIdQuery(directionId).data;
   };
   const missionName = () => {
-    return directionMissionsName(directionId).data
+    return directionMissionsName(directionId).data;
   };
   return (
     <MissionContext.Provider

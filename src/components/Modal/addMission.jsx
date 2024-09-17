@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
   Modal,
   Input,
@@ -9,16 +9,20 @@ import {
   DatePicker,
   message,
 } from "antd";
-import { useMissionContext } from "../../providers/context/MissionsContext";
+import {useMissionContext} from "../../providers/context/MissionsContext";
 import moment from "moment";
-import { ActivityDetailsForm, NextTaskForm, PerformanceIndicatorForm, TaskForm } from "./Forms/MissionDetailsForm";
+import {
+  ActivityDetailsForm,
+  NextTaskForm,
+  PerformanceIndicatorForm,
+  TaskForm,
+} from "./Forms/MissionDetailsForm";
 
-const { Step } = Steps;
-const { Option } = Select;
+const {Step} = Steps;
+const {Option} = Select;
 
-
-const AddActivityModal = ({ visible, onCancel }) => {
-  const { MissionNameByDirectionId, saveMission } = useMissionContext();
+const AddActivityModal = ({visible, onCancel}) => {
+  const {MissionNameByDirectionId, saveMission} = useMissionContext();
   const [currentStep, setCurrentStep] = useState(0);
 
   const [activity, setActivity] = useState({
@@ -40,34 +44,40 @@ const AddActivityModal = ({ visible, onCancel }) => {
 
   const addAnotherActivity = () => {
     // Ajouter la nouvelle activité à la liste d'activités existantes
-    setActivity(prevActivityList => [
+    setActivity((prevActivityList) => [
       ...prevActivityList,
       {
         description: activity.description,
         observation: activity.observation,
         prediction: activity.prediction,
-        dueDatetime: activity.dueDatetime ? moment(activity.dueDatetime).format("YYYY-MM-DD") : null,
-        task: tasks.map(task => ({
+        dueDatetime: activity.dueDatetime
+          ? moment(activity.dueDatetime).format("YYYY-MM-DD")
+          : null,
+        task: tasks.map((task) => ({
           description: task.description,
-          dueDatetime: task.dueDatetime ? moment(task.dueDatetime).format("YYYY-MM-DD") : null,
+          dueDatetime: task.dueDatetime
+            ? moment(task.dueDatetime).format("YYYY-MM-DD")
+            : null,
         })),
-        nextTask: nextTasks.map(task => ({
+        nextTask: nextTasks.map((task) => ({
           description: task.description,
-          dueDatetime: task.dueDatetime ? moment(task.dueDatetime).format("YYYY-MM-DD") : null,
+          dueDatetime: task.dueDatetime
+            ? moment(task.dueDatetime).format("YYYY-MM-DD")
+            : null,
         })),
-        performanceRealization: performanceIndicators.map(indicator => ({
+        performanceRealization: performanceIndicators.map((indicator) => ({
           indicators: indicator.indicators,
           realization: indicator.realization,
         })),
-      }
-    ]);}
+      },
+    ]);
+  };
 
   const resetActivity = () => {
+    setNewMissionDescription("");
+    setSelectedMission(null);
+    setMissionType("");
 
-    setNewMissionDescription("")
-    setSelectedMission(null)
-    setMissionType("")
-    
     setActivity({
       description: "",
       observation: "",
@@ -82,22 +92,29 @@ const AddActivityModal = ({ visible, onCancel }) => {
 
   const handleSubmit = async () => {
     const activityData = {
-      name: missionType === "existing" ? selectedMission : newMissionDescription,
+      name:
+        missionType === "existing" ? selectedMission : newMissionDescription,
       activityList: [
         {
           description: activity.description,
           observation: activity.observation,
           prediction: activity.prediction,
-          dueDatetime: activity.dueDatetime ? moment(activity.dueDatetime).format("YYYY-MM-DD") : null,
+          dueDatetime: activity.dueDatetime
+            ? moment(activity.dueDatetime).format("YYYY-MM-DD")
+            : null,
           task: tasks.map((task) => ({
             description: task.description,
-            dueDatetime: task.dueDatetime ? moment(task.dueDatetime).format("YYYY-MM-DD") : null,
+            dueDatetime: task.dueDatetime
+              ? moment(task.dueDatetime).format("YYYY-MM-DD")
+              : null,
           })),
           nextTask: nextTasks.map((task) => ({
             description: task.description,
-            dueDatetime: task.dueDatetime ? moment(task.dueDatetime).format("YYYY-MM-DD") : null,
+            dueDatetime: task.dueDatetime
+              ? moment(task.dueDatetime).format("YYYY-MM-DD")
+              : null,
           })),
-          performanceRealization: performanceIndicators.map((indicator) => ({            
+          performanceRealization: performanceIndicators.map((indicator) => ({
             indicators: indicator.realization,
             realization: indicator.indicators,
           })),
@@ -106,15 +123,14 @@ const AddActivityModal = ({ visible, onCancel }) => {
     };
 
     try {
-      
       await saveMission(activityData);
       message.success("Activité ajoutée avec succès !");
-      resetActivity()
-      onCancel()
-      setCurrentStep(0); 
+      resetActivity();
+      onCancel();
+      setCurrentStep(0);
     } catch (error) {
-        message.error("Erreur lors de l'ajout de l'activité.");
-      } 
+      message.error("Erreur lors de l'ajout de l'activité.");
+    }
   };
 
   const steps = [
@@ -177,7 +193,9 @@ const AddActivityModal = ({ visible, onCancel }) => {
     },
     {
       title: "Ajouter des prochaines tâches",
-      content: <NextTaskForm nextTasks={nextTasks} setNextTasks={setNextTasks} />,
+      content: (
+        <NextTaskForm nextTasks={nextTasks} setNextTasks={setNextTasks} />
+      ),
     },
     {
       title: "Indicateurs de performance",
