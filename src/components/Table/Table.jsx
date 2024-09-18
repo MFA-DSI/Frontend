@@ -479,11 +479,13 @@
           />
         </div>
         <ActivityModal
+          mode={mode}
           visible={isModalVisible}
           onCancel={handleCancel}
           activity={selectedActivity}
         />
         <MissionModal
+          mode={mode}
           visible={isMissionModalVisible}
           onCancel={handleMissionCancel}
           mission={selectedMission}

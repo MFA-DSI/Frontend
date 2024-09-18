@@ -1,15 +1,13 @@
-// MissionModal.js
 import React, { useState, useEffect } from "react";
 import { Modal, List, Button, message, Input } from "antd";
-import DeleteMissionModal from "./DeleteModal";
+import DeleteModal from "./DeleteModal";
 
-const MissionModal = ({ visible, onCancel, mission, onDelete }) => {
+const MissionModal = ({ visible, onCancel, mission, onDelete, mode }) => {
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedMission, setEditedMission] = useState(mission || { description: '', activityList: [] });
 
   useEffect(() => {
-    // Update editedMission when mission prop changes
     if (mission) {
       setEditedMission(mission);
     }
@@ -34,11 +32,10 @@ const MissionModal = ({ visible, onCancel, mission, onDelete }) => {
   };
 
   const handleSaveClick = () => {
-    // Save the changes made in editedMission
     setIsEditing(false);
-    // Assuming `onDelete` is a function to save the mission
     onDelete(editedMission);
     message.success("Mission modifiée avec succès !");
+    setEditedMission(mission || { description: '', activityList: [] }); // Reset to original or empty mission
   };
 
   const handleChange = (field, value) => {
@@ -100,34 +97,39 @@ const MissionModal = ({ visible, onCancel, mission, onDelete }) => {
           </div>
 
           <div style={{ marginInline: '20px' }}>
-            {isEditing ? (
+            {mode === 'mydirection' && (
               <>
-                <Button type="primary" onClick={handleSaveClick} style={{ marginBottom: '10px', marginRight: '10px' }}>
-                  Sauvegarder
-                </Button>
-                <Button onClick={() => { setIsEditing(false); setEditedMission(mission || { description: '', activityList: [] }); }}>
-                  Annuler
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button type="primary" style={{ marginBottom: '10px', marginRight: '10px' }} onClick={handleEditClick}>
-                  Modifier
-                </Button>
-                <Button danger onClick={showDeleteModal}>
-                  Supprimer
-                </Button>
+                {isEditing ? (
+                  <>
+                    <Button type="primary" onClick={handleSaveClick} style={{ marginBottom: '10px', marginRight: '10px' }}>
+                      Sauvegarder
+                    </Button>
+                    <Button onClick={() => { setIsEditing(false); setEditedMission(mission || { description: '', activityList: [] }); }}>
+                      Annuler
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button type="primary" style={{ marginBottom: '10px', marginRight: '10px' }} onClick={handleEditClick}>
+                      Modifier
+                    </Button>
+                    <Button danger onClick={showDeleteModal}>
+                      Supprimer
+                    </Button>
+                  </>
+                )}
               </>
             )}
           </div>
         </div>
       </Modal>
 
-      <DeleteMissionModal
+      <DeleteModal
+        itemType={'mission'}
         visible={isDeleteModalVisible}
         onCancel={handleDeleteCancel}
         onDelete={onDelete}
-        mission={mission}
+        item={mission}
         onSuccessDelete={handleSuccessDelete}
       />
     </>
