@@ -12,7 +12,6 @@ import MyDirection from "./pages/MyDirection/MyDirection";
 import Notification from "./pages/Notification/Notification";
 import Profile from "./pages/Profile/Profile";
 import LoginPage from "./pages/Login/LoginPage";
-import {HackWebProviders} from "./providers";
 
 const queryClient = new QueryClient();
 

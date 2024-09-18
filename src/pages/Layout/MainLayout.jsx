@@ -5,9 +5,8 @@ import {RiNotification3Fill} from "react-icons/ri";
 import {Layout, Menu, theme, Skeleton} from "antd";
 import {Link, useLocation} from "react-router-dom";
 import SearchBar from "../../components/SearchBar/SearchBar";
-import {ActivitieProvider} from "../../providers/context/ActivitiesContext";
-import {MissionProvider} from "../../providers/context/MissionsContext";
 import {HackWebProviders} from "../../providers";
+import "./assets/index.css";
 
 const {Header, Content, Sider} = Layout;
 
@@ -15,7 +14,6 @@ const siderStyle = {
   overflow: "auto",
   height: "100vh",
   maxWidth: "300px",
-  width: "300px",
   position: "fixed",
   top: 0,
   bottom: 0,
@@ -30,28 +28,28 @@ const MainLayout = ({children}) => {
 
   const location = useLocation();
 
-  const items = [
-    {
-      key: "/",
-      icon: React.createElement(BarChartOutlined),
-      label: <Link to="/">Toutes les directions</Link>,
-    },
-    {
-      key: "/myDirection",
-      icon: React.createElement(CloudOutlined),
-      label: <Link to="/myDirection">Ma direction</Link>,
-    },
-    {
-      key: "/notifications",
-      icon: React.createElement(RiNotification3Fill),
-      label: <Link to="/notifications">Notification(s)</Link>,
-    },
-    {
-      key: "/profile",
-      icon: React.createElement(UserOutlined),
-      label: <Link to="/profile">Mon profil</Link>,
-    },
-  ];
+    const items = [
+      {
+        key: "/",
+        icon: React.createElement(BarChartOutlined),
+        label: <Link className="menu-item-link" to="/">Toutes les directions</Link>,
+      },
+      {
+        key: "/myDirection",
+        icon: React.createElement(CloudOutlined),
+        label: <Link className="menu-item-link" to="/myDirection">Ma direction</Link>,
+      },
+      {
+        key: "/notifications",
+        icon: React.createElement(RiNotification3Fill),
+        label: <Link className="menu-item-link" to="/notifications">Notification(s)</Link>,
+      },
+      {
+        key: "/profile",
+        icon: React.createElement(UserOutlined),
+        label: <Link className="menu-item-link" to="/profile">Mon profil</Link>,
+      },
+    ];
 
   const menu = (
     <Menu>
@@ -85,6 +83,7 @@ const MainLayout = ({children}) => {
           <Menu
             theme="dark"
             mode="inline"
+            style={{fontFamily:"Source Sans Pro",fontSize:"15px"}}
             selectedKeys={[location.pathname]}
             items={items}
           />
