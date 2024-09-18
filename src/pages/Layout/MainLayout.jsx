@@ -11,7 +11,7 @@ const { Header, Content, Sider } = Layout;
 
 const siderStyle = {
   height: "100vh",
-  width: "300px", // Taille fixe pour éviter le scroll
+  width: "300px", 
   position: "fixed",
   top: 0,
   bottom: 0,
