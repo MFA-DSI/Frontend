@@ -68,7 +68,7 @@ const MissionModal = ({ visible, onCancel, mission, onDelete, mode }) => {
                 </div>
 
                 <h4>Les Activités rattachées :</h4>
-                <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                <div>
                   <List
                     itemLayout="vertical"
                     dataSource={editedMission.activityList}

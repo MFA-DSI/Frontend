@@ -3,17 +3,20 @@ import { Modal, Button, Input, DatePicker } from "antd";
 import moment from "moment";
 import "./assets/index.css";
 import { dateFormatter } from "./utils/dateFormatter";
-import TaskModal from "./TaskModal"; // Import TaskModal
+import TaskModal from "./TaskModal";
+import DeleteModal from "./DeleteModal"; // Import DeleteModal
 
-const ActivityModal = ({ visible, onCancel, activity, mode }) => {
-  const [isEditing, setIsEditing] = useState(false); // Editing state
+const ActivityModal = ({ visible, onCancel, activity, mode, onDelete }) => {
+  const [isEditing, setIsEditing] = useState(false);
   const [editedDescription, setEditedDescription] = useState(activity?.description || "");
   const [editedObservation, setEditedObservation] = useState(activity?.observation || "");
   const [editedDueDatetime, setEditedDueDatetime] = useState(activity ? moment(activity.dueDatetime) : null);
   
-  const [isTaskModalVisible, setIsTaskModalVisible] = useState(false); // Task modal state
-  const [selectedTask, setSelectedTask] = useState(null); // Task to be edited
-  const [taskType, setTaskType] = useState(""); // Task type ('task' or 'nextTask')
+  const [isTaskModalVisible, setIsTaskModalVisible] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
+  const [taskType, setTaskType] = useState("");
+
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false); // Delete modal state
 
   useEffect(() => {
     if (activity) {
@@ -45,6 +48,20 @@ const ActivityModal = ({ visible, onCancel, activity, mode }) => {
     setSelectedTask(task);
     setTaskType(type);
     setIsTaskModalVisible(true);
+  };
+
+  const handleDeleteCancel = () => {
+    setIsDeleteModalVisible(false);
+  };
+
+  const handleSuccessDelete = () => {
+    setIsDeleteModalVisible(false);
+    onCancel(); // Close the activity modal
+    console.log("Activity deleted successfully!");
+  };
+
+  const showDeleteModal = () => {
+    setIsDeleteModalVisible(true);
   };
 
   if (!activity) return null;
@@ -182,7 +199,9 @@ const ActivityModal = ({ visible, onCancel, activity, mode }) => {
           )}
 
           {mode === "mydirection" && !isEditing && (
-            <Button danger>Supprimer</Button>
+            <Button danger onClick={showDeleteModal}>
+              Supprimer
+            </Button>
           )}
         </div>
       </div>
@@ -194,6 +213,15 @@ const ActivityModal = ({ visible, onCancel, activity, mode }) => {
         onSave={handleTaskSave}
         title={taskType === "task" ? "Tâche" : "Tâche Prochaine"}
         type={taskType}
+      />
+
+      <DeleteModal
+        itemType={'activity'}
+        visible={isDeleteModalVisible}
+        onCancel={handleDeleteCancel}
+        onDelete={() => { onDelete(); handleSuccessDelete(); }}
+        item={activity}
+        onSuccessDelete={handleSuccessDelete}
       />
     </Modal>
   );
