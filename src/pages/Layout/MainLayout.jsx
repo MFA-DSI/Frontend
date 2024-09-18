@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { BarChartOutlined, CloudOutlined, UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import { RiNotification3Fill } from "react-icons/ri";
-import { Layout, Menu, theme, Skeleton,message } from "antd";
+import { Layout, Menu, theme, Skeleton, message, Button } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import { HackWebProviders } from "../../providers";
@@ -11,7 +11,7 @@ const { Header, Content, Sider } = Layout;
 
 const siderStyle = {
   height: "100vh",
-  width: "300px", 
+  width: "300px",
   position: "fixed",
   top: 0,
   bottom: 0,
@@ -28,8 +28,8 @@ const MainLayout = ({ children }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    sessionStorage.clear()
-    message.info("vous êtes déconnecté")
+    sessionStorage.clear();
+    message.info("vous êtes déconnecté");
     navigate("/login"); // Redirige vers la page de login
   };
 
@@ -59,32 +59,19 @@ const MainLayout = ({ children }) => {
   return (
     <Layout hasSider>
       <HackWebProviders>
-        <Sider style={siderStyle}>
-          <div className="demo-logo-vertical" />
-          <div
-            style={{
-              marginBottom: "20px",
-              textAlign: "center",
-              marginTop: "40px",
-            }}
-          >
-            <img
-              src="src/assets/logo.jpg"
-              alt="Logo"
-              style={{ maxWidth: "100%", maxHeight: "90px" }}
-            />
-          </div>
+        <Sider style={siderStyle}>         
           <Menu
             theme="dark"
             mode="inline"
-            style={{ fontFamily: "Source Sans Pro", fontSize: "15px", flex: 1 }}
+            style={{ fontFamily: "Source Sans Pro", fontSize: "15px", flex: 1 ,marginTop:"15vh"
+            }}
             selectedKeys={[location.pathname]}
             items={items}
           />
-             <Menu
+          <Menu
             theme="dark"
             mode="inline"
-            style={{ marginTop: "37vh", textAlign: "center",bottom:"0" }} // Pousse le bouton en bas
+            style={{ marginTop: "45vh", textAlign: "center" }} // Align the logout button to the bottom
           >
             <Menu.Item
               key="logout"
@@ -97,24 +84,41 @@ const MainLayout = ({ children }) => {
             </Menu.Item>
           </Menu>
         </Sider>
-
-        <Layout style={{ marginInlineStart: 200 }}> {/* Ajout de 300px pour correspondre à la largeur du Sider */}
-          <Header
+        <Header
             style={{
               padding: 0,
               background: "white",
               position: "fixed",
-              width: "100%",
+              width: "100%", 
               zIndex: 1,
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
+              paddingInline: "20px",
+              borderBottom: "1px solid #e8e8e8", 
+              boxShadow: "0 3px 8px rgba(0, 0, 0, 0.1)" 
             }}
           >
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <img
+                src="src/assets/logo.jpg"
+                alt="Logo"
+                style={{width:"50px", maxWidth: "100px", marginRight: "20px" }}
+              />
+              <span>MFA-ACTION</span>
+            </div>
+
+           
             <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
               <SearchBar />
             </div>
+
+           
+            <Button icon={<RiNotification3Fill />} />
           </Header>
+
+        <Layout style={{ marginLeft: 200 }}>
+          
           <Content style={{ overflow: "initial", marginTop: 64 }}>
             <div
               style={{

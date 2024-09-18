@@ -32,9 +32,9 @@
     });
 
     const [selectedActivity, setSelectedActivity] = useState(null);
-    const [selectedMission, setSelectedMission] = useState(null); // State for selected mission
-    const [isModalVisible, setIsModalVisible] = useState(false); // For activity modal
-    const [isMissionModalVisible, setIsMissionModalVisible] = useState(false); // For mission modal
+    const [selectedMission, setSelectedMission] = useState(null); 
+    const [isModalVisible, setIsModalVisible] = useState(false); 
+    const [isMissionModalVisible, setIsMissionModalVisible] = useState(false);
     const [pageSize, setPageSize] = useState(50);
     const [selectedIds, setSelectedIds] = useState([]);
 
