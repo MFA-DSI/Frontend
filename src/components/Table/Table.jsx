@@ -68,6 +68,12 @@
       });
     };
 
+
+    const onDelete =(content)=>{
+      console.log(content);
+      
+    }
+
     const getColumns = () => {
       if (activityType === "weekly") {
         return [
@@ -480,6 +486,7 @@
         </div>
         <ActivityModal
           mode={mode}
+          onDelete={onDelete}
           visible={isModalVisible}
           onCancel={handleCancel}
           activity={selectedActivity}
@@ -487,6 +494,7 @@
         <MissionModal
           mode={mode}
           visible={isMissionModalVisible}
+          onDelete={onDelete}
           onCancel={handleMissionCancel}
           mission={selectedMission}
         />

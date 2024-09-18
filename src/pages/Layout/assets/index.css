@@ -1,10 +1,10 @@
 .menu-item-link {
-  border-radius: 10px; /* Customize the radius */
+  border-radius: 10px; 
   padding: 8px;
   display: block;
-  transition: background-color 0.3s ease; /* Smooth transition on hover */
+  transition: background-color 0.3s ease; 
 }
 
 .menu-item-link:hover {
-  background-color: rgba(52, 45, 154, 0.1); /* Optional hover effect */
+  background-color: rgba(52, 45, 154, 0.1); 
 }
