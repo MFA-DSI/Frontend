@@ -1,23 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Input, DatePicker } from "antd";
 import moment from "moment";
-import TaskModal from "./TaskModal"; // Importer le TaskModal
 import "./assets/index.css";
 import { dateFormatter } from "./utils/dateFormatter";
+import TaskModal from "./TaskModal"; // Import TaskModal
 
 const ActivityModal = ({ visible, onCancel, activity, mode }) => {
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false); // Editing state
   const [editedDescription, setEditedDescription] = useState(activity?.description || "");
   const [editedObservation, setEditedObservation] = useState(activity?.observation || "");
   const [editedDueDatetime, setEditedDueDatetime] = useState(activity ? moment(activity.dueDatetime) : null);
+  
+  const [isTaskModalVisible, setIsTaskModalVisible] = useState(false); // Task modal state
+  const [selectedTask, setSelectedTask] = useState(null); // Task to be edited
+  const [taskType, setTaskType] = useState(""); // Task type ('task' or 'nextTask')
 
-  // Task modal state for adding/editing
-  const [taskModalVisible, setTaskModalVisible] = useState(false);
-  const [selectedTask, setSelectedTask] = useState(null); 
-  const [taskType, setTaskType] = useState(""); // For distinguishing between tasks and nextTasks
+  useEffect(() => {
+    if (activity) {
+      setEditedDescription(activity.description);
+      setEditedObservation(activity.observation);
+      setEditedDueDatetime(moment(activity.dueDatetime));
+    }
+  }, [activity]);
 
   const handleSave = () => {
-    console.log("Sauvegarde en cours...", {
+    console.log("Saving changes...", {
       description: editedDescription,
       observation: editedObservation,
       dueDatetime: editedDueDatetime,
@@ -29,34 +36,28 @@ const ActivityModal = ({ visible, onCancel, activity, mode }) => {
     setIsEditing(true);
   };
 
-  const openTaskModal = (task = null, type = "task") => {
+  const handleTaskSave = (task) => {
+    console.log("Saving task...", task);
+    setIsTaskModalVisible(false);
+  };
+
+  const openTaskModal = (task, type) => {
     setSelectedTask(task);
-    setTaskType(type); // To distinguish between task and nextTask
-    setTaskModalVisible(true);
-  };
-
-  const handleTaskSave = (newTask) => {
-    console.log("Nouvelle tâche enregistrée:", newTask);
-    setTaskModalVisible(false);
-    setSelectedTask(null);
-  };
-
-  const closeTaskModal = () => {
-    setTaskModalVisible(false);
-    setSelectedTask(null);
+    setTaskType(type);
+    setIsTaskModalVisible(true);
   };
 
   if (!activity) return null;
 
   return (
     <Modal visible={visible} onCancel={onCancel} footer={null} width={800}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
           <h2>Détails de l'Activité</h2>
 
           <div>
             <h3>Description:</h3>
-            {isEditing ? (
+            {isEditing && mode === "mydirection" ? (
               <Input
                 value={editedDescription}
                 onChange={(e) => setEditedDescription(e.target.value)}
@@ -69,7 +70,7 @@ const ActivityModal = ({ visible, onCancel, activity, mode }) => {
 
           <div>
             <h3>Observation:</h3>
-            {isEditing ? (
+            {isEditing && mode === "mydirection" ? (
               <Input
                 value={editedObservation}
                 onChange={(e) => setEditedObservation(e.target.value)}
@@ -82,8 +83,11 @@ const ActivityModal = ({ visible, onCancel, activity, mode }) => {
 
           <div>
             <h3>Date Limite:</h3>
-            {isEditing ? (
-              <DatePicker value={editedDueDatetime} onChange={(date) => setEditedDueDatetime(date)} />
+            {isEditing && mode === "mydirection" ? (
+              <DatePicker
+                value={editedDueDatetime}
+                onChange={(date) => setEditedDueDatetime(date)}
+              />
             ) : (
               <p>{dateFormatter(activity.dueDatetime).toLocaleString()}</p>
             )}
@@ -93,22 +97,27 @@ const ActivityModal = ({ visible, onCancel, activity, mode }) => {
             <h3>Tâches:</h3>
             {activity.task.length > 0 ? (
               activity.task.map((task) => (
-                <div key={task.id}>
-                  <p>
-                    - {task.description} (Effectué le : {dateFormatter(task.dueDatetime).toLocaleString()})
-                  </p>
-                  {mode === "mydirection" && (
-                    <Button type="link" onClick={() => openTaskModal(task, "task")}>
+                <p key={task.id}>
+                  - {task.description} (Effectué le : {dateFormatter(task.dueDatetime).toLocaleString()})
+                  {mode === "mydirection" && !isEditing && (
+                    <Button
+                      type="link"
+                      onClick={() => openTaskModal(task, "task")}
+                    >
                       Modifier
                     </Button>
                   )}
-                </div>
+                </p>
               ))
             ) : (
               <p>Aucune tâche</p>
             )}
-            {mode === "mydirection" && (
-              <Button type="dashed" onClick={() => openTaskModal(null, "task")}>
+
+            {mode === "mydirection" && !isEditing && (
+              <Button
+                type="dashed"
+                onClick={() => openTaskModal(null, "task")}
+              >
                 + Ajouter une tâche
               </Button>
             )}
@@ -116,54 +125,74 @@ const ActivityModal = ({ visible, onCancel, activity, mode }) => {
             <h3>Tâches Prochaines:</h3>
             {activity.nextTask.length > 0 ? (
               activity.nextTask.map((nextTask) => (
-                <div key={nextTask.id}>
-                  <p>
-                    - {nextTask.description} (Doit être effectué le : {dateFormatter(nextTask.dueDatetime).toLocaleString()})
-                  </p>
-                  {mode === "mydirection" && (
-                    <Button type="link" onClick={() => openTaskModal(nextTask, "nextTask")}>
+                <p key={nextTask.id}>
+                  - {nextTask.description} (Doit être effectué le : {dateFormatter(nextTask.dueDatetime).toLocaleString()})
+                  {mode === "mydirection" && !isEditing && (
+                    <Button
+                      type="link"
+                      onClick={() => openTaskModal(nextTask, "nextTask")}
+                    >
                       Modifier
                     </Button>
                   )}
-                </div>
+                </p>
               ))
             ) : (
               <p>Aucune tâche prochaine</p>
             )}
-            {mode === "mydirection" && (
-              <Button type="dashed" onClick={() => openTaskModal(null, "nextTask")}>
+
+            {mode === "mydirection" && !isEditing && (
+              <Button
+                type="dashed"
+                onClick={() => openTaskModal(null, "nextTask")}
+              >
                 + Ajouter une tâche prochaine
               </Button>
             )}
           </div>
         </div>
 
-        <div style={{ marginInline: "20px" }}>
+        <div style={{ marginInline: '20px' }}>
           {isEditing ? (
             <div>
-              <Button type="primary" style={{ marginBottom: "10px", marginRight: "10px" }} onClick={handleSave}>
+              <Button
+                type="primary"
+                style={{ marginBottom: '10px', marginRight: '10px' }}
+                onClick={handleSave}
+              >
                 Sauvegarder
               </Button>
-              <Button type="info" style={{ marginBottom: "10px", marginRight: "10px" }} onClick={onCancel}>
+              <Button
+                style={{ marginBottom: '10px', marginRight: '10px' }}
+                onClick={() => setIsEditing(false)}
+              >
                 Annuler
               </Button>
             </div>
           ) : (
-            <Button type="primary" style={{ marginBottom: "10px", marginRight: "10px" }} onClick={handleEdit}>
-              Modifier
-            </Button>
+            mode === "mydirection" && (
+              <Button
+                type="primary"
+                style={{ marginBottom: '10px', marginRight: '10px' }}
+                onClick={handleEdit}
+              >
+                Modifier
+              </Button>
+            )
           )}
 
-          {mode === "mydirection" && !isEditing && <Button danger>Supprimer</Button>}
+          {mode === "mydirection" && !isEditing && (
+            <Button danger>Supprimer</Button>
+          )}
         </div>
       </div>
 
       <TaskModal
-        visible={taskModalVisible}
-        onCancel={closeTaskModal}
+        visible={isTaskModalVisible}
+        onCancel={() => setIsTaskModalVisible(false)}
         task={selectedTask}
         onSave={handleTaskSave}
-        title={taskType === "task" ? "tâche" : "tâche prochaine"}
+        title={taskType === "task" ? "Tâche" : "Tâche Prochaine"}
         type={taskType}
       />
     </Modal>
