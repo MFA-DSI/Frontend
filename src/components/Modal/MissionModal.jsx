@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Modal, List, Button, message, Input } from "antd";
 import DeleteModal from "./DeleteModal";
+import { useMissionContext } from "../../providers";
+import { toast } from "react-toastify";
 
 const MissionModal = ({ visible, onCancel, mission, onDelete, mode }) => {
+  const { deleteMission } = useMissionContext();
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedMission, setEditedMission] = useState(mission || { description: '', activityList: [] });
-
   useEffect(() => {
     if (mission) {
       setEditedMission(mission);
     }
+
   }, [mission]);
 
   const showDeleteModal = () => {
@@ -21,11 +24,23 @@ const MissionModal = ({ visible, onCancel, mission, onDelete, mode }) => {
     setDeleteModalVisible(false);
   };
 
-  const handleSuccessDelete = () => {
-    setDeleteModalVisible(false);
-    onCancel();
-    message.success("Mission supprimée avec succès !");
+  const handleSuccessDelete = async () => {
+    if (!mission || !mission.id) {
+      message.error("Mission non valide ou ID manquant !");
+      return;
+    }
+    
+    try {
+      await deleteMission(mission.id); 
+      setDeleteModalVisible(false);
+      onCancel();
+      message.success("Mission supprimée avec succès !");
+    } catch (error) {
+      message.error("Une erreur s'est produite lors de la suppression de cette mission");
+      toast.error(error.message);
+    }
   };
+  
 
   const handleEditClick = () => {
     setIsEditing(true);

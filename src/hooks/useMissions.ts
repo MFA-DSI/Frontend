@@ -17,14 +17,14 @@ export const useMissions = () => {
 
   const directionIdQuery = () =>
     useQuery({
-      queryKey: ["directionMissions"],
+      queryKey: ["missions"],
       queryFn: () =>
         getByDirectionId(sessionStorage.getItem("directionId") || ""),
     });
 
   const directionMissionsName = () =>
     useQuery({
-      queryKey: ["missionsName"],
+      queryKey: ["missions"],
       queryFn: () =>
         fetchMissionsName(sessionStorage.getItem("directionId") || ""),
     });

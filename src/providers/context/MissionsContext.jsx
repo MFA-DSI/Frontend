@@ -8,9 +8,11 @@ export const MissionProvider = ({children}) => {
   const {
     missions,
     isLoading,
+    deleteMission,
     directionIdQuery,
     directionMissionsName,
     saveMission,
+   
   } = useMissions();
   const [filterType, setFilterType] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
@@ -52,12 +54,14 @@ export const MissionProvider = ({children}) => {
   const missionName = () => {
     return directionMissionsName(directionId).data;
   };
+
   return (
     <MissionContext.Provider
       value={{
         filteredMissions: filteredMissions(),
         MissionByDirectionId: directionMission(),
         MissionNameByDirectionId: missionName(),
+        deleteMission,
         saveMission,
         isLoading,
         setFilterType,

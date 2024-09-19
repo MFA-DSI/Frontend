@@ -110,7 +110,7 @@ export const getByDirectionId = async (
   }
 };
 
-// Save a new mission
+
 export const saveMission = async (mission: CreateMission): Promise<Mission> => {
   try {
     const directionId = sessionStorage.getItem("directionId");
@@ -142,10 +142,12 @@ export const saveMission = async (mission: CreateMission): Promise<Mission> => {
   }
 };
 
-// Delete a mission
+
 export const deleteMission = async (id: string): Promise<void> => {
+  //?userId=d29eb730-3e40-4781-8918-f67520ce98df&missionId=6346bf58-6b5a-43aa-a58c-753b9619a574
+  const userId = sessionStorage.getItem("userId")
   try {
-    const url = `http://localhost:8080/direction/mission/delete/${id}`;
+    const url = `http://localhost:8080/direction/mission/delete?userId=${userId}&missionId=${id}`;
     const response = await fetch(url, {
       method: "DELETE",
     });
