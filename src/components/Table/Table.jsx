@@ -10,6 +10,8 @@
   import ActivityModal from "../Modal/ActivityModal";
   import MissionModal from "../Modal/MissionModal";
 
+  import "./assets/index.css"
+
   const {Option} = Select;
 
   const TableComponent = ({mode}) => {
@@ -280,7 +282,8 @@
             padding: "10px",
             marginBottom: "5px",
             backgroundColor: "#f9f9f9",
-            borderRadius: "4px",
+            borderRadius: "5px",
+           
           }}
         >
           <div
@@ -288,13 +291,15 @@
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
+              borderRadius: "12px"
             }}
           >
-            <h2 style={{marginTop: 50}}>Liste des Activités</h2>
-            <div style={{display: "flex", alignItems: "center", marginTop: 50}}>
+            <h2 style={{ marginTop: mode === 'mydirection' ? 30 : 0}}>Liste des Activités</h2>
+<div style={{ display: "flex", alignItems: "center", marginTop: mode === 'mydirection' ? 30 : 0 }}>
+
               <Select
                 value={activityType}
-                style={{width: 120, marginRight: "8px"}}
+                style={{width: 120, marginRight: "5px"}}
                 onChange={(value) => {
                   setActivityType(value);
                   setFilterType(value);
@@ -467,10 +472,11 @@
         </div>
         <div
           style={{
-            height: "calc(100vh - 210px)",
-            overflow: "auto",
-            paddingRight: "9px",
+            height: "calc(100vh - 250px)",
+            overflow: "auto", 
+            paddingInline: "4.5px",
           }}
+          className="custom-ant-table"
         >
           <Table
             columns={getColumns()}
@@ -480,7 +486,7 @@
               showSizeChanger: true,
               pageSizeOptions: ["10", "20", "50", "100"],
             }}
-            scroll={mode === "all" ? {y: 290} : {y: 290}}
+            scroll={mode === "all" ? {y: 263.5} : {y: 250}}
             locale={{emptyText: "Aucune donnée à afficher"}}
           />
         </div>

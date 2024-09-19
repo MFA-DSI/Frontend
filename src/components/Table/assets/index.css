@@ -1,0 +1,25 @@
+.custom-ant-table .ant-table {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .custom-ant-table .ant-table-thead > tr > th {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .custom-ant-table .ant-table-tbody > tr > td {
+    border-bottom: 1px solid #dddddd;
+  }
+  
+  .custom-ant-table .ant-table-tbody > tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .custom-ant-table .ant-table-container {
+    border-radius: 12px;
+  
+  }
+  
