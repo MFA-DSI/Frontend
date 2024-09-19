@@ -146,7 +146,7 @@ export const saveMission = async (mission: CreateMission): Promise<Mission> => {
 export const deleteMission = async (id: string): Promise<void> => {
   const userId = sessionStorage.getItem("userId")
   try {
-    const url = `http://localhost:8080/direction/mission/delete?userId=${userId}&activityId=${id}`;
+    const url = `http://localhost:8080/direction/mission/delete?userId=${userId}&missionId=${id}`;
     const response = await fetch(url, {
       method: "DELETE",
     });

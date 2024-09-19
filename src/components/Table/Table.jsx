@@ -487,6 +487,7 @@
               pageSizeOptions: ["10", "20", "50", "100"],
             }}
             scroll={mode === "all" ? {y: 263.5} : {y: 250}}
+            
             locale={{emptyText: "Aucune donnée à afficher"}}
           />
         </div>
