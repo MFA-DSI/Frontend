@@ -1,5 +1,6 @@
 import {useQuery, useMutation, useQueryClient} from "react-query";
 import {
+  deleteActivity,
   fetchActivities,
   getActivityByDirectionId,
 } from "../providers/activity-provider";
@@ -14,14 +15,21 @@ export const useActivities = () => {
 
   const directionIdQuery = () =>
     useQuery({
-      queryKey: ["directionActivities"],
+      queryKey: ["activities"],
       queryFn: () =>
         getActivityByDirectionId(sessionStorage.getItem("directionId") || ""),
+    });
+
+  const deleteActivityMutation = useMutation(deleteActivity, {
+      onSuccess: () => {
+        queryClient.invalidateQueries("activities");
+      },
     });
 
   return {
     activities: activitiesQuery.data,
     directionIdQuery,
+    deleteActivityMutation,
     isLoading: activitiesQuery.isLoading,
     error: activitiesQuery.error,
   };

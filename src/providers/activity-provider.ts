@@ -84,4 +84,29 @@ export const getActivityByDirectionId = async (
     toast.error("Une erreur inattendue est survenue.");
     throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
   }
+
+
+};
+
+export const deleteActivity = async (id: string): Promise<void> => {
+  const userId = sessionStorage.getItem("userId")
+  try {
+    const url = `http://localhost:8080/direction/activity/delete?userId=${userId}&activityId=${id}`;
+    const response = await fetch(url, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage =
+        errorData.message ||
+        "Erreur inconnue lors de la suppression de cette activité";
+      toast.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+  } catch (error) {
+    console.error("Error deleting delete:", error);
+    toast.error("Une erreur inattendue est survenue.");
+    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+  }
 };

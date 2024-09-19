@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Input, DatePicker } from "antd";
+import { Modal, Button, Input, DatePicker,message } from "antd";
 import moment from "moment";
 import "./assets/index.css";
 import { dateFormatter } from "./utils/dateFormatter";
 import TaskModal from "./TaskModal";
-import DeleteModal from "./DeleteModal"; // Import DeleteModal
+import DeleteModal from "./DeleteModal"; 
+import { useActivitiesContext } from "../../providers";
+import { toast } from "react-toastify";
+
 
 const ActivityModal = ({ visible, onCancel, activity, mode, onDelete }) => {
+  const {deleteActivity } = useActivitiesContext()
   const [isEditing, setIsEditing] = useState(false);
   const [editedDescription, setEditedDescription] = useState(activity?.description || "");
   const [editedObservation, setEditedObservation] = useState(activity?.observation || "");
@@ -54,10 +58,21 @@ const ActivityModal = ({ visible, onCancel, activity, mode, onDelete }) => {
     setIsDeleteModalVisible(false);
   };
 
-  const handleSuccessDelete = () => {
-    setIsDeleteModalVisible(false);
-    onCancel(); // Close the activity modal
-    console.log("Activity deleted successfully!");
+  const handleSuccessDelete = async () => {
+    if (!activity || !activity.id) {
+      message.error("Activité non valide ou ID manquant !");
+      return;
+    }
+    
+    try {
+      await deleteActivity(activity.id); 
+      setIsDeleteModalVisible(false);
+      onCancel();
+      message.success("Activity supprimée avec succès !");
+    } catch (error) {
+      message.error("Une erreur s'est produite lors de la suppression de cette activity");
+      toast.error(error.message);
+    }
   };
 
   const showDeleteModal = () => {
