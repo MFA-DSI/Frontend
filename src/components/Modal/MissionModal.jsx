@@ -5,10 +5,11 @@ import { useMissionContext } from "../../providers";
 import { toast } from "react-toastify";
 
 const MissionModal = ({ visible, onCancel, mission, onDelete, mode }) => {
-  const { deleteMission } = useMissionContext();
+  const { deleteMission,updateMission } = useMissionContext();
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedMission, setEditedMission] = useState(mission || { description: '', activityList: [] });
+
   useEffect(() => {
     if (mission) {
       setEditedMission(mission);
@@ -46,11 +47,30 @@ const MissionModal = ({ visible, onCancel, mission, onDelete, mode }) => {
     setIsEditing(true);
   };
 
-  const handleSaveClick = () => {
-    setIsEditing(false);
+  const handleSaveClick = async() => {
+
+
+    if (!mission || !mission.id) {
+      message.error("Mission non valide ou ID manquant !");
+      return;
+    }
+    
+    try {
+        const missionToUpdate = {
+          id :editedMission.id,
+          name: editedMission.description
+        }
+      await updateMission(missionToUpdate)
+      setIsEditing(false);
+      onCancel()
     onDelete(editedMission);
     message.success("Mission modifiée avec succès !");
-    setEditedMission(mission || { description: '', activityList: [] }); // Reset to original or empty mission
+    setEditedMission(mission || { description: '', activityList: [] }); 
+    } catch (error) {
+      message.error("Une erreur s'est produite lors de la suppression de cette mission");
+      toast.error(error.message);
+    }
+   
   };
 
   const handleChange = (field, value) => {

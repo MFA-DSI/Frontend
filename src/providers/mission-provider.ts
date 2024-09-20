@@ -165,3 +165,36 @@ export const deleteMission = async (id: string): Promise<void> => {
     throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
   }
 };
+
+export const updateMission = async (mission: MissionName): Promise<Mission> => {
+  try {
+    const directionId = sessionStorage.getItem("directionId");
+    const userId =sessionStorage.getItem("userId")
+    const url = `http://localhost:8080/direction/mission/update?directionId=${directionId}&userId=${userId}&missionId=${mission.id}`;
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(mission),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage =
+        errorData.message ||
+        "Erreur inconnue lors de l'enregistrement de la mission";
+      toast.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    const data: Mission = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error saving mission:", error);
+    toast.error("Une erreur inattendue est survenue.");
+    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+  }
+};
+
+

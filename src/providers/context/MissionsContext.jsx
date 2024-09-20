@@ -12,6 +12,7 @@ export const MissionProvider = ({children}) => {
     directionIdQuery,
     directionMissionsName,
     saveMission,
+    updateMission,
    
   } = useMissions();
   const [filterType, setFilterType] = useState("all");
@@ -63,6 +64,7 @@ export const MissionProvider = ({children}) => {
         MissionNameByDirectionId: missionName(),
         deleteMission,
         saveMission,
+        updateMission,
         isLoading,
         setFilterType,
         setSearchTerm,

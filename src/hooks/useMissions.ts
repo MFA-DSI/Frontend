@@ -5,6 +5,7 @@ import {
   saveMission,
   deleteMission,
   fetchMissionsName,
+  updateMission,
 } from "../providers/mission-provider";
 
 export const useMissions = () => {
@@ -35,6 +36,12 @@ export const useMissions = () => {
     },
   });
 
+  const udpateMissionMutation = useMutation(updateMission, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("missions");
+    },
+  });
+
   const deleteMissionMutation = useMutation(deleteMission, {
     onSuccess: () => {
       queryClient.invalidateQueries("missions");
@@ -47,6 +54,7 @@ export const useMissions = () => {
     directionMissionsName,
     saveMission: saveMissionMutation.mutate,
     deleteMission: deleteMissionMutation.mutate,
+    updateMission : udpateMissionMutation.mutate, 
     isLoading: missionsQuery.isLoading,
     error: missionsQuery.error,
   };
