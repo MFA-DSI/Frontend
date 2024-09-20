@@ -3,6 +3,7 @@ import {
   deleteActivity,
   fetchActivities,
   getActivityByDirectionId,
+  updateActivity,
 } from "../providers/activity-provider";
 
 export const useActivities = () => {
@@ -26,10 +27,18 @@ export const useActivities = () => {
       },
     });
 
+  
+    const udpateActivityMutation = useMutation(updateActivity, {
+      onSuccess: () => {
+        queryClient.invalidateQueries("activities");
+      },
+    });
+
   return {
     activities: activitiesQuery.data,
     directionIdQuery,
     deleteActivityMutation,
+    updateMissionActivity: udpateActivityMutation.mutate,
     isLoading: activitiesQuery.isLoading,
     error: activitiesQuery.error,
   };

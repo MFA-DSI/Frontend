@@ -3,21 +3,39 @@ import { Modal, Input, DatePicker } from "antd";
 import moment from "moment";
 
 const TaskModal = ({ visible, onCancel, task, onSave, title, type }) => {
-  const [description, setDescription] = useState("");
-  const [dueDatetime, setDueDatetime] = useState(null);
+  
+  const [taskToEdit, setTaskEdit] = useState({
+    id: "",
+    description: "",
+    dueDatetime: null,
+  });
+
+  const updateTask = (property, value) => {
+    setTaskEdit((prevTask) => ({
+      ...prevTask,
+      [property]: value,
+    }));
+  };
 
   useEffect(() => {
     if (task) {
-      setDescription(task.description);
-      setDueDatetime(moment(task.dueDatetime));
+      setTaskEdit({
+        id: task.id || "",
+        description: task.description || "",
+        dueDatetime: task.dueDatetime ? moment(task.dueDatetime) : null, // utiliser moment pour gérer les dates
+      });
     } else {
-      setDescription("");
-      setDueDatetime(null);
+      setTaskEdit({ id: "", description: "", dueDatetime: null });
     }
   }, [task]);
 
   const handleSave = () => {
-    onSave({ description, dueDatetime, type });
+    onSave({
+      ...taskToEdit,
+      dueDatetime: taskToEdit.dueDatetime ? taskToEdit.dueDatetime.toISOString() : null, 
+      type,
+    });
+    
   };
 
   return (
@@ -32,16 +50,16 @@ const TaskModal = ({ visible, onCancel, task, onSave, title, type }) => {
       <div>
         <h3>Description:</h3>
         <Input
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          value={taskToEdit.description}
+          onChange={(e) => updateTask("description", e.target.value)}
           placeholder={`Description de la ${title}`}
         />
       </div>
       <div>
         <h3>Date Limite:</h3>
         <DatePicker
-          value={dueDatetime}
-          onChange={(date) => setDueDatetime(date)}
+          value={taskToEdit.dueDatetime}
+          onChange={(date) => updateTask("dueDatetime", date)}
           placeholder="Date limite"
         />
       </div>

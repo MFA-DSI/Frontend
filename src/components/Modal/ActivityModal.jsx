@@ -10,12 +10,15 @@ import { toast } from "react-toastify";
 
 
 const ActivityModal = ({ visible, onCancel, activity, mode, onDelete }) => {
-  const {deleteActivity } = useActivitiesContext()
+  const {deleteActivity,updateMissionActivity } = useActivitiesContext()
   const [isEditing, setIsEditing] = useState(false);
-  const [editedDescription, setEditedDescription] = useState(activity?.description || "");
-  const [editedObservation, setEditedObservation] = useState(activity?.observation || "");
-  const [editedDueDatetime, setEditedDueDatetime] = useState(activity ? moment(activity.dueDatetime) : null);
-  
+  const [editedActivity, setEditedActivity] = useState({
+    id : activity?.id ||"",
+    description: activity?.description || "",
+    observation: activity?.observation || "",
+    dueDatetime: activity ? moment(activity.dueDatetime) : null,
+    prediction: activity?.prediction || ""
+  });
   const [isTaskModalVisible, setIsTaskModalVisible] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
   const [taskType, setTaskType] = useState("");
@@ -24,20 +27,48 @@ const ActivityModal = ({ visible, onCancel, activity, mode, onDelete }) => {
 
   useEffect(() => {
     if (activity) {
-      setEditedDescription(activity.description);
-      setEditedObservation(activity.observation);
-      setEditedDueDatetime(moment(activity.dueDatetime));
+      setEditedActivity({
+        id : activity.id,
+        description: activity.description,
+        observation: activity.observation,
+        dueDatetime: moment(activity.dueDatetime),
+        prediction: activity.prediction
+      });
     }
   }, [activity]);
-
-  const handleSave = () => {
-    console.log("Saving changes...", {
-      description: editedDescription,
-      observation: editedObservation,
-      dueDatetime: editedDueDatetime,
-    });
-    setIsEditing(false);
+  
+  const handleInputChange = (field, value) => {
+    setEditedActivity((prevState) => ({
+      ...prevState,
+      [field]: value
+    }));
   };
+  const handleSave = async () => {
+
+    if (!activity || !activity.id) {
+      message.error("Activité non valide ou ID manquant !");
+      return;
+    }
+    try {
+      const activityUpdate = {
+        id : editedActivity.id,
+        description : editedActivity.description,
+        prediction : editedActivity.prediction,
+        observation : editedActivity.observation,
+        dueDatetime : editedActivity.dueDatetime
+        
+      }
+      await updateMissionActivity(activityUpdate); 
+      onCancel();
+      setIsEditing(false);
+      message.success("Activity modifié avec succès !");
+    } catch (error) {
+      message.error("Une erreur s'est produite lors de la modification de cette activité");
+      toast.error(error.message);
+    }
+   
+  };
+
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -63,7 +94,6 @@ const ActivityModal = ({ visible, onCancel, activity, mode, onDelete }) => {
       message.error("Activité non valide ou ID manquant !");
       return;
     }
-    
     try {
       await deleteActivity(activity.id); 
       setIsDeleteModalVisible(false);
@@ -88,42 +118,56 @@ const ActivityModal = ({ visible, onCancel, activity, mode, onDelete }) => {
           <h2>Détails de l'Activité</h2>
 
           <div>
-            <h3>Description:</h3>
-            {isEditing && mode === "mydirection" ? (
-              <Input
-                value={editedDescription}
-                onChange={(e) => setEditedDescription(e.target.value)}
-                placeholder="Modifier la description"
-              />
-            ) : (
-              <p>{activity.description}</p>
-            )}
-          </div>
+  <h3>Description:</h3>
+  {isEditing && mode === "mydirection" ? (
+    <Input
+      value={editedActivity.description}
+      onChange={(e) => handleInputChange("description", e.target.value)}
+      placeholder="Modifier la description"
+    />
+  ) : (
+    <p>{activity.description}</p>
+  )}
+</div>
 
-          <div>
-            <h3>Observation:</h3>
-            {isEditing && mode === "mydirection" ? (
-              <Input
-                value={editedObservation}
-                onChange={(e) => setEditedObservation(e.target.value)}
-                placeholder="Modifier l'observation"
-              />
-            ) : (
-              <p>{activity.observation}</p>
-            )}
-          </div>
+<div>
+  <h3>Prédiction:</h3>
+  {isEditing && mode === "mydirection" ? (
+    <Input
+      value={editedActivity.prediction}
+      onChange={(e) => handleInputChange("prediction", e.target.value)}
+      placeholder="Modifier la prédiction"
+    />
+  ) : (
+    <p>{activity.prediction}</p>
+  )}
+</div>
 
-          <div>
-            <h3>Date Limite:</h3>
-            {isEditing && mode === "mydirection" ? (
-              <DatePicker
-                value={editedDueDatetime}
-                onChange={(date) => setEditedDueDatetime(date)}
-              />
-            ) : (
-              <p>{dateFormatter(activity.dueDatetime).toLocaleString()}</p>
-            )}
-          </div>
+<div>
+  <h3>Observation:</h3>
+  {isEditing && mode === "mydirection" ? (
+    <Input
+      value={editedActivity.observation}
+      onChange={(e) => handleInputChange("observation", e.target.value)}
+      placeholder="Modifier l'observation"
+    />
+  ) : (
+    <p>{activity.observation}</p>
+  )}
+</div>
+
+<div>
+  <h3>Date Limite:</h3>
+  {isEditing && mode === "mydirection" ? (
+    <DatePicker
+      value={editedActivity.dueDatetime}
+      onChange={(date) => handleInputChange("dueDatetime", date)}
+    />
+  ) : (
+    <p>{dateFormatter(activity.dueDatetime).toLocaleString()}</p>
+  )}
+</div>
+
 
           <div>
             <h3>Tâches:</h3>

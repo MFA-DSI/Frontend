@@ -37,7 +37,7 @@
     const [selectedMission, setSelectedMission] = useState(null); 
     const [isModalVisible, setIsModalVisible] = useState(false); 
     const [isMissionModalVisible, setIsMissionModalVisible] = useState(false);
-    const [pageSize, setPageSize] = useState(50);
+    const [pageSize, setPageSize] = useState(200);
     const [selectedIds, setSelectedIds] = useState([]);
 
     const showModal = (activity) => {

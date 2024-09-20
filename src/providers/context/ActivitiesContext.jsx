@@ -4,7 +4,7 @@ import {useActivities} from "../../hooks";
 const ActivityContext = createContext();
 
 export const ActivitieProvider = ({children}) => {
-  const {activities, directionIdQuery, isLoading,deleteActivityMutation} = useActivities();
+  const {activities, directionIdQuery, isLoading,deleteActivityMutation,updateMissionActivity} = useActivities();
   const [filterType, setFilterType] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -36,6 +36,7 @@ export const ActivitieProvider = ({children}) => {
         filteredActivities: filteredActivities(),
         directionIdQueryActvities: directionIdQuery().data,
         deleteActivity : deleteActivityMutation.mutate,
+        updateMissionActivity,
         isLoading,
         setFilterType,
         setSearchTerm,
