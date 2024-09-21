@@ -110,7 +110,6 @@ export const getByDirectionId = async (
   }
 };
 
-
 export const saveMission = async (mission: CreateMission): Promise<Mission> => {
   try {
     const directionId = sessionStorage.getItem("directionId");
@@ -142,9 +141,8 @@ export const saveMission = async (mission: CreateMission): Promise<Mission> => {
   }
 };
 
-
 export const deleteMission = async (id: string): Promise<void> => {
-  const userId = sessionStorage.getItem("userId")
+  const userId = sessionStorage.getItem("userId");
   try {
     const url = `http://localhost:8080/direction/mission/delete?userId=${userId}&missionId=${id}`;
     const response = await fetch(url, {
@@ -169,7 +167,7 @@ export const deleteMission = async (id: string): Promise<void> => {
 export const updateMission = async (mission: MissionName): Promise<Mission> => {
   try {
     const directionId = sessionStorage.getItem("directionId");
-    const userId =sessionStorage.getItem("userId")
+    const userId = sessionStorage.getItem("userId");
     const url = `http://localhost:8080/direction/mission/update?directionId=${directionId}&userId=${userId}&missionId=${mission.id}`;
     const response = await fetch(url, {
       method: "PUT",
@@ -196,5 +194,3 @@ export const updateMission = async (mission: MissionName): Promise<Mission> => {
     throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
   }
 };
-
-

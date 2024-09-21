@@ -4,7 +4,17 @@ import {useActivities} from "../../hooks";
 const ActivityContext = createContext();
 
 export const ActivitieProvider = ({children}) => {
-  const {activities, directionIdQuery, isLoading,deleteActivityMutation,updateMissionActivity} = useActivities();
+  const {
+    activities,
+    directionIdQuery,
+    isLoading,
+    deleteActivity,
+    updateMissionActivity,
+    addTask,
+    addNextTask,
+    addRecommendation,
+    addPerformance,
+  } = useActivities();
   const [filterType, setFilterType] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -35,8 +45,12 @@ export const ActivitieProvider = ({children}) => {
       value={{
         filteredActivities: filteredActivities(),
         directionIdQueryActvities: directionIdQuery().data,
-        deleteActivity : deleteActivityMutation.mutate,
+        deleteActivity: deleteActivity,
         updateMissionActivity,
+        addTaskToActivty : addTask,
+        addNextTask: addNextTask,
+        addPerformance: addPerformance,
+        addRecommendation: addRecommendation,
         isLoading,
         setFilterType,
         setSearchTerm,

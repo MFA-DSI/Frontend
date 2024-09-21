@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { authProvider } from "../../providers/auth-provider";
-import { Form, Input, Button, Card, Typography } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import React, {useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {authProvider} from "../../providers/auth-provider";
+import {Form, Input, Button, Card, Typography} from "antd";
+import {UserOutlined, LockOutlined} from "@ant-design/icons";
 import "./assets/index.scss";
 
-const { Title } = Typography;
-const { login } = authProvider;
+const {Title} = Typography;
+const {login} = authProvider;
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -15,7 +15,7 @@ const Login = () => {
   const onFinish = async (values) => {
     setIsLoading(true);
     try {
-      await login({ email: values.email, password: values.password });
+      await login({email: values.email, password: values.password});
       setTimeout(() => {
         navigate("/"); // Redirige après la connexion réussie
       }, 500);
@@ -28,29 +28,24 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <Card className="login-card" bordered={false} style={{ width: 400 }}>
-       
+      <Card className="login-card" bordered={false} style={{width: 400}}>
         <div className="login-logo-container">
-          <img
-            src="src/assets/logo.jpg" 
-            alt="Logo"
-            className="login-logo"
-          />
+          <img src="src/assets/logo.jpg" alt="Logo" className="login-logo" />
         </div>
-        <Title level={3} style={{ textAlign: "center" }}>
-            MFA - ACTION
+        <Title level={3} style={{textAlign: "center"}}>
+          MFA - ACTION
         </Title>
         <Form
           name="admin_login"
           className="login-form"
-          initialValues={{ remember: true }}
+          initialValues={{remember: true}}
           onFinish={onFinish}
         >
           <Form.Item
             name="email"
             rules={[
-              { required: true, message: "Veuillez saisir votre email " },
-              { type: "email", message: "Veuillez entrer un email valide" },
+              {required: true, message: "Veuillez saisir votre email "},
+              {type: "email", message: "Veuillez entrer un email valide"},
             ]}
           >
             <Input
@@ -62,7 +57,9 @@ const Login = () => {
 
           <Form.Item
             name="password"
-            rules={[{ required: true, message: "Veuillez saisir votre mot de passe " }]}
+            rules={[
+              {required: true, message: "Veuillez saisir votre mot de passe "},
+            ]}
           >
             <Input.Password
               prefix={<LockOutlined className="site-form-item-icon" />}

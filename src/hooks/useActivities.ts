@@ -1,5 +1,9 @@
 import {useQuery, useMutation, useQueryClient} from "react-query";
 import {
+  addNextTaskTActivity,
+  addPerformanceToActivity,
+  addRecommendationToActivity,
+  addTaskToActivity,
   deleteActivity,
   fetchActivities,
   getActivityByDirectionId,
@@ -22,23 +26,56 @@ export const useActivities = () => {
     });
 
   const deleteActivityMutation = useMutation(deleteActivity, {
-      onSuccess: () => {
-        queryClient.invalidateQueries("activities");
-      },
-    });
+    onSuccess: () => {
+      queryClient.invalidateQueries("activities");
+    },
+  });
 
-  
-    const udpateActivityMutation = useMutation(updateActivity, {
+  const udpateActivityMutation = useMutation(updateActivity, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("activities");
+    },
+  });
+
+  const udpateActivityTaskMutation = useMutation(addTaskToActivity, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("activities");
+    },
+  });
+
+  const udpateActivityNextTaskMutation = useMutation(addNextTaskTActivity, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("activities");
+    },
+  });
+
+  const udpatePerformanceRealizationMutation = useMutation(
+    addPerformanceToActivity,
+    {
       onSuccess: () => {
         queryClient.invalidateQueries("activities");
       },
-    });
+    }
+  );
+
+  const udpateRecommendationMutation = useMutation(
+    addRecommendationToActivity,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("activities");
+      },
+    }
+  );
 
   return {
     activities: activitiesQuery.data,
     directionIdQuery,
-    deleteActivityMutation,
+    deleteActivity: deleteActivityMutation.mutate,
     updateMissionActivity: udpateActivityMutation.mutate,
+    addTask: udpateActivityTaskMutation.mutate,
+    addNextTask: udpateActivityNextTaskMutation.mutate,
+    addPerformance: udpatePerformanceRealizationMutation.mutate,
+    addRecommendation: udpateRecommendationMutation.mutate,
     isLoading: activitiesQuery.isLoading,
     error: activitiesQuery.error,
   };

@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { Modal, Input, DatePicker } from "antd";
+import React, {useState, useEffect} from "react";
+import {Modal, Input, DatePicker,message} from "antd";
 import moment from "moment";
+import { useActivitiesContext } from "../../providers";
+import { toast } from "react-toastify";
 
-const TaskModal = ({ visible, onCancel, task, onSave, title, type }) => {
-  
+const TaskModal = ({visible, onCancel, task, onSave, title, type,activityId}) => {
+  const { addTaskToActivty } = useActivitiesContext(); 
   const [taskToEdit, setTaskEdit] = useState({
     id: "",
     description: "",
     dueDatetime: null,
   });
+  const [activity,setActivity] = useState("")
+
 
   const updateTask = (property, value) => {
     setTaskEdit((prevTask) => ({
@@ -18,24 +22,45 @@ const TaskModal = ({ visible, onCancel, task, onSave, title, type }) => {
   };
 
   useEffect(() => {
-    if (task) {
+    
+    if (task && activityId) {
       setTaskEdit({
         id: task.id || "",
         description: task.description || "",
-        dueDatetime: task.dueDatetime ? moment(task.dueDatetime) : null, // utiliser moment pour gérer les dates
+        dueDatetime: task.dueDatetime ? moment(task.dueDatetime) : null,
       });
+      setActivity(activityId)
     } else {
-      setTaskEdit({ id: "", description: "", dueDatetime: null });
+      setTaskEdit({id: "", description: "", dueDatetime: null});
+      setActivity("")
     }
-  }, [task]);
+  }, [task,activityId]);
 
-  const handleSave = () => {
-    onSave({
+  const handleSave = async () => {
+   
+    const updateTask = {
       ...taskToEdit,
-      dueDatetime: taskToEdit.dueDatetime ? taskToEdit.dueDatetime.toISOString() : null, 
-      type,
-    });
+      dueDatetime: taskToEdit.dueDatetime ? taskToEdit.dueDatetime.toISOString() : null,
+      description : taskToEdit.description
+    };
     
+    try {
+
+      const Task = {
+        id : activityId.id,
+        task : updateTask
+      }
+       
+      await addTaskToActivty(Task)
+      onSave()
+      message.success("Tâche modifié avec succès !");
+    } catch (error) {
+      message.error(
+        "Une erreur s'est produite lors de la modification de cette activité"
+      );
+      toast.error(error.message);
+    }
+  
   };
 
   return (

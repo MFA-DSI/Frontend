@@ -1,5 +1,7 @@
 import {toast} from "react-toastify";
 import environment from "../conf/environment";
+import { PerformanceRealization, Recommendation, Task } from "../types";
+
 
 export interface Activity {
   id: string;
@@ -10,6 +12,7 @@ export interface Activity {
   task: ActivityItem[];
   nextTask: ActivityItem[];
   performanceRealizationDTO: PerformanceRealization[];
+  recommenation : Recommendation[]
 }
 
 export interface ActivityItem {
@@ -17,12 +20,11 @@ export interface ActivityItem {
   description: string;
   dueDatetime: string;
 }
-
-export interface PerformanceRealization {
-  id: string;
-  indicators: number;
-  realization: string;
+interface updateActivityItem{
+  id : string;
+  task: ActivityItem[]
 }
+
 
 export const fetchActivities = async (): Promise<unknown> => {
   try {
@@ -146,3 +148,171 @@ export const deleteActivity = async (id: string): Promise<void> => {
     throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
   }
 };
+
+export const addTaskToActivity = async(taskDetails : updateActivityItem)=>{
+  const userId = sessionStorage.getItem("userId")
+  try {
+ 
+    const url = `http://localhost:8080/direction/task?activityId=${taskDetails.id}`;
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify([taskDetails.task]),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage =
+        errorData.message ||
+        "Erreur inconnue lors de la création de cette tache";
+      toast.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+  } catch (error) {
+    console.error("Error deleting delete:", error);
+    toast.error("Une erreur inattendue est survenue.");
+    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+  }}
+
+  export const DetachTaskToActivity = async(taskId: string)=>{
+    try {
+      const url = `http://localhost:8080/direction/nextTask/delete?id=${taskId}`;
+      const response = await fetch(url, {
+        method: "DELETE",
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        const errorMessage =
+          errorData.message ||
+          "Erreur inconnue lors de la création de cette tache";
+        toast.error(errorMessage);
+        throw new Error(errorMessage);
+      }
+    } catch (error) {
+      console.error("Error deleting delete:", error);
+      toast.error("Une erreur inattendue est survenue.");
+      throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+    }
+}
+
+export const addNextTaskTActivity = async(activityId: string,NextTask: Task)=>{
+  try {
+    const url = `http://localhost:8080/direction/NextTask?activityId=${activityId}`;
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify([NextTask]),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage =
+        errorData.message ||
+        "Erreur inconnue lors de la création de cette tache";
+      toast.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+  } catch (error) {
+    console.error("Error deleting delete:", error);
+    toast.error("Une erreur inattendue est survenue.");
+    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+  }}
+
+  export const DetachNextTaskFromActivity = async(taskId: string)=>{
+    try {
+      const url = `http://localhost:8080/direction/nextTask/delete?id=${taskId}`;
+      const response = await fetch(url, {
+        method: "DELETE",
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        const errorMessage =
+          errorData.message ||
+          "Erreur inconnue lors de la création de cette tache";
+        toast.error(errorMessage);
+        throw new Error(errorMessage);
+      }
+    } catch (error) {
+      console.error("Error deleting delete:", error);
+      toast.error("Une erreur inattendue est survenue.");
+      throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+    }
+}
+
+export const addPerformanceToActivity = async (performanceRealization :PerformanceRealization) => {
+  try {
+    const url = `http://localhost:8080/direction/perfromanceRealization?activityId=${activityId}`;
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify([performanceRealization]),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage =
+        errorData.message ||
+        "Erreur inconnue lors de la création de cette indicateur de performance";
+      toast.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+  } catch (error) {
+    console.error("Error deleting delete:", error);
+    toast.error("Une erreur inattendue est survenue.");
+    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+}}
+export const detachPerformanceFromActivity= async (id: string) => {
+  try {
+    const url = `http://localhost:8080/direction/performanceRealization/delete?id=${id}`;
+    const response = await fetch(url, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage =
+        errorData.message ||
+        "Erreur inconnue lors de la création de la suppression de cette performance";
+      toast.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+  } catch (error) {
+    console.error("Error deleting delete:", error);
+    toast.error("Une erreur inattendue est survenue.");
+    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+  }
+}
+
+export const addRecommendationToActivity =  async(recommendation: Recommendation,activityId : string)=>{
+  try {
+    const url = `http://localhost:8080/direction/activity/recommendation?activityId=${activityId}`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(recommendation),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage =
+        errorData.message ||
+        "Erreur inconnue lors de la création de cette indicateur de performance";
+      toast.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+  } catch (error) {
+    console.error("Error deleting delete:", error);
+    toast.error("Une erreur inattendue est survenue.");
+    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+
+}}

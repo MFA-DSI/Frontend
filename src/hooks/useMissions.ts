@@ -54,7 +54,7 @@ export const useMissions = () => {
     directionMissionsName,
     saveMission: saveMissionMutation.mutate,
     deleteMission: deleteMissionMutation.mutate,
-    updateMission : udpateMissionMutation.mutate, 
+    updateMission: udpateMissionMutation.mutate,
     isLoading: missionsQuery.isLoading,
     error: missionsQuery.error,
   };

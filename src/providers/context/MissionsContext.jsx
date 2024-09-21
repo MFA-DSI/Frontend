@@ -13,7 +13,6 @@ export const MissionProvider = ({children}) => {
     directionMissionsName,
     saveMission,
     updateMission,
-   
   } = useMissions();
   const [filterType, setFilterType] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");

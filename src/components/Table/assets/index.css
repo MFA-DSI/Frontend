@@ -1,43 +1,37 @@
 .custom-ant-table .ant-table {
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .custom-ant-table .ant-table-thead > tr > th {
-    background-color: #4CAF50;
-    color: white;
-    font-weight: bold;
-  }
-  
-  .custom-ant-table .ant-table-tbody > tr > td {
-    border-bottom: 1px solid #dddddd;
-  }
-  
-  .custom-ant-table .ant-table-tbody > tr:hover {
-    background-color: #f1f1f1;
-  }
-  
-  .custom-ant-table .ant-table-container {
-    border-radius: 12px;
-  
-  }
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
 
- 
+.custom-ant-table .ant-table-thead > tr > th {
+  background-color: #4caf50;
+  color: white;
+  font-weight: bold;
+}
+
+.custom-ant-table .ant-table-tbody > tr > td {
+  border-bottom: 1px solid #dddddd;
+}
+
+.custom-ant-table .ant-table-tbody > tr:hover {
+  background-color: #f1f1f1;
+}
+
+.custom-ant-table .ant-table-container {
+  border-radius: 12px;
+}
+
 .custom-ant-table ::-webkit-scrollbar {
-    width: 4px ; 
-  }
-  
-  
-  .custom-ant-table ::-webkit-scrollbar-thumb {
-    background-color: #be2a2a; 
-    border-radius: 10px;
-  }
-  
-  
-  .custom-ant-table ::-webkit-scrollbar-track {
-    background-color: #da1414; 
-    border-radius: 10px; 
-  }
-  
-  
+  width: 4px;
+}
+
+.custom-ant-table ::-webkit-scrollbar-thumb {
+  background-color: #be2a2a;
+  border-radius: 10px;
+}
+
+.custom-ant-table ::-webkit-scrollbar-track {
+  background-color: #da1414;
+  border-radius: 10px;
+}
