@@ -1,7 +1,6 @@
 import {toast} from "react-toastify";
 import environment from "../conf/environment";
-import { PerformanceRealization, Recommendation, Task } from "../types";
-
+import {PerformanceRealization, Recommendation, Task} from "../types";
 
 export interface Activity {
   id: string;
@@ -12,7 +11,7 @@ export interface Activity {
   task: ActivityItem[];
   nextTask: ActivityItem[];
   performanceRealizationDTO: PerformanceRealization[];
-  recommenation : Recommendation[]
+  recommenation: Recommendation[];
 }
 
 export interface ActivityItem {
@@ -20,12 +19,11 @@ export interface ActivityItem {
   description: string;
   dueDatetime: string;
 }
-interface updateActivityItem{
-  id : string;
+interface updateActivityItem {
+  id: string;
   task: ActivityItem[];
   type: string;
 }
-
 
 export const fetchActivities = async (): Promise<unknown> => {
   try {
@@ -44,10 +42,9 @@ export const fetchActivities = async (): Promise<unknown> => {
       throw new Error(errorMessage);
     }
 
-   
     const data: Activity[] = await response.json();
 
-    return data; 
+    return data;
   } catch (error) {
     // Handle any other errors
     console.error("Error fetching missions:", error);
@@ -82,11 +79,9 @@ export const getActivityByDirectionId = async (
     toast.error("Une erreur inattendue est survenue.");
     throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
   }
-
-
 };
 
-export const getActivityById = async (id:string) => {
+export const getActivityById = async (id: string) => {
   try {
     const url = `http://localhost:8080/direction/activity?id=${id}`;
     const response = await fetch(url, {
@@ -110,22 +105,21 @@ export const getActivityById = async (id:string) => {
     toast.error("Une erreur inattendue est survenue.");
     throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
   }
-  
-}
-export const updateActivity = async (activities : Activity): Promise<Activity> => {
-
-  const activityToUpdate  = {
-    id : activities.id,
-    description :activities.description,
+};
+export const updateActivity = async (
+  activities: Activity
+): Promise<Activity> => {
+  const activityToUpdate = {
+    id: activities.id,
+    description: activities.description,
     observation: activities.observation,
-    prediction : activities.prediction,
-    dueDatetime: activities.dueDatetime
-   }
+    prediction: activities.prediction,
+    dueDatetime: activities.dueDatetime,
+  };
 
   try {
     const url = "http://localhost:8080/direction/activity/update";
 
-   
     const response = await fetch(url, {
       method: "PUT",
       headers: {
@@ -153,7 +147,7 @@ export const updateActivity = async (activities : Activity): Promise<Activity> =
 };
 
 export const deleteActivity = async (id: string): Promise<void> => {
-  const userId = sessionStorage.getItem("userId")
+  const userId = sessionStorage.getItem("userId");
   try {
     const url = `http://localhost:8080/direction/activity/delete?userId=${userId}&activityId=${id}`;
     const response = await fetch(url, {
@@ -175,13 +169,9 @@ export const deleteActivity = async (id: string): Promise<void> => {
   }
 };
 
-export const addTaskToActivity = async(taskDetails : updateActivityItem)=>{
-  
-  const type = taskDetails.type === "task" ? "task" : "nextTask"
+export const addTaskToActivity = async (taskDetails: updateActivityItem) => {
+  const type = taskDetails.type === "task" ? "task" : "nextTask";
   try {
-
-      console.log("task is",taskDetails.task);
-      
     const url = `http://localhost:8080/direction/${type}?activityId=${taskDetails.id}`;
     const response = await fetch(url, {
       method: "PUT",
@@ -203,31 +193,35 @@ export const addTaskToActivity = async(taskDetails : updateActivityItem)=>{
     console.error("Error deleting delete:", error);
     toast.error("Une erreur inattendue est survenue.");
     throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
-  }}
+  }
+};
 
-  export const DetachTaskToActivity = async(taskId: string)=>{
-    try {
-      const url = `http://localhost:8080/direction/nextTask/delete?id=${taskId}`;
-      const response = await fetch(url, {
-        method: "DELETE",
-      });
-  
-      if (!response.ok) {
-        const errorData = await response.json();
-        const errorMessage =
-          errorData.message ||
-          "Erreur inconnue lors de la création de cette tache";
-        toast.error(errorMessage);
-        throw new Error(errorMessage);
-      }
-    } catch (error) {
-      console.error("Error deleting delete:", error);
-      toast.error("Une erreur inattendue est survenue.");
-      throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+export const DetachTaskToActivity = async (taskId: string) => {
+  try {
+    const url = `http://localhost:8080/direction/nextTask/delete?id=${taskId}`;
+    const response = await fetch(url, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage =
+        errorData.message ||
+        "Erreur inconnue lors de la création de cette tache";
+      toast.error(errorMessage);
+      throw new Error(errorMessage);
     }
-}
+  } catch (error) {
+    console.error("Error deleting delete:", error);
+    toast.error("Une erreur inattendue est survenue.");
+    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+  }
+};
 
-export const addNextTaskTActivity = async(activityId: string,NextTask: Task)=>{
+export const addNextTaskTActivity = async (
+  activityId: string,
+  NextTask: Task
+) => {
   try {
     const url = `http://localhost:8080/direction/NextTask?activityId=${activityId}`;
     const response = await fetch(url, {
@@ -250,31 +244,34 @@ export const addNextTaskTActivity = async(activityId: string,NextTask: Task)=>{
     console.error("Error deleting delete:", error);
     toast.error("Une erreur inattendue est survenue.");
     throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
-  }}
+  }
+};
 
-  export const DetachNextTaskFromActivity = async(taskId: string)=>{
-    try {
-      const url = `http://localhost:8080/direction/nextTask/delete?id=${taskId}`;
-      const response = await fetch(url, {
-        method: "DELETE",
-      });
-  
-      if (!response.ok) {
-        const errorData = await response.json();
-        const errorMessage =
-          errorData.message ||
-          "Erreur inconnue lors de la création de cette tache";
-        toast.error(errorMessage);
-        throw new Error(errorMessage);
-      }
-    } catch (error) {
-      console.error("Error deleting delete:", error);
-      toast.error("Une erreur inattendue est survenue.");
-      throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+export const DetachNextTaskFromActivity = async (taskId: string) => {
+  try {
+    const url = `http://localhost:8080/direction/nextTask/delete?id=${taskId}`;
+    const response = await fetch(url, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage =
+        errorData.message ||
+        "Erreur inconnue lors de la création de cette tache";
+      toast.error(errorMessage);
+      throw new Error(errorMessage);
     }
-}
+  } catch (error) {
+    console.error("Error deleting delete:", error);
+    toast.error("Une erreur inattendue est survenue.");
+    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+  }
+};
 
-export const addPerformanceToActivity = async (performanceRealization :PerformanceRealization) => {
+export const addPerformanceToActivity = async (
+  performanceRealization: PerformanceRealization
+) => {
   try {
     const url = `http://localhost:8080/direction/perfromanceRealization?activityId=${activityId}`;
     const response = await fetch(url, {
@@ -297,8 +294,9 @@ export const addPerformanceToActivity = async (performanceRealization :Performan
     console.error("Error deleting delete:", error);
     toast.error("Une erreur inattendue est survenue.");
     throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
-}}
-export const detachPerformanceFromActivity= async (id: string) => {
+  }
+};
+export const detachPerformanceFromActivity = async (id: string) => {
   try {
     const url = `http://localhost:8080/direction/performanceRealization/delete?id=${id}`;
     const response = await fetch(url, {
@@ -318,9 +316,12 @@ export const detachPerformanceFromActivity= async (id: string) => {
     toast.error("Une erreur inattendue est survenue.");
     throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
   }
-}
+};
 
-export const addRecommendationToActivity =  async(recommendation: Recommendation,activityId : string)=>{
+export const addRecommendationToActivity = async (
+  recommendation: Recommendation,
+  activityId: string
+) => {
   try {
     const url = `http://localhost:8080/direction/activity/recommendation?activityId=${activityId}`;
     const response = await fetch(url, {
@@ -343,5 +344,5 @@ export const addRecommendationToActivity =  async(recommendation: Recommendation
     console.error("Error deleting delete:", error);
     toast.error("Une erreur inattendue est survenue.");
     throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
-
-}}
+  }
+};

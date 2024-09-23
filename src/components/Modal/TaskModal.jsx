@@ -1,18 +1,26 @@
 import React, {useState, useEffect} from "react";
-import {Modal, Input, DatePicker,message} from "antd";
+import {Modal, Input, DatePicker, message} from "antd";
 import moment from "moment";
-import { useActivitiesContext } from "../../providers";
-import { toast } from "react-toastify";
+import {useActivitiesContext} from "../../providers";
+import {toast} from "react-toastify";
 
-const TaskModal = ({visible, onCancel, task, onSave, title, type,activityId,reopenMainModal}) => {
-  const { addTaskToActivty } = useActivitiesContext(); 
+const TaskModal = ({
+  visible,
+  onCancel,
+  task,
+  onSave,
+  title,
+  type,
+  activityId,
+  reopenMainModal,
+}) => {
+  const {addTaskToActivty} = useActivitiesContext();
   const [taskToEdit, setTaskEdit] = useState({
     id: "",
     description: "",
     dueDatetime: null,
   });
-  const [activity,setActivity] = useState("")
-
+  const [activity, setActivity] = useState("");
 
   const updateTask = (property, value) => {
     setTaskEdit((prevTask) => ({
@@ -22,39 +30,38 @@ const TaskModal = ({visible, onCancel, task, onSave, title, type,activityId,reop
   };
 
   useEffect(() => {
-    
     if (task && activityId) {
       setTaskEdit({
         id: task.id || "",
         description: task.description || "",
         dueDatetime: task.dueDatetime ? moment(task.dueDatetime) : null,
       });
-      setActivity(activityId)
+      setActivity(activityId);
     } else {
       setTaskEdit({id: "", description: "", dueDatetime: null});
-      setActivity("")
+      setActivity("");
     }
-  }, [task,activityId]);
+  }, [task, activityId]);
 
   const handleSave = async () => {
-   
     const updateTask = {
       ...taskToEdit,
       id: taskToEdit.id,
-      dueDatetime: taskToEdit.dueDatetime ? taskToEdit.dueDatetime.toISOString() : null,
-      description : taskToEdit.description
+      dueDatetime: taskToEdit.dueDatetime
+        ? taskToEdit.dueDatetime.toISOString()
+        : null,
+      description: taskToEdit.description,
     };
-    
-    try {
 
+    try {
       const Task = {
-        id : activityId.id,
-        task : updateTask,
-        type: type
-      }
-      await addTaskToActivty(Task)
-      onSave()
-      reopenMainModal()
+        id: activityId.id,
+        task: updateTask,
+        type: type,
+      };
+      await addTaskToActivty(Task);
+      onSave();
+      reopenMainModal();
       message.success("Tâche modifié avec succès !");
     } catch (error) {
       message.error(
@@ -62,7 +69,6 @@ const TaskModal = ({visible, onCancel, task, onSave, title, type,activityId,reop
       );
       toast.error(error.message);
     }
-  
   };
 
   return (

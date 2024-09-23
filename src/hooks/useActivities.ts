@@ -26,11 +26,10 @@ export const useActivities = () => {
         getActivityByDirectionId(sessionStorage.getItem("directionId") || ""),
     });
 
-  const activityIdQuery = (id: string)=>
+  const activityIdQuery = (id: string) =>
     useQuery({
       queryKey: ["activities"],
-      queryFn: () =>
-        getActivityById(id),
+      queryFn: () => getActivityById(id),
     });
 
   const deleteActivityMutation = useMutation(deleteActivity, {
@@ -66,14 +65,12 @@ export const useActivities = () => {
     }
   );
 
-  const udpateRecommendationMutation = useMutation(
-    addRecommendationToActivity,
-  );
+  const udpateRecommendationMutation = useMutation(addRecommendationToActivity);
 
   return {
     activities: activitiesQuery.data,
     directionIdQuery,
-    MissionsActivityIdQuery : activityIdQuery,
+    MissionsActivityIdQuery: activityIdQuery,
     deleteActivity: deleteActivityMutation.mutate,
     updateMissionActivity: udpateActivityMutation.mutate,
     addTask: udpateActivityTaskMutation.mutate,

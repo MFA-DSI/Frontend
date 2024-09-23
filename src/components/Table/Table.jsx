@@ -11,7 +11,7 @@ import ActivityModal from "../Modal/ActivityModal";
 import MissionModal from "../Modal/MissionModal";
 
 import "./assets/index.css";
-import { useDirectionsContext } from "../../providers";
+import {useDirectionsContext} from "../../providers";
 
 const {Option} = Select;
 
@@ -28,7 +28,6 @@ const TableComponent = ({mode}) => {
     setFilterType,
     setDirectionFilter,
   } = useMissionContext();
-
 
   const [activityType, setActivityType] = useState("all");
   const [dateFilter, setDateFilter] = useState({
@@ -117,7 +116,7 @@ const TableComponent = ({mode}) => {
           dataIndex: "nextTask",
           render: (nextTaskList) => (
             <div>
-               {nextTaskList.length > 0
+              {nextTaskList.length > 0
                 ? nextTaskList.map((task) => (
                     <div key={task.id}>- {task.description}</div>
                   ))

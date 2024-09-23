@@ -14,7 +14,7 @@ export const ActivitieProvider = ({children}) => {
     addNextTask,
     addRecommendation,
     addPerformance,
-    MissionsActivityIdQuery
+    MissionsActivityIdQuery,
   } = useActivities();
   const [filterType, setFilterType] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
@@ -48,11 +48,11 @@ export const ActivitieProvider = ({children}) => {
         directionIdQueryActvities: directionIdQuery().data,
         deleteActivity: deleteActivity,
         updateMissionActivity,
-        addTaskToActivty : addTask,
+        addTaskToActivty: addTask,
         addNextTask: addNextTask,
         addPerformance: addPerformance,
         addRecommendation: addRecommendation,
-        activityIdQuery : MissionsActivityIdQuery,
+        activityIdQuery: MissionsActivityIdQuery,
         isLoading,
         setFilterType,
         setSearchTerm,

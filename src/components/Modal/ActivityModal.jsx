@@ -72,7 +72,6 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
   };
 
   const handleTaskSave = () => {
-  
     setIsTaskModalVisible(false);
   };
 
@@ -344,11 +343,10 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
         title={taskType === "task" ? "Tâche" : "Tâche Prochaine"}
         type={taskType}
         reopenMainModal={() => {
-          onCancel(); 
+          onCancel();
           setTimeout(() => {
-
-            onCancel(false); 
-          }, 200); 
+            onCancel(false);
+          }, 200);
         }}
       />
 

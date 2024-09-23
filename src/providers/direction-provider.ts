@@ -1,3 +1,5 @@
+import {Direction} from "../types";
+
 const API_URL: string = import.meta.env.VITE_API_URL;
 
 export const fetchDirections = async (): Promise<Direction[]> => {
@@ -12,8 +14,3 @@ export const fetchDirections = async (): Promise<Direction[]> => {
   const data: Direction[] = await response.json();
   return data;
 };
-
-interface Direction {
-  id: string;
-  name: string;
-}
