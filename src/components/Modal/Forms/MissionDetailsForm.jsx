@@ -153,7 +153,7 @@ export const PerformanceIndicatorForm = ({
     setPerformanceIndicators([...performanceIndicators, newIndicator]);
     setIndicators("");
     setRealization("");
-    setErrorMessage(""); // Clear error after successful addition
+    setErrorMessage(""); 
   };
 
   return (

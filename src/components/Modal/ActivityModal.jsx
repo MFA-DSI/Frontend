@@ -7,6 +7,7 @@ import TaskModal from "./TaskModal";
 import DeleteModal from "./DeleteModal";
 import {useActivitiesContext} from "../../providers";
 import {toast} from "react-toastify";
+import PerformanceModal from "./PerformanceModal";
 
 const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
   const {deleteActivity, updateMissionActivity} = useActivitiesContext();
@@ -21,9 +22,11 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
   const [isTaskModalVisible, setIsTaskModalVisible] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
   const [taskType, setTaskType] = useState("");
+  const [isPerformanceModalVisible, setIsPerformanceModalVisible] = useState(false);
+  const [selectedPerformance, setSelectedPerformance] = useState(null); 
 
-  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false); // Delete modal state
 
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false); 
   useEffect(() => {
     if (activity) {
       setEditedActivity({
@@ -80,6 +83,17 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
     setTaskType(type);
     setIsTaskModalVisible(true);
   };
+
+  const openPerformanceModal = (performance) => {
+    setSelectedPerformance(performance);
+    setIsPerformanceModalVisible(true);
+  };
+
+  const handlePerformanceSave = () => {
+    setIsPerformanceModalVisible(false);
+    onCancel(); 
+  };
+
 
   const handleDeleteCancel = () => {
     setIsDeleteModalVisible(false);
@@ -237,18 +251,15 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
             {activity.performanceRealization.length > 0 ? (
               activity.performanceRealization.map((performanceIndicator) => (
                 <p key={performanceIndicator.id}>
-                  - {performanceIndicator.realization} (Dû a le :{" "}
+                  - {performanceIndicator.realization} (
                   {performanceIndicator.indicators})
                   {mode === "mydirection" && !isEditing && (
                     <Button
-                      type="link"
-                      onClick={() =>
-                        openTaskModal(
-                          performanceIndicator,
-                          "performanceIndicator"
-                        )
-                      }
-                    >
+                    type="link"
+                    onClick={() =>
+                      openPerformanceModal(performanceIndicator)
+                    }
+                  >
                       Modifier
                     </Button>
                   )}
@@ -260,7 +271,11 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
             {mode === "mydirection" && !isEditing && (
               <Button
                 type="dashed"
-                onClick={() => openTaskModal(null, "nextTask")}
+                onClick={() =>
+                  openPerformanceModal(
+                    null                       
+                  )
+                }
               >
                 + Ajouter une indicateur de performance
               </Button>
@@ -349,6 +364,19 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
           }, 200);
         }}
       />
+      <PerformanceModal
+        visible={isPerformanceModalVisible}
+        onCancel={() => setIsPerformanceModalVisible(false)}
+        performance={selectedPerformance}
+        onSave={handlePerformanceSave}
+        activityId={activity}
+        reopenMainModal={() => {
+          onCancel();
+          setTimeout(() => {
+            onCancel(false);
+          }, 200);
+        }}
+      />
 
       <DeleteModal
         itemType={"activity"}
@@ -361,6 +389,7 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
         item={activity}
         onSuccessDelete={handleSuccessDelete}
       />
+     
     </Modal>
   );
 };

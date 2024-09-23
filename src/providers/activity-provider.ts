@@ -25,6 +25,11 @@ interface updateActivityItem {
   type: string;
 }
 
+interface udpatePerformance {
+  id: string,
+  performance : PerformanceRealization
+}
+
 export const fetchActivities = async (): Promise<unknown> => {
   try {
     const url =
@@ -46,7 +51,6 @@ export const fetchActivities = async (): Promise<unknown> => {
 
     return data;
   } catch (error) {
-    // Handle any other errors
     console.error("Error fetching missions:", error);
     toast.error("Une erreur inattendue est survenue.");
     throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
@@ -218,68 +222,17 @@ export const DetachTaskToActivity = async (taskId: string) => {
   }
 };
 
-export const addNextTaskTActivity = async (
-  activityId: string,
-  NextTask: Task
-) => {
-  try {
-    const url = `http://localhost:8080/direction/NextTask?activityId=${activityId}`;
-    const response = await fetch(url, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify([NextTask]),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      const errorMessage =
-        errorData.message ||
-        "Erreur inconnue lors de la création de cette tache";
-      toast.error(errorMessage);
-      throw new Error(errorMessage);
-    }
-  } catch (error) {
-    console.error("Error deleting delete:", error);
-    toast.error("Une erreur inattendue est survenue.");
-    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
-  }
-};
-
-export const DetachNextTaskFromActivity = async (taskId: string) => {
-  try {
-    const url = `http://localhost:8080/direction/nextTask/delete?id=${taskId}`;
-    const response = await fetch(url, {
-      method: "DELETE",
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      const errorMessage =
-        errorData.message ||
-        "Erreur inconnue lors de la création de cette tache";
-      toast.error(errorMessage);
-      throw new Error(errorMessage);
-    }
-  } catch (error) {
-    console.error("Error deleting delete:", error);
-    toast.error("Une erreur inattendue est survenue.");
-    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
-  }
-};
-
 export const addPerformanceToActivity = async (
-  performanceRealization: PerformanceRealization
+  performanceRealization: udpatePerformance
 ) => {
   try {
-    const url = `http://localhost:8080/direction/perfromanceRealization?activityId=${activityId}`;
+    const url = `http://localhost:8080/direction/performanceRealization?activityId=${performanceRealization.id}`;
     const response = await fetch(url, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify([performanceRealization]),
+      body: JSON.stringify([performanceRealization.performance]),
     });
 
     if (!response.ok) {

@@ -1,6 +1,5 @@
 import {useQuery, useMutation, useQueryClient} from "react-query";
 import {
-  addNextTaskTActivity,
   addPerformanceToActivity,
   addRecommendationToActivity,
   addTaskToActivity,
@@ -49,13 +48,6 @@ export const useActivities = () => {
       queryClient.invalidateQueries("activities");
     },
   });
-
-  const udpateActivityNextTaskMutation = useMutation(addNextTaskTActivity, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("activities");
-    },
-  });
-
   const udpatePerformanceRealizationMutation = useMutation(
     addPerformanceToActivity,
     {
@@ -74,7 +66,6 @@ export const useActivities = () => {
     deleteActivity: deleteActivityMutation.mutate,
     updateMissionActivity: udpateActivityMutation.mutate,
     addTask: udpateActivityTaskMutation.mutate,
-    addNextTask: udpateActivityNextTaskMutation.mutate,
     addPerformance: udpatePerformanceRealizationMutation.mutate,
     addRecommendation: udpateRecommendationMutation.mutate,
     isLoading: activitiesQuery.isLoading,
