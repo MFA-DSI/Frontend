@@ -22,7 +22,8 @@ export interface ActivityItem {
 }
 interface updateActivityItem{
   id : string;
-  task: ActivityItem[]
+  task: ActivityItem[];
+  type: string;
 }
 
 
@@ -85,17 +86,42 @@ export const getActivityByDirectionId = async (
 
 };
 
+export const getActivityById = async (id:string) => {
+  try {
+    const url = `http://localhost:8080/direction/activity?id=${id}`;
+    const response = await fetch(url, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage =
+        errorData.message ||
+        "Erreur inconnue lors de la récupération des missions par direction";
+      toast.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    const data: Activity = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching missions by directionId:", error);
+    toast.error("Une erreur inattendue est survenue.");
+    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+  }
+  
+}
 export const updateActivity = async (activities : Activity): Promise<Activity> => {
 
   const activityToUpdate  = {
     id : activities.id,
     description :activities.description,
+    observation: activities.observation,
     prediction : activities.prediction,
     dueDatetime: activities.dueDatetime
    }
 
-   console.log("it's", activityToUpdate);
-   
   try {
     const url = "http://localhost:8080/direction/activity/update";
 
@@ -150,10 +176,13 @@ export const deleteActivity = async (id: string): Promise<void> => {
 };
 
 export const addTaskToActivity = async(taskDetails : updateActivityItem)=>{
-  const userId = sessionStorage.getItem("userId")
+  
+  const type = taskDetails.type === "task" ? "task" : "nextTask"
   try {
- 
-    const url = `http://localhost:8080/direction/task?activityId=${taskDetails.id}`;
+
+      console.log("task is",taskDetails.task);
+      
+    const url = `http://localhost:8080/direction/${type}?activityId=${taskDetails.id}`;
     const response = await fetch(url, {
       method: "PUT",
       headers: {

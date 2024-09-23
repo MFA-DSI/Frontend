@@ -11,6 +11,7 @@ import ActivityModal from "../Modal/ActivityModal";
 import MissionModal from "../Modal/MissionModal";
 
 import "./assets/index.css";
+import { useDirectionsContext } from "../../providers";
 
 const {Option} = Select;
 
@@ -28,6 +29,7 @@ const TableComponent = ({mode}) => {
     setDirectionFilter,
   } = useMissionContext();
 
+
   const [activityType, setActivityType] = useState("all");
   const [dateFilter, setDateFilter] = useState({
     month: null,
@@ -40,7 +42,7 @@ const TableComponent = ({mode}) => {
   const [selectedMission, setSelectedMission] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isMissionModalVisible, setIsMissionModalVisible] = useState(false);
-  const [pageSize, setPageSize] = useState(200);
+  const [pageSize, setPageSize] = useState(20);
   const [selectedIds, setSelectedIds] = useState([]);
 
   const showModal = (activity) => {
@@ -103,7 +105,7 @@ const TableComponent = ({mode}) => {
             <div>
               {taskList.length > 0
                 ? taskList.map((task) => (
-                    <div key={task.id}>{task.description}</div>
+                    <div key={task.id}>- {task.description}</div>
                   ))
                 : "Aucune tâche"}
             </div>
@@ -115,8 +117,10 @@ const TableComponent = ({mode}) => {
           dataIndex: "nextTask",
           render: (nextTaskList) => (
             <div>
-              {nextTaskList.length > 0
-                ? nextTaskList[0].description
+               {nextTaskList.length > 0
+                ? nextTaskList.map((task) => (
+                    <div key={task.id}>- {task.description}</div>
+                  ))
                 : "Aucune tâche prochaine"}
             </div>
           ),

@@ -75,5 +75,12 @@ export const MissionProvider = ({children}) => {
 };
 
 export const useMissionContext = () => {
-  return useContext(MissionContext);
+  const context = useContext(MissionContext);
+  if (!context) {
+    throw new Error(
+      "useMissionContext must be used within a DirectionProvider"
+    );
+  }
+
+  return context;
 };

@@ -14,6 +14,7 @@ export const ActivitieProvider = ({children}) => {
     addNextTask,
     addRecommendation,
     addPerformance,
+    MissionsActivityIdQuery
   } = useActivities();
   const [filterType, setFilterType] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
@@ -51,6 +52,7 @@ export const ActivitieProvider = ({children}) => {
         addNextTask: addNextTask,
         addPerformance: addPerformance,
         addRecommendation: addRecommendation,
+        activityIdQuery : MissionsActivityIdQuery,
         isLoading,
         setFilterType,
         setSearchTerm,
@@ -62,5 +64,12 @@ export const ActivitieProvider = ({children}) => {
 };
 
 export const useActivitiesContext = () => {
-  return useContext(ActivityContext);
+  const context = useContext(ActivityContext);
+  if (!context) {
+    throw new Error(
+      "useActivitiesContext must be used within a DirectionProvider"
+    );
+  }
+
+  return context;
 };

@@ -228,9 +228,9 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
             {mode === "mydirection" && !isEditing && (
               <Button
                 type="dashed"
-                onClick={() => openTaskModal(nextTask, "nextTask")}
+                onClick={() => openTaskModal(null, "nextTask")}
               >
-                + Ajouter une tâche
+                + Ajouter une tâche prochaine
               </Button>
             )}
 
@@ -343,6 +343,13 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
         onSave={handleTaskSave}
         title={taskType === "task" ? "Tâche" : "Tâche Prochaine"}
         type={taskType}
+        reopenMainModal={() => {
+          onCancel(); 
+          setTimeout(() => {
+
+            onCancel(false); 
+          }, 200); 
+        }}
       />
 
       <DeleteModal

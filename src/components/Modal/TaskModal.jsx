@@ -4,7 +4,7 @@ import moment from "moment";
 import { useActivitiesContext } from "../../providers";
 import { toast } from "react-toastify";
 
-const TaskModal = ({visible, onCancel, task, onSave, title, type,activityId}) => {
+const TaskModal = ({visible, onCancel, task, onSave, title, type,activityId,reopenMainModal}) => {
   const { addTaskToActivty } = useActivitiesContext(); 
   const [taskToEdit, setTaskEdit] = useState({
     id: "",
@@ -40,6 +40,7 @@ const TaskModal = ({visible, onCancel, task, onSave, title, type,activityId}) =>
    
     const updateTask = {
       ...taskToEdit,
+      id: taskToEdit.id,
       dueDatetime: taskToEdit.dueDatetime ? taskToEdit.dueDatetime.toISOString() : null,
       description : taskToEdit.description
     };
@@ -48,11 +49,12 @@ const TaskModal = ({visible, onCancel, task, onSave, title, type,activityId}) =>
 
       const Task = {
         id : activityId.id,
-        task : updateTask
+        task : updateTask,
+        type: type
       }
-       
       await addTaskToActivty(Task)
       onSave()
+      reopenMainModal()
       message.success("Tâche modifié avec succès !");
     } catch (error) {
       message.error(
