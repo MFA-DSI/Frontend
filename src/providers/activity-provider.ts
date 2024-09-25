@@ -26,8 +26,8 @@ interface updateActivityItem {
 }
 
 interface udpatePerformance {
-  id: string,
-  performance : PerformanceRealization
+  id: string;
+  performance: PerformanceRealization;
 }
 
 export const fetchActivities = async (): Promise<unknown> => {

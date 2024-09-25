@@ -8,6 +8,8 @@ import DeleteModal from "./DeleteModal";
 import {useActivitiesContext} from "../../providers";
 import {toast} from "react-toastify";
 import PerformanceModal from "./PerformanceModal";
+import {EditableField} from "./Forms/ActivityDetails";
+import {TaskList} from "./Forms/TaskDetails";
 
 const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
   const {deleteActivity, updateMissionActivity} = useActivitiesContext();
@@ -22,11 +24,12 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
   const [isTaskModalVisible, setIsTaskModalVisible] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
   const [taskType, setTaskType] = useState("");
-  const [isPerformanceModalVisible, setIsPerformanceModalVisible] = useState(false);
-  const [selectedPerformance, setSelectedPerformance] = useState(null); 
+  const [isPerformanceModalVisible, setIsPerformanceModalVisible] =
+    useState(false);
+  const [selectedPerformance, setSelectedPerformance] = useState(null);
 
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
-  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false); 
   useEffect(() => {
     if (activity) {
       setEditedActivity({
@@ -89,11 +92,14 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
     setIsPerformanceModalVisible(true);
   };
 
+  const handlePerformanceModalCancel = () => {
+    setSelectedPerformance(null);
+    setIsPerformanceModalVisible(false);
+  };
   const handlePerformanceSave = () => {
     setIsPerformanceModalVisible(false);
-    onCancel(); 
+    onCancel();
   };
-
 
   const handleDeleteCancel = () => {
     setIsDeleteModalVisible(false);
@@ -136,116 +142,67 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
           <h2>Détails de l'Activité</h2>
 
           <div>
-            <h3>Description:</h3>
-            {isEditing && mode === "mydirection" ? (
-              <Input
-                value={editedActivity.description}
-                onChange={(e) =>
-                  handleInputChange("description", e.target.value)
-                }
-                placeholder="Modifier la description"
-              />
-            ) : (
-              <p>{activity.description}</p>
-            )}
+            <EditableField
+              label="Description"
+              value={editedActivity.description}
+              isEditing={isEditing}
+              mode={mode}
+              onChange={(e) => handleInputChange("description", e.target.value)}
+              placeholder="Modifier la description"
+            />
           </div>
 
           <div>
-            <h3>Prédiction:</h3>
-            {isEditing && mode === "mydirection" ? (
-              <Input
-                value={editedActivity.prediction}
-                onChange={(e) =>
-                  handleInputChange("prediction", e.target.value)
-                }
-                placeholder="Modifier la prédiction"
-              />
-            ) : (
-              <p>{activity.prediction}</p>
-            )}
+            <EditableField
+              label="Prédiction"
+              value={editedActivity.prediction}
+              isEditing={isEditing}
+              mode={mode}
+              onChange={(e) => handleInputChange("prediction", e.target.value)}
+              placeholder="Modifier la prédiction"
+            />
           </div>
 
           <div>
-            <h3>Observation:</h3>
-            {isEditing && mode === "mydirection" ? (
-              <Input
-                value={editedActivity.observation}
-                onChange={(e) =>
-                  handleInputChange("observation", e.target.value)
-                }
-                placeholder="Modifier l'observation"
-              />
-            ) : (
-              <p>{activity.observation}</p>
-            )}
+            <EditableField
+              label="Observation"
+              value={editedActivity.observation}
+              isEditing={isEditing}
+              mode={mode}
+              onChange={(e) => handleInputChange("observation", e.target.value)}
+              placeholder="Modifier l'observation"
+            />
           </div>
 
           <div>
-            <h3>Date Limite:</h3>
-            {isEditing && mode === "mydirection" ? (
-              <DatePicker
-                value={editedActivity.dueDatetime}
-                onChange={(date) => handleInputChange("dueDatetime", date)}
-              />
-            ) : (
-              <p>{dateFormatter(activity.dueDatetime).toLocaleString()}</p>
-            )}
+            <EditableField
+              label="Date Limite"
+              value={editedActivity.dueDatetime}
+              isEditing={isEditing}
+              mode={mode}
+              onChange={(date) => handleInputChange("dueDatetime", date)}
+              inputType="date"
+            />
           </div>
 
           <div>
-            <h3>Tâches:</h3>
-            {activity.task.length > 0 ? (
-              activity.task.map((task) => (
-                <p key={task.id}>
-                  - {task.description} (Effectué le :{" "}
-                  {dateFormatter(task.dueDatetime).toLocaleString()})
-                  {mode === "mydirection" && !isEditing && (
-                    <Button
-                      type="link"
-                      onClick={() => openTaskModal(task, "task")}
-                    >
-                      Modifier
-                    </Button>
-                  )}
-                </p>
-              ))
-            ) : (
-              <p>Aucune tâche</p>
-            )}
+            <TaskList
+              title="Tâches"
+              tasks={activity.task}
+              isEditing={isEditing}
+              mode={mode}
+              openTaskModal={openTaskModal}
+              type="task"
+            />
 
-            {mode === "mydirection" && !isEditing && (
-              <Button type="dashed" onClick={() => openTaskModal(null, "task")}>
-                + Ajouter une tâche
-              </Button>
-            )}
-
-            <h3>Tâches Prochaines:</h3>
-            {activity.nextTask.length > 0 ? (
-              activity.nextTask.map((nextTask) => (
-                <p key={nextTask.id}>
-                  - {nextTask.description} (Doit être effectué le :{" "}
-                  {dateFormatter(nextTask.dueDatetime).toLocaleString()})
-                  {mode === "mydirection" && !isEditing && (
-                    <Button
-                      type="link"
-                      onClick={() => openTaskModal(nextTask, "nextTask")}
-                    >
-                      Modifier
-                    </Button>
-                  )}
-                </p>
-              ))
-            ) : (
-              <p>Aucune tâche prochaine</p>
-            )}
-            {mode === "mydirection" && !isEditing && (
-              <Button
-                type="dashed"
-                onClick={() => openTaskModal(null, "nextTask")}
-              >
-                + Ajouter une tâche prochaine
-              </Button>
-            )}
+            <TaskList
+              title="Tâches Prochaines"
+              tasks={activity.nextTask}
+              isEditing={isEditing}
+              mode={mode}
+              openTaskModal={openTaskModal}
+              type="nextTask"
+            />
 
             <h3>Performance:</h3>
             {activity.performanceRealization.length > 0 ? (
@@ -255,11 +212,9 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
                   {performanceIndicator.indicators})
                   {mode === "mydirection" && !isEditing && (
                     <Button
-                    type="link"
-                    onClick={() =>
-                      openPerformanceModal(performanceIndicator)
-                    }
-                  >
+                      type="link"
+                      onClick={() => openPerformanceModal(performanceIndicator)}
+                    >
                       Modifier
                     </Button>
                   )}
@@ -269,14 +224,7 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
               <p>Aucune indicateur de performance</p>
             )}
             {mode === "mydirection" && !isEditing && (
-              <Button
-                type="dashed"
-                onClick={() =>
-                  openPerformanceModal(
-                    null                       
-                  )
-                }
-              >
+              <Button type="dashed" onClick={() => openPerformanceModal(null)}>
                 + Ajouter une indicateur de performance
               </Button>
             )}
@@ -366,7 +314,7 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
       />
       <PerformanceModal
         visible={isPerformanceModalVisible}
-        onCancel={() => setIsPerformanceModalVisible(false)}
+        onCancel={handlePerformanceModalCancel}
         performance={selectedPerformance}
         onSave={handlePerformanceSave}
         activityId={activity}
@@ -389,7 +337,6 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
         item={activity}
         onSuccessDelete={handleSuccessDelete}
       />
-     
     </Modal>
   );
 };

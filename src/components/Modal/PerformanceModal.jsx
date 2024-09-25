@@ -1,25 +1,30 @@
-import React, { useState, useEffect } from "react";
-import { Modal, Button, Input, InputNumber, Select, message } from "antd";
+import React, {useState, useEffect} from "react";
+import {Modal, Button, Input, InputNumber, Select, message} from "antd";
 import "./assets/index.css";
-import { useActivitiesContext } from "../../providers";
-import { toast } from "react-toastify";
+import {useActivitiesContext} from "../../providers";
+import {toast} from "react-toastify";
 
-const { Option } = Select;
+const {Option} = Select;
 
-const PerformanceModal = ({ visible, onCancel, onSave, performance,activityId }) => {
-  const {addPerformance} = useActivitiesContext()
+const PerformanceModal = ({
+  visible,
+  onCancel,
+  onSave,
+  performance,
+  activityId,
+}) => {
+  const {addPerformance} = useActivitiesContext();
   const [realization, setRealization] = useState(performance?.realization || 0);
   const [indicator, setIndicator] = useState(performance?.indicators || "");
   const [realizationType, setRealizationType] = useState(
     performance?.realizationType || "chiffre"
   );
 
-  
   const validateRealization = () => {
     if (realizationType === "pourcentage") {
       if (realization < 0 || realization > 100) {
         message.error("Le pourcentage doit être un nombre entre 0 et 100.");
-        setRealization("")
+        setRealization("");
         return false;
       }
     }
@@ -29,25 +34,25 @@ const PerformanceModal = ({ visible, onCancel, onSave, performance,activityId })
   const handleRealizationChange = (value) => {
     if (realizationType === "percentage" && value > 100) {
       message.error("Le pourcentage ne peut pas dépasser 100.");
-      setRealization("")
+      setRealization("");
     } else {
       setRealization(value);
     }
   };
 
-  const handleSave = async() => {
+  const handleSave = async () => {
     if (validateRealization()) {
       const performanceData = {
         id: activityId.id,
-        performance : {
-          indicators : realization,
-        realization: indicator,
-        }
+        performance: {
+          indicators: realization,
+          realization: indicator,
+        },
       };
 
       try {
         await addPerformance(performanceData);
-      
+
         onSave(performanceData);
         onCancel();
         message.success("Tâche modifié avec succès !");
@@ -66,37 +71,45 @@ const PerformanceModal = ({ visible, onCancel, onSave, performance,activityId })
       setIndicator(performance.indicators);
       setRealizationType(performance.realizationType || "chiffre");
     }
-  }, [performance,activityId]);
+  }, [performance, activityId]);
 
   return (
     <Modal visible={visible} onCancel={onCancel} footer={null}>
-      <h2>{performance ? "Modifier l'indicateur de performance" : "Ajouter un indicateur de performance"}</h2>
-      
+      <h2>
+        {performance
+          ? "Modifier l'indicateur de performance"
+          : "Ajouter un indicateur de performance"}
+      </h2>
+
       <div>
         <h3>Type de Réalisation:</h3>
         <Select
           value={realizationType}
           onChange={(value) => setRealizationType(value)}
-          style={{ width: 200 }}
+          style={{width: 200}}
         >
           <Option value="chiffre">Chiffre</Option>
           <Option value="percentage">Pourcentage</Option>
         </Select>
       </div>
 
-      <div style={{ marginTop: "16px" }}>
+      <div style={{marginTop: "16px"}}>
         <h3>Réalisation :</h3>
         <InputNumber
           value={realization}
           min={0}
           type="number"
           onChange={handleRealizationChange}
-          placeholder={realizationType === "pourcentage" ? "Entrez un pourcentage (0-100)" : "Entrez une valeur"}
-          style={{ width: "100%" }}
+          placeholder={
+            realizationType === "pourcentage"
+              ? "Entrez un pourcentage (0-100)"
+              : "Entrez une valeur"
+          }
+          style={{width: "100%"}}
         />
       </div>
 
-      <div style={{ marginTop: "16px" }}>
+      <div style={{marginTop: "16px"}}>
         <h3> Indicateurs:</h3>
         <Input
           value={indicator}
@@ -105,8 +118,10 @@ const PerformanceModal = ({ visible, onCancel, onSave, performance,activityId })
         />
       </div>
 
-      <div style={{ marginTop: "24px", display: "flex", justifyContent: "flex-end" }}>
-        <Button onClick={onCancel} style={{ marginRight: "8px" }}>
+      <div
+        style={{marginTop: "24px", display: "flex", justifyContent: "flex-end"}}
+      >
+        <Button onClick={onCancel} style={{marginRight: "8px"}}>
           Annuler
         </Button>
         <Button type="primary" onClick={handleSave}>
