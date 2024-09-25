@@ -47,10 +47,19 @@ const PerformanceModal = ({
         performance: {
           indicators: realization,
           realization: indicator,
+          realizationType: realizationType
+          
         },
+
       };
 
+      
+      
+
       try {
+        console.log("performance: ",performanceData
+        );
+        
         await addPerformance(performanceData);
 
         onSave(performanceData);

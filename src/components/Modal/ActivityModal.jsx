@@ -209,7 +209,7 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
               activity.performanceRealization.map((performanceIndicator) => (
                 <p key={performanceIndicator.id}>
                   - {performanceIndicator.realization} (
-                  {performanceIndicator.indicators})
+                  {performanceIndicator.indicators} {performanceIndicator.realizationType === "percentage"? "%" : ""} )
                   {mode === "mydirection" && !isEditing && (
                     <Button
                       type="link"

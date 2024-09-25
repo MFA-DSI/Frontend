@@ -1,6 +1,7 @@
 import {toast} from "react-toastify";
 import environment from "../conf/environment";
 import {PerformanceRealization, Recommendation, Task} from "../types";
+import { message } from "antd";
 
 export interface Activity {
   id: string;
@@ -243,6 +244,7 @@ export const addPerformanceToActivity = async (
       toast.error(errorMessage);
       throw new Error(errorMessage);
     }
+    message.success("Tâche modifié avec succès !");
   } catch (error) {
     console.error("Error deleting delete:", error);
     toast.error("Une erreur inattendue est survenue.");
