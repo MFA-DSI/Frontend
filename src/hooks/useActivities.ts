@@ -57,7 +57,12 @@ export const useActivities = () => {
     }
   );
 
-  const udpateRecommendationMutation = useMutation(addRecommendationToActivity);
+  const udpateRecommendationMutation = useMutation(addRecommendationToActivity,
+    {
+    onSuccess: () => {
+      queryClient.invalidateQueries("activities");
+    },}
+  );
 
   return {
     activities: activitiesQuery.data,

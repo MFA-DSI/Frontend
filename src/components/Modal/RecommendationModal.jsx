@@ -4,33 +4,29 @@ import { useActivitiesContext } from "../../providers";
 
 const { TextArea } = Input;
 
-const RecommendationModal = ({ visible, onCancel, activity, onSave, recommendation }) => {
+const RecommendationModal = ({ visible, onCancel, activity, onSave, recommendation,onCloseSuccess }) => {
   const {addRecommendation} = useActivitiesContext();
   const [recommendationUpdate, setRecommendationUpdate] = useState("");
   const [activityTitle, setActivityTitle] = useState("");
 
   const handleSend =async () => {
-    if (onSave) {
-      onSave(recommendationUpdate); 
-    }
 
     try {
         const recommandationToUpdate = {
             activityId : activity.id,
             description : recommendationUpdate
           }
-        console.log(recommandationToUpdate);
         
       await addRecommendation(recommandationToUpdate);
-
-      onSave(performanceData);
-      onCancel();
+    
      
     } catch (error) {
       message.error(
         "Une erreur s'est produite lors de la modification de cette activité"
       );
       toast.error(error.message);
+    }finally{
+      onCancel();
     }
   
   };

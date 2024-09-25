@@ -343,7 +343,13 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
         onCancel={handleRecommendationCancel}
         activity={selectedActivity}
         onSave={handleRecommendationSave}
-        recommendation={selectedActivity}    
+        recommendation={selectedActivity}
+        onCloseSuccess={() => {
+          onCancel();
+          setTimeout(() => {
+            onCancel(false);
+          }, 200);
+        }} 
       />
 
       <DeleteModal
