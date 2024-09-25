@@ -10,6 +10,7 @@ import {toast} from "react-toastify";
 import PerformanceModal from "./PerformanceModal";
 import {EditableField} from "./Forms/ActivityDetails";
 import {TaskList} from "./Forms/TaskDetails";
+import RecommendationModal from "./RecommendationModal";
 
 const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
   const {deleteActivity, updateMissionActivity} = useActivitiesContext();
@@ -27,7 +28,8 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
   const [isPerformanceModalVisible, setIsPerformanceModalVisible] =
     useState(false);
   const [selectedPerformance, setSelectedPerformance] = useState(null);
-
+  const [selectedActivity,setSelectedActivity]= useState(null);
+  const [isRecommendationVisible,setIsRecommendationVisible]= useState(null);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
   useEffect(() => {
@@ -64,7 +66,6 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
       await updateMissionActivity(activityUpdate);
       onCancel();
       setIsEditing(false);
-      message.success("Activity modifié avec succès !");
     } catch (error) {
       message.error(
         "Une erreur s'est produite lors de la modification de cette activité"
@@ -92,6 +93,10 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
     setIsPerformanceModalVisible(true);
   };
 
+  const openRecommendationModal=()=>{
+    setSelectedActivity(editedActivity)
+    setIsRecommendationVisible(true)
+  }
   const handlePerformanceModalCancel = () => {
     setSelectedPerformance(null);
     setIsPerformanceModalVisible(false);
@@ -100,6 +105,14 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
     setIsPerformanceModalVisible(false);
     onCancel();
   };
+
+  const handleRecommendationSave = ()=>{
+    setIsRecommendationVisible(false)
+  }
+  const handleRecommendationCancel = ()=>{
+    setIsRecommendationVisible(false);
+    onCancel()
+  }
 
   const handleDeleteCancel = () => {
     setIsDeleteModalVisible(false);
@@ -114,7 +127,6 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
       await deleteActivity(activity.id);
       setIsDeleteModalVisible(false);
       onCancel();
-      message.success("Activity supprimée avec succès !");
     } catch (error) {
       message.error(
         "Une erreur s'est produite lors de la suppression de cette activity"
@@ -224,7 +236,7 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
               <p>Aucune indicateur de performance</p>
             )}
             {mode === "mydirection" && !isEditing && (
-              <Button type="dashed" onClick={() => openPerformanceModal(null)}>
+              <Button type="dashed" onClick={() => openPerformanceModal(editedActivity)}>
                 + Ajouter une indicateur de performance
               </Button>
             )}
@@ -238,7 +250,7 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
                     <Button
                       type="link"
                       onClick={() =>
-                        openTaskModal(recommendation, "recommendation")
+                        openRecommendationModal()
                       }
                     >
                       Modifier
@@ -252,7 +264,7 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
             {mode === "mydirection" && !isEditing && (
               <Button
                 type="dashed"
-                onClick={() => openTaskModal(null, "nextTask")}
+                onClick={() => openRecommendationModal(selectedActivity)}
               >
                 + Ajouter une recommendation
               </Button>
@@ -324,6 +336,14 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
             onCancel(false);
           }, 200);
         }}
+      />
+
+      <RecommendationModal
+        visible={isRecommendationVisible}
+        onCancel={handleRecommendationCancel}
+        activity={selectedActivity}
+        onSave={handleRecommendationSave}
+        recommendation={selectedActivity}    
       />
 
       <DeleteModal

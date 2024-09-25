@@ -64,7 +64,7 @@ const PerformanceModal = ({
 
         onSave(performanceData);
         onCancel();
-        message.success("Tâche modifié avec succès !");
+       
       } catch (error) {
         message.error(
           "Une erreur s'est produite lors de la modification de cette activité"

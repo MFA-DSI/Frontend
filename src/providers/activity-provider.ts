@@ -31,6 +31,12 @@ interface udpatePerformance {
   performance: PerformanceRealization;
 }
 
+interface recommendationUpdate {
+  activityId : string;
+  committerId : string;
+  description : string;
+}
+
 export const fetchActivities = async (): Promise<unknown> => {
   try {
     const url =
@@ -167,6 +173,7 @@ export const deleteActivity = async (id: string): Promise<void> => {
       toast.error(errorMessage);
       throw new Error(errorMessage);
     }
+    message.success("Activity supprimée avec succès !");
   } catch (error) {
     console.error("Error deleting delete:", error);
     toast.error("Une erreur inattendue est survenue.");
@@ -244,7 +251,7 @@ export const addPerformanceToActivity = async (
       toast.error(errorMessage);
       throw new Error(errorMessage);
     }
-    message.success("Tâche modifié avec succès !");
+    message.success("Performance modifié avec succès !");
   } catch (error) {
     console.error("Error deleting delete:", error);
     toast.error("Une erreur inattendue est survenue.");
@@ -274,17 +281,22 @@ export const detachPerformanceFromActivity = async (id: string) => {
 };
 
 export const addRecommendationToActivity = async (
-  recommendation: Recommendation,
-  activityId: string
+  recommendation: recommendationUpdate
 ) => {
+
   try {
-    const url = `http://localhost:8080/direction/activity/recommendation?activityId=${activityId}`;
+    const url = `http://localhost:8080/direction/activity/recommendation?activityId=${recommendation.activityId}`;
+    
+    const recommendationBody = {
+      description : recommendation.description,
+      committerId : sessionStorage.getItem("userId")
+    }
     const response = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(recommendation),
+      body: JSON.stringify(recommendationBody),
     });
 
     if (!response.ok) {
@@ -295,6 +307,7 @@ export const addRecommendationToActivity = async (
       toast.error(errorMessage);
       throw new Error(errorMessage);
     }
+    message.success("recommendation envoyée avec succès !");
   } catch (error) {
     console.error("Error deleting delete:", error);
     toast.error("Une erreur inattendue est survenue.");
