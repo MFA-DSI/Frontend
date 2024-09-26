@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Table, Select, Spin, Button, Checkbox, Badge} from "antd";
 import {useActivitiesContext} from "../../providers/context/ActivitiesContext";
 import {useMissionContext} from "../../providers/context/MissionsContext";
@@ -12,6 +12,7 @@ import MissionModal from "../Modal/MissionModal";
 
 import "./assets/index.css";
 import {useDirectionsContext} from "../../providers";
+import { getWeeksInMonth } from "./utils/DateUtils";
 
 const {Option} = Select;
 
@@ -44,6 +45,11 @@ const TableComponent = ({mode}) => {
   const [pageSize, setPageSize] = useState(20);
   const [selectedIds, setSelectedIds] = useState([]);
 
+
+  useEffect(() => {
+    
+   
+  }, [mode]);
   const showModal = (activity) => {
     setSelectedActivity(activity);
     setIsModalVisible(true);
@@ -250,24 +256,7 @@ const TableComponent = ({mode}) => {
     }
   };
 
-  const getWeeksInMonth = (month, year) => {
-    const weeks = [];
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const startDate = firstDay.getDate() - firstDay.getDay();
-    const endDate = lastDay.getDate();
 
-    for (let i = startDate; i <= endDate; i += 7) {
-      const weekStartDate = new Date(year, month, i);
-      const weekEndDate = new Date(year, month, i + 6);
-      if (weekStartDate.getDate() <= endDate) {
-        weeks.push(
-          `Semaine du ${weekStartDate.toLocaleDateString()} au ${weekEndDate.toLocaleDateString()}`
-        );
-      }
-    }
-    return weeks;
-  };
 
   if (isMissionLoading || (activityType === "weekly" && isActivityLoading))
     return <Spin />;

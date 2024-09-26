@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {Modal, Button, Input, DatePicker, message} from "antd";
+import {Modal, Button, Input, DatePicker, message, Badge} from "antd";
 import moment from "moment";
 import "./assets/index.css";
 import {dateFormatter} from "./utils/dateFormatter";
@@ -241,27 +241,32 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
               </Button>
             )}
 
-            <h3>Recommandation:</h3>
-            {activity.recommendation.length > 0 ? (
-              activity.recommendation.map((e) => (
-                <p key={e.id}>
-                  - {e.description}
-                  {mode === "mydirection" && !isEditing && (
-                    <Button
-                      type="link"
-                      onClick={() =>
-                        openRecommendationModal()
-                      }
-                    >
-                      Modifier
-                    </Button>
-                  )}
-                </p>
-              ))
-            ) : (
-              <p>Aucune Recommendation</p>
-            )}
-            {mode === "mydirection" && !isEditing && (
+<h3>Recommandation:</h3>
+{activity.recommendation.length > 0 ? (
+  activity.recommendation.map((e) => (
+    <p key={e.id}>
+      - {e.description}
+      {e.validate_status ? (
+        <Badge color="green" count="Approuvé" />
+      ) : (
+        <>
+          <Badge color="blue" count="Non approuvé" />
+          {mode === "mydirection" && !isEditing && (
+            <Button
+              type="link"
+              onClick={() => openRecommendationModal()}
+            >
+              Approuver
+            </Button>
+          )}
+        </>
+      )}
+    </p>
+  ))
+) : (
+  <p>Aucune Recommandation</p>
+)}
+ {mode === "mydirection" && !isEditing && (
               <Button
                 type="dashed"
                 onClick={() => openRecommendationModal(selectedActivity)}
