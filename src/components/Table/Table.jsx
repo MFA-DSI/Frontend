@@ -264,7 +264,8 @@ const TableComponent = ({mode}) => {
   const layoutModeMissions =
     mode === "mydirection" ? MissionByDirectionId : filteredMissions;
   const layoutModeActivities =
-    mode == "mydirection" ? directionIdQueryActvities : filteredActivities;
+    mode === "mydirection" ? directionIdQueryActvities : filteredActivities;
+    
   const dataSource =
     activityType === "weekly" ? layoutModeActivities : layoutModeMissions;
 

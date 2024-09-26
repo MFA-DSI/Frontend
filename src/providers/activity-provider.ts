@@ -68,7 +68,7 @@ export const getActivityByDirectionId = async (
   directionId: string
 ): Promise<unknown> => {
   try {
-    const url = `http://localhost:8080/direction/activities/all?directionId=${directionId}`;
+    const url = `http://localhost:8080/direction/activity/direction?directionId=${directionId}&page=1&page_size=1000`;
     const response = await fetch(url, {
       method: "GET",
     });

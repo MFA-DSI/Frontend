@@ -20,32 +20,35 @@ export const useActivities = () => {
 
   const directionIdQuery = () =>
     useQuery({
-      queryKey: ["activities"],
+      queryKey: ["activity"],
       queryFn: () =>
         getActivityByDirectionId(sessionStorage.getItem("directionId") || ""),
     });
 
   const activityIdQuery = (id: string) =>
     useQuery({
-      queryKey: ["activities"],
+      queryKey: ["activity"],
       queryFn: () => getActivityById(id),
     });
 
   const deleteActivityMutation = useMutation(deleteActivity, {
     onSuccess: () => {
       queryClient.invalidateQueries("activities");
+      queryClient.invalidateQueries("activity");
     },
   });
 
   const udpateActivityMutation = useMutation(updateActivity, {
     onSuccess: () => {
       queryClient.invalidateQueries("activities");
+      queryClient.invalidateQueries("activity");
     },
   });
 
   const udpateActivityTaskMutation = useMutation(addTaskToActivity, {
     onSuccess: () => {
       queryClient.invalidateQueries("activities");
+      queryClient.invalidateQueries("activity");
     },
   });
   const udpatePerformanceRealizationMutation = useMutation(
@@ -53,6 +56,7 @@ export const useActivities = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries("activities");
+        queryClient.invalidateQueries("activity");
       },
     }
   );
@@ -61,6 +65,7 @@ export const useActivities = () => {
     {
     onSuccess: () => {
       queryClient.invalidateQueries("activities");
+      queryClient.invalidateQueries("activity");
     },}
   );
 

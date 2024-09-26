@@ -2,6 +2,7 @@ import React, {createContext, useContext, useState} from "react";
 import {useMissions} from "../../hooks/useMissions"; // Adjust the path as necessary
 
 const MissionContext = createContext();
+
 const directionId = sessionStorage.getItem("directionId");
 
 export const MissionProvider = ({children}) => {

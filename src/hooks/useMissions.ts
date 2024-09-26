@@ -18,14 +18,14 @@ export const useMissions = () => {
 
   const directionIdQuery = () =>
     useQuery({
-      queryKey: ["missions"],
+      queryKey: ["mission"],
       queryFn: () =>
         getByDirectionId(sessionStorage.getItem("directionId") || ""),
     });
 
   const directionMissionsName = () =>
     useQuery({
-      queryKey: ["missions"],
+      queryKey: ["mission"],
       queryFn: () =>
         fetchMissionsName(sessionStorage.getItem("directionId") || ""),
     });
@@ -33,18 +33,21 @@ export const useMissions = () => {
   const saveMissionMutation = useMutation(saveMission, {
     onSuccess: () => {
       queryClient.invalidateQueries("missions");
+      queryClient.invalidateQueries("mission");
     },
   });
 
   const udpateMissionMutation = useMutation(updateMission, {
     onSuccess: () => {
       queryClient.invalidateQueries("missions");
+      queryClient.invalidateQueries("mission");
     },
   });
 
   const deleteMissionMutation = useMutation(deleteMission, {
     onSuccess: () => {
       queryClient.invalidateQueries("missions");
+      queryClient.invalidateQueries("mission");
     },
   });
 

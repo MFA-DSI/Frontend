@@ -85,7 +85,7 @@ export const getByDirectionId = async (
   directionId: string
 ): Promise<Mission[]> => {
   try {
-    const url = `http://localhost:8080/direction/mission/directions?directionId=${directionId}`;
+    const url = `http://localhost:8080/direction/mission/directions?directionId=${directionId}&page=1&page_size=100`;
     const response = await fetch(url, {
       method: "GET",
     });
@@ -100,7 +100,6 @@ export const getByDirectionId = async (
     }
 
     const data: Mission[] = await response.json();
-    console.log(data);
 
     return data;
   } catch (error) {

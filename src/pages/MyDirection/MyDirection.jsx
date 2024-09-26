@@ -16,6 +16,7 @@ const MyDirection = () => {
   const handleCloseModal = () => {
     setIsAddActivityModalVisible(false);
   };
+  
 
   return (
     <MainLayout>
