@@ -100,6 +100,7 @@ export const getByDirectionId = async (
     }
 
     const data: Mission[] = await response.json();
+console.log("mission ",data);
 
     return data;
   } catch (error) {
