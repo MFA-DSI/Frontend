@@ -46,9 +46,7 @@ const TableComponent = ({mode}) => {
   const [selectedIds, setSelectedIds] = useState([]);
 
 
-  useEffect(() => {
-    
-   
+  useEffect(() => {   
   }, [mode]);
   const showModal = (activity) => {
     setSelectedActivity(activity);

@@ -7,13 +7,14 @@ const DirectionContext = createContext<unknown>(
 );
 
 export const DirectionProvider = ({children}) => {
-  const {fetchServices,fetchDirections, isLoading,isError} = useDirections();
+  const {fetchActualDirection,fetchServices,fetchDirections, isLoading,isError} = useDirections();
 
   return (
     <DirectionContext.Provider value={
       {
-        fetchDirectionName : fetchDirections,
+        fetchAllDirection : fetchDirections,
         fetchAllService : fetchServices.data,
+        fetchActualDirectionName: fetchActualDirection,
         isLoading : isLoading,
         isError : isError
       }

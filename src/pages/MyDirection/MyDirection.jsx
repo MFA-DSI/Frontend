@@ -4,8 +4,11 @@ import {Button} from "antd";
 import MainLayout from "../Layout/MainLayout";
 import TableComponent from "../../components/Table/Table";
 import AddActivityModal from "../../components/Modal/AddMission";
+import { useDirectionsContext } from "../../providers";
+import { DirectionName } from "../../components";
 
 const MyDirection = () => {
+ 
   const [isAddActivityModalVisible, setIsAddActivityModalVisible] =
     useState(false);
 
@@ -21,7 +24,7 @@ const MyDirection = () => {
   return (
     <MainLayout>
       <div>
-        <h2>La direction </h2>
+        <DirectionName></DirectionName>
         <Button
           type="primary"
           style={{position: "fixed", left: "210px"}}

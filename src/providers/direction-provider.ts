@@ -30,3 +30,19 @@ export const fetchDirectionServices= async () => {
   
   return data;
 }
+
+export const fetchDirectionName = async () => {
+  const directionId = sessionStorage.getItem("directionId")
+  const response = await fetch(`${API_URL}/direction/name/${directionId}`, {
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const data: Direction = await response.json();
+  console.log(data);
+  
+  return data;
+}

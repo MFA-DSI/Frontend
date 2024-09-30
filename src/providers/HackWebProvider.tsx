@@ -4,11 +4,8 @@ import {MissionProvider} from "./context/MissionsContext";
 import { DirectionProvider } from "./context/DirectionContext";
 
 export const HackWebProviders = ({children}) => (
-  <DirectionProvider>
-      
-   
+  <DirectionProvider>   
   <ActivitieProvider>
-    
     <MissionProvider>{children}</MissionProvider>
   </ActivitieProvider>
   </DirectionProvider>
