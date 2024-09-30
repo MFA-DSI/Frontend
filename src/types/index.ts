@@ -7,3 +7,4 @@ export * from "./Mission";
 export * from "./Task";
 export * from "./performanceRealization";
 export * from "./Recommendation";
+export * from "./Service";

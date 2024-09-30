@@ -1,11 +1,12 @@
 import {toast} from "react-toastify";
 import environment from "../conf/environment"; // Adjust the path as necessary
-import {CreateMission} from "../types";
+import {CreateMission, Service} from "../types";
 
 // Define the type for Activity
 interface Mission {
   id: string;
   description: string;
+  serviceId: string;
   activityList: ActivityItem[];
 }
 

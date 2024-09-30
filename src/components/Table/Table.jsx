@@ -11,7 +11,6 @@ import ActivityModal from "../Modal/ActivityModal";
 import MissionModal from "../Modal/MissionModal";
 
 import "./assets/index.css";
-import {useDirectionsContext} from "../../providers";
 import { getWeeksInMonth } from "./utils/DateUtils";
 
 const {Option} = Select;
@@ -29,6 +28,7 @@ const TableComponent = ({mode}) => {
     setFilterType,
     setDirectionFilter,
   } = useMissionContext();
+
 
   const [activityType, setActivityType] = useState("all");
   const [dateFilter, setDateFilter] = useState({
@@ -163,7 +163,9 @@ const TableComponent = ({mode}) => {
         {
           title: "Missions",
           dataIndex: "description",
-          render: (description, record) => <div>{description}</div>,
+          render: (description, record) => <div>{description}  <Badge count={`${record.service.name}`} style={{ marginLeft: 10 }} color="green">
+      
+        </Badge></div>,
           width: 250,
         },
         {

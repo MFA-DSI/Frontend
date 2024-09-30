@@ -2,22 +2,22 @@
 import React, {createContext, useContext, ReactNode, FC} from "react";
 import {useDirections} from "../../hooks/useDirection";
 
-interface DirectionContextProps {
-  data: unknown;
-  isLoading: boolean;
-  isError: boolean;
-  error?: Error;
-}
-
-const DirectionContext = createContext<DirectionContextProps | undefined>(
+const DirectionContext = createContext<unknown>(
   undefined
 );
 
-export const DirectionProvider: FC<{children: ReactNode}> = ({children}) => {
-  const {data, isLoading, isError} = useDirections();
+export const DirectionProvider = ({children}) => {
+  const {fetchServices,fetchDirections, isLoading,isError} = useDirections();
 
   return (
-    <DirectionContext.Provider value={{data, isLoading, isError}}>
+    <DirectionContext.Provider value={
+      {
+        fetchDirectionName : fetchDirections,
+        fetchAllService : fetchServices.data,
+        isLoading : isLoading,
+        isError : isError
+      }
+    }>
       {children}
     </DirectionContext.Provider>
   );

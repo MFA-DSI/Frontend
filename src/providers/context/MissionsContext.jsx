@@ -50,10 +50,10 @@ export const MissionProvider = ({children}) => {
   };
 
   const directionMission = () => {
-    return directionIdQuery(directionId).data;
+    return directionIdQuery().data;
   };
   const missionName = () => {
-    return directionMissionsName(directionId).data;
+    return directionMissionsName().data;
   };
 
   return (

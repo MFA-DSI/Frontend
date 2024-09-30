@@ -1,5 +1,5 @@
 export type CreateMission = {
-  description: string;
+  name: string;
   activityList: addActivityItem[];
 };
 
@@ -11,4 +11,5 @@ type addActivityItem = {
 type PerformanceRealization = {
   indicators: number;
   realization: string;
+  realizationType: string
 };

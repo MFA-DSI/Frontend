@@ -17,12 +17,15 @@ import {
   PerformanceIndicatorForm,
   TaskForm,
 } from "./Forms/MissionDetailsForm";
+import { useDirectionsContext } from "../../providers";
+import { json } from "react-router-dom";
 
 const {Step} = Steps;
 const {Option} = Select;
 
 const AddActivityModal = ({visible, onCancel}) => {
   const {MissionNameByDirectionId, saveMission} = useMissionContext();
+  const {fetchAllService,isLoading} = useDirectionsContext();
   const [currentStep, setCurrentStep] = useState(0);
 
   const [activity, setActivity] = useState({
@@ -36,8 +39,10 @@ const AddActivityModal = ({visible, onCancel}) => {
   const [performanceIndicators, setPerformanceIndicators] = useState([]);
   const [selectedMission, setSelectedMission] = useState(null);
   const [newMissionDescription, setNewMissionDescription] = useState("");
+  const [selectedServices, setSelectedServices] = useState([]);
   const [missionType, setMissionType] = useState("");
   const existingMissions = MissionNameByDirectionId;
+  const existingService = fetchAllService;
 
   const next = () => setCurrentStep(currentStep + 1);
   const prev = () => setCurrentStep(currentStep - 1);
@@ -68,6 +73,7 @@ const AddActivityModal = ({visible, onCancel}) => {
         performanceRealization: performanceIndicators.map((indicator) => ({
           indicators: indicator.indicators,
           realization: indicator.realization,
+          realizationType: indicator.realizationType
         })),
       },
     ]);
@@ -94,6 +100,7 @@ const AddActivityModal = ({visible, onCancel}) => {
     const activityData = {
       name:
         missionType === "existing" ? selectedMission : newMissionDescription,
+      serviceId: selectedServices,
       activityList: [
         {
           description: activity.description,
@@ -117,6 +124,7 @@ const AddActivityModal = ({visible, onCancel}) => {
           performanceRealization: performanceIndicators.map((indicator) => ({
             indicators: indicator.realization,
             realization: indicator.indicators,
+            realizationType: indicator.realizationType
           })),
         },
       ],
@@ -178,6 +186,32 @@ const AddActivityModal = ({visible, onCancel}) => {
               />
             </Form.Item>
           )}
+        </Form>
+      ),
+    },
+    {
+      title: "Choix des services rattachés",
+      content: (
+        <Form>
+          <Form.Item label="Services rattachés">
+            <Select
+              value={selectedServices}
+              onChange={(value) => setSelectedServices(value)}
+              placeholder="Sélectionner les services rattachés"
+            >
+             
+              {
+                !isLoading && (
+                  existingService.map((service) => (
+                    <Option key={service.id} value={service.id}>
+                      {service.name}
+                    </Option>
+                  ))
+                )
+              
+             }
+            </Select>
+          </Form.Item>
         </Form>
       ),
     },

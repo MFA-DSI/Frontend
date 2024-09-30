@@ -1,4 +1,4 @@
-import {useQuery, useMutation, useQueryClient} from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import {
   fetchMissions,
   getByDirectionId,
@@ -23,28 +23,27 @@ export const useMissions = () => {
         getByDirectionId(sessionStorage.getItem("directionId") || ""),
     });
 
-  const directionMissionsName = () =>
+  const directionMissionsName = (id) =>
     useQuery({
       queryKey: ["mission"],
-      queryFn: () =>
-        fetchMissionsName(sessionStorage.getItem("directionId") || ""),
+      queryFn: () => fetchMissionsName(id),
     });
 
-  const saveMissionMutation = useMutation(saveMission, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("missions");
-      queryClient.invalidateQueries("mission");
-    },
-  });
-
-  const udpateMissionMutation = useMutation(updateMission, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("missions");
-      queryClient.invalidateQueries("mission");
-    },
-  });
-
   const deleteMissionMutation = useMutation(deleteMission, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("missions");
+      queryClient.invalidateQueries("mission");
+    },
+  });
+
+  const updateMissionMutation = useMutation(updateMission, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("missions");
+      queryClient.invalidateQueries("mission");
+    },
+  });
+
+  const saveMissionMutation = useMutation(saveMission, {
     onSuccess: () => {
       queryClient.invalidateQueries("missions");
       queryClient.invalidateQueries("mission");
@@ -55,9 +54,9 @@ export const useMissions = () => {
     missions: missionsQuery.data,
     directionIdQuery,
     directionMissionsName,
-    saveMission: saveMissionMutation.mutate,
     deleteMission: deleteMissionMutation.mutate,
-    updateMission: udpateMissionMutation.mutate,
+    updateMission: updateMissionMutation.mutate,
+    saveMission: saveMissionMutation.mutate,
     isLoading: missionsQuery.isLoading,
     error: missionsQuery.error,
   };
