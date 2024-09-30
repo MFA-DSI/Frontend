@@ -1,10 +1,10 @@
 import axios from "axios";
-import {AuthLogin} from "../types/Auth";
-import {AuthReponse} from "../types/AuthReponse";
-import {toast} from "react-toastify";
+import { AuthLogin } from "../types/Auth";
+import { AuthReponse } from "../types/AuthReponse";
+import { toast } from "react-toastify";
 import environment from "../conf/environment";
-import {errorTranslations} from "./utils/translator/translator";
-import {useAuthStore} from "../hooks";
+import { errorTranslations } from "./utils/translator/translator";
+import { useAuthStore } from "../hooks";
 
 export const authProvider = {
   login: async (auth: AuthLogin): Promise<void> => {
@@ -14,7 +14,7 @@ export const authProvider = {
         {
           pending: "Connexion en cours...",
           success: "Connexion réussie 👌",
-        }
+        },
       );
 
       if (response.status !== 200) {

@@ -1,7 +1,7 @@
-import axios, {AxiosError} from "axios";
-import {User} from "../types/User";
-import {handleAxiosError} from "../lib/handleAxiosError";
-import {AuthReponse} from "../types/AuthReponse";
+import axios, { AxiosError } from "axios";
+import { User } from "../types/User";
+import { handleAxiosError } from "../lib/handleAxiosError";
+import { AuthReponse } from "../types/AuthReponse";
 
 const API_URL: string = import.meta.env.VITE_API_URL;
 

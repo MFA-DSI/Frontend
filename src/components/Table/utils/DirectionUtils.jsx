@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react'
-import { useDirectionsContext } from '../../../providers'
+import React, { useEffect } from "react";
+import { useDirectionsContext } from "../../../providers";
 
-export const DirectionName = ()=> {
-const {fetchActualDirectionName}= useDirectionsContext()
-const name = fetchActualDirectionName.data.name;
+export const DirectionName = () => {
+  const { fetchActualDirectionName } = useDirectionsContext();
+  const name = fetchActualDirectionName?.data?.name || "Chargement...";
 
-
-    useEffect(() => {
-    }, [name]);
+  useEffect(() => {}, [name]);
 
   return (
-    <h2>La direction : {name}</h2>
-  )
-}
+    <div style={{ paddingTop: "5px" }}>
+      <h2>La direction : {name}</h2>
+    </div>
+  );
+};

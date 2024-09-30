@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from "react";
-import {Table, Select, Spin, Button, Checkbox, Badge} from "antd";
-import {useActivitiesContext} from "../../providers/context/ActivitiesContext";
-import {useMissionContext} from "../../providers/context/MissionsContext";
+import React, { useEffect, useState } from "react";
+import { Table, Select, Spin, Button, Checkbox, Badge } from "antd";
+import { useActivitiesContext } from "../../providers/context/ActivitiesContext";
+import { useMissionContext } from "../../providers/context/MissionsContext";
 import {
   FilePdfOutlined,
   FileExcelOutlined,
@@ -13,9 +13,9 @@ import MissionModal from "../Modal/MissionModal";
 import "./assets/index.css";
 import { getWeeksInMonth } from "./utils/DateUtils";
 
-const {Option} = Select;
+const { Option } = Select;
 
-const TableComponent = ({mode}) => {
+const TableComponent = ({ mode }) => {
   const {
     filteredActivities,
     isLoading: isActivityLoading,
@@ -28,7 +28,6 @@ const TableComponent = ({mode}) => {
     setFilterType,
     setDirectionFilter,
   } = useMissionContext();
-
 
   const [activityType, setActivityType] = useState("all");
   const [dateFilter, setDateFilter] = useState({
@@ -45,9 +44,7 @@ const TableComponent = ({mode}) => {
   const [pageSize, setPageSize] = useState(20);
   const [selectedIds, setSelectedIds] = useState([]);
 
-
-  useEffect(() => {   
-  }, [mode]);
+  useEffect(() => {}, [mode]);
   const showModal = (activity) => {
     setSelectedActivity(activity);
     setIsModalVisible(true);
@@ -161,9 +158,16 @@ const TableComponent = ({mode}) => {
         {
           title: "Missions",
           dataIndex: "description",
-          render: (description, record) => <div>{description}  <Badge count={`${record.service.name}`} style={{ marginLeft: 10 }} color="green">
-      
-        </Badge></div>,
+          render: (description, record) => (
+            <div>
+              {description}{" "}
+              <Badge
+                count={`${record.service.name}`}
+                style={{ marginLeft: 10 }}
+                color="green"
+              ></Badge>
+            </div>
+          ),
           width: 250,
         },
         {
@@ -180,7 +184,7 @@ const TableComponent = ({mode}) => {
                   <Badge
                     count={`${otherActivitiesCount} autre(s)`}
                     color={"green"}
-                    style={{marginLeft: 8}}
+                    style={{ marginLeft: 8 }}
                   />
                 )}
               </div>
@@ -207,7 +211,7 @@ const TableComponent = ({mode}) => {
                   <Badge
                     count={`${otherIndicatorsCount} autre(s)`}
                     color={"blue"}
-                    style={{marginLeft: 8}}
+                    style={{ marginLeft: 8 }}
                   />
                 )}
               </div>
@@ -234,7 +238,7 @@ const TableComponent = ({mode}) => {
                   <Badge
                     count={`${otherRealizationsCount} autre(s)`}
                     color={"yellow"}
-                    style={{marginLeft: 8}}
+                    style={{ marginLeft: 8 }}
                   />
                 )}
               </div>
@@ -256,8 +260,6 @@ const TableComponent = ({mode}) => {
     }
   };
 
-
-
   if (isMissionLoading || (activityType === "weekly" && isActivityLoading))
     return <Spin />;
 
@@ -265,7 +267,7 @@ const TableComponent = ({mode}) => {
     mode === "mydirection" ? MissionByDirectionId : filteredMissions;
   const layoutModeActivities =
     mode === "mydirection" ? directionIdQueryActvities : filteredActivities;
-    
+
   const dataSource =
     activityType === "weekly" ? layoutModeActivities : layoutModeMissions;
 
@@ -287,7 +289,7 @@ const TableComponent = ({mode}) => {
             borderRadius: "12px",
           }}
         >
-          <h2 style={{marginTop: mode === "mydirection" ? 30 : 0}}>
+          <h2 style={{ marginTop: mode === "mydirection" ? 30 : 0 }}>
             Liste des Activités
           </h2>
           <div
@@ -299,7 +301,7 @@ const TableComponent = ({mode}) => {
           >
             <Select
               value={activityType}
-              style={{width: 120, marginRight: "5px"}}
+              style={{ width: 120, marginRight: "5px" }}
               onChange={(value) => {
                 setActivityType(value);
                 setFilterType(value);
@@ -318,7 +320,7 @@ const TableComponent = ({mode}) => {
             </Select>
             <Select
               defaultValue="all"
-              style={{width: 120, marginRight: "8px"}}
+              style={{ width: 120, marginRight: "8px" }}
               onChange={setDirectionFilter}
             >
               <Option value="all">Toutes les Directions</Option>
@@ -332,12 +334,12 @@ const TableComponent = ({mode}) => {
               <>
                 <Select
                   placeholder="Mois"
-                  style={{width: 100, marginRight: "8px"}}
+                  style={{ width: 100, marginRight: "8px" }}
                   onChange={(value) => {
-                    setDateFilter({...dateFilter, month: value});
+                    setDateFilter({ ...dateFilter, month: value });
                   }}
                 >
-                  {Array.from({length: 12}, (_, index) => (
+                  {Array.from({ length: 12 }, (_, index) => (
                     <Option key={index} value={index}>
                       {new Date(0, index).toLocaleString("fr-FR", {
                         month: "long",
@@ -347,15 +349,15 @@ const TableComponent = ({mode}) => {
                 </Select>
                 <Select
                   placeholder="Semaine"
-                  style={{width: 200}}
+                  style={{ width: 200 }}
                   onChange={(value) =>
-                    setDateFilter({...dateFilter, week: value})
+                    setDateFilter({ ...dateFilter, week: value })
                   }
                 >
                   {dateFilter.month !== null &&
                     getWeeksInMonth(
                       dateFilter.month,
-                      new Date().getFullYear()
+                      new Date().getFullYear(),
                     ).map((week, index) => (
                       <Option key={index} value={week}>
                         {week}
@@ -369,9 +371,9 @@ const TableComponent = ({mode}) => {
               <>
                 <Select
                   placeholder="Année"
-                  style={{width: 100}}
+                  style={{ width: 100 }}
                   onChange={(value) =>
-                    setDateFilter({...dateFilter, year: value})
+                    setDateFilter({ ...dateFilter, year: value })
                   }
                 >
                   <Option value="2023">2023</Option>
@@ -379,12 +381,12 @@ const TableComponent = ({mode}) => {
                 </Select>
                 <Select
                   placeholder="Mois"
-                  style={{width: 100, marginRight: "8px"}}
+                  style={{ width: 100, marginRight: "8px" }}
                   onChange={(value) =>
-                    setDateFilter({...dateFilter, month: value})
+                    setDateFilter({ ...dateFilter, month: value })
                   }
                 >
-                  {Array.from({length: 12}, (_, index) => (
+                  {Array.from({ length: 12 }, (_, index) => (
                     <Option key={index} value={index}>
                       {new Date(0, index).toLocaleString("fr-FR", {
                         month: "long",
@@ -399,9 +401,9 @@ const TableComponent = ({mode}) => {
               <>
                 <Select
                   placeholder="Année"
-                  style={{width: 100, marginRight: "8px"}}
+                  style={{ width: 100, marginRight: "8px" }}
                   onChange={(value) =>
-                    setDateFilter({...dateFilter, year: value})
+                    setDateFilter({ ...dateFilter, year: value })
                   }
                 >
                   <Option value="2023">2023</Option>
@@ -409,9 +411,9 @@ const TableComponent = ({mode}) => {
                 </Select>
                 <Select
                   placeholder="Trimestre"
-                  style={{width: 100}}
+                  style={{ width: 100 }}
                   onChange={(value) =>
-                    setDateFilter({...dateFilter, quarter: value})
+                    setDateFilter({ ...dateFilter, quarter: value })
                   }
                 >
                   <Option value="Q1">Q1</Option>
@@ -432,12 +434,12 @@ const TableComponent = ({mode}) => {
         >
           {selectedIds.length > 0 && (
             <>
-              <span style={{marginRight: "8px", alignSelf: "center"}}>
+              <span style={{ marginRight: "8px", alignSelf: "center" }}>
                 Exporter en :
               </span>
               <Button
                 type="default"
-                icon={<FilePdfOutlined style={{color: "red"}} />}
+                icon={<FilePdfOutlined style={{ color: "red" }} />}
                 style={{
                   marginRight: "8px",
                   backgroundColor: "white",
@@ -486,8 +488,8 @@ const TableComponent = ({mode}) => {
             showSizeChanger: true,
             pageSizeOptions: ["10", "20", "50", "100"],
           }}
-          scroll={mode === "all" ? {y: 263.5} : {y: 250}}
-          locale={{emptyText: "Aucune donnée à afficher"}}
+          scroll={mode === "all" ? { y: 263.5 } : { y: 250 }}
+          locale={{ emptyText: "Aucune donnée à afficher" }}
         />
       </div>
       <ActivityModal

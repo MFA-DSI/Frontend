@@ -1,15 +1,15 @@
-import React, {useState, useEffect} from "react";
-import {Modal, List, Button, message, Input} from "antd";
+import React, { useState, useEffect } from "react";
+import { Modal, List, Button, message, Input } from "antd";
 import DeleteModal from "./DeleteModal";
-import {useMissionContext} from "../../providers";
-import {toast} from "react-toastify";
+import { useMissionContext } from "../../providers";
+import { toast } from "react-toastify";
 
-const MissionModal = ({visible, onCancel, mission, onDelete, mode}) => {
-  const {deleteMission, updateMission} = useMissionContext();
+const MissionModal = ({ visible, onCancel, mission, onDelete, mode }) => {
+  const { deleteMission, updateMission } = useMissionContext();
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedMission, setEditedMission] = useState(
-    mission || {description: "", activityList: []}
+    mission || { description: "", activityList: [] },
   );
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const MissionModal = ({visible, onCancel, mission, onDelete, mode}) => {
       message.success("Mission supprimée avec succès !");
     } catch (error) {
       message.error(
-        "Une erreur s'est produite lors de la suppression de cette mission"
+        "Une erreur s'est produite lors de la suppression de cette mission",
       );
       toast.error(error.message);
     }
@@ -65,17 +65,17 @@ const MissionModal = ({visible, onCancel, mission, onDelete, mode}) => {
       onCancel();
       onDelete(editedMission);
       message.success("Mission modifiée avec succès !");
-      setEditedMission(mission || {description: "", activityList: []});
+      setEditedMission(mission || { description: "", activityList: [] });
     } catch (error) {
       message.error(
-        "Une erreur s'est produite lors de la suppression de cette mission"
+        "Une erreur s'est produite lors de la suppression de cette mission",
       );
       toast.error(error.message);
     }
   };
 
   const handleChange = (field, value) => {
-    setEditedMission({...editedMission, [field]: value});
+    setEditedMission({ ...editedMission, [field]: value });
   };
 
   return (
@@ -128,7 +128,7 @@ const MissionModal = ({visible, onCancel, mission, onDelete, mode}) => {
                                     Indicateurs : {realization.realization}{" "}
                                     (Réalisations : {realization.indicators})
                                   </li>
-                                )
+                                ),
                               )}
                             </ul>
                           }
@@ -143,7 +143,7 @@ const MissionModal = ({visible, onCancel, mission, onDelete, mode}) => {
             )}
           </div>
 
-          <div style={{marginInline: "20px"}}>
+          <div style={{ marginInline: "20px" }}>
             {mode === "mydirection" && (
               <>
                 {isEditing ? (
@@ -151,7 +151,7 @@ const MissionModal = ({visible, onCancel, mission, onDelete, mode}) => {
                     <Button
                       type="primary"
                       onClick={handleSaveClick}
-                      style={{marginBottom: "10px", marginRight: "10px"}}
+                      style={{ marginBottom: "10px", marginRight: "10px" }}
                     >
                       Sauvegarder
                     </Button>
@@ -159,7 +159,7 @@ const MissionModal = ({visible, onCancel, mission, onDelete, mode}) => {
                       onClick={() => {
                         setIsEditing(false);
                         setEditedMission(
-                          mission || {description: "", activityList: []}
+                          mission || { description: "", activityList: [] },
                         );
                       }}
                     >
@@ -170,7 +170,7 @@ const MissionModal = ({visible, onCancel, mission, onDelete, mode}) => {
                   <>
                     <Button
                       type="primary"
-                      style={{marginBottom: "10px", marginRight: "10px"}}
+                      style={{ marginBottom: "10px", marginRight: "10px" }}
                       onClick={handleEditClick}
                     >
                       Modifier

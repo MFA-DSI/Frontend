@@ -1,8 +1,8 @@
 // NotificationComponents.jsx
-import React, {useState} from "react";
-import {Card, Button, Typography} from "antd";
+import React, { useState } from "react";
+import { Card, Button, Typography } from "antd";
 
-const {Title} = Typography;
+const { Title } = Typography;
 
 export const NotificationComponents = () => {
   const initialNotifications = [
@@ -83,13 +83,13 @@ export const NotificationComponents = () => {
   };
 
   return (
-    <div style={{marginTop: "60px"}}>
+    <div style={{ marginTop: "60px" }}>
       {" "}
       {notifications.map((notification, index) => (
         <Card
           key={index}
           bordered
-          style={{width: "100%", marginBottom: "16px"}}
+          style={{ width: "100%", marginBottom: "16px" }}
           hoverable
         >
           <p>{notification}</p>
@@ -99,7 +99,7 @@ export const NotificationComponents = () => {
         <Button
           type="primary"
           onClick={handleShowMore}
-          style={{marginTop: "16px"}}
+          style={{ marginTop: "16px" }}
         >
           Voir Plus
         </Button>

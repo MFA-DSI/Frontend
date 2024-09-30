@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from "react";
-import {Modal, Input, DatePicker, message} from "antd";
+import React, { useState, useEffect } from "react";
+import { Modal, Input, DatePicker, message } from "antd";
 import moment from "moment";
-import {useActivitiesContext} from "../../providers";
-import {toast} from "react-toastify";
+import { useActivitiesContext } from "../../providers";
+import { toast } from "react-toastify";
 
 const TaskModal = ({
   visible,
@@ -14,7 +14,7 @@ const TaskModal = ({
   activityId,
   reopenMainModal,
 }) => {
-  const {addTaskToActivty} = useActivitiesContext();
+  const { addTaskToActivty } = useActivitiesContext();
   const [taskToEdit, setTaskEdit] = useState({
     id: "",
     description: "",
@@ -38,7 +38,7 @@ const TaskModal = ({
       });
       setActivity(activityId);
     } else {
-      setTaskEdit({id: "", description: "", dueDatetime: null});
+      setTaskEdit({ id: "", description: "", dueDatetime: null });
       setActivity("");
     }
   }, [task, activityId]);
@@ -65,7 +65,7 @@ const TaskModal = ({
       message.success("Tâche modifié avec succès !");
     } catch (error) {
       message.error(
-        "Une erreur s'est produite lors de la modification de cette activité"
+        "Une erreur s'est produite lors de la modification de cette activité",
       );
       toast.error(error.message);
     }

@@ -1,4 +1,4 @@
-import {DatePicker, Input} from "antd";
+import { DatePicker, Input } from "antd";
 import react from "react";
 
 export const EditableField = ({

@@ -1,11 +1,11 @@
-import React, {createContext, useContext, useState} from "react";
-import {useMissions} from "../../hooks/useMissions"; // Adjust the path as necessary
+import React, { createContext, useContext, useState } from "react";
+import { useMissions } from "../../hooks/useMissions"; // Adjust the path as necessary
 
 const MissionContext = createContext();
 
 const directionId = sessionStorage.getItem("directionId");
 
-export const MissionProvider = ({children}) => {
+export const MissionProvider = ({ children }) => {
   const {
     missions,
     isLoading,
@@ -33,9 +33,9 @@ export const MissionProvider = ({children}) => {
             activity.performanceRealization.some((realization) =>
               realization.realization
                 .toLowerCase()
-                .includes(searchTerm.toLowerCase())
-            )
-          )
+                .includes(searchTerm.toLowerCase()),
+            ),
+          ),
       );
     }
 
@@ -79,7 +79,7 @@ export const useMissionContext = () => {
   const context = useContext(MissionContext);
   if (!context) {
     throw new Error(
-      "useMissionContext must be used within a DirectionProvider"
+      "useMissionContext must be used within a DirectionProvider",
     );
   }
 

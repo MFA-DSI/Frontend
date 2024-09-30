@@ -11,7 +11,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   userId: null,
   token: null,
 
-  setDirectionId: (directionId: string) => set({directionId}),
-  setUserId: (userId: string) => set({userId}),
-  setToken: (token: string) => set({token}),
+  setDirectionId: (directionId: string) => set({ directionId }),
+  setUserId: (userId: string) => set({ userId }),
+  setToken: (token: string) => set({ token }),
 }));

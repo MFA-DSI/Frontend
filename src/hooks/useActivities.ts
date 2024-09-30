@@ -1,4 +1,4 @@
-import {useQuery, useMutation, useQueryClient} from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import {
   addPerformanceToActivity,
   addRecommendationToActivity,
@@ -58,15 +58,17 @@ export const useActivities = () => {
         queryClient.invalidateQueries("activities");
         queryClient.invalidateQueries("activity");
       },
-    }
+    },
   );
 
-  const udpateRecommendationMutation = useMutation(addRecommendationToActivity,
+  const udpateRecommendationMutation = useMutation(
+    addRecommendationToActivity,
     {
-    onSuccess: () => {
-      queryClient.invalidateQueries("activities");
-      queryClient.invalidateQueries("activity");
-    },}
+      onSuccess: () => {
+        queryClient.invalidateQueries("activities");
+        queryClient.invalidateQueries("activity");
+      },
+    },
   );
 
   return {

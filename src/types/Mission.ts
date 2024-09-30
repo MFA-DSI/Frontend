@@ -11,5 +11,5 @@ type addActivityItem = {
 type PerformanceRealization = {
   indicators: number;
   realization: string;
-  realizationType: string
+  realizationType: string;
 };

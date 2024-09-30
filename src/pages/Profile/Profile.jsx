@@ -1,6 +1,6 @@
 import React from "react";
 import MainLayout from "../Layout/MainLayout";
-import {ProfileComponent} from "../../components/Profile/ProfileComponent";
+import { ProfileComponent } from "../../components/Profile/ProfileComponent";
 
 const Profile = () => {
   return (

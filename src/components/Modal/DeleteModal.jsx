@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {Modal, Input} from "antd";
+import React, { useState } from "react";
+import { Modal, Input } from "antd";
 
 const DeleteModal = ({
   visible,
@@ -46,7 +46,7 @@ const DeleteModal = ({
               resetModal();
             }
       }
-      okButtonProps={{disabled: confirmName !== item?.description}} // Désactiver le bouton si les noms ne correspondent pas
+      okButtonProps={{ disabled: confirmName !== item?.description }} // Désactiver le bouton si les noms ne correspondent pas
       okText="Supprimer"
       cancelText="Annuler"
     >

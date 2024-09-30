@@ -1,6 +1,6 @@
-import {Button} from "antd";
+import { Button } from "antd";
 import react from "react";
-import {dateFormatter} from "../utils/dateFormatter";
+import { dateFormatter } from "../utils/dateFormatter";
 
 export const TaskList = ({
   title,

@@ -7,7 +7,7 @@ export const errorTranslations = {
   },
   mg: {
     "Incorrect password": "Hamarino ny teny miafinao",
-    "account_locked": "Nohidiana io kaonty io",
+    account_locked: "Nohidiana io kaonty io",
     // Add more translations here
   },
 };

@@ -1,19 +1,19 @@
-import React, {useState, useEffect} from "react";
-import {Modal, Button, Input, DatePicker, message, Badge} from "antd";
+import React, { useState, useEffect } from "react";
+import { Modal, Button, Input, DatePicker, message, Badge } from "antd";
 import moment from "moment";
 import "./assets/index.css";
-import {dateFormatter} from "./utils/dateFormatter";
+import { dateFormatter } from "./utils/dateFormatter";
 import TaskModal from "./TaskModal";
 import DeleteModal from "./DeleteModal";
-import {useActivitiesContext} from "../../providers";
-import {toast} from "react-toastify";
+import { useActivitiesContext } from "../../providers";
+import { toast } from "react-toastify";
 import PerformanceModal from "./PerformanceModal";
-import {EditableField} from "./Forms/ActivityDetails";
-import {TaskList} from "./Forms/TaskDetails";
+import { EditableField } from "./Forms/ActivityDetails";
+import { TaskList } from "./Forms/TaskDetails";
 import RecommendationModal from "./RecommendationModal";
 
-const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
-  const {deleteActivity, updateMissionActivity} = useActivitiesContext();
+const ActivityModal = ({ visible, onCancel, activity, mode, onDelete }) => {
+  const { deleteActivity, updateMissionActivity } = useActivitiesContext();
   const [isEditing, setIsEditing] = useState(false);
   const [editedActivity, setEditedActivity] = useState({
     id: activity?.id || "",
@@ -28,8 +28,8 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
   const [isPerformanceModalVisible, setIsPerformanceModalVisible] =
     useState(false);
   const [selectedPerformance, setSelectedPerformance] = useState(null);
-  const [selectedActivity,setSelectedActivity]= useState(null);
-  const [isRecommendationVisible,setIsRecommendationVisible]= useState(null);
+  const [selectedActivity, setSelectedActivity] = useState(null);
+  const [isRecommendationVisible, setIsRecommendationVisible] = useState(null);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
   useEffect(() => {
@@ -68,7 +68,7 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
       setIsEditing(false);
     } catch (error) {
       message.error(
-        "Une erreur s'est produite lors de la modification de cette activité"
+        "Une erreur s'est produite lors de la modification de cette activité",
       );
       toast.error(error.message);
     }
@@ -93,10 +93,10 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
     setIsPerformanceModalVisible(true);
   };
 
-  const openRecommendationModal=()=>{
-    setSelectedActivity(editedActivity)
-    setIsRecommendationVisible(true)
-  }
+  const openRecommendationModal = () => {
+    setSelectedActivity(editedActivity);
+    setIsRecommendationVisible(true);
+  };
   const handlePerformanceModalCancel = () => {
     setSelectedPerformance(null);
     setIsPerformanceModalVisible(false);
@@ -106,13 +106,13 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
     onCancel();
   };
 
-  const handleRecommendationSave = ()=>{
-    setIsRecommendationVisible(false)
-  }
-  const handleRecommendationCancel = ()=>{
+  const handleRecommendationSave = () => {
     setIsRecommendationVisible(false);
-    onCancel()
-  }
+  };
+  const handleRecommendationCancel = () => {
+    setIsRecommendationVisible(false);
+    onCancel();
+  };
 
   const handleDeleteCancel = () => {
     setIsDeleteModalVisible(false);
@@ -129,7 +129,7 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
       onCancel();
     } catch (error) {
       message.error(
-        "Une erreur s'est produite lors de la suppression de cette activity"
+        "Une erreur s'est produite lors de la suppression de cette activity",
       );
       toast.error(error.message);
     }
@@ -221,7 +221,11 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
               activity.performanceRealization.map((performanceIndicator) => (
                 <p key={performanceIndicator.id}>
                   - {performanceIndicator.realization} (
-                  {performanceIndicator.indicators} {performanceIndicator.realizationType === "percentage"? "%" : ""} )
+                  {performanceIndicator.indicators}{" "}
+                  {performanceIndicator.realizationType === "percentage"
+                    ? "%"
+                    : ""}{" "}
+                  )
                   {mode === "mydirection" && !isEditing && (
                     <Button
                       type="link"
@@ -236,37 +240,40 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
               <p>Aucune indicateur de performance</p>
             )}
             {mode === "mydirection" && !isEditing && (
-              <Button type="dashed" onClick={() => openPerformanceModal(editedActivity)}>
+              <Button
+                type="dashed"
+                onClick={() => openPerformanceModal(editedActivity)}
+              >
                 + Ajouter une indicateur de performance
               </Button>
             )}
 
-<h3>Recommandation:</h3>
-{activity.recommendation.length > 0 ? (
-  activity.recommendation.map((e) => (
-    <p key={e.id}>
-      - {e.description}
-      {e.validate_status ? (
-        <Badge color="green" count="Approuvé" />
-      ) : (
-        <>
-          <Badge color="blue" count="Non approuvé" />
-          {mode === "mydirection" && !isEditing && (
-            <Button
-              type="link"
-              onClick={() => openRecommendationModal()}
-            >
-              Approuver
-            </Button>
-          )}
-        </>
-      )}
-    </p>
-  ))
-) : (
-  <p>Aucune Recommandation</p>
-)}
- {mode === "mydirection" && !isEditing && (
+            <h3>Recommandation:</h3>
+            {activity.recommendation.length > 0 ? (
+              activity.recommendation.map((e) => (
+                <p key={e.id}>
+                  - {e.description}
+                  {e.validate_status ? (
+                    <Badge color="green" count="Approuvé" />
+                  ) : (
+                    <>
+                      <Badge color="blue" count="Non approuvé" />
+                      {mode === "mydirection" && !isEditing && (
+                        <Button
+                          type="link"
+                          onClick={() => openRecommendationModal()}
+                        >
+                          Approuver
+                        </Button>
+                      )}
+                    </>
+                  )}
+                </p>
+              ))
+            ) : (
+              <p>Aucune Recommandation</p>
+            )}
+            {mode === "mydirection" && !isEditing && (
               <Button
                 type="dashed"
                 onClick={() => openRecommendationModal(selectedActivity)}
@@ -277,18 +284,18 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
           </div>
         </div>
 
-        <div style={{marginInline: "20px"}}>
+        <div style={{ marginInline: "20px" }}>
           {isEditing ? (
             <div>
               <Button
                 type="primary"
-                style={{marginBottom: "10px", marginRight: "10px"}}
+                style={{ marginBottom: "10px", marginRight: "10px" }}
                 onClick={handleSave}
               >
                 Sauvegarder
               </Button>
               <Button
-                style={{marginBottom: "10px", marginRight: "10px"}}
+                style={{ marginBottom: "10px", marginRight: "10px" }}
                 onClick={() => setIsEditing(false)}
               >
                 Annuler
@@ -298,7 +305,7 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
             mode === "mydirection" && (
               <Button
                 type="primary"
-                style={{marginBottom: "10px", marginRight: "10px"}}
+                style={{ marginBottom: "10px", marginRight: "10px" }}
                 onClick={handleEdit}
               >
                 Modifier
@@ -354,7 +361,7 @@ const ActivityModal = ({visible, onCancel, activity, mode, onDelete}) => {
           setTimeout(() => {
             onCancel(false);
           }, 200);
-        }} 
+        }}
       />
 
       <DeleteModal

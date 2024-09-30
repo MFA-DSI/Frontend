@@ -4,31 +4,34 @@ import { useActivitiesContext } from "../../providers";
 
 const { TextArea } = Input;
 
-const RecommendationModal = ({ visible, onCancel, activity, onSave, recommendation,onCloseSuccess }) => {
-  const {addRecommendation} = useActivitiesContext();
+const RecommendationModal = ({
+  visible,
+  onCancel,
+  activity,
+  onSave,
+  recommendation,
+  onCloseSuccess,
+}) => {
+  const { addRecommendation } = useActivitiesContext();
   const [recommendationUpdate, setRecommendationUpdate] = useState("");
   const [activityTitle, setActivityTitle] = useState("");
 
-  const handleSend =async () => {
-
+  const handleSend = async () => {
     try {
-        const recommandationToUpdate = {
-            activityId : activity.id,
-            description : recommendationUpdate
-          }
-        
+      const recommandationToUpdate = {
+        activityId: activity.id,
+        description: recommendationUpdate,
+      };
+
       await addRecommendation(recommandationToUpdate);
-    
-     
     } catch (error) {
       message.error(
-        "Une erreur s'est produite lors de la modification de cette activité"
+        "Une erreur s'est produite lors de la modification de cette activité",
       );
       toast.error(error.message);
-    }finally{
+    } finally {
       onCancel();
     }
-  
   };
 
   useEffect(() => {

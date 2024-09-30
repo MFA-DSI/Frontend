@@ -1,6 +1,6 @@
 // Profile.js
-import React, {useState} from "react";
-import {Form, Input, Button, Typography} from "antd";
+import React, { useState } from "react";
+import { Form, Input, Button, Typography } from "antd";
 
 export const ProfileComponent = () => {
   const [userInfo, setUserInfo] = useState({
@@ -33,7 +33,7 @@ export const ProfileComponent = () => {
         <Form.Item
           label="Email"
           name="email"
-          rules={[{required: true, message: "Veuillez entrer votre email!"}]}
+          rules={[{ required: true, message: "Veuillez entrer votre email!" }]}
         >
           <Input />
         </Form.Item>

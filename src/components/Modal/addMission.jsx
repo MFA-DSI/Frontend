@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {
   Modal,
   Input,
@@ -9,7 +9,7 @@ import {
   DatePicker,
   message,
 } from "antd";
-import {useMissionContext} from "../../providers/context/MissionsContext";
+import { useMissionContext } from "../../providers/context/MissionsContext";
 import moment from "moment";
 import {
   ActivityDetailsForm,
@@ -20,12 +20,12 @@ import {
 import { useDirectionsContext } from "../../providers";
 import { json } from "react-router-dom";
 
-const {Step} = Steps;
-const {Option} = Select;
+const { Step } = Steps;
+const { Option } = Select;
 
-const AddActivityModal = ({visible, onCancel}) => {
-  const {MissionNameByDirectionId, saveMission} = useMissionContext();
-  const {fetchAllService,isLoading} = useDirectionsContext();
+const AddActivityModal = ({ visible, onCancel }) => {
+  const { MissionNameByDirectionId, saveMission } = useMissionContext();
+  const { fetchAllService, isLoading } = useDirectionsContext();
   const [currentStep, setCurrentStep] = useState(0);
 
   const [activity, setActivity] = useState({
@@ -73,7 +73,7 @@ const AddActivityModal = ({visible, onCancel}) => {
         performanceRealization: performanceIndicators.map((indicator) => ({
           indicators: indicator.indicators,
           realization: indicator.realization,
-          realizationType: indicator.realizationType
+          realizationType: indicator.realizationType,
         })),
       },
     ]);
@@ -124,7 +124,7 @@ const AddActivityModal = ({visible, onCancel}) => {
           performanceRealization: performanceIndicators.map((indicator) => ({
             indicators: indicator.realization,
             realization: indicator.indicators,
-            realizationType: indicator.realizationType
+            realizationType: indicator.realizationType,
           })),
         },
       ],
@@ -199,17 +199,12 @@ const AddActivityModal = ({visible, onCancel}) => {
               onChange={(value) => setSelectedServices(value)}
               placeholder="Sélectionner les services rattachés"
             >
-             
-              {
-                !isLoading && (
-                  existingService.map((service) => (
-                    <Option key={service.id} value={service.id}>
-                      {service.name}
-                    </Option>
-                  ))
-                )
-              
-             }
+              {!isLoading &&
+                existingService.map((service) => (
+                  <Option key={service.id} value={service.id}>
+                    {service.name}
+                  </Option>
+                ))}
             </Select>
           </Form.Item>
         </Form>

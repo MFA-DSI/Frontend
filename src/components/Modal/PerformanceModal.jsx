@@ -1,10 +1,10 @@
-import React, {useState, useEffect} from "react";
-import {Modal, Button, Input, InputNumber, Select, message} from "antd";
+import React, { useState, useEffect } from "react";
+import { Modal, Button, Input, InputNumber, Select, message } from "antd";
 import "./assets/index.css";
-import {useActivitiesContext} from "../../providers";
-import {toast} from "react-toastify";
+import { useActivitiesContext } from "../../providers";
+import { toast } from "react-toastify";
 
-const {Option} = Select;
+const { Option } = Select;
 
 const PerformanceModal = ({
   visible,
@@ -13,11 +13,11 @@ const PerformanceModal = ({
   performance,
   activityId,
 }) => {
-  const {addPerformance} = useActivitiesContext();
+  const { addPerformance } = useActivitiesContext();
   const [realization, setRealization] = useState(performance?.realization || 0);
   const [indicator, setIndicator] = useState(performance?.indicators || "");
   const [realizationType, setRealizationType] = useState(
-    performance?.realizationType || "chiffre"
+    performance?.realizationType || "chiffre",
   );
 
   const validateRealization = () => {
@@ -47,27 +47,20 @@ const PerformanceModal = ({
         performance: {
           indicators: realization,
           realization: indicator,
-          realizationType: realizationType
-          
+          realizationType: realizationType,
         },
-
       };
 
-      
-      
-
       try {
-        console.log("performance: ",performanceData
-        );
-        
+        console.log("performance: ", performanceData);
+
         await addPerformance(performanceData);
 
         onSave(performanceData);
         onCancel();
-       
       } catch (error) {
         message.error(
-          "Une erreur s'est produite lors de la modification de cette activité"
+          "Une erreur s'est produite lors de la modification de cette activité",
         );
         toast.error(error.message);
       }
@@ -95,14 +88,14 @@ const PerformanceModal = ({
         <Select
           value={realizationType}
           onChange={(value) => setRealizationType(value)}
-          style={{width: 200}}
+          style={{ width: 200 }}
         >
           <Option value="chiffre">Chiffre</Option>
           <Option value="percentage">Pourcentage</Option>
         </Select>
       </div>
 
-      <div style={{marginTop: "16px"}}>
+      <div style={{ marginTop: "16px" }}>
         <h3>Réalisation :</h3>
         <InputNumber
           value={realization}
@@ -114,11 +107,11 @@ const PerformanceModal = ({
               ? "Entrez un pourcentage (0-100)"
               : "Entrez une valeur"
           }
-          style={{width: "100%"}}
+          style={{ width: "100%" }}
         />
       </div>
 
-      <div style={{marginTop: "16px"}}>
+      <div style={{ marginTop: "16px" }}>
         <h3> Indicateurs:</h3>
         <Input
           value={indicator}
@@ -128,9 +121,13 @@ const PerformanceModal = ({
       </div>
 
       <div
-        style={{marginTop: "24px", display: "flex", justifyContent: "flex-end"}}
+        style={{
+          marginTop: "24px",
+          display: "flex",
+          justifyContent: "flex-end",
+        }}
       >
-        <Button onClick={onCancel} style={{marginRight: "8px"}}>
+        <Button onClick={onCancel} style={{ marginRight: "8px" }}>
           Annuler
         </Button>
         <Button type="primary" onClick={handleSave}>

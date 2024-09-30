@@ -1,9 +1,9 @@
-import React, {useState} from "react";
-import {Input, Button, Form, Select, DatePicker} from "antd";
+import React, { useState } from "react";
+import { Input, Button, Form, Select, DatePicker } from "antd";
 import moment from "moment";
 
-export const ActivityDetailsForm = ({activity, setActivity}) => {
-  const {description, observation, prediction, dueDatetime} = activity;
+export const ActivityDetailsForm = ({ activity, setActivity }) => {
+  const { description, observation, prediction, dueDatetime } = activity;
 
   return (
     <Form>
@@ -11,7 +11,7 @@ export const ActivityDetailsForm = ({activity, setActivity}) => {
         <Input
           value={description}
           onChange={(e) =>
-            setActivity({...activity, description: e.target.value})
+            setActivity({ ...activity, description: e.target.value })
           }
         />
       </Form.Item>
@@ -19,7 +19,7 @@ export const ActivityDetailsForm = ({activity, setActivity}) => {
         <Input
           value={observation}
           onChange={(e) =>
-            setActivity({...activity, observation: e.target.value})
+            setActivity({ ...activity, observation: e.target.value })
           }
         />
       </Form.Item>
@@ -27,25 +27,25 @@ export const ActivityDetailsForm = ({activity, setActivity}) => {
         <Input
           value={prediction}
           onChange={(e) =>
-            setActivity({...activity, prediction: e.target.value})
+            setActivity({ ...activity, prediction: e.target.value })
           }
         />
       </Form.Item>
       <Form.Item label="Date d'échéance">
         <DatePicker
           value={dueDatetime ? moment(dueDatetime) : null}
-          onChange={(date) => setActivity({...activity, dueDatetime: date})}
+          onChange={(date) => setActivity({ ...activity, dueDatetime: date })}
         />
       </Form.Item>
     </Form>
   );
 };
-export const TaskForm = ({tasks, setTasks}) => {
+export const TaskForm = ({ tasks, setTasks }) => {
   const [taskDescription, setTaskDescription] = useState("");
   const [taskDueDate, setTaskDueDate] = useState(null);
 
   const handleAddTask = () => {
-    const newTask = {description: taskDescription, dueDatetime: taskDueDate};
+    const newTask = { description: taskDescription, dueDatetime: taskDueDate };
     setTasks([...tasks, newTask]);
     setTaskDescription("");
     setTaskDueDate(null);
@@ -83,7 +83,7 @@ export const TaskForm = ({tasks, setTasks}) => {
   );
 };
 
-export const NextTaskForm = ({nextTasks, setNextTasks}) => {
+export const NextTaskForm = ({ nextTasks, setNextTasks }) => {
   const [nextTaskDescription, setNextTaskDescription] = useState("");
   const [nextTaskDueDate, setNextTaskDueDate] = useState(null);
 
@@ -141,7 +141,7 @@ export const PerformanceIndicatorForm = ({
   const handleAddIndicator = () => {
     if (realizationType === "percentage" && realization > 100) {
       setErrorMessage(
-        "La valeur ne doit pas dépasser 100% pour un pourcentage."
+        "La valeur ne doit pas dépasser 100% pour un pourcentage.",
       );
       return;
     }
@@ -181,7 +181,7 @@ export const PerformanceIndicatorForm = ({
             setRealization(e.target.value);
             if (realizationType === "percentage" && e.target.value > 100) {
               setErrorMessage(
-                "La valeur ne doit pas dépasser 100% pour un pourcentage."
+                "La valeur ne doit pas dépasser 100% pour un pourcentage.",
               );
             } else {
               setErrorMessage("");
@@ -195,7 +195,7 @@ export const PerformanceIndicatorForm = ({
           type="number"
           max={realizationType === "percentage" ? 100 : undefined} // Set max for percentage
         />
-        {errorMessage && <span style={{color: "red"}}>{errorMessage}</span>}
+        {errorMessage && <span style={{ color: "red" }}>{errorMessage}</span>}
       </Form.Item>
 
       <Button

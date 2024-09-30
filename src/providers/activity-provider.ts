@@ -1,6 +1,6 @@
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import environment from "../conf/environment";
-import {PerformanceRealization, Recommendation, Task} from "../types";
+import { PerformanceRealization, Recommendation, Task } from "../types";
 import { message } from "antd";
 
 export interface Activity {
@@ -32,9 +32,9 @@ interface udpatePerformance {
 }
 
 interface recommendationUpdate {
-  activityId : string;
-  committerId : string;
-  description : string;
+  activityId: string;
+  committerId: string;
+  description: string;
 }
 
 export const fetchActivities = async (): Promise<unknown> => {
@@ -65,7 +65,7 @@ export const fetchActivities = async (): Promise<unknown> => {
 };
 
 export const getActivityByDirectionId = async (
-  directionId: string
+  directionId: string,
 ): Promise<unknown> => {
   try {
     const url = `http://localhost:8080/direction/activity/direction?directionId=${directionId}&page=1&page_size=1000`;
@@ -118,7 +118,7 @@ export const getActivityById = async (id: string) => {
   }
 };
 export const updateActivity = async (
-  activities: Activity
+  activities: Activity,
 ): Promise<Activity> => {
   const activityToUpdate = {
     id: activities.id,
@@ -231,7 +231,7 @@ export const DetachTaskToActivity = async (taskId: string) => {
 };
 
 export const addPerformanceToActivity = async (
-  performanceRealization: udpatePerformance
+  performanceRealization: udpatePerformance,
 ) => {
   try {
     const url = `http://localhost:8080/direction/performanceRealization?activityId=${performanceRealization.id}`;
@@ -281,16 +281,15 @@ export const detachPerformanceFromActivity = async (id: string) => {
 };
 
 export const addRecommendationToActivity = async (
-  recommendation: recommendationUpdate
+  recommendation: recommendationUpdate,
 ) => {
-
   try {
     const url = `http://localhost:8080/direction/activity/recommendation?activityId=${recommendation.activityId}`;
-    
+
     const recommendationBody = {
-      description : recommendation.description,
-      committerId : sessionStorage.getItem("userId")
-    }
+      description: recommendation.description,
+      committerId: sessionStorage.getItem("userId"),
+    };
     const response = await fetch(url, {
       method: "POST",
       headers: {

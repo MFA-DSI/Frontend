@@ -1,6 +1,6 @@
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import environment from "../conf/environment"; // Adjust the path as necessary
-import {CreateMission, Service} from "../types";
+import { CreateMission, Service } from "../types";
 
 // Define the type for Activity
 interface Mission {
@@ -55,7 +55,7 @@ export const fetchMissions = async (): Promise<Mission[]> => {
 };
 
 export const fetchMissionsName = async (
-  directionId: string
+  directionId: string,
 ): Promise<MissionName[]> => {
   try {
     const url = `http://localhost:8080/direction/mission/name?directionId=${directionId}`;
@@ -83,7 +83,7 @@ export const fetchMissionsName = async (
 
 // Fetching missions by directionId
 export const getByDirectionId = async (
-  directionId: string
+  directionId: string,
 ): Promise<Mission[]> => {
   try {
     const url = `http://localhost:8080/direction/mission/directions?directionId=${directionId}&page=1&page_size=100`;
@@ -101,7 +101,7 @@ export const getByDirectionId = async (
     }
 
     const data: Mission[] = await response.json();
-console.log("mission ",data);
+    console.log("mission ", data);
 
     return data;
   } catch (error) {
