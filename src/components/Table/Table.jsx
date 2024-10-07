@@ -12,6 +12,9 @@ import MissionModal from "../Modal/MissionModal";
 
 import "./assets/index.css";
 import { getWeeksInMonth } from "./utils/DateUtils";
+import { useDirectionsContext } from "../../providers";
+import { useFilesContext } from "../../providers/context/FilesContext";
+import { toast } from "react-toastify";
 
 const { Option } = Select;
 
@@ -26,9 +29,11 @@ const TableComponent = ({ mode }) => {
     isLoading: isMissionLoading,
     MissionByDirectionId,
     setFilterType,
-    setDirectionFilter,
+    setDirectionFilter    
   } = useMissionContext();
 
+  const {fetchAllDirection}= useDirectionsContext();
+const {fetchMissionXLS} = useFilesContext();
   const [activityType, setActivityType] = useState("all");
   const [dateFilter, setDateFilter] = useState({
     month: null,
@@ -74,6 +79,15 @@ const TableComponent = ({ mode }) => {
       }
     });
   };
+
+//TODO: separate this handler to File.ts
+  const handleExport = async (type)=>{
+      try {
+        await fetchMissionXLS(selectedIds)
+      } catch (error) {
+        toast.error(error.message)
+      }
+  }
 
   const onDelete = (content) => {
     console.log(content);
@@ -318,6 +332,8 @@ const TableComponent = ({ mode }) => {
               <Option value="monthly">Mensuel</Option>
               <Option value="quarterly">Trimestriel</Option>
             </Select>
+
+            
             <Select
               defaultValue="all"
               style={{ width: 120, marginRight: "8px" }}

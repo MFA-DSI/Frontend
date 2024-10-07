@@ -16,7 +16,7 @@ export const DirectionProvider = ({ children }) => {
   return (
     <DirectionContext.Provider
       value={{
-        fetchAllDirection: fetchDirections,
+        fetchAllDirection: fetchDirections.data,
         fetchAllService: fetchServices.data,
         fetchActualDirectionName: fetchActualDirection,
         isLoading: isLoading,
