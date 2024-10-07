@@ -1,36 +1,33 @@
-import React, { createContext, useContext, ReactNode, FC } from "react";
+import React, { createContext, useContext } from "react";
 import { useFiles } from "../../hooks";
 
 const FilesContext = createContext<unknown>(undefined);
 
 export const FilesProvider = ({ children }) => {
   const {
-
     missionToPDF,
     missionToDOC,
-    missionTOXLS ,
-        
+    missionToXLS ,      
   } = useFiles();
 
   return (
     <FilesContext.Provider
       value={{
         fetchMissionPDF: missionToPDF,
-        fetchMissionDOC:missionToDOC,
-        fetchMissionXLS: missionTOXLS,
-       // TODO :add loading and error here 
+        fetchMissionDOC: missionToDOC,
+        fetchMissionXLS: missionToXLS,  
       }}
     >
       {children}
     </FilesContext.Provider>
-  );
+  );  
 };
 
 export const useFilesContext = () => {
   const context = useContext(FilesContext);
   if (!context) {
     throw new Error(
-      "useFilessContext must be used within a FilesProvider",
+      "useFilesContext must be used within a FilesProvider",
     );
   }
 

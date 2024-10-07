@@ -1,35 +1,32 @@
 import { useQuery } from "@tanstack/react-query";
-import {
-  fetchDirectionName,
-  fetchDirections,
-  fetchDirectionServices,
-} from "../providers/direction-provider";
+
 import { useMutation, useQueryClient } from "react-query";
 import { exportMissionToDOC, exportMissionToPDF, exportMissionToXLS } from "../providers";
 import { message } from "antd";
 
 export const useFiles = () => {
-  const exportToMissionPDF =  useMutation(exportMissionToPDF, {
+
+  const exportToMissionPDF = useMutation(exportMissionToPDF, {
     onSuccess: () => {
-     message.success("votre fichier PDF est prête")
+      message.success("votre fichier PDF est prêt");
     },
   });
 
-  const exportToMissionXLS =  useMutation(exportMissionToXLS, {
+  const exportToMissionXLS = useMutation(exportMissionToXLS, {
     onSuccess: () => {
-     message.success("votre fichier excel est prête")
+      message.success("votre fichier Excel est prêt");
     },
   });
 
-  const exportToMissionDOC =  useMutation(exportMissionToDOC, {
+  const exportToMissionDOC = useMutation(exportMissionToDOC, {
     onSuccess: () => {
-     message.success("votre fichier doc est prête")
+      message.success("votre fichier DOC est prêt");
     },
   });
 
   return {
-    missionToPDF: exportToMissionPDF,
-    missionToDOC: exportToMissionDOC,
-    missionTOXLS : exportToMissionXLS  
+    missionToPDF: exportToMissionPDF.mutate,
+    missionToDOC: exportToMissionDOC.mutate,
+    missionToXLS: exportToMissionXLS.mutate,  // Changer "missionTOXLS" en "missionToXLS"
   };
 };

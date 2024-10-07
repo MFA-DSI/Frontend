@@ -15,6 +15,8 @@ import { getWeeksInMonth } from "./utils/DateUtils";
 import { useDirectionsContext } from "../../providers";
 import { useFilesContext } from "../../providers/context/FilesContext";
 import { toast } from "react-toastify";
+import { saveAs } from 'file-saver';
+
 
 const { Option } = Select;
 
@@ -33,7 +35,7 @@ const TableComponent = ({ mode }) => {
   } = useMissionContext();
 
   const {fetchAllDirection}= useDirectionsContext();
-const {fetchMissionXLS} = useFilesContext();
+  const { fetchMissionXLS } = useFilesContext();  
   const [activityType, setActivityType] = useState("all");
   const [dateFilter, setDateFilter] = useState({
     month: null,
@@ -81,13 +83,18 @@ const {fetchMissionXLS} = useFilesContext();
   };
 
 //TODO: separate this handler to File.ts
-  const handleExport = async (type)=>{
-      try {
-        await fetchMissionXLS(selectedIds)
-      } catch (error) {
-        toast.error(error.message)
-      }
+
+const handleExport = async (type) => {
+  if (type === "XLS") {
+    try {
+     await fetchMissionXLS(selectedIds); // Récupère le Blob
+      setSelectedIds([]);
+    
+    } catch (error) {
+      toast.error(error.message);
+    }
   }
+};
 
   const onDelete = (content) => {
     console.log(content);
@@ -473,7 +480,7 @@ const {fetchMissionXLS} = useFilesContext();
                   backgroundColor: "green",
                   color: "white",
                 }}
-                onClick={() => handleExport("Excel")}
+                onClick={() => handleExport("XLS")}
               >
                 Excel
               </Button>
