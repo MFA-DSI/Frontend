@@ -87,7 +87,7 @@ const TableComponent = ({ mode }) => {
 const handleExport = async (type) => {
   if (type === "XLS") {
     try {
-     await fetchMissionXLS(selectedIds); // Récupère le Blob
+     await fetchMissionXLS(selectedIds); 
       setSelectedIds([]);
     
     } catch (error) {
