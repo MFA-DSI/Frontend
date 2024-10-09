@@ -1,11 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { useMutation, useQueryClient } from "react-query";
-import { exportMissionToDOC, exportMissionToPDF, exportMissionToXLS } from "../providers";
+import {
+  exportMissionToDOC,
+  exportMissionToPDF,
+  exportMissionToXLS,
+} from "../providers";
 import { message } from "antd";
 
 export const useFiles = () => {
-
   const exportToMissionPDF = useMutation(exportMissionToPDF, {
     onSuccess: () => {
       message.success("votre fichier PDF est prêt");
@@ -27,6 +30,6 @@ export const useFiles = () => {
   return {
     missionToPDF: exportToMissionPDF.mutate,
     missionToDOC: exportToMissionDOC.mutate,
-    missionToXLS: exportToMissionXLS.mutate,  // Changer "missionTOXLS" en "missionToXLS"
+    missionToXLS: exportToMissionXLS.mutate, // Changer "missionTOXLS" en "missionToXLS"
   };
 };

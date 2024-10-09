@@ -15,8 +15,7 @@ import { getWeeksInMonth } from "./utils/DateUtils";
 import { useDirectionsContext } from "../../providers";
 import { useFilesContext } from "../../providers/context/FilesContext";
 import { toast } from "react-toastify";
-import { saveAs } from 'file-saver';
-
+import { saveAs } from "file-saver";
 
 const { Option } = Select;
 
@@ -31,11 +30,11 @@ const TableComponent = ({ mode }) => {
     isLoading: isMissionLoading,
     MissionByDirectionId,
     setFilterType,
-    setDirectionFilter    
+    setDirectionFilter,
   } = useMissionContext();
 
-  const {fetchAllDirection}= useDirectionsContext();
-  const { fetchMissionXLS } = useFilesContext();  
+  const { fetchAllDirection } = useDirectionsContext();
+  const { fetchMissionXLS } = useFilesContext();
   const [activityType, setActivityType] = useState("all");
   const [dateFilter, setDateFilter] = useState({
     month: null,
@@ -82,19 +81,18 @@ const TableComponent = ({ mode }) => {
     });
   };
 
-//TODO: separate this handler to File.ts
+  //TODO: separate this handler to File.ts
 
-const handleExport = async (type) => {
-  if (type === "XLS") {
-    try {
-     await fetchMissionXLS(selectedIds); 
-      setSelectedIds([]);
-    
-    } catch (error) {
-      toast.error(error.message);
+  const handleExport = async (type) => {
+    if (type === "XLS") {
+      try {
+        await fetchMissionXLS(selectedIds);
+        setSelectedIds([]);
+      } catch (error) {
+        toast.error(error.message);
+      }
     }
-  }
-};
+  };
 
   const onDelete = (content) => {
     console.log(content);
@@ -340,7 +338,6 @@ const handleExport = async (type) => {
               <Option value="quarterly">Trimestriel</Option>
             </Select>
 
-            
             <Select
               defaultValue="all"
               style={{ width: 120, marginRight: "8px" }}

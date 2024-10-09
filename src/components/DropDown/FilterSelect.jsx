@@ -1,9 +1,16 @@
-import React from 'react';
-import { Select } from 'antd';
+import React from "react";
+import { Select } from "antd";
 
 const { Option } = Select;
 
-const FilterSelect = ({ defaultValue = "all", onChange, data, isLoading, isError ,tittle}) => {
+const FilterSelect = ({
+  defaultValue = "all",
+  onChange,
+  data,
+  isLoading,
+  isError,
+  tittle,
+}) => {
   if (isLoading) return <div>Loading data...</div>;
   if (isError) return <div>Error loading data.</div>;
 
@@ -14,7 +21,7 @@ const FilterSelect = ({ defaultValue = "all", onChange, data, isLoading, isError
       onChange={onChange}
     >
       <Option value="all">{tittle}</Option>
-      {data.map(value => (
+      {data.map((value) => (
         <Option key={value.id} value={value.name}>
           {value.name}
         </Option>
