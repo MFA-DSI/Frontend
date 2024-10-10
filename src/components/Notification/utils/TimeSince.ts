@@ -24,7 +24,7 @@ export const getTimeSince = (creationDatetime) => {
 };
 
 export const convertToJSDate = (localDateOrTime) => {
-  if (localDateOrTime.length === 10) {
+  if (localDateOrTime === 10) {
     return moment(localDateOrTime + "T00:00:00");
   }
   return moment(localDateOrTime);
