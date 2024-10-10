@@ -9,8 +9,6 @@ export const NotificationProvider = ({ children }) => {
     updateNotificationViewStatus,isLoading,isError} = useNotification();
 
     const getAllNotification = ()=>{
-      console.log(fetchAllNotification);
-      
         return fetchAllNotification.data
     }
 

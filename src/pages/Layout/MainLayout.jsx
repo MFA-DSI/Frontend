@@ -1,11 +1,11 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useState } from "react";
 import {
   BarChartOutlined,
   CloudOutlined,
   UserOutlined,
   LogoutOutlined,
+  MenuOutlined,
 } from "@ant-design/icons";
-import { RiNotification3Fill } from "react-icons/ri";
 import { Layout, Menu, theme, Skeleton, message, Button } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import SearchBar from "../../components/SearchBar/SearchBar";
@@ -16,7 +16,6 @@ const { Header, Content, Sider } = Layout;
 
 const siderStyle = {
   height: "100vh",
-  width: "300px",
   position: "fixed",
   top: 0,
   bottom: 0,
@@ -32,6 +31,8 @@ const MainLayout = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const [collapsed, setCollapsed] = useState(false); // Gérer l'état du burger menu
+
   const handleLogout = () => {
     sessionStorage.clear();
     message.info("vous êtes déconnecté");
@@ -41,8 +42,8 @@ const MainLayout = ({ children }) => {
   const items = [
     {
       key: "/",
-      icon: React.createElement(BarChartOutlined),
-      label: (
+      icon: <BarChartOutlined />,
+      label: !collapsed && (
         <Link className="menu-item-link" to="/">
           Toutes les directions
         </Link>
@@ -50,8 +51,8 @@ const MainLayout = ({ children }) => {
     },
     {
       key: "/myDirection",
-      icon: React.createElement(CloudOutlined),
-      label: (
+      icon: <CloudOutlined />,
+      label: !collapsed && (
         <Link className="menu-item-link" to="/myDirection">
           Ma direction
         </Link>
@@ -59,8 +60,8 @@ const MainLayout = ({ children }) => {
     },
     {
       key: "/notifications",
-      icon: React.createElement(RiNotification3Fill),
-      label: (
+      icon: <UserOutlined />,
+      label: !collapsed && (
         <Link className="menu-item-link" to="/notifications">
           Notification(s)
         </Link>
@@ -68,8 +69,8 @@ const MainLayout = ({ children }) => {
     },
     {
       key: "/profile",
-      icon: React.createElement(UserOutlined),
-      label: (
+      icon: <UserOutlined />,
+      label: !collapsed && (
         <Link className="menu-item-link" to="/profile">
           Mon profil
         </Link>
@@ -80,7 +81,18 @@ const MainLayout = ({ children }) => {
   return (
     <Layout hasSider>
       <HackWebProviders>
-        <Sider style={siderStyle}>
+        <Sider
+          style={siderStyle}
+          collapsible
+          collapsed={collapsed}
+          onCollapse={(value) => setCollapsed(value)}
+        >
+          <Button
+            type="text"
+            icon={<MenuOutlined />} 
+            onClick={() => setCollapsed(!collapsed)}
+            style={{ fontSize: "20px", width: "100%", marginTop: "10px" }}
+          />
           <Menu
             theme="dark"
             mode="inline"
@@ -88,26 +100,11 @@ const MainLayout = ({ children }) => {
               fontFamily: "Source Sans Pro",
               fontSize: "15px",
               flex: 1,
-              marginTop: "15vh",
+              marginTop: "10vh",
             }}
             selectedKeys={[location.pathname]}
             items={items}
           />
-          <Menu
-            theme="dark"
-            mode="inline"
-            style={{ marginTop: "45vh", textAlign: "center" }} // Align the logout button to the bottom
-          >
-            <Menu.Item
-              key="logout"
-              icon={<LogoutOutlined />}
-              danger
-              onClick={handleLogout}
-              style={{ textAlign: "center" }}
-            >
-              Se déconnecter
-            </Menu.Item>
-          </Menu>
         </Sider>
         <Header
           style={{
@@ -137,10 +134,17 @@ const MainLayout = ({ children }) => {
             <SearchBar />
           </div>
 
-          <Button icon={<RiNotification3Fill />} />
+          <Button
+            type="primary"
+            icon={<LogoutOutlined />}
+            onClick={handleLogout}
+            danger
+          >
+            Déconnexion
+          </Button>
         </Header>
 
-        <Layout style={{ marginLeft: 200 }}>
+        <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
           <Content style={{ overflow: "initial", marginTop: 64 }}>
             <div
               style={{

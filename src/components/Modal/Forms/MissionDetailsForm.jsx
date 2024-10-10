@@ -66,7 +66,7 @@ export const TaskForm = ({ tasks, setTasks }) => {
         />
       </Form.Item>
       <Button type="primary" onClick={handleAddTask}>
-        Ajouter une Tâche
+        Enregister cette Tâche
       </Button>
       <ul>
         {tasks.map((task, index) => (
@@ -112,7 +112,7 @@ export const NextTaskForm = ({ nextTasks, setNextTasks }) => {
         />
       </Form.Item>
       <Button type="primary" onClick={handleAddNextTask}>
-        Ajouter une Tâche Prochaine
+        Enregistrer cette Tâche Prochaine
       </Button>
       <ul>
         {nextTasks.map((nextTask, index) => (
@@ -203,13 +203,13 @@ export const PerformanceIndicatorForm = ({
         onClick={handleAddIndicator}
         disabled={!!errorMessage}
       >
-        Ajouter un indicateur
+        Enregistrer cette indicateur
       </Button>
       <ul>
         {performanceIndicators.map((indicator, index) => (
           <li key={index}>
             {indicator.indicators} - {indicator.realization} (
-            {indicator.realizationType})
+            {indicator.realizationType === "number"? "nombre" : "pourcentage"})
           </li>
         ))}
       </ul>

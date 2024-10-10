@@ -48,7 +48,7 @@ const AddActivityModal = ({ visible, onCancel }) => {
   const prev = () => setCurrentStep(currentStep - 1);
 
   const addAnotherActivity = () => {
-    // Ajouter la nouvelle activité à la liste d'activités existantes
+    
     setActivity((prevActivityList) => [
       ...prevActivityList,
       {
@@ -142,100 +142,100 @@ const AddActivityModal = ({ visible, onCancel }) => {
   };
 
   const steps = [
-    {
-      title: "Choix de la mission",
-      content: (
-        <Form>
-          <Form.Item label="Type de mission">
+  {
+    title: "Choix de la mission et des services",
+    content: (
+      <Form>
+        {/* Sélection du type de mission */}
+        <Form.Item label="Type de mission">
+          <Select
+            value={missionType}
+            onChange={(value) => {
+              setMissionType(value);
+              setSelectedMission(null); 
+              setNewMissionDescription(""); 
+            }}
+            placeholder="Sélectionner un type de mission"
+          >
+            <Option value="existing">Mission existante</Option>
+            <Option value="new">Nouvelle mission</Option>
+          </Select>
+        </Form.Item>
+
+        {/* Sélectionner une mission si existante */}
+        {missionType === "existing" && (
+          <Form.Item label="Sélectionner une mission">
             <Select
-              value={missionType}
-              onChange={(value) => {
-                setMissionType(value);
-                setSelectedMission(null); // Reset when type changes
-                setNewMissionDescription(""); // Reset new mission description
-              }}
-              placeholder="Sélectionner un type de mission"
+              value={selectedMission}
+              onChange={(value) => setSelectedMission(value)}
+              placeholder="Sélectionner une mission existante"
             >
-              <Option value="existing">Mission existante</Option>
-              <Option value="new">Nouvelle mission</Option>
+              {existingMissions?.map((mission) => (
+                <Option key={mission.id} value={mission.description}>
+                  {mission.description}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
+        )}
 
-          {missionType === "existing" && (
-            <Form.Item label="Sélectionner une mission">
-              <Select
-                value={selectedMission}
-                onChange={(value) => setSelectedMission(value)}
-                placeholder="Sélectionner une mission existante"
-              >
-                {existingMissions?.map((mission) => (
-                  <Option key={mission.id} value={mission.description}>
-                    {mission.description}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-          )}
-
-          {missionType === "new" && (
-            <Form.Item label="Nouvelle mission">
-              <Input
-                value={newMissionDescription}
-                onChange={(e) => setNewMissionDescription(e.target.value)}
-                placeholder="Entrer la description de la nouvelle mission"
-              />
-            </Form.Item>
-          )}
-        </Form>
-      ),
-    },
-    {
-      title: "Choix des services rattachés",
-      content: (
-        <Form>
-          <Form.Item label="Services rattachés">
-            <Select
-              value={selectedServices}
-              onChange={(value) => setSelectedServices(value)}
-              placeholder="Sélectionner les services rattachés"
-            >
-              {!isLoading &&
-                existingService.map((service) => (
-                  <Option key={service.id} value={service.id}>
-                    {service.name}
-                  </Option>
-                ))}
-            </Select>
+        {/* Description de la nouvelle mission */}
+        {missionType === "new" && (
+          <Form.Item label="Nouvelle mission">
+            <Input
+              value={newMissionDescription}
+              onChange={(e) => setNewMissionDescription(e.target.value)}
+              placeholder="Entrer la description de la nouvelle mission"
+            />
           </Form.Item>
-        </Form>
-      ),
-    },
-    {
-      title: "Informations sur l'activité",
-      content: (
-        <ActivityDetailsForm activity={activity} setActivity={setActivity} />
-      ),
-    },
-    {
-      title: "Ajouter des tâches",
-      content: <TaskForm tasks={tasks} setTasks={setTasks} />,
-    },
-    {
-      title: "Ajouter des prochaines tâches",
-      content: (
-        <NextTaskForm nextTasks={nextTasks} setNextTasks={setNextTasks} />
-      ),
-    },
-    {
-      title: "Indicateurs de performance",
-      content: (
-        <PerformanceIndicatorForm
-          performanceIndicators={performanceIndicators}
-          setPerformanceIndicators={setPerformanceIndicators}
-        />
-      ),
-    },
-  ];
+        )}
+
+        {/* Sélection des services rattachés */}
+        <Form.Item label="Services rattachés">
+          <Select
+            value={selectedServices}
+            onChange={(value) => setSelectedServices(value)}
+            placeholder="Sélectionner les services rattachés"
+            
+          >
+            {!isLoading &&
+              existingService.map((service) => (
+                <Option key={service.id} value={service.id}>
+                  {service.name}
+                </Option>
+              ))}
+          </Select>
+        </Form.Item>
+      </Form>
+    ),
+  },
+  {
+    title: "Informations sur l'activité",
+    content: (
+      <ActivityDetailsForm activity={activity} setActivity={setActivity} />
+    ),
+  },
+  {
+    title: "Ajouter des tâches",
+    content: <TaskForm tasks={tasks} setTasks={setTasks} />,
+  },
+  {
+    title: "Ajouter des prochaines tâches",
+    content: (
+      <NextTaskForm nextTasks={nextTasks} setNextTasks={setNextTasks} />
+    ),
+  },
+  {
+    title: "Indicateurs de performance",
+    content: (
+      <PerformanceIndicatorForm
+        performanceIndicators={performanceIndicators}
+        setPerformanceIndicators={setPerformanceIndicators}
+      />
+    ),
+  },
+];
+
 
   return (
     <Modal
