@@ -8,53 +8,19 @@ import {
 } from "@ant-design/icons";
 
 import { convertToJSDate, getTimeSince } from "./utils/TimeSince";
+import { useNotification } from "../../hooks";
+import { useNotificationContext } from "../../providers/context/NotificationContext";
+
 
 const { Title, Text } = Typography;
 
-const notifications = [
-  {
-    id: 1,
-    title: "Nouvelle mission assignée",
-    description: "Une nouvelle mission vous a été assignée par la direction.",
-    type: "mission",
-    isNew: true,
-    creationDatetime: "2024-10-08T12:30:00",
-    viewStatus: false,
-  },
-  {
-    id: 2,
-    title: "Recommandation à suivre",
-    description: "Une nouvelle recommandation a été ajoutée pour vous.",
-    type: "recommendation",
-    isNew: true,
-    creationDatetime: "2024-10-08T12:30:00",
-    viewStatus: true,
-  },
-  {
-    id: 3,
-    title: "Demande de rapport trimestriel",
-    description: "Veuillez soumettre le rapport trimestriel pour votre équipe.",
-    type: "report",
-    isNew: false,
-    creationDatetime: "2024-10-09T06:43:00",
-    viewStatus: false,
-  },
-  {
-    id: 4,
-    title: "Nouvelle mission ajoutée",
-    description: "Une nouvelle mission a été ajoutée à votre tableau de bord.",
-    type: "mission",
-    isNew: false,
-    creationDatetime: "2025-08-08T12:30:00",
-    viewStatus: true,
-  },
-];
+
+
 
 const getIconByType = (type) => {
   switch (type) {
     case "mission":
       return <PlusCircleOutlined style={{ color: "#1890ff" }} />;
-      return <FileTextOutlined style={{ color: "#fa541c" }} />;
     case "recommendation":
       return <BulbOutlined style={{ color: "#52c41a" }} />;
     default:
@@ -63,14 +29,25 @@ const getIconByType = (type) => {
 };
 
 const NotificationCardDynamicIcons = () => {
+
+  const {fetchNotifications} = useNotificationContext()
+  console.log(fetchNotifications);
+  
+const backendNotifications = fetchNotifications;
+
+
+  const notifications = backendNotifications.map((notification) => ({
+    ...notification,
+    isNew: !notification.viewStatus, 
+  }));
+
   const [notificationTimes, setNotificationTimes] = useState(
     notifications.map((notification) => ({
       id: notification.id,
       timeSince: getTimeSince(convertToJSDate(notification.creationDatetime)),
-    })),
+    }))
   );
 
-  // Met à jour le temps écoulé toutes les minutes
   useEffect(() => {
     const interval = setInterval(() => {
       const updatedTimes = notifications.map((notification) => ({
@@ -78,10 +55,10 @@ const NotificationCardDynamicIcons = () => {
         timeSince: getTimeSince(convertToJSDate(notification.creationDatetime)),
       }));
       setNotificationTimes(updatedTimes);
-    }, 60000); // 60 secondes
+    }, 60000); 
 
     return () => clearInterval(interval);
-  }, []);
+  }, [notifications]);
 
   return (
     <Card
@@ -138,7 +115,7 @@ const NotificationCardDynamicIcons = () => {
                 avatar={
                   <Badge dot={notification.isNew} offset={[0, 5]}>
                     <Avatar
-                      icon={getIconByType(notification.type)}
+                      icon={getIconByType(notification.status)}
                       size={36}
                       style={{ backgroundColor: "#f0f2f5" }}
                     />
@@ -153,7 +130,7 @@ const NotificationCardDynamicIcons = () => {
                         color: notification.viewStatus ? "#8c8c8c" : "#000000",
                       }}
                     >
-                      {notification.title}
+                      {notification.description}
                     </Text>
                   </Space>
                 }

@@ -1,8 +1,7 @@
 import { toast } from "react-toastify";
-import environment from "../conf/environment"; // Adjust the path as necessary
+import environment from "../conf/environment"; 
 import { CreateMission, Service } from "../types";
 
-// Define the type for Activity
 interface Mission {
   id: string;
   description: string;
@@ -26,7 +25,7 @@ interface MissionName {
   id: string;
   name: string;
 }
-// Fetching all missions from an API
+
 export const fetchMissions = async (): Promise<Mission[]> => {
   try {
     const url =
