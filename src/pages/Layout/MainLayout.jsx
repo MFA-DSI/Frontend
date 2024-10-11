@@ -137,7 +137,7 @@ const MainLayout = ({ children }) => {
             type="text"
             icon={<MenuOutlined />} // Icône du menu burger
             onClick={showDrawer}
-            style={{ fontSize: "20px", display: "none" }} // Masquer par défaut
+            style={{ fontSize: "20px" }} 
             className="burger-menu" // Pour les styles responsives
           />
           <div style={{ display: "flex", alignItems: "center" }}>

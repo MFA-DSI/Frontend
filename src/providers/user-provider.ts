@@ -1,24 +1,27 @@
-import axios, { AxiosError } from "axios";
 import { User } from "../types/User";
-import { handleAxiosError } from "../lib/handleAxiosError";
-import { AuthReponse } from "../types/AuthReponse";
+import { handleAxiosError } from "../lib/handleAxiosError"; // You might want to rename this to handleFetchError or modify it to handle general errors
 
 const API_URL: string = import.meta.env.VITE_API_URL;
 
-export const signInProvider = {
-  save: async (user: User): Promise<void> => {
-    try {
-      const response = await axios.post(`${API_URL}/users/signup`, user);
-      if (response.status !== 200) {
-        Promise.reject(response.statusText);
+export const getUserInformation = async (id: string): Promise<User | void> => {
+  try {
+    const response = await fetch(`${API_URL}/user/information?id=${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
       }
-      const token: AuthReponse = response.data;
-      sessionStorage.setItem("token", token.token.accessToken);
-      sessionStorage.setItem("directionId", token.directionId);
-      sessionStorage.setItem("userId", token.userId);
-      Promise.resolve();
-    } catch (error) {
-      handleAxiosError(error as AxiosError);
+    });
+
+    if (!response.ok) {
+      return Promise.reject(response.statusText);
     }
-  },
+
+    const data = await response.json();
+    console.log("data ",data);
+    
+    return data;
+  } catch (error) {
+    // Replace handleAxiosError with a more general error handler if necessary
+    handleAxiosError(error);
+  }
 };
