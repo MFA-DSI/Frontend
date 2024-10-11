@@ -2,35 +2,17 @@ import React, { useState } from "react";
 import { Form, Input, Button, Typography, Row, Col, Card, Avatar, Table } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useDirectionsContext } from "../../providers";
+import { toFullName } from "./utils/nameToFullName";
 
 export const ProfileComponent = () => {
-  const { fetchActualUserInformation} = useDirectionsContext();
+  const { fetchActualUserInformation, fetchAllDirectionResponsibles} = useDirectionsContext();
   const userInformation = fetchActualUserInformation
   const [userInfo, setUserInfo] = useState(userInformation);
 
   const [isEditing, setIsEditing] = useState(false);
 
   // Sample data for other users
-  const otherUsers = [
-    {
-      key: '1',
-      grade: 'LTN',
-      fullName: 'John Doe',
-      function: 'Développeur',
-    },
-    {
-      key: '2',
-      grade: 'CDT',
-      fullName: 'Jane Smith',
-      function: 'Chef de Projet',
-    },
-    {
-      key: '3',
-      grade: 'COL',
-      fullName: 'Alice Johnson',
-      function: 'Analyste',
-    },
-  ];
+  const otherUsers = fetchAllDirectionResponsibles
 
   const columns = [
     {
@@ -43,7 +25,11 @@ export const ProfileComponent = () => {
       title: 'Nom et Prénom',
       dataIndex: 'fullName',
       key: 'fullName',
-      render: (text) => <Typography.Text>{text}</Typography.Text>,
+      render: (_, record) => (
+        <Typography.Text>
+          {toFullName(record.firstName, record.lastName)}
+        </Typography.Text>
+      ),
     },
     {
       title: 'Fonction',
@@ -64,7 +50,7 @@ export const ProfileComponent = () => {
 
   return (
     <div style={{ maxWidth: "100%", padding: "24px" }}>
-      {/* User Profile Card */}
+     
       <Card
         style={{
           width: "100%",

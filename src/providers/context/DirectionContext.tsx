@@ -10,6 +10,7 @@ export const DirectionProvider = ({ children }) => {
     fetchServices,
     fetchDirections,
     fetchUserInformation,
+    fetchAllResponsibles,
     isLoading,
     isError,
   } = useDirections();
@@ -21,6 +22,7 @@ export const DirectionProvider = ({ children }) => {
         fetchAllService: fetchServices.data,
         fetchActualDirectionName: fetchActualDirection,
         fetchActualUserInformation: fetchUserInformation,
+        fetchAllDirectionResponsibles: fetchAllResponsibles,
         isLoading: isLoading,
         isError: isError,
       }}

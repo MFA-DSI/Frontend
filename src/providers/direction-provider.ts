@@ -45,6 +45,5 @@ export const fetchDirectionName = async () => {
 
   const data: Direction = await response.json();
   console.log(data);
-
   return data;
 };

@@ -6,11 +6,15 @@ import {
   fetchDirectionServices,
 } from "../providers/direction-provider";
 import { useQueryClient } from "react-query";
-import { getUserInformation } from "../providers";
+import { getDirectionResponsiblesInformation, getUserInformation } from "../providers";
 
 export const useDirections = () => {
 
-  const userId = sessionStorage.getItem("userId")
+
+  // TODO: change this from zustand 
+  const userId = sessionStorage.getItem("userId");
+  const directionId = sessionStorage.getItem("directionId");
+
   const fetchAllDirections = useQuery({
     queryKey: ["directions"],
     queryFn: fetchDirections,
@@ -30,12 +34,17 @@ export const useDirections = () => {
     queryKey: ["user"],
     queryFn : ()=>  getUserInformation(userId || "")
   })
+  const fetchAllDirectionResponsible = useQuery({
+    queryKey : ["responsible"],
+    queryFn : ()=> getDirectionResponsiblesInformation(directionId ||"")
+  })
 
   return {
     fetchDirections: fetchAllDirections,
     fetchServices: fetchServiceByDirectionId,
     fetchActualDirection: fetchActualDirectionName,
     fetchUserInformation : fetchDirectionUserInformation.data,
+    fetchAllResponsibles: fetchAllDirectionResponsible.data,
     isLoading: fetchAllDirections.isLoading,
     isError: fetchAllDirections.isError,
   };
