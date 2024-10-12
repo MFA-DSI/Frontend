@@ -11,11 +11,7 @@ import { convertToJSDate, getTimeSince } from "./utils/TimeSince";
 import { useNotification } from "../../hooks";
 import { useNotificationContext } from "../../providers/context/NotificationContext";
 
-
 const { Title, Text } = Typography;
-
-
-
 
 const getIconByType = (type) => {
   switch (type) {
@@ -29,23 +25,21 @@ const getIconByType = (type) => {
 };
 
 const NotificationCardDynamicIcons = () => {
-
-  const {fetchNotifications} = useNotificationContext()
+  const { fetchNotifications } = useNotificationContext();
   console.log(fetchNotifications);
-  
-const backendNotifications = fetchNotifications;
 
+  const backendNotifications = fetchNotifications;
 
   const notifications = backendNotifications.map((notification) => ({
     ...notification,
-    isNew: !notification.viewStatus, 
+    isNew: !notification.viewStatus,
   }));
 
   const [notificationTimes, setNotificationTimes] = useState(
     notifications.map((notification) => ({
       id: notification.id,
       timeSince: getTimeSince(convertToJSDate(notification.creationDatetime)),
-    }))
+    })),
   );
 
   useEffect(() => {
@@ -55,7 +49,7 @@ const backendNotifications = fetchNotifications;
         timeSince: getTimeSince(convertToJSDate(notification.creationDatetime)),
       }));
       setNotificationTimes(updatedTimes);
-    }, 60000); 
+    }, 60000);
 
     return () => clearInterval(interval);
   }, [notifications]);

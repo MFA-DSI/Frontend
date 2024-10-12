@@ -25,7 +25,7 @@ export const fetchNotification = async (): Promise<Notification[]> => {
     return data;
   } catch (error) {
     console.error("Failed to fetch notifications", error);
-    throw error; 
+    throw error;
   }
 };
 
@@ -39,19 +39,21 @@ export const updateNotificationStatus = async (id: string) => {
   try {
     const url = new URL(`${API_URL}/direction/notification/update`);
     url.searchParams.append("id", id);
-    
+
     const response = await fetch(url.toString(), {
       method: "PUT",
     });
 
     if (!response.ok) {
-      throw new Error(`Error updating notification status: ${response.statusText}`);
+      throw new Error(
+        `Error updating notification status: ${response.statusText}`,
+      );
     }
 
     const data: Notification = await response.json();
     return data;
   } catch (error) {
     console.error("Failed to update notification status", error);
-    throw error;  // Re-throw the error to be handled by the calling function
+    throw error; // Re-throw the error to be handled by the calling function
   }
 };

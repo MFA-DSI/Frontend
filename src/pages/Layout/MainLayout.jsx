@@ -1,4 +1,3 @@
-
 import React, { Suspense, useState } from "react";
 import {
   BarChartOutlined,
@@ -23,7 +22,7 @@ const siderStyle = {
   bottom: 0,
   display: "flex",
   flexDirection: "column",
-  padding: "20px 0", 
+  padding: "20px 0",
 };
 
 const MainLayout = ({ children }) => {
@@ -34,8 +33,8 @@ const MainLayout = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [collapsed, setCollapsed] = useState(false); 
-  const [visible, setVisible] = useState(false); 
+  const [collapsed, setCollapsed] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   const handleLogout = () => {
     sessionStorage.clear();
@@ -137,7 +136,7 @@ const MainLayout = ({ children }) => {
             type="text"
             icon={<MenuOutlined />} // Icône du menu burger
             onClick={showDrawer}
-            style={{ fontSize: "20px" }} 
+            style={{ fontSize: "20px" }}
             className="burger-menu" // Pour les styles responsives
           />
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -171,11 +170,7 @@ const MainLayout = ({ children }) => {
           onClose={closeDrawer}
           visible={visible}
         >
-          <Menu
-            theme="light"
-            mode="inline"
-            selectedKeys={[location.pathname]}
-          >
+          <Menu theme="light" mode="inline" selectedKeys={[location.pathname]}>
             {items.map((item) => (
               <Menu.Item
                 key={item.key}
@@ -193,7 +188,12 @@ const MainLayout = ({ children }) => {
                 </Link>
               </Menu.Item>
             ))}
-            <Menu.Item key="logout" icon={<LogoutOutlined />} danger onClick={handleLogout}>
+            <Menu.Item
+              key="logout"
+              icon={<LogoutOutlined />}
+              danger
+              onClick={handleLogout}
+            >
               Se déconnecter
             </Menu.Item>
           </Menu>

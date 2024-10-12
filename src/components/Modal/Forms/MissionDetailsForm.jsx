@@ -209,7 +209,7 @@ export const PerformanceIndicatorForm = ({
         {performanceIndicators.map((indicator, index) => (
           <li key={index}>
             {indicator.indicators} - {indicator.realization} (
-            {indicator.realizationType === "number"? "nombre" : "pourcentage"})
+            {indicator.realizationType === "number" ? "nombre" : "pourcentage"})
           </li>
         ))}
       </ul>

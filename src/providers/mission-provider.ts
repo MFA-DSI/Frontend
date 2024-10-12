@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import environment from "../conf/environment"; 
+import environment from "../conf/environment";
 import { CreateMission, Service } from "../types";
 
 interface Mission {

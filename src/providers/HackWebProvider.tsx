@@ -7,13 +7,12 @@ import { NotificationProvider } from "./context/NotificationContext";
 
 export const HackWebProviders = ({ children }) => (
   <NotificationProvider>
-      <DirectionProvider>
-    <ActivitieProvider>
-      <FilesProvider>
-        <MissionProvider>{children}</MissionProvider>
-      </FilesProvider>
-    </ActivitieProvider>
-  </DirectionProvider>
+    <DirectionProvider>
+      <ActivitieProvider>
+        <FilesProvider>
+          <MissionProvider>{children}</MissionProvider>
+        </FilesProvider>
+      </ActivitieProvider>
+    </DirectionProvider>
   </NotificationProvider>
-  
 );

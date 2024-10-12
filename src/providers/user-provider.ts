@@ -4,22 +4,20 @@ import { Direction } from "readline";
 
 const API_URL: string = import.meta.env.VITE_API_URL;
 
-
-
 interface DirectionResponsible {
-  id: string,
-  firstName: string,
-  lastName: string,
-  grade: string,
-  function : string
+  id: string;
+  firstName: string;
+  lastName: string;
+  grade: string;
+  function: string;
 }
 export const getUserInformation = async (id: string): Promise<User | void> => {
   try {
     const response = await fetch(`${API_URL}/user/information?id=${id}`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json'
-      }
+        "Content-Type": "application/json",
+      },
     });
 
     if (!response.ok) {
@@ -27,29 +25,34 @@ export const getUserInformation = async (id: string): Promise<User | void> => {
     }
 
     const data = await response.json();
-    
+
     return data;
   } catch (error) {
     handleAxiosError(error);
   }
 };
 
-export const getDirectionResponsiblesInformation = async (id: string): Promise<DirectionResponsible | void> => {
+export const getDirectionResponsiblesInformation = async (
+  id: string,
+): Promise<DirectionResponsible | void> => {
   try {
-    const response = await fetch(`${API_URL}/direction/responsible?directionId=${id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    const response = await fetch(
+      `${API_URL}/direction/responsible?directionId=${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
 
     if (!response.ok) {
       return Promise.reject(response.statusText);
     }
 
     const data = await response.json();
-    console.log("data ",data);
-    
+    console.log("data ", data);
+
     return data;
   } catch (error) {
     handleAxiosError(error);
