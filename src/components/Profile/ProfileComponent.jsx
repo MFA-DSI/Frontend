@@ -15,6 +15,7 @@ export const ProfileComponent = () => {
   const [isUserModalVisible, setIsUserModalVisible] = useState(false);
   const [isResponsableModalVisible, setIsResponsableModalVisible] =
     useState(false);
+
   const columns = [
     {
       title: "Grade",
@@ -51,45 +52,63 @@ export const ProfileComponent = () => {
         }}
       >
         <Row align="middle" gutter={16}>
-          <Col span={6}>
+          {/* Left side: Avatar */}
+          <Col span={4} style={{ textAlign: "center" }}>
             <Avatar
               size={100}
               icon={<UserOutlined />}
               style={{ backgroundColor: "#87d068" }}
             />
           </Col>
-          <Col span={18}>
-            <Row>
-              <Col span={12}>
-                <Typography.Text strong>Grade:</Typography.Text>{" "}
-                {userInformation.grade}
-              </Col>
-              <Col span={12}>
-                <Typography.Title level={4} style={{ marginBottom: 0 }}>
-                  {toFullName(
-                    userInformation.firstname,
-                    userInformation.lastname,
-                  )}
-                </Typography.Title>
-              </Col>
-            </Row>
-            <Row gutter={16} style={{ marginTop: "8px" }}>
-              <Col span={12}>
-                <Typography.Text strong>Email:</Typography.Text>{" "}
-                {userInformation.mail}
-              </Col>
-              <Col span={12}>
-                <Typography.Text strong>Téléphone:</Typography.Text>{" "}
-                {userInformation.phoneNumber}
-              </Col>
-            </Row>
-            <Row style={{ marginTop: "8px" }}>
-              <Col span={24}>
-                <Typography.Text strong>Direction:</Typography.Text>{" "}
-                {userInformation.direction}
-              </Col>
-            </Row>
-          </Col>
+
+          {/* Right side: User Details */}
+          <Col span={20}>
+  <Row>
+    <Col span={12} style={{ display: "flex", flexDirection: "column" }}>
+      <div style={{ display: "flex", marginBottom: "8px", alignItems: "center" }}>
+        <Typography.Text strong style={{ minWidth: "150px", textAlign: "right", marginRight: "10px" }}>
+          Grade:
+        </Typography.Text>
+        <Typography.Text>{userInformation.grade}</Typography.Text>
+      </div>
+      <div style={{ display: "flex", marginBottom: "8px", alignItems: "center" }}>
+        <Typography.Text strong style={{ minWidth: "150px", textAlign: "right", marginRight: "10px" }}>
+          Nom:
+        </Typography.Text>
+        <Typography.Text>
+          {userInformation.lastname} {userInformation.firstname}
+        </Typography.Text>
+      </div>
+      <div style={{ display: "flex", marginBottom: "8px", alignItems: "center" }}>
+        <Typography.Text strong style={{ minWidth: "150px", textAlign: "right", marginRight: "10px" }}>
+          Email:
+        </Typography.Text>
+        <Typography.Text>{userInformation.mail}</Typography.Text>
+      </div>
+    </Col>
+    <Col span={12} style={{ display: "flex", flexDirection: "column" }}>
+      <div style={{ display: "flex", marginBottom: "8px", alignItems: "center" }}>
+        <Typography.Text strong style={{ minWidth: "150px", textAlign: "right", marginRight: "10px" }}>
+          Direction:
+        </Typography.Text>
+        <Typography.Text>{userInformation.direction}</Typography.Text>
+      </div>
+      <div style={{ display: "flex", marginBottom: "8px", alignItems: "center" }}>
+        <Typography.Text strong style={{ minWidth: "100px", textAlign: "left", marginRight: "4px" }}>
+          Téléphone (WhatsApp):
+        </Typography.Text>
+        <Typography.Text>{userInformation.phoneNumbers}</Typography.Text>
+      </div>
+      <div style={{ display: "flex", marginBottom: "8px", alignItems: "center" }}>
+        <Typography.Text strong style={{ minWidth: "150px", textAlign: "right", marginRight: "10px" }}>
+          Fonction:
+        </Typography.Text>
+        <Typography.Text>{userInformation.function}</Typography.Text>
+      </div>
+    </Col>
+  </Row>
+</Col>
+
         </Row>
       </Card>
 
@@ -115,13 +134,11 @@ export const ProfileComponent = () => {
         <Table columns={columns} dataSource={otherUsers} rowKey="id" />
       </Card>
 
-      
+      {/* Modals */}
       <AddUserModal
         visible={isUserModalVisible}
         onCancel={() => setIsUserModalVisible(false)}
       />
-
-   
       <AddResponsableDirectionModal
         visible={isResponsableModalVisible}
         onCancel={() => setIsResponsableModalVisible(false)}

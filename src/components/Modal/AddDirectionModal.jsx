@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input, Select, Modal } from "antd";
+import { Form, Input, Select, Modal, Button } from "antd";
 
 const directionsOptions = [
   { value: "Direction 1", label: "Direction 1" },
@@ -29,7 +29,14 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
         form.resetFields();
         onCancel(); 
       }}
-      onOk={handleSave}
+      footer={[
+        <Button key="back" onClick={onCancel}>
+          Annuler
+        </Button>,
+        <Button key="submit" type="primary" onClick={handleSave}>
+          Enregistrer
+        </Button>,
+      ]}
       cancelText="Annuler"
     >
       <Form form={form} layout="vertical">
@@ -45,7 +52,7 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
           name="lastname"
           rules={[{ required: true, message: "Veuillez entrer un prénom" }]}
         >
-          <Input placeholder="Entrez le nom" />
+          <Input placeholder="Entrez le prénom" />
         </Form.Item>
 
         <Form.Item

@@ -1,4 +1,3 @@
-// App.js
 import React, { lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Routes, Route, useLocation } from "react-router-dom";
@@ -12,6 +11,7 @@ import MyDirection from "./pages/MyDirection/MyDirection";
 import Notification from "./pages/Notification/Notification";
 import Profile from "./pages/Profile/Profile";
 import LoginPage from "./pages/Login/LoginPage";
+import ReportMission from "./pages/ReportMission/ReportMission";
 
 const queryClient = new QueryClient();
 
@@ -26,17 +26,11 @@ function App() {
         <Route path="/" element={<AuthWrapper />}>
           <Route index element={<HomePage />} />
           <Route path="myDirection" element={<MyDirection />} />
+          <Route path="reports" element={<ReportMission />} />
           <Route path="notifications" element={<Notification />} />
           <Route path="profile" element={<Profile />} />
         </Route>
-        <Route
-          path="/login"
-          element={
-            <PrivateWrapper>
-              <LoginPage />
-            </PrivateWrapper>
-          }
-        />
+        <Route path="/login" element={<LoginPage />} /> 
       </Routes>
     </QueryClientProvider>
   );

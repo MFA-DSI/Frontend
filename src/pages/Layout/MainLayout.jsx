@@ -5,15 +5,16 @@ import {
   UserOutlined,
   NotificationOutlined,
   LogoutOutlined,
-  MenuOutlined,
+  DownOutlined, // Petite flèche pour le sous-menu
 } from "@ant-design/icons";
-import { Layout, Menu, theme, Skeleton, message, Button, Drawer } from "antd";
+import { Layout, Menu, Skeleton, message, Button, theme } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import { HackWebProviders } from "../../providers";
 import "./assets/index.css";
 
 const { Header, Content, Sider } = Layout;
+const { SubMenu } = Menu; // Utilisation du SubMenu pour les dropdowns
 
 const siderStyle = {
   height: "100vh",
@@ -32,22 +33,12 @@ const MainLayout = ({ children }) => {
 
   const location = useLocation();
   const navigate = useNavigate();
-
   const [collapsed, setCollapsed] = useState(false);
-  const [visible, setVisible] = useState(false);
 
   const handleLogout = () => {
     sessionStorage.clear();
     message.info("vous êtes déconnecté");
-    navigate("/login"); // Redirige vers la page de login
-  };
-
-  const showDrawer = () => {
-    setVisible(true);
-  };
-
-  const closeDrawer = () => {
-    setVisible(false);
+    navigate("/login");
   };
 
   const items = [
@@ -60,10 +51,24 @@ const MainLayout = ({ children }) => {
       key: "/myDirection",
       icon: <CloudOutlined />,
       label: "Ma direction",
+      children: [
+        {
+          key: "/myDirection",
+          label: "Listes des Missions",
+        },
+        {
+          key: "/reports",
+          label: "Générer un rapport",
+        },
+        {
+          key: "/myDirection/rapport-activite",
+          label: "Rapport d'Activité",
+        },
+      ],
     },
     {
       key: "/notifications",
-      icon: <UserOutlined />,
+      icon: <NotificationOutlined />,
       label: "Notification(s)",
     },
     {
@@ -76,7 +81,6 @@ const MainLayout = ({ children }) => {
   return (
     <Layout>
       <HackWebProviders>
-        {/* Sider pour les grands écrans */}
         <Sider
           style={siderStyle}
           collapsible
@@ -94,29 +98,51 @@ const MainLayout = ({ children }) => {
             }}
             selectedKeys={[location.pathname]}
           >
+            {/* Mapping des items du menu */}
             {items.map((item) => (
-              <Menu.Item
-                key={item.key}
-                icon={item.icon}
-                style={{
-                  margin: "10px 0", // Ajout de marge pour chaque item
-                  padding: "10px 15px", // Ajout de padding pour chaque item
-                  borderRadius: "8px", // Arrondi des coins
-                  display: "flex", // Utilisation de flex pour aligner l'icône et le label
-                  alignItems: "center", // Aligner les éléments au centre
-                }}
-              >
-                <Link className="menu-item-link" to={item.key}>
-                  <span style={{ marginLeft: collapsed ? "0" : "10px" }}>
-                    {item.label}
-                  </span>
-                </Link>
-              </Menu.Item>
+              item.children ? (
+                <SubMenu
+                  key={item.key}
+                  icon={item.icon}
+                  title={item.label}
+                  style={{
+                    margin: "10px 0",
+                   
+                    borderRadius: "8px",
+                  }}
+                >
+                  {/* Sous-menu pour la section "Ma direction" */}
+                  {item.children.map((subItem) => (
+                    <Menu.Item key={subItem.key}>
+                      <Link className="menu-item-link" to={subItem.key}>
+                        {subItem.label}
+                      </Link>
+                    </Menu.Item>
+                  ))}
+                </SubMenu>
+              ) : (
+                <Menu.Item
+                  key={item.key}
+                  icon={item.icon}
+                  style={{
+                    margin: "10px 0",
+                    padding: "10px 15px",
+                    borderRadius: "8px",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Link className="menu-item-link" to={item.key}>
+                    <span style={{ marginLeft: collapsed ? "0" : "10px" }}>
+                      {item.label}
+                    </span>
+                  </Link>
+                </Menu.Item>
+              )
             ))}
           </Menu>
         </Sider>
 
-        {/* Header avec le bouton burger et la SearchBar */}
         <Header
           style={{
             padding: 0,
@@ -132,13 +158,6 @@ const MainLayout = ({ children }) => {
             boxShadow: "0 3px 8px rgba(0, 0, 0, 0.1)",
           }}
         >
-          <Button
-            type="text"
-            icon={<MenuOutlined />} // Icône du menu burger
-            onClick={showDrawer}
-            style={{ fontSize: "20px" }}
-            className="burger-menu" // Pour les styles responsives
-          />
           <div style={{ display: "flex", alignItems: "center" }}>
             <img
               src="src/assets/logo.jpg"
@@ -152,7 +171,6 @@ const MainLayout = ({ children }) => {
             <SearchBar />
           </div>
 
-          {/* Bouton de déconnexion dans l'en-tête */}
           <Button
             type="primary"
             icon={<LogoutOutlined />}
@@ -163,43 +181,6 @@ const MainLayout = ({ children }) => {
           </Button>
         </Header>
 
-        {/* Drawer pour les petits écrans */}
-        <Drawer
-          title="Menu"
-          placement="left"
-          onClose={closeDrawer}
-          visible={visible}
-        >
-          <Menu theme="light" mode="inline" selectedKeys={[location.pathname]}>
-            {items.map((item) => (
-              <Menu.Item
-                key={item.key}
-                icon={item.icon}
-                style={{
-                  margin: "10px 0", // Ajout de marge pour chaque item
-                  padding: "10px 15px", // Ajout de padding pour chaque item
-                  borderRadius: "8px", // Arrondi des coins
-                  display: "flex", // Utilisation de flex pour aligner l'icône et le label
-                  alignItems: "center", // Aligner les éléments au centre
-                }}
-              >
-                <Link className="menu-item-link" to={item.key}>
-                  <span>{item.label}</span>
-                </Link>
-              </Menu.Item>
-            ))}
-            <Menu.Item
-              key="logout"
-              icon={<LogoutOutlined />}
-              danger
-              onClick={handleLogout}
-            >
-              Se déconnecter
-            </Menu.Item>
-          </Menu>
-        </Drawer>
-
-        {/* Contenu principal */}
         <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
           <Content style={{ overflow: "initial", marginTop: 64 }}>
             <div
