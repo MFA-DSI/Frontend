@@ -128,6 +128,19 @@ export const ProfileComponent = () => {
         <Button type="primary" onClick={() => setIsUserModalVisible(true)}>
           Ajouter un utilisateur
         </Button>
+        
+        {/* change to this on admin fixed : {
+          role ==="admin" &&(<Button
+            type="primary"
+            style={{ marginLeft: "8px" }}
+            onClick={() => setIsResponsableModalVisible(true)}
+          >
+            Ajouter un responsable direction
+          </Button>)
+        }      
+        
+        */}
+        
         <Button
           type="primary"
           style={{ marginLeft: "8px" }}

@@ -10,7 +10,6 @@ export const fetchDirections = async (): Promise<Direction[]> => {
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
-
   const data: Direction[] = await response.json();
   return data;
 };

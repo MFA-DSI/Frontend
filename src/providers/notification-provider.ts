@@ -1,8 +1,10 @@
+import { useAuthStore } from "../hooks";
 import { Notification } from "../types";
 
 const API_URL: string = import.meta.env.VITE_API_URL;
 
 export const fetchNotification = async (): Promise<Notification[]> => {
+
   const userId = sessionStorage.getItem("userId");
 
   if (!userId) {

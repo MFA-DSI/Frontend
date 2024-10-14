@@ -7,10 +7,13 @@ import {
   fetchMissionsName,
   updateMission,
 } from "../providers/mission-provider";
-
+import { useAuthStore } from "./useAuthStore";
 export const useMissions = () => {
   const queryClient = useQueryClient();
+  const direction = useAuthStore.getState().role;
 
+  console.log("directino ",direction );
+  
   const missionsQuery = useQuery({
     queryKey: ["missions"],
     queryFn: fetchMissions,
@@ -20,7 +23,8 @@ export const useMissions = () => {
     useQuery({
       queryKey: ["mission"],
       queryFn: () =>
-        getByDirectionId(sessionStorage.getItem("directionId") || ""),
+        getByDirectionId(sessionStorage.getItem("directionId") || "")
+      
     });
 
   const directionMissionsName = (id) =>

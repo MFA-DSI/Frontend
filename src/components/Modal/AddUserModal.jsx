@@ -9,7 +9,7 @@ const AddUserModal = ({ visible, onCancel, onSave }) => {
 
   const handlePersonnelTypeChange = (value) => {
     setPersonnelType(value);
-    setGradeOptions(Grade(value)); // Récupérer les grades selon le type de personnel
+    setGradeOptions(Grade(value));
   };
 
   const handleSave = () => {
