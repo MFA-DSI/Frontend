@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import environment from "../conf/environment";
 import { errorTranslations } from "./utils/translator/translator";
 import { useAuthStore } from "../hooks";
+import {jwtDecode} from "jwt-decode";
 
 export const authProvider = {
   login: async (auth: AuthLogin): Promise<void> => {
@@ -16,33 +17,44 @@ export const authProvider = {
           success: "Connexion réussie 👌",
         },
       );
-
+  
       if (response.status !== 200) {
         return Promise.reject(response.statusText);
       }
-
+  
       const token: AuthReponse = response.data;
+  
+   
+      const decodedToken: any = jwtDecode(token.token.accessToken);
+      const role = decodedToken.role ? decodedToken.role[0] : null;
+  
+
+      
+      
       sessionStorage.setItem("token", token.token.accessToken);
       sessionStorage.setItem("directionId", token.directionId);
       sessionStorage.setItem("userId", token.userId);
-
+      sessionStorage.setItem("role", role);
+  
+     
       useAuthStore.setState({
         directionId: token.directionId,
         userId: token.userId,
         token: token.token.accessToken,
+        role: role,  
       });
-
+      console.log("Updated auth store:", useAuthStore.getState());
       return Promise.resolve();
-    } catch (error) {
-      const errorCode = error.response.data.message;
-      const language = "mg";
-
+    } catch (error: any) {
+      const errorCode = error.response?.data?.message;
+      const language = "mg";  
+  
       const translatedError = errorTranslations[language][errorCode];
-
+  
       if (translatedError) {
         toast.error(translatedError);
       } else {
-        toast.error(`Erreur inconnue: ${error.response.data.message}`);
+        toast.error(`Erreur inconnue: ${errorCode}`);
       }
       return Promise.reject(error);
     }

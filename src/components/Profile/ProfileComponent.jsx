@@ -5,13 +5,16 @@ import { useDirectionsContext } from "../../providers";
 import { toFullName } from "./utils/nameToFullName";
 import AddUserModal from "../Modal/AddUserModal";
 import AddResponsableDirectionModal from "../Modal/AddDirectionModal";
+import { useAuthStore } from "../../hooks";
 
 export const ProfileComponent = () => {
   const { fetchActualUserInformation, fetchAllDirectionResponsibles } =
     useDirectionsContext();
   const userInformation = fetchActualUserInformation;
   const otherUsers = fetchAllDirectionResponsibles;
-
+  
+  const role = useAuthStore.getState().role;
+  
   const [isUserModalVisible, setIsUserModalVisible] = useState(false);
   const [isResponsableModalVisible, setIsResponsableModalVisible] =
     useState(false);
@@ -65,6 +68,8 @@ export const ProfileComponent = () => {
           <Col span={20}>
   <Row>
     <Col span={12} style={{ display: "flex", flexDirection: "column" }}>
+
+  
       <div style={{ display: "flex", marginBottom: "8px", alignItems: "center" }}>
         <Typography.Text strong style={{ minWidth: "150px", textAlign: "right", marginRight: "10px" }}>
           Grade:

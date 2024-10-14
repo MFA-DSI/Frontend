@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Select, Button, Card, Divider } from "antd";
+import { useAuthStore } from "../../hooks";
 
 const { Option } = Select;
 
 const ReportGenerator = () => {
+  const role = useAuthStore((state) => state.role);
   const [activityType, setActivityType] = useState("weekly");
   const [dateFilter, setDateFilter] = useState({
     month: null,
