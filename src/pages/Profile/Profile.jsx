@@ -1,7 +1,8 @@
-import React from "react";
+import React,{lazy} from "react";
 import MainLayout from "../Layout/MainLayout";
-import { ProfileComponent } from "../../components/Profile/ProfileComponent";
 
+
+const ProfileComponent = lazy(() => import("../../components/Profile/ProfileComponent")); 
 const Profile = () => {
   return (
     <MainLayout>

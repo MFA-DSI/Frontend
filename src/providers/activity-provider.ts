@@ -158,7 +158,7 @@ export const updateActivity = async (
 };
 
 export const deleteActivity = async (id: string): Promise<void> => {
-  const userId = sessionStorage.getItem("userId");
+  const userId = localStorage.getItem("userId");
   try {
     const url = `http://localhost:8080/direction/activity/delete?userId=${userId}&activityId=${id}`;
     const response = await fetch(url, {
@@ -288,7 +288,7 @@ export const addRecommendationToActivity = async (
 
     const recommendationBody = {
       description: recommendation.description,
-      committerId: sessionStorage.getItem("userId"),
+      committerId: localStorage.getItem("userId"),
     };
     const response = await fetch(url, {
       method: "POST",

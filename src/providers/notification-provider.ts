@@ -5,7 +5,7 @@ const API_URL: string = import.meta.env.VITE_API_URL;
 
 export const fetchNotification = async (): Promise<Notification[]> => {
 
-  const userId = sessionStorage.getItem("userId");
+  const userId = localStorage.getItem("userId");
 
   if (!userId) {
     throw new Error("User ID is not available in session storage");
@@ -32,7 +32,7 @@ export const fetchNotification = async (): Promise<Notification[]> => {
 };
 
 export const updateNotificationStatus = async (id: string) => {
-  const directionId = sessionStorage.getItem("directionId");
+  const directionId = localStorage.getItem("directionId");
 
   if (!directionId) {
     throw new Error("Direction ID is not available in session storage");

@@ -22,7 +22,7 @@ export const useMissions = () => {
     useQuery({
       queryKey: ["mission"],
       queryFn: () =>
-        getByDirectionId(sessionStorage.getItem("directionId") || "")
+        getByDirectionId(localStorage.getItem("directionId") || "")
       
     });
 

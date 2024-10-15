@@ -3,7 +3,7 @@ import { useMissions } from "../../hooks/useMissions"; // Adjust the path as nec
 
 const MissionContext = createContext();
 
-const directionId = sessionStorage.getItem("directionId");
+const directionId = localStorage.getItem("directionId");
 
 export const MissionProvider = ({ children }) => {
   const {

@@ -13,10 +13,10 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-  directionId: null,
-  userId: null,
-  token: null,
-  role: null, 
+  directionId: localStorage.getItem("directionId"),
+  userId:  localStorage.getItem("userId"),
+  token:  localStorage.getItem("token"),
+  role:  localStorage.getItem("role"), 
 
   setDirectionId: (directionId: string) => set({ directionId }),
   setUserId: (userId: string) => set({ userId }),

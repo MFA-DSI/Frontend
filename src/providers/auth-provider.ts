@@ -31,10 +31,10 @@ export const authProvider = {
 
       
       
-      sessionStorage.setItem("token", token.token.accessToken);
-      sessionStorage.setItem("directionId", token.directionId);
-      sessionStorage.setItem("userId", token.userId);
-      sessionStorage.setItem("role", role);
+      localStorage.setItem("token", token.token.accessToken);
+      localStorage.setItem("directionId", token.directionId);
+      localStorage.setItem("userId", token.userId);
+      localStorage.setItem("role", role);
   
      
       useAuthStore.setState({
@@ -60,7 +60,7 @@ export const authProvider = {
     }
   },
   logout: async (): Promise<void> => {
-    sessionStorage.removeItem("token");
+    localStorage.removeItem("token");
     Promise.resolve();
   },
 };

@@ -36,7 +36,7 @@ const MainLayout = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false);
 
   const handleLogout = () => {
-    sessionStorage.clear();
+    localStorage.clear();
     message.info("vous êtes déconnecté");
     navigate("/login");
   };

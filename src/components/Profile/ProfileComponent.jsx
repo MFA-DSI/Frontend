@@ -7,7 +7,7 @@ import AddUserModal from "../Modal/AddUserModal";
 import AddResponsableDirectionModal from "../Modal/AddDirectionModal";
 import { useAuthStore } from "../../hooks";
 
-export const ProfileComponent = () => {
+ const ProfileComponent = () => {
   const { fetchActualUserInformation, fetchAllDirectionResponsibles } =
     useDirectionsContext();
   const userInformation = fetchActualUserInformation;
@@ -215,3 +215,5 @@ export const ProfileComponent = () => {
     </div>
   );
 };
+
+export default ProfileComponent;

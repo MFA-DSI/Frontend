@@ -17,7 +17,7 @@ export const useDirections = () => {
 
   // TODO: change this from zustand
   
-  const userId = sessionStorage.getItem("userId");
+  const userId = localStorage.getItem("userId");
  
 
   const fetchAllDirections = useQuery({

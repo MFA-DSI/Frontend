@@ -23,7 +23,7 @@ interface DirectionResponsible {
   function: string;
 }
 
-const directionId = sessionStorage.getItem("directionId");
+const directionId = localStorage.getItem("directionId");
 export const getUserInformation = async (id: string): Promise<User | void> => {
   try {
     const response = await fetch(`${API_URL}/user/information?id=${id}`, {

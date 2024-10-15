@@ -33,7 +33,7 @@ export const fetchDirections = async (): Promise<Direction[]> => {
 };
 
 export const fetchDirectionServices = async () => {
-  const directionId = sessionStorage.getItem("directionId");
+  const directionId = localStorage.getItem("directionId");
   const response = await fetch(
     `${API_URL}/direction/service/all?directionId=${directionId}`,
     {
@@ -51,7 +51,7 @@ export const fetchDirectionServices = async () => {
 };
 
 export const fetchDirectionName = async () => {
-  const directionId = sessionStorage.getItem("directionId");
+  const directionId = localStorage.getItem("directionId");
   const response = await fetch(`${API_URL}/direction/name/${directionId}`, {
     method: "GET",
   });

@@ -7,7 +7,7 @@ import { useAuthStore } from "../../hooks";
 const role = useAuthStore.getState().role;
 
 //TODO: change this to state from zustand
-const directionId = sessionStorage.getItem("directionId")
+const directionId = localStorage.getItem("directionId")
 
 const AddUserModal = ({ visible, onCancel }) => {
   const { saveNewUser } = useDirectionsContext();

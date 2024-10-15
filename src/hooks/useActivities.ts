@@ -22,7 +22,7 @@ export const useActivities = () => {
     useQuery({
       queryKey: ["activity"],
       queryFn: () =>
-        getActivityByDirectionId(sessionStorage.getItem("directionId") || ""),
+        getActivityByDirectionId(localStorage.getItem("directionId") || ""),
     });
 
   const activityIdQuery = (id: string) =>

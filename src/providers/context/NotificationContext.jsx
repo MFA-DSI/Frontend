@@ -20,8 +20,8 @@ export const NotificationProvider = ({ children }) => {
       value={{
         fetchNotifications: getAllNotification(),
         updateNotification: updateNotificationViewStatus.mutate,
-        isLoading: isLoading,
-        isError: isError,
+        isLoading,
+       isError,
       }}
     >
       {children}
