@@ -16,8 +16,7 @@ export const useNotification = () => {
   const updateNotification = useMutation({
     mutationFn: (id: string) => updateNotificationStatus(id),
     onSuccess: () => {
-     
-      queryClient.invalidateQueries(["notification"]);
+      queryClient.invalidateQueries("notification");
     },
   });
 

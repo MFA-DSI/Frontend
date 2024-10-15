@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Card, Avatar, Typography, Button, Row, Col, Table } from "antd";
+import React, { useState ,useEffect} from "react";
+import { Card, Avatar, Typography, Button, Row, Col, Table, Badge } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useDirectionsContext } from "../../providers";
 import { toFullName } from "./utils/nameToFullName";
@@ -13,37 +13,88 @@ export const ProfileComponent = () => {
   const userInformation = fetchActualUserInformation;
   const otherUsers = fetchAllDirectionResponsibles;
   
-  const role = useAuthStore.getState().role;
+ 
   
   const [isUserModalVisible, setIsUserModalVisible] = useState(false);
   const [isResponsableModalVisible, setIsResponsableModalVisible] =
     useState(false);
 
-  const columns = [
-    {
-      title: "Grade",
-      dataIndex: "grade",
-      key: "grade",
-      render: (text) => <Typography.Text>{text}</Typography.Text>,
-    },
-    {
-      title: "Nom et Prénom",
-      dataIndex: "fullName",
-      key: "fullName",
-      render: (_, record) => (
-        <Typography.Text>
-          {toFullName(record.firstName, record.lastName)}
-        </Typography.Text>
-      ),
-    },
-    {
-      title: "Fonction",
-      dataIndex: "function",
-      key: "function",
-      render: (text) => <Typography.Text>{text}</Typography.Text>,
-    },
-  ];
 
+    // Sample data for filtering
+    const grades = [
+      { text: 'A', value: 'A' },
+      { text: 'B', value: 'B' },
+      { text: 'C', value: 'C' },
+    ];
+    
+    const functions = [
+      { text: 'Designer', value: 'Designer' },
+      { text: 'Developer', value: 'Developer' },
+      { text: 'Manager', value: 'Manager' },
+    ];
+    
+    const columns = [
+      {
+        title: "Grade",
+        dataIndex: "grade",
+        key: "grade",
+        filters: grades.sort((a, b) => a.text.localeCompare(b.text)), 
+        render: (text) => <Typography.Text>{text}</Typography.Text>,
+      },
+      {
+        title: "Nom et Prénom",
+        dataIndex: "fullName",
+        key: "fullName",
+        render: (_, record) => (
+          <Typography.Text>
+            {toFullName(record.firstName, record.lastName)}
+          </Typography.Text>
+        ),
+      },
+      {
+        title: "Fonction",
+        dataIndex: "function",
+        key: "function",
+        filters: functions.sort((a, b) => a.text.localeCompare(b.text)), // Sort alphabetically
+      
+        render: (text) => <Typography.Text>{text}</Typography.Text>,
+      },
+      {
+        title: "Approved", // New column for 'approved' field
+        dataIndex: "approved",
+        key: "approved",
+        filters: [
+          { text: 'Approuvé', value: true },
+          { text: 'En attente', value: false },
+        ],
+        onFilter: (value, record) => record.approved === value,
+        render: (approved, record) => (
+          <>
+            <Badge 
+              status={approved ? "success" : "default"} 
+              text={approved ? "Approuvé" : "En attente"} 
+            />
+            {!approved && (
+              <Button 
+                type="primary" 
+                onClick={() => handleApprove(record.id)} // Replace with actual function to approve
+                style={{ marginLeft: 8 }}
+              >
+                Approuver
+              </Button>
+            )}
+          </>
+        ),
+      },
+    ];
+    
+    // Example function to handle the approval action
+    const handleApprove = (id) => {
+      // Implement the approval logic here, e.g., update the record in state or make an API call
+      console.log(`Approved record with ID: ${id}`);
+    };
+    
+  
   return (
     <div style={{ maxWidth: "100%", padding: "24px" }}>
       <Card
@@ -72,7 +123,7 @@ export const ProfileComponent = () => {
   
       <div style={{ display: "flex", marginBottom: "8px", alignItems: "center" }}>
         <Typography.Text strong style={{ minWidth: "150px", textAlign: "right", marginRight: "10px" }}>
-          Grade:
+          Grade: 
         </Typography.Text>
         <Typography.Text>{userInformation.grade}</Typography.Text>
       </div>

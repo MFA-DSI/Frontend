@@ -86,15 +86,21 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
               name="contactValue"
               noStyle
               rules={[
-                { 
-                  required: true, 
+                {
+                  required: true,
                   message: `Veuillez entrer ${
                     contactType === "email" ? "un email" : "un numéro de téléphone"
                   }`,
-                  type: contactType === "email" ? "email" : "string",
-                  pattern: contactType === "phone" ? /^[0-9]+$/ : undefined,
-                  message: contactType === "phone" ? "Veuillez entrer un numéro valide" : "Veuillez entrer un email valide"
                 },
+                contactType === "email"
+                  ? {
+                      type: "email",
+                      message: "Veuillez entrer un email valide",
+                    }
+                  : {
+                      pattern: /^[0-9]+$/,
+                      message: "Veuillez entrer un numéro valide",
+                    },
               ]}
             >
               <Input 

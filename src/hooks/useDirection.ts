@@ -1,20 +1,24 @@
 // useDirections.ts
 import { useQuery } from "@tanstack/react-query";
 import {
+  addUserToDirection,
   fetchDirectionName,
   fetchDirections,
   fetchDirectionServices,
 } from "../providers/direction-provider";
-import { useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import {
   getDirectionResponsiblesInformation,
   getUserInformation,
 } from "../providers";
 
 export const useDirections = () => {
+  const queryClient = useQueryClient();
+
   // TODO: change this from zustand
+  
   const userId = sessionStorage.getItem("userId");
-  const directionId = sessionStorage.getItem("directionId");
+ 
 
   const fetchAllDirections = useQuery({
     queryKey: ["directions"],
@@ -37,7 +41,13 @@ export const useDirections = () => {
   });
   const fetchAllDirectionResponsible = useQuery({
     queryKey: ["responsible"],
-    queryFn: () => getDirectionResponsiblesInformation(directionId || ""),
+    queryFn: () => getDirectionResponsiblesInformation(),
+  });
+
+  const saveNewUserMutation = useMutation(addUserToDirection, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["responsible"]);
+    },
   });
 
   return {
@@ -46,6 +56,7 @@ export const useDirections = () => {
     fetchActualDirection: fetchActualDirectionName,
     fetchUserInformation: fetchDirectionUserInformation.data,
     fetchAllResponsibles: fetchAllDirectionResponsible.data,
+    saveNewUser : saveNewUserMutation.mutate,
     isLoading: fetchAllDirections.isLoading,
     isError: fetchAllDirections.isError,
   };

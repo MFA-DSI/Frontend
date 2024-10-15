@@ -10,9 +10,8 @@ import {
 import { useAuthStore } from "./useAuthStore";
 export const useMissions = () => {
   const queryClient = useQueryClient();
-  const direction = useAuthStore.getState().role;
-
-  console.log("directino ",direction );
+ 
+  
   
   const missionsQuery = useQuery({
     queryKey: ["missions"],

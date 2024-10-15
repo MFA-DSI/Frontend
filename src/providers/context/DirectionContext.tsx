@@ -13,6 +13,7 @@ export const DirectionProvider = ({ children }) => {
     fetchAllResponsibles,
     isLoading,
     isError,
+    saveNewUser
   } = useDirections();
 
   return (
@@ -23,6 +24,7 @@ export const DirectionProvider = ({ children }) => {
         fetchActualDirectionName: fetchActualDirection,
         fetchActualUserInformation: fetchUserInformation,
         fetchAllDirectionResponsibles: fetchAllResponsibles,
+        saveNewUser,
         isLoading: isLoading,
         isError: isError,
       }}

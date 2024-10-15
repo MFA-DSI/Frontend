@@ -43,7 +43,7 @@ export const authProvider = {
         token: token.token.accessToken,
         role: role,  
       });
-      console.log("Updated auth store:", useAuthStore.getState());
+      
       return Promise.resolve();
     } catch (error: any) {
       const errorCode = error.response?.data?.message;
@@ -59,7 +59,6 @@ export const authProvider = {
       return Promise.reject(error);
     }
   },
-
   logout: async (): Promise<void> => {
     sessionStorage.removeItem("token");
     Promise.resolve();

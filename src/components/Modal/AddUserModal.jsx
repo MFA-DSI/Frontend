@@ -1,27 +1,61 @@
 import React, { useState } from "react";
 import { Form, Input, Select, Modal, Button } from "antd";
-import { personnelOptions, Grade } from "./utils/Grade"; // Import de vos options de grade
+import { personnelOptions, Grade } from "./utils/Grade";
+import { useDirectionsContext } from "../../providers";
+import { useAuthStore } from "../../hooks";
 
-const AddUserModal = ({ visible, onCancel, onSave }) => {
-  const [form] = Form.useForm(); // Utilisation de form pour gérer les valeurs du formulaire
+const role = useAuthStore.getState().role;
+
+//TODO: change this to state from zustand
+const directionId = sessionStorage.getItem("directionId")
+
+const AddUserModal = ({ visible, onCancel }) => {
+  const { saveNewUser } = useDirectionsContext();
+  const [form] = Form.useForm();
   const [personnelType, setPersonnelType] = useState(null);
   const [gradeOptions, setGradeOptions] = useState([]);
+  const [contactType, setContactType] = useState("email"); 
 
   const handlePersonnelTypeChange = (value) => {
     setPersonnelType(value);
     setGradeOptions(Grade(value));
   };
 
+  const onSave = (values) => {
+    // Construct the user object according to the interface
+    const user = {
+      firstname: values.firstname,
+      lastname: values.lastname,
+      email: contactType === "email" ? values.contactValue : null,
+      phoneNumbers: contactType === "phone" ? values.contactValue : null,
+      grade: personnelType !== "PC" ? values.grade : "PC",
+      function: values.fonction,
+      directionId: directionId, 
+    };
+
+
+    saveNewUser(user)
+      .then(() => {
+        console.log("User saved successfully");
+        form.resetFields(); 
+       
+      })
+      .catch((error) => {
+        console.error("Error saving user:", error);
+      });
+  };
+
   const handleSave = () => {
     form
       .validateFields()
       .then((values) => {
-        onSave(values); // Appel de la fonction onSave avec les valeurs du formulaire
-        form.resetFields(); // Réinitialisation des champs après enregistrement
+        onSave(values); 
       })
       .catch((info) => {
         console.log("Erreur lors de la validation:", info);
-      });
+      }).finally(
+        onCancel()
+      );
   };
 
   return (
@@ -29,9 +63,10 @@ const AddUserModal = ({ visible, onCancel, onSave }) => {
       visible={visible}
       title="Ajouter un utilisateur"
       onCancel={() => {
-        form.resetFields(); // Réinitialise le formulaire lors de l'annulation
+        form.resetFields();
         onCancel();
       }}
+      centered
       footer={[
         <Button key="back" onClick={onCancel}>
           Annuler
@@ -49,6 +84,7 @@ const AddUserModal = ({ visible, onCancel, onSave }) => {
         >
           <Input placeholder="Entrez le nom" />
         </Form.Item>
+
         <Form.Item
           label="Prénom"
           name="lastname"
@@ -89,6 +125,53 @@ const AddUserModal = ({ visible, onCancel, onSave }) => {
             />
           </Form.Item>
         )}
+
+        <Form.Item label="Contact">
+          <Input.Group compact>
+            <Form.Item name="contactType" noStyle>
+              <Select
+                defaultValue="email"
+                onChange={(value) => setContactType(value)}
+                style={{ width: '30%' }}
+                options={[
+                  { value: "email", label: "Email" },
+                  { value: "phone", label: "Téléphone" },
+                ]}
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="contactValue"
+              noStyle
+              rules={[
+                {
+                  required: true,
+                  message: `Veuillez entrer ${
+                    contactType === "email" ? "un email" : "un numéro de téléphone"
+                  }`,
+                },
+                contactType === "email"
+                  ? {
+                      type: "email",
+                      message: "Veuillez entrer un email valide",
+                    }
+                  : {
+                      pattern: /^[0-9]+$/,
+                      message: "Veuillez entrer un numéro valide",
+                    },
+              ]}
+            >
+              <Input
+                placeholder={
+                  contactType === "email"
+                    ? "Entrez l'adresse email"
+                    : "Entrez le numéro de téléphone"
+                }
+                style={{ width: '70%' }}
+              />
+            </Form.Item>
+          </Input.Group>
+        </Form.Item>
 
         <Form.Item
           label="Fonction"
