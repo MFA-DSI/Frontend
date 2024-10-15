@@ -7,7 +7,7 @@ import {
   fetchMissionsName,
   updateMission,
 } from "../providers/mission-provider";
-import { useAuthStore } from "./useAuthStore";
+
 export const useMissions = () => {
   const queryClient = useQueryClient();
  

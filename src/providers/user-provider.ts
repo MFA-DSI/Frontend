@@ -2,6 +2,7 @@ import { User } from "../types/User";
 import { handleAxiosError } from "../lib/handleAxiosError"; // You might want to rename this to handleFetchError or modify it to handle general errors
 import { Direction } from "readline";
 import { DirectionName } from "../components";
+import { message } from "antd";
 
 const API_URL: string = import.meta.env.VITE_API_URL;
 
@@ -88,6 +89,7 @@ export const PostNewUser = async (
     }
 
     const data = await response.json();
+    message.success("utilisateur ajouter avec succées")
 
     return data;
   } catch (error) {

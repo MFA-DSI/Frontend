@@ -1,3 +1,4 @@
+import { message } from "antd";
 import { Direction, Service } from "../types";
 
 const API_URL: string = import.meta.env.VITE_API_URL;
@@ -78,6 +79,6 @@ export const addUserToDirection = async (usertoAdd : User) => {
   }
 
   const data: User = await response.json();
-  console.log(data);
+  message.success("utilisteur ajouter avec succées")
   return data;
 };
