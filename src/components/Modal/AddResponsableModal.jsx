@@ -207,32 +207,36 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
         </Form>
       </Modal>
 
+      {responseData && (
       <Modal
-        title="New Responsible Created"
+        title={`Nouveau Responsable du ${responseData.directionName}`}
         visible={responseModalVisible}
         
         onCancel={handleCloseModal}
         footer={[
           <Button key="export" onClick={() => generateExcelFile(responseData)} disabled={!responseData}>
-            Export XLS
+            Export ces identifiants
           </Button>,
           <Button key="close" onClick={handleCloseModal}>
             Close
           </Button>,
         ]}
       >
-        {responseData && (
+       
           <div>
-            <p>ID: {responseData.id}</p>
-            <p>Email: {responseData.identity}</p>
-            <p>Password: {responseData.password}</p>
+            <p>Direction : {responseData.directionName}</p>
+            <p>Identifiant : {responseData.identity}</p>
+            <p>Mot de passe : {responseData.password}</p>
             <p>
-              The credentials have been saved to an Excel file named{" "}
-              <strong>responsible_credentials.xlsx</strong>.
+
+             
+              Les informations d'identification ont été enregistrées dans un fichier Excel nommé{" "}
+              <strong>{responseData.name}.xlsx</strong>.
             </p>
           </div>
-        )}
+        
       </Modal>
+      )}
     </>
   );
 };
