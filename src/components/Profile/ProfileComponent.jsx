@@ -11,10 +11,10 @@ import {
   Spin,
 } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-import { useDirectionsContext } from "../../providers";
 import { toFullName } from "./utils/nameToFullName";
 import AddUserModal from "../Modal/AddUserModal";
 import AddResponsableDirectionModal from "../Modal/AddResponsableModal";
+import { useDirectionsContext } from "../../providers";
 
 const ProfileComponent = () => {
   const {
@@ -22,10 +22,11 @@ const ProfileComponent = () => {
     fetchAllDirectionResponsibles,
     isResponsibleLoading,
     isUserLoading,
+    approveUserToDirectionMember
   } = useDirectionsContext();
 
   const userInformation = fetchActualUserInformation;
-  const otherUsers = fetchAllDirectionResponsibles;
+  fetchAllDirectionResponsibles;
 
   const [isUserModalVisible, setIsUserModalVisible] = useState(false);
   const [isResponsableModalVisible, setIsResponsableModalVisible] =
@@ -266,28 +267,30 @@ const ProfileComponent = () => {
       )}
 
       {/* Affichage de la liste des responsables si isResponsibleLoading est faux */}
-      {!isResponsibleLoading && (
-        <Card
-          style={{
-            width: "100%",
-            borderRadius: "8px",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-          }}
-        >
-          <Typography.Title level={4}>Actions</Typography.Title>
-          <Button type="primary" onClick={() => setIsUserModalVisible(true)}>
-            Ajouter un utilisateur
-          </Button>
-          <Button
-            type="primary"
-            style={{ marginLeft: "8px" }}
-            onClick={() => setIsResponsableModalVisible(true)}
-          >
-            Ajouter un responsable direction
-          </Button>
-          <Table columns={columns} dataSource={otherUsers} rowKey="id" />
-        </Card>
-      )}
+      {isResponsibleLoading ? (
+  <Spin size="large" />
+) : (
+  <Card
+    style={{
+      width: "100%",
+      borderRadius: "8px",
+      boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+    }}
+  >
+    <Typography.Title level={4}>Actions</Typography.Title>
+    <Button type="primary" onClick={() => setIsUserModalVisible(true)}>
+      Ajouter un utilisateur
+    </Button>
+    <Button
+      type="primary"
+      style={{ marginLeft: "8px" }}
+      onClick={() => setIsResponsableModalVisible(true)}
+    >
+      Ajouter un responsable direction
+    </Button>
+    <Table columns={columns} dataSource={fetchAllDirectionResponsibles} rowKey="id" />
+  </Card>
+)}
 
       {/* Modals */}
       <AddUserModal

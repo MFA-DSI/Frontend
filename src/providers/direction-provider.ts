@@ -97,3 +97,15 @@ export const addReponsibleToDirection = async (usertoAdd: User) => {
 
   return data;
 };
+
+export const approveUserToDirection = async (userId,toApproveId) => {
+  const response = await fetch(`${API_URL}/users/user/approve?userId=${userId}&toApproveId=${toApproveId}`, {
+    method: "PUT",
+  });
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const data: PostedNewUser = await response.json();
+   return data;
+};

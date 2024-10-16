@@ -12,10 +12,9 @@ import MissionModal from "../Modal/MissionModal";
 
 import "./assets/index.css";
 import { getWeeksInMonth } from "./utils/DateUtils";
-import { useDirectionsContext } from "../../providers";
 import { useFilesContext } from "../../providers/context/FilesContext";
 import { toast } from "react-toastify";
-import { saveAs } from "file-saver";
+
 
 const { Option } = Select;
 
@@ -32,8 +31,6 @@ const TableComponent = ({ mode }) => {
     setFilterType,
     setDirectionFilter,
   } = useMissionContext();
-
-  const { fetchAllDirection } = useDirectionsContext();
   const { fetchMissionXLS } = useFilesContext();
   const [activityType, setActivityType] = useState("all");
   const [dateFilter, setDateFilter] = useState({

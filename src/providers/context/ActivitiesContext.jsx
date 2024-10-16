@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useState } from "react";
-import { useActivities } from "../../hooks";
+import React, {createContext, useContext, useState} from "react";
+import {useActivities} from "../../hooks";
 
 const ActivityContext = createContext();
 
-export const ActivitieProvider = ({ children }) => {
+export const ActivitieProvider = ({children}) => {
   const {
     activities,
     directionIdQuery,
@@ -31,9 +31,9 @@ export const ActivitieProvider = ({ children }) => {
             .includes(searchTerm.toLowerCase()) ||
           activity.activityList.some((a) =>
             a.performanceRealization.some((r) =>
-              r.realization.toLowerCase().includes(searchTerm.toLowerCase()),
-            ),
-          ),
+              r.realization.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+          )
       );
     }
 
@@ -44,7 +44,7 @@ export const ActivitieProvider = ({ children }) => {
     <ActivityContext.Provider
       value={{
         filteredActivities: filteredActivities(),
-        directionIdQueryActvities: directionIdQuery().data,
+        directionIdQueryActvities: directionIdQuery(),
         deleteActivity: deleteActivity,
         updateMissionActivity,
         addTaskToActivty: addTask,
@@ -65,7 +65,7 @@ export const useActivitiesContext = () => {
   const context = useContext(ActivityContext);
   if (!context) {
     throw new Error(
-      "useActivitiesContext must be used within a DirectionProvider",
+      "useActivitiesContext must be used within a DirectionProvider"
     );
   }
 

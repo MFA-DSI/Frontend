@@ -2,7 +2,7 @@
 import React, { createContext, useContext, ReactNode, FC } from "react";
 import { useDirections } from "../../hooks/useDirection";
 
-const DirectionContext = createContext<unknown>(undefined);
+const DirectionContext = createContext();
 
 export const DirectionProvider = ({ children }) => {
   const {
@@ -17,7 +17,13 @@ export const DirectionProvider = ({ children }) => {
     isResponsibleLoading,
     isUserLoading,
     saveNewResponsible,
+    approveUserToDirectionMember
   } = useDirections();
+
+
+  const getAllResponsible = ()=>{
+    return fetchAllResponsibles.data
+  }
 
   return (
     <DirectionContext.Provider
@@ -26,9 +32,10 @@ export const DirectionProvider = ({ children }) => {
         fetchAllService: fetchServices,
         fetchActualDirectionName: fetchActualDirection,
         fetchActualUserInformation: fetchUserInformation,
-        fetchAllDirectionResponsibles: fetchAllResponsibles,
+        fetchAllDirectionResponsibles: getAllResponsible(),
         saveNewUser,
         saveNewResponsible,
+        approveUserToDirectionMember,
         isLoading,
         isResponsibleLoading,
         isUserLoading,

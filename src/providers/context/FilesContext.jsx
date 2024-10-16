@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from "react";
 import { useFiles } from "../../hooks";
 
-const FilesContext = createContext<unknown>(undefined);
+const FilesContext = createContext();
 
 export const FilesProvider = ({ children }) => {
   const { missionToPDF, missionToDOC, missionToXLS } = useFiles();

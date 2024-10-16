@@ -30,6 +30,6 @@ export const useFiles = () => {
   return {
     missionToPDF: exportToMissionPDF.mutate,
     missionToDOC: exportToMissionDOC.mutate,
-    missionToXLS: exportToMissionXLS.mutate, // Changer "missionTOXLS" en "missionToXLS"
+    missionToXLS: exportToMissionXLS.mutate, 
   };
 };

@@ -45,10 +45,10 @@ export const getUserInformation = async (id: string): Promise<User | void> => {
 };
 
 export const getDirectionResponsiblesInformation =
-  async (): Promise<DirectionResponsible | void> => {
+  async (id : string): Promise<DirectionResponsible | void> => {
     try {
       const response = await fetch(
-        `${API_URL}/direction/responsible?directionId=${directionId}`,
+        `${API_URL}/direction/responsible?directionId=${id}`,
         {
           method: "GET",
           headers: {
