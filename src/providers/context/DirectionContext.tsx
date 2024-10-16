@@ -15,18 +15,20 @@ export const DirectionProvider = ({ children }) => {
     isError,
     saveNewUser,
     isResponsibleLoading,
-    isUserLoading
+    isUserLoading,
+    saveNewResponsible
   } = useDirections();
 
   return (
     <DirectionContext.Provider
       value={{
-        fetchAllDirection: fetchDirections.data,
-        fetchAllService: fetchServices.data,
+        fetchAllDirection: fetchDirections,
+        fetchAllService: fetchServices,
         fetchActualDirectionName: fetchActualDirection,
         fetchActualUserInformation: fetchUserInformation,
         fetchAllDirectionResponsibles: fetchAllResponsibles,
         saveNewUser,
+        saveNewResponsible,
         isLoading,
         isResponsibleLoading,
         isUserLoading,

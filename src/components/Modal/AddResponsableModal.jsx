@@ -1,33 +1,58 @@
 import React, { useState } from "react";
-import { Form, Input, Select, Modal, Button } from "antd";
-import { personnelOptions, Grade } from "./utils/Grade"; // Import des options de grade
+import { Form, Input, Select, Modal, Button, message } from "antd";
+import { personnelOptions, Grade } from "./utils/Grade";
+import { useDirectionsContext } from "../../providers";
 
-const directionsOptions = [
-  { value: "Direction 1", label: "Direction 1" },
-  { value: "Direction 2", label: "Direction 2" },
-];
-
-const servicesOptions = [
-  { value: "Service 1", label: "Service 1" },
-  { value: "Service 2", label: "Service 2" },
-];
 
 const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
+  const { fetchAllDirection, saveNewResponsible } = useDirectionsContext();
   const [form] = Form.useForm();
   const [personnelType, setPersonnelType] = useState(null);
   const [gradeOptions, setGradeOptions] = useState([]);
-  const [contactType, setContactType] = useState("email"); // Default to email
+  const [contactType, setContactType] = useState("email");
+  const [directionsOptions, setDirectionsOptions] = useState([]);
+
+  // Fetch directions directly
+  if (visible && directionsOptions.length === 0) {
+    const directions = fetchAllDirection(); // Fetch directions from the context
+    const options = directions.map((direction) => ({
+      value: direction.id, // Set id as the value
+      label: direction.name, // Set name as the label
+    }));
+    setDirectionsOptions(options);
+  }
 
   const handlePersonnelTypeChange = (value) => {
     setPersonnelType(value);
     setGradeOptions(Grade(value));
   };
 
-  const handleSave = () => {
-    form.validateFields().then((values) => {
-      onSave(values);
+  const handleSave = async () => {
+    try {
+      const values = await form.validateFields();
+      
+      // Map form values to the NewResponsible interface
+      const newResponsible = {
+        firstname: values.firstname,
+        lastname: values.lastname,
+        grade: values.personnelType,
+        directionId: values.direction, 
+        function: values.fonction,
+        ...(contactType === "email" ? { email: values.contactValue } : { phone: values.contactValue }),
+        ...(personnelType && personnelType !== "PC" ? { grade: values.grade } : {}),
+      };
+
+
+      console.log(newResponsible);
+      
+      // Call the async saveNewResponsible function with the mapped object
+      await saveNewResponsible(newResponsible);
+      message.success("Responsable ajouté avec succès");
       form.resetFields();
-    });
+      onSave(newResponsible); // Pass the transformed values to onSave if needed
+    } catch (error) {
+      console.error("Failed to save new responsible:", error);
+    }
   };
 
   return (
@@ -67,14 +92,11 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
 
         <Form.Item label="Contact">
           <Input.Group compact>
-            <Form.Item
-              name="contactType"
-              noStyle
-            >
+            <Form.Item name="contactType" noStyle>
               <Select
                 defaultValue="email"
                 onChange={(value) => setContactType(value)}
-                style={{ width: '30%' }}
+                style={{ width: "30%" }}
                 options={[
                   { value: "email", label: "Email" },
                   { value: "phone", label: "Téléphone" },
@@ -103,13 +125,13 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
                     },
               ]}
             >
-              <Input 
+              <Input
                 placeholder={
-                  contactType === "email" 
-                  ? "Entrez l'adresse email" 
-                  : "Entrez le numéro de téléphone"
-                } 
-                style={{ width: '70%' }} 
+                  contactType === "email"
+                    ? "Entrez l'adresse email"
+                    : "Entrez le numéro de téléphone"
+                }
+                style={{ width: "70%" }}
               />
             </Form.Item>
           </Input.Group>
@@ -150,19 +172,8 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
           rules={[{ required: true, message: "Veuillez choisir une direction" }]}
         >
           <Select
-            options={directionsOptions}
+            options={directionsOptions} // Dynamically populated options
             placeholder="Sélectionnez une direction"
-          />
-        </Form.Item>
-
-        <Form.Item
-          label="Service rattaché"
-          name="service"
-          rules={[{ required: true, message: "Veuillez choisir un service" }]}
-        >
-          <Select
-            options={servicesOptions}
-            placeholder="Sélectionnez un service rattaché"
           />
         </Form.Item>
 
@@ -173,9 +184,6 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
         >
           <Input placeholder="Entrez la fonction" />
         </Form.Item>
-
-        {/* Contact Information (Email or Phone) */}
-        
       </Form>
     </Modal>
   );

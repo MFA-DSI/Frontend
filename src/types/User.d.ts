@@ -8,3 +8,15 @@ export type User = {
   password: string;
   direction: string;
 };
+
+
+export type NewResponsible = {
+  firstname: string;
+  lastname: string;
+  email?: string;  
+  phone?: string;  
+  personnelType: string;
+  grade?: string;  
+  directionId: string;
+  fonction: string;
+}

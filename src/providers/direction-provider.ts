@@ -82,3 +82,21 @@ export const addUserToDirection = async (usertoAdd : User) => {
   message.success("utilisteur ajouter avec succées")
   return data;
 };
+
+export const addReponsibleToDirection = async (usertoAdd : User) => {
+  
+  const response = await fetch(`${API_URL}/users/createAdmin`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(usertoAdd),
+  });
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const data: User = await response.json();
+  message.success("utilisteur ajouter avec succées")
+  return data;
+};

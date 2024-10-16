@@ -4,7 +4,7 @@ import { UserOutlined } from "@ant-design/icons";
 import { useDirectionsContext } from "../../providers";
 import { toFullName } from "./utils/nameToFullName";
 import AddUserModal from "../Modal/AddUserModal";
-import AddResponsableDirectionModal from "../Modal/AddDirectionModal";
+import AddResponsableDirectionModal from "../Modal/AddResponsableModal";
 
 const ProfileComponent = () => {
   const {
