@@ -9,14 +9,13 @@ export type User = {
   direction: string;
 };
 
-
 export type NewResponsible = {
   firstname: string;
   lastname: string;
-  email?: string;  
-  phone?: string;  
+  email?: string;
+  phone?: string;
   personnelType: string;
-  grade?: string;  
+  grade?: string;
   directionId: string;
   fonction: string;
-}
+};

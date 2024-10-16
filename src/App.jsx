@@ -30,7 +30,7 @@ function App() {
           <Route path="notifications" element={<Notification />} />
           <Route path="profile" element={<Profile />} />
         </Route>
-        <Route path="/login" element={<LoginPage />} /> 
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </QueryClientProvider>
   );

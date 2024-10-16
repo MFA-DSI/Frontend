@@ -6,15 +6,13 @@ import { message } from "antd";
 
 const API_URL: string = import.meta.env.VITE_API_URL;
 
-
-
 interface newUser {
-  firstname : string,
-  lastname: string,
-  grade : string,
-  function: string,
-  mail: string,
-  phoneNumbers: string
+  firstname: string;
+  lastname: string;
+  grade: string;
+  function: string;
+  mail: string;
+  phoneNumbers: string;
 }
 interface DirectionResponsible {
   id: string;
@@ -46,32 +44,32 @@ export const getUserInformation = async (id: string): Promise<User | void> => {
   }
 };
 
-export const getDirectionResponsiblesInformation = async (
-): Promise<DirectionResponsible | void> => {
-  try {
-    const response = await fetch(
-      `${API_URL}/direction/responsible?directionId=${directionId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
+export const getDirectionResponsiblesInformation =
+  async (): Promise<DirectionResponsible | void> => {
+    try {
+      const response = await fetch(
+        `${API_URL}/direction/responsible?directionId=${directionId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      },
-    );
+      );
 
-    if (!response.ok) {
-      return Promise.reject(response.statusText);
+      if (!response.ok) {
+        return Promise.reject(response.statusText);
+      }
+
+      const data = await response.json();
+
+      return data;
+    } catch (error) {
+      handleAxiosError(error);
     }
-
-    const data = await response.json();
-    
-    return data;
-  } catch (error) {
-    handleAxiosError(error);
-  }
-};
+  };
 export const PostNewUser = async (
-  user ,
+  user,
 ): Promise<DirectionResponsible | void> => {
   try {
     const response = await fetch(
@@ -89,7 +87,7 @@ export const PostNewUser = async (
     }
 
     const data = await response.json();
-    message.success("utilisateur ajouter avec succées")
+    message.success("utilisateur ajouter avec succées");
 
     return data;
   } catch (error) {

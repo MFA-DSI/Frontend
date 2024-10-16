@@ -17,9 +17,8 @@ export const useDirections = () => {
   const queryClient = useQueryClient();
 
   // TODO: change this from zustand
-  
+
   const userId = localStorage.getItem("userId");
- 
 
   const fetchAllDirections = useQuery({
     queryKey: ["directions"],
@@ -63,11 +62,11 @@ export const useDirections = () => {
     fetchActualDirection: fetchActualDirectionName,
     fetchUserInformation: fetchDirectionUserInformation.data,
     fetchAllResponsibles: fetchAllDirectionResponsible.data,
-    saveNewUser : saveNewUserMutation.mutate,
-    saveNewResponsible : saveNewResponsibleToDirection.mutate,
+    saveNewUser: saveNewUserMutation.mutate,
+    saveNewResponsible: saveNewResponsibleToDirection.mutate,
     isLoading: fetchAllDirections.isLoading,
-    isResponsibleLoading:fetchAllDirectionResponsible.isLoading,
-    isUserLoading : fetchDirectionUserInformation.isLoading,
+    isResponsibleLoading: fetchAllDirectionResponsible.isLoading,
+    isUserLoading: fetchDirectionUserInformation.isLoading,
     isError: fetchAllDirections.isError,
   };
 };

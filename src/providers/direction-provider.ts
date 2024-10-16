@@ -3,22 +3,20 @@ import { Direction, Service } from "../types";
 
 const API_URL: string = import.meta.env.VITE_API_URL;
 
-
-
 interface User {
-  id: string,
-  firstname: string,
-  lastname: string,
-  email : string,
-  phoneNumbers: string,
-  grade: string,
-  function : string,
-  directionId: string
+  id: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  phoneNumbers: string;
+  grade: string;
+  function: string;
+  directionId: string;
 }
 
-interface PostedNewUser{
-  identity : string;
-  password : string
+interface PostedNewUser {
+  identity: string;
+  password: string;
 }
 
 export const fetchDirections = async (): Promise<Direction[]> => {
@@ -65,8 +63,7 @@ export const fetchDirectionName = async () => {
   console.log(data);
   return data;
 };
-export const addUserToDirection = async (usertoAdd : User) => {
-  
+export const addUserToDirection = async (usertoAdd: User) => {
   const response = await fetch(`${API_URL}/users/createUser`, {
     method: "POST",
     headers: {
@@ -79,12 +76,11 @@ export const addUserToDirection = async (usertoAdd : User) => {
   }
 
   const data: User = await response.json();
-  message.success("utilisteur ajouter avec succées")
+  message.success("utilisteur ajouter avec succées");
   return data;
 };
 
-export const addReponsibleToDirection = async (usertoAdd : User) => {
-  
+export const addReponsibleToDirection = async (usertoAdd: User) => {
   const response = await fetch(`${API_URL}/users/createAdmin`, {
     method: "POST",
     headers: {
@@ -97,7 +93,7 @@ export const addReponsibleToDirection = async (usertoAdd : User) => {
   }
 
   const data: User = await response.json();
-  message.success("utilisteur ajouter avec succées")
-  
+  message.success("utilisteur ajouter avec succées");
+
   return data;
 };

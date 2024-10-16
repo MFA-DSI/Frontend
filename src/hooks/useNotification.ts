@@ -9,10 +9,9 @@ export const useNotification = () => {
 
   const fetchNotifications = useQuery({
     queryKey: ["notification"],
-    queryFn:  fetchNotification,
+    queryFn: fetchNotification,
   });
 
-  
   const updateNotification = useMutation({
     mutationFn: (id: string) => updateNotificationStatus(id),
     onSuccess: () => {

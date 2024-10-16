@@ -99,7 +99,7 @@ const MainLayout = ({ children }) => {
             selectedKeys={[location.pathname]}
           >
             {/* Mapping des items du menu */}
-            {items.map((item) => (
+            {items.map((item) =>
               item.children ? (
                 <SubMenu
                   key={item.key}
@@ -107,7 +107,7 @@ const MainLayout = ({ children }) => {
                   title={item.label}
                   style={{
                     margin: "10px 0",
-                   
+
                     borderRadius: "8px",
                   }}
                 >
@@ -138,8 +138,8 @@ const MainLayout = ({ children }) => {
                     </span>
                   </Link>
                 </Menu.Item>
-              )
-            ))}
+              ),
+            )}
           </Menu>
         </Sider>
 

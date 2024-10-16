@@ -11,15 +11,13 @@ export const NotificationProvider = ({ children }) => {
     isError,
   } = useNotification();
 
-
-
   return (
     <NotificationContext.Provider
       value={{
         fetchNotifications: fetchAllNotification,
         updateNotification: updateNotificationViewStatus.mutate,
         isLoading,
-       isError,
+        isError,
       }}
     >
       {children}

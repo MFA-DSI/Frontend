@@ -7,14 +7,14 @@ import { useAuthStore } from "../../hooks";
 const role = useAuthStore.getState().role;
 
 //TODO: change this to state from zustand
-const directionId = localStorage.getItem("directionId")
+const directionId = localStorage.getItem("directionId");
 
 const AddUserModal = ({ visible, onCancel }) => {
   const { saveNewUser } = useDirectionsContext();
   const [form] = Form.useForm();
   const [personnelType, setPersonnelType] = useState(null);
   const [gradeOptions, setGradeOptions] = useState([]);
-  const [contactType, setContactType] = useState("email"); 
+  const [contactType, setContactType] = useState("email");
 
   const handlePersonnelTypeChange = (value) => {
     setPersonnelType(value);
@@ -30,15 +30,13 @@ const AddUserModal = ({ visible, onCancel }) => {
       phoneNumbers: contactType === "phone" ? values.contactValue : null,
       grade: personnelType !== "PC" ? values.grade : "PC",
       function: values.fonction,
-      directionId: directionId, 
+      directionId: directionId,
     };
-
 
     saveNewUser(user)
       .then(() => {
         console.log("User saved successfully");
-        form.resetFields(); 
-       
+        form.resetFields();
       })
       .catch((error) => {
         console.error("Error saving user:", error);
@@ -49,13 +47,12 @@ const AddUserModal = ({ visible, onCancel }) => {
     form
       .validateFields()
       .then((values) => {
-        onSave(values); 
+        onSave(values);
       })
       .catch((info) => {
         console.log("Erreur lors de la validation:", info);
-      }).finally(
-        onCancel()
-      );
+      })
+      .finally(onCancel());
   };
 
   return (
@@ -132,7 +129,7 @@ const AddUserModal = ({ visible, onCancel }) => {
               <Select
                 defaultValue="email"
                 onChange={(value) => setContactType(value)}
-                style={{ width: '30%' }}
+                style={{ width: "30%" }}
                 options={[
                   { value: "email", label: "Email" },
                   { value: "phone", label: "Téléphone" },
@@ -147,7 +144,9 @@ const AddUserModal = ({ visible, onCancel }) => {
                 {
                   required: true,
                   message: `Veuillez entrer ${
-                    contactType === "email" ? "un email" : "un numéro de téléphone"
+                    contactType === "email"
+                      ? "un email"
+                      : "un numéro de téléphone"
                   }`,
                 },
                 contactType === "email"
@@ -167,7 +166,7 @@ const AddUserModal = ({ visible, onCancel }) => {
                     ? "Entrez l'adresse email"
                     : "Entrez le numéro de téléphone"
                 }
-                style={{ width: '70%' }}
+                style={{ width: "70%" }}
               />
             </Form.Item>
           </Input.Group>

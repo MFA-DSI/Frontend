@@ -4,7 +4,6 @@ import { Select, Button, Card, Divider } from "antd";
 const { Option } = Select;
 
 const ReportGenerator = () => {
- 
   const [activityType, setActivityType] = useState("weekly");
   const [dateFilter, setDateFilter] = useState({
     month: null,
@@ -17,12 +16,16 @@ const ReportGenerator = () => {
     const weeks = [];
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
-  
-    for (let date = firstDay; date <= lastDay; date.setDate(date.getDate() + 7)) {
+
+    for (
+      let date = firstDay;
+      date <= lastDay;
+      date.setDate(date.getDate() + 7)
+    ) {
       const weekNumber = Math.ceil(date.getDate() / 7);
-      weeks.push(`Semaine ${weekNumber} (${date.toLocaleDateString('fr-FR')})`);
+      weeks.push(`Semaine ${weekNumber} (${date.toLocaleDateString("fr-FR")})`);
     }
-  
+
     return weeks;
   };
 
@@ -67,14 +70,13 @@ const ReportGenerator = () => {
                 setDateFilter({ ...dateFilter, week: value })
               }
             >
-              {getWeeksInMonth(
-                dateFilter.month,
-                new Date().getFullYear(),
-              ).map((week, index) => (
-                <Option key={index} value={week}>
-                  {week}
-                </Option>
-              ))}
+              {getWeeksInMonth(dateFilter.month, new Date().getFullYear()).map(
+                (week, index) => (
+                  <Option key={index} value={week}>
+                    {week}
+                  </Option>
+                ),
+              )}
             </Select>
           )}
         </>
@@ -85,9 +87,7 @@ const ReportGenerator = () => {
           <Select
             placeholder="Année"
             style={{ width: "100%", marginBottom: "16px" }}
-            onChange={(value) => 
-              setDateFilter({ ...dateFilter, year: value })
-            }
+            onChange={(value) => setDateFilter({ ...dateFilter, year: value })}
           >
             <Option value="2023">2023</Option>
             <Option value="2024">2024</Option>
@@ -117,9 +117,7 @@ const ReportGenerator = () => {
           <Select
             placeholder="Année"
             style={{ width: "100%", marginBottom: "16px" }}
-            onChange={(value) => 
-              setDateFilter({ ...dateFilter, year: value })
-            }
+            onChange={(value) => setDateFilter({ ...dateFilter, year: value })}
           >
             <Option value="2023">2023</Option>
             <Option value="2024">2024</Option>
@@ -141,8 +139,22 @@ const ReportGenerator = () => {
         </>
       )}
 
-      <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "16px" }}>
-        <Button type="primary" disabled={!dateFilter.week && !dateFilter.month && !dateFilter.year && !dateFilter.quarter}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          marginTop: "16px",
+        }}
+      >
+        <Button
+          type="primary"
+          disabled={
+            !dateFilter.week &&
+            !dateFilter.month &&
+            !dateFilter.year &&
+            !dateFilter.quarter
+          }
+        >
           Générer le rapport
         </Button>
       </div>

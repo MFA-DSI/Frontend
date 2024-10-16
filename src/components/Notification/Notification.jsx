@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Card, List, Avatar, Typography, Badge, Space, Skeleton, Spin } from "antd";
+import {
+  Card,
+  List,
+  Avatar,
+  Typography,
+  Badge,
+  Space,
+  Skeleton,
+  Spin,
+} from "antd";
 import {
   NotificationOutlined,
   FileTextOutlined,
@@ -24,10 +33,8 @@ const getIconByType = (type) => {
 };
 
 const NotificationCardDynamicIcons = () => {
-  const { fetchNotifications, isLoading : isNotificationLoading } = useNotificationContext();
-
-  
- 
+  const { fetchNotifications, isLoading: isNotificationLoading } =
+    useNotificationContext();
 
   const notifications = fetchNotifications.map((notification) => ({
     ...notification,
@@ -38,7 +45,7 @@ const NotificationCardDynamicIcons = () => {
     notifications.map((notification) => ({
       id: notification.id,
       timeSince: getTimeSince(convertToJSDate(notification.creationDatetime)),
-    }))
+    })),
   );
 
   useEffect(() => {
@@ -53,10 +60,7 @@ const NotificationCardDynamicIcons = () => {
     return () => clearInterval(interval);
   }, [notifications]);
 
-
-
-  
-  if (isNotificationLoading) return <Spin/>
+  if (isNotificationLoading) return <Spin />;
   return (
     <Card
       title={
@@ -72,93 +76,89 @@ const NotificationCardDynamicIcons = () => {
         marginBottom: "24px",
         padding: "20px",
       }}
-     
     >
-      
-        <List
-          itemLayout="horizontal"
-          dataSource={notifications}
-          renderItem={(notification) => {
-            const timeElapsed =
-              notificationTimes.find((item) => item.id === notification.id)
-                ?.timeSince || "";
+      <List
+        itemLayout="horizontal"
+        dataSource={notifications}
+        renderItem={(notification) => {
+          const timeElapsed =
+            notificationTimes.find((item) => item.id === notification.id)
+              ?.timeSince || "";
 
-            return (
-              <List.Item
-                style={{
-                  height: "60px",
-                  padding: "8px 0",
-                  margin: "5px",
-                  borderBottom: "1px solid #f0f0f0",
-                  transition: "transform 0.3s ease",
-                  borderRadius: "10px",
-                  display: "flex",
-                  alignItems: "center",
-                  backgroundColor: notification.viewStatus
-                    ? "#f5f5f5"
-                    : "#ffffff",
-                  color: notification.viewStatus ? "#8c8c8c" : "#000000",
-                  cursor: "pointer",
-                }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.transform = "scale(1.02)")
+          return (
+            <List.Item
+              style={{
+                height: "60px",
+                padding: "8px 0",
+                margin: "5px",
+                borderBottom: "1px solid #f0f0f0",
+                transition: "transform 0.3s ease",
+                borderRadius: "10px",
+                display: "flex",
+                alignItems: "center",
+                backgroundColor: notification.viewStatus
+                  ? "#f5f5f5"
+                  : "#ffffff",
+                color: notification.viewStatus ? "#8c8c8c" : "#000000",
+                cursor: "pointer",
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.transform = "scale(1.02)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.transform = "scale(1)")
+              }
+            >
+              <List.Item.Meta
+                avatar={
+                  <Badge dot={notification.isNew} offset={[0, 5]}>
+                    <Avatar
+                      icon={getIconByType(notification.status)}
+                      size={36}
+                      style={{ backgroundColor: "#f0f2f5" }}
+                    />
+                  </Badge>
                 }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.transform = "scale(1)")
-                }
-              >
-                <List.Item.Meta
-                  avatar={
-                    <Badge dot={notification.isNew} offset={[0, 5]}>
-                      <Avatar
-                        icon={getIconByType(notification.status)}
-                        size={36}
-                        style={{ backgroundColor: "#f0f2f5" }}
-                      />
-                    </Badge>
-                  }
-                  title={
-                    <Space direction="vertical" size={0}>
-                      <Text
-                        strong
-                        style={{
-                          fontSize: "14px",
-                          color: notification.viewStatus
-                            ? "#8c8c8c"
-                            : "#000000",
-                        }}
-                      >
-                        {notification.description}
-                      </Text>
-                    </Space>
-                  }
-                  description={
+                title={
+                  <Space direction="vertical" size={0}>
                     <Text
-                      type="secondary"
+                      strong
                       style={{
-                        fontSize: "12px",
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
+                        fontSize: "14px",
+                        color: notification.viewStatus ? "#8c8c8c" : "#000000",
                       }}
                     >
                       {notification.description}
                     </Text>
-                  }
-                />
-                <div
-                  style={{
-                    marginLeft: "auto",
-                    fontSize: "12px",
-                    color: "#8c8c8c",
-                  }}
-                >
-                  {timeElapsed}
-                </div>
-              </List.Item>
-            );
-          }}
-        />
+                  </Space>
+                }
+                description={
+                  <Text
+                    type="secondary"
+                    style={{
+                      fontSize: "12px",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {notification.description}
+                  </Text>
+                }
+              />
+              <div
+                style={{
+                  marginLeft: "auto",
+                  fontSize: "12px",
+                  color: "#8c8c8c",
+                }}
+              >
+                {timeElapsed}
+              </div>
+            </List.Item>
+          );
+        }}
+      />
     </Card>
   );
 };

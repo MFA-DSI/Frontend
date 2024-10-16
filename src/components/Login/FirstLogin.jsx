@@ -31,7 +31,11 @@ const FirstLogin = ({ username }) => {
 
   return (
     <div className="change-password-container">
-      <Card className="change-password-card" bordered={false} style={{ width: 400 }}>
+      <Card
+        className="change-password-card"
+        bordered={false}
+        style={{ width: 400 }}
+      >
         <div className="welcome-container">
           <Title level={3} style={{ textAlign: "center" }}>
             Bienvenue, {username}
@@ -44,7 +48,12 @@ const FirstLogin = ({ username }) => {
         >
           <Form.Item
             name="oldPassword"
-            rules={[{ required: true, message: "Veuillez entrer votre ancien mot de passe" }]}
+            rules={[
+              {
+                required: true,
+                message: "Veuillez entrer votre ancien mot de passe",
+              },
+            ]}
           >
             <Input.Password
               prefix={<LockOutlined className="site-form-item-icon" />}
@@ -55,7 +64,12 @@ const FirstLogin = ({ username }) => {
 
           <Form.Item
             name="newPassword"
-            rules={[{ required: true, message: "Veuillez entrer votre nouveau mot de passe" }]}
+            rules={[
+              {
+                required: true,
+                message: "Veuillez entrer votre nouveau mot de passe",
+              },
+            ]}
           >
             <Input.Password
               prefix={<LockOutlined className="site-form-item-icon" />}
@@ -66,15 +80,20 @@ const FirstLogin = ({ username }) => {
 
           <Form.Item
             name="confirmPassword"
-            dependencies={['newPassword']}
+            dependencies={["newPassword"]}
             rules={[
-              { required: true, message: "Veuillez confirmer votre nouveau mot de passe" },
+              {
+                required: true,
+                message: "Veuillez confirmer votre nouveau mot de passe",
+              },
               ({ getFieldValue }) => ({
                 validator(_, value) {
-                  if (!value || getFieldValue('newPassword') === value) {
+                  if (!value || getFieldValue("newPassword") === value) {
                     return Promise.resolve();
                   }
-                  return Promise.reject(new Error("Les mots de passe ne correspondent pas"));
+                  return Promise.reject(
+                    new Error("Les mots de passe ne correspondent pas"),
+                  );
                 },
               }),
             ]}

@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import environment from "../conf/environment";
 import { errorTranslations } from "./utils/translator/translator";
 import { useAuthStore } from "../hooks";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 export const authProvider = {
   login: async (auth: AuthLogin): Promise<void> => {
@@ -17,40 +17,35 @@ export const authProvider = {
           success: "Connexion réussie 👌",
         },
       );
-  
+
       if (response.status !== 200) {
         return Promise.reject(response.statusText);
       }
-  
+
       const token: AuthReponse = response.data;
-  
-   
+
       const decodedToken: any = jwtDecode(token.token.accessToken);
       const role = decodedToken.role ? decodedToken.role[0] : null;
-  
 
-      
-      
       localStorage.setItem("token", token.token.accessToken);
       localStorage.setItem("directionId", token.directionId);
       localStorage.setItem("userId", token.userId);
       localStorage.setItem("role", role);
-  
-     
+
       useAuthStore.setState({
         directionId: token.directionId,
         userId: token.userId,
         token: token.token.accessToken,
-        role: role,  
+        role: role,
       });
-      
+
       return Promise.resolve();
     } catch (error: any) {
       const errorCode = error.response?.data?.message;
-      const language = "mg";  
-  
+      const language = "mg";
+
       const translatedError = errorTranslations[language][errorCode];
-  
+
       if (translatedError) {
         toast.error(translatedError);
       } else {

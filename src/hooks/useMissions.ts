@@ -10,9 +10,7 @@ import {
 
 export const useMissions = () => {
   const queryClient = useQueryClient();
- 
-  
-  
+
   const missionsQuery = useQuery({
     queryKey: ["missions"],
     queryFn: fetchMissions,
@@ -22,8 +20,7 @@ export const useMissions = () => {
     useQuery({
       queryKey: ["mission"],
       queryFn: () =>
-        getByDirectionId(localStorage.getItem("directionId") || "")
-      
+        getByDirectionId(localStorage.getItem("directionId") || ""),
     });
 
   const directionMissionsName = (id) =>

@@ -16,7 +16,7 @@ export const DirectionProvider = ({ children }) => {
     saveNewUser,
     isResponsibleLoading,
     isUserLoading,
-    saveNewResponsible
+    saveNewResponsible,
   } = useDirections();
 
   return (

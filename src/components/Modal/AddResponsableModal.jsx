@@ -4,7 +4,6 @@ import { personnelOptions, Grade } from "./utils/Grade";
 import { useDirectionsContext } from "../../providers";
 import { generateExcelFile } from "./utils/generateExcelfile";
 
-
 const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
   const { fetchAllDirection, saveNewResponsible } = useDirectionsContext();
   const [form] = Form.useForm();
@@ -14,7 +13,6 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
   const [directionsOptions, setDirectionsOptions] = useState([]);
   const [responseModalVisible, setResponseModalVisible] = useState(false);
   const [responseData, setResponseData] = useState(null);
-  
 
   // Fetch directions directly
   if (visible && directionsOptions.length === 0) {
@@ -34,7 +32,7 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
   const handleSave = async () => {
     try {
       const values = await form.validateFields();
-      
+
       // Map form values to the NewResponsible interface
       const newResponsible = {
         firstname: values.firstname,
@@ -42,37 +40,37 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
         grade: values.personnelType,
         directionId: values.direction,
         function: values.fonction,
-        ...(contactType === "email" ? { email: values.contactValue } : { phone: values.contactValue }),
-        ...(personnelType && personnelType !== "PC" ? { grade: values.grade } : {}),
+        ...(contactType === "email"
+          ? { email: values.contactValue }
+          : { phone: values.contactValue }),
+        ...(personnelType && personnelType !== "PC"
+          ? { grade: values.grade }
+          : {}),
       };
 
       // Call the async saveNewResponsible function with the mapped object
       await saveNewResponsible(newResponsible, {
         onSuccess: (data) => {
           // Set the response data in state
-          setResponseData(data); 
+          setResponseData(data);
           // Show the modal after successful response
-          setResponseModalVisible(true)
+          setResponseModalVisible(true);
         },
         onError: (error) => {
           console.error("Failed to add responsible:", error);
         },
       });
 
-
-     
-
       form.resetFields();
-      onCancel()
+      onCancel();
     } catch (error) {
       console.error("Failed to save new responsible:", error);
     }
   };
 
- 
   const handleCloseModal = () => {
     setResponseModalVisible(false);
-    setResponseData(null); 
+    setResponseData(null);
   };
 
   return (
@@ -132,7 +130,9 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
                   {
                     required: true,
                     message: `Veuillez entrer ${
-                      contactType === "email" ? "un email" : "un numéro de téléphone"
+                      contactType === "email"
+                        ? "un email"
+                        : "un numéro de téléphone"
                     }`,
                   },
                   contactType === "email"
@@ -161,7 +161,12 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
           <Form.Item
             label="Type de personnel"
             name="personnelType"
-            rules={[{ required: true, message: "Veuillez choisir un type de personnel" }]}
+            rules={[
+              {
+                required: true,
+                message: "Veuillez choisir un type de personnel",
+              },
+            ]}
           >
             <Select
               options={personnelOptions}
@@ -189,7 +194,9 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
           <Form.Item
             label="Direction"
             name="direction"
-            rules={[{ required: true, message: "Veuillez choisir une direction" }]}
+            rules={[
+              { required: true, message: "Veuillez choisir une direction" },
+            ]}
           >
             <Select
               options={directionsOptions}
@@ -200,7 +207,9 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
           <Form.Item
             label="Fonction"
             name="fonction"
-            rules={[{ required: true, message: "Veuillez entrer une fonction" }]}
+            rules={[
+              { required: true, message: "Veuillez entrer une fonction" },
+            ]}
           >
             <Input placeholder="Entrez la fonction" />
           </Form.Item>
@@ -208,34 +217,33 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
       </Modal>
 
       {responseData && (
-      <Modal
-        title={`Nouveau Responsable du ${responseData.directionName}`}
-        visible={responseModalVisible}
-        
-        onCancel={handleCloseModal}
-        footer={[
-          <Button key="export" onClick={() => generateExcelFile(responseData)} disabled={!responseData}>
-            Export ces identifiants
-          </Button>,
-          <Button key="close" onClick={handleCloseModal}>
-            Close
-          </Button>,
-        ]}
-      >
-       
+        <Modal
+          title={`Nouveau Responsable du ${responseData.directionName}`}
+          visible={responseModalVisible}
+          onCancel={handleCloseModal}
+          footer={[
+            <Button
+              key="export"
+              onClick={() => generateExcelFile(responseData)}
+              disabled={!responseData}
+            >
+              Export ces identifiants
+            </Button>,
+            <Button key="close" onClick={handleCloseModal}>
+              Fermer
+            </Button>,
+          ]}
+        >
           <div>
             <p>Direction : {responseData.directionName}</p>
             <p>Identifiant : {responseData.identity}</p>
             <p>Mot de passe : {responseData.password}</p>
             <p>
-
-             
-              Les informations d'identification ont été enregistrées dans un fichier Excel nommé{" "}
-              <strong>{responseData.name}.xlsx</strong>.
+              Les informations d'identification ont été enregistrées dans un
+              fichier Excel nommé <strong>{responseData.name}.xlsx</strong>.
             </p>
           </div>
-        
-      </Modal>
+        </Modal>
       )}
     </>
   );
