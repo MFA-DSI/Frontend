@@ -21,7 +21,7 @@ export const useNotification = () => {
   });
 
   return {
-    fetchAllNotification: fetchNotifications,
+    fetchAllNotification: fetchNotifications.data,
     updateNotificationViewStatus: updateNotification.mutate,
     isLoading: fetchNotifications.isLoading,
     isError: fetchNotifications.isError,

@@ -98,5 +98,6 @@ export const addReponsibleToDirection = async (usertoAdd : User) => {
 
   const data: User = await response.json();
   message.success("utilisteur ajouter avec succées")
+  
   return data;
 };
