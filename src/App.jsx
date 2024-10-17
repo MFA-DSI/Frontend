@@ -12,6 +12,7 @@ import Notification from "./pages/Notification/Notification";
 import Profile from "./pages/Profile/Profile";
 import LoginPage from "./pages/Login/LoginPage";
 import ReportMission from "./pages/ReportMission/ReportMission";
+import FirstLoginPage from "./pages/Login/FirstLoginPage";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ function App() {
           <Route path="profile" element={<Profile />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/signin" element={<FirstLoginPage />} />
       </Routes>
     </QueryClientProvider>
   );

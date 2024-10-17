@@ -3,12 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { Form, Input, Button, Card, Typography } from "antd";
 import { LockOutlined } from "@ant-design/icons";
 import "./assets/index.scss";
+import { authProvider } from "../../providers";
 
 const { Title } = Typography;
 
-const FirstLogin = ({ username }) => {
-  const [isLoading, setIsLoading] = useState(false);
+
+const {signin} = authProvider;
+
+const FirstLoginComponent = () => {
   const navigate = useNavigate();
+  const username = localStorage.getItem("username")
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const onFinish = async (values) => {
     setIsLoading(true);
@@ -18,9 +24,10 @@ const FirstLogin = ({ username }) => {
       console.log("New Password:", values.newPassword);
       console.log("Confirm Password:", values.confirmPassword);
 
-      // Simule la redirection après succès
+      // appel await first login
+      await signin({ oldPassword: values.oldPassword, newPassword: values.newPassword });
       setTimeout(() => {
-        navigate("/"); // Redirection après le changement de mot de passe
+        navigate("/"); // Redirection après la connexion réussie
       }, 500);
     } catch (error) {
       console.error("Password change failed:", error);
@@ -123,4 +130,4 @@ const FirstLogin = ({ username }) => {
   );
 };
 
-export default FirstLogin;
+export default FirstLoginComponent;

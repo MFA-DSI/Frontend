@@ -15,10 +15,19 @@ const Login = () => {
   const onFinish = async (values) => {
     setIsLoading(true);
     try {
-      await login({ email: values.email, password: values.password });
-      setTimeout(() => {
-        navigate("/"); // Redirige après la connexion réussie
-      }, 500);
+      // Appel de la fonction login et récupération de la réponse
+      const ress = await login({ email: values.email, password: values.password });
+      console.log("Response:", ress);
+  
+      // Si premier login, rediriger vers /signin
+      if (ress.message === "You must change your password upon first login") {
+        navigate("/signin");
+      } else {
+        // Sinon, rediriger vers "/"
+        setTimeout(() => {
+          navigate("/"); // Redirection après la connexion réussie
+        }, 500);
+      }
     } catch (error) {
       console.error("Authentication failed:", error);
     } finally {
