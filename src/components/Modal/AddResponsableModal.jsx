@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Form, Input, Select, Modal, Button, message } from "antd";
 import { personnelOptions, Grade } from "./utils/Grade";
 import { useDirectionsContext } from "../../providers";
-import { generateExcelFile } from "./utils/generateExcelfile";
+
+import ApprobatedUserModal from "./Forms/ApprobatedUser";
 
 const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
   const { fetchAllDirection, saveNewResponsible } = useDirectionsContext();
@@ -14,11 +15,10 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
   const [responseModalVisible, setResponseModalVisible] = useState(false);
   const [responseData, setResponseData] = useState(null);
 
-  // Fetch directions directly
   if (visible && directionsOptions.length === 0) {
-    const directions = fetchAllDirection; // Fetch directions from the context
+    const directions = fetchAllDirection; 
     const options = directions.map((direction) => ({
-      value: direction.id, // Set id as the value
+      value: direction.id,
       label: direction.name, // Set name as the label
     }));
     setDirectionsOptions(options);
@@ -217,33 +217,22 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
       </Modal>
 
       {responseData && (
-        <Modal
-          title={`Nouveau Responsable du ${responseData.directionName}`}
-          visible={responseModalVisible}
-          onCancel={handleCloseModal}
-          footer={[
-            <Button
-              key="export"
-              onClick={() => generateExcelFile(responseData)}
-              disabled={!responseData}
-            >
-              Export ces identifiants
-            </Button>,
-            <Button key="close" onClick={handleCloseModal}>
-              Fermer
-            </Button>,
-          ]}
-        >
-          <div>
-            <p>Direction : {responseData.directionName}</p>
-            <p>Identifiant : {responseData.identity}</p>
-            <p>Mot de passe : {responseData.password}</p>
-            <p>
-              Les informations d'identification ont été enregistrées dans un
-              fichier Excel nommé <strong>{responseData.name}.xlsx</strong>.
-            </p>
-          </div>
-        </Modal>
+        <ApprobatedUserModal
+        title={`Nouveau Responsable du ${responseData?.directionName}`}
+        visible={responseModalVisible}
+        onCancel={handleCloseModal}
+        responseData={responseData}
+      >
+        <div>
+          <p>Direction : {responseData?.directionName}</p>
+          <p>Identifiant : {responseData?.identity}</p>
+          <p>Mot de passe : {responseData?.password}</p>
+          <p>
+            Les informations d'identification ont été enregistrées dans un fichier Excel nommé 
+            <strong>{responseData?.name}.xlsx</strong>.
+          </p>
+        </div>
+      </ApprobatedUserModal>
       )}
     </>
   );
