@@ -6,7 +6,6 @@ import "./assets/index.scss";
 import { authProvider } from "../../providers";
 
 const { Title } = Typography;
-
 const { signin } = authProvider;
 
 const FirstLoginComponent = () => {
@@ -17,18 +16,15 @@ const FirstLoginComponent = () => {
   const onFinish = async (values) => {
     setIsLoading(true);
     try {
-      // Appel à l'API pour changer le mot de passe
+      // Console logs for debugging
       console.log("Old Password:", values.oldPassword);
       console.log("New Password:", values.newPassword);
       console.log("Confirm Password:", values.confirmPassword);
 
-      // appel await first login
-      await signin({
-        oldPassword: values.oldPassword,
-        newPassword: values.newPassword,
-      });
+      // Simulate first login password change
+      await signin({ oldPassword: values.oldPassword, newPassword: values.newPassword });
       setTimeout(() => {
-        navigate("/"); // Redirection après la connexion réussie
+        navigate("/");
       }, 500);
     } catch (error) {
       console.error("Password change failed:", error);
@@ -38,20 +34,16 @@ const FirstLoginComponent = () => {
   };
 
   return (
-    <div className="change-password-container">
-      <Card
-        className="change-password-card"
-        bordered={false}
-        style={{ width: 400 }}
-      >
-        <div className="welcome-container">
+    <div className="login-container"> {/* Changed to match Login component */}
+      <Card className="login-card" bordered={false} style={{ width: 400 }}>
+        <div className="welcome-container login-logo-container"> {/* Reuse similar structure */}
           <Title level={3} style={{ textAlign: "center" }}>
             Bienvenue, {username}
           </Title>
         </div>
         <Form
           name="change_password"
-          className="change-password-form"
+          className="login-form" 
           onFinish={onFinish}
         >
           <Form.Item
@@ -64,7 +56,7 @@ const FirstLoginComponent = () => {
             ]}
           >
             <Input.Password
-              prefix={<LockOutlined className="site-form-item-icon" />}
+              prefix={<LockOutlined className="site-form-item-icon" />} 
               placeholder="Ancien mot de passe"
               size="large"
             />
@@ -80,7 +72,7 @@ const FirstLoginComponent = () => {
             ]}
           >
             <Input.Password
-              prefix={<LockOutlined className="site-form-item-icon" />}
+              prefix={<LockOutlined className="site-form-item-icon" />} 
               placeholder="Nouveau mot de passe"
               size="large"
             />
@@ -100,14 +92,14 @@ const FirstLoginComponent = () => {
                     return Promise.resolve();
                   }
                   return Promise.reject(
-                    new Error("Les mots de passe ne correspondent pas"),
+                    new Error("Les mots de passe ne correspondent pas")
                   );
                 },
               }),
             ]}
           >
             <Input.Password
-              prefix={<LockOutlined className="site-form-item-icon" />}
+              prefix={<LockOutlined className="site-form-item-icon" />} 
               placeholder="Confirmez le mot de passe"
               size="large"
             />
@@ -117,7 +109,7 @@ const FirstLoginComponent = () => {
             <Button
               type="primary"
               htmlType="submit"
-              className="change-password-form-button"
+              className="login-form-button" 
               block
               size="large"
               loading={isLoading}
