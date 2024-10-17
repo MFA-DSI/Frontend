@@ -28,10 +28,12 @@ export const authProvider = {
       if (data.message === "You must change your password upon first login") {
         localStorage.setItem("userId", data.userId);
         localStorage.setItem("username", data.name);
-        toast.info("Vous devez changer votre mot de passe");
+        
 
         return data;
-      }
+      
+      }else{
+  
 
       // Cas où l'authentification est réussie et un token est reçu
       const token: AuthReponse = data;
@@ -53,6 +55,8 @@ export const authProvider = {
       });
 
       return Promise.resolve();
+            
+    }
     } catch (error: any) {
       const errorCode = error.response?.data?.message;
       const language = "mg";

@@ -16,6 +16,8 @@ import { toFullName } from "./utils/nameToFullName";
 import AddUserModal from "../Modal/AddUserModal";
 import AddResponsableDirectionModal from "../Modal/AddResponsableModal";
 import { useDirectionsContext } from "../../providers";
+import ApprobateUserModal from "../Modal/Forms/ApprobatedUser";
+import { useAuthStore } from "../../hooks";
 
 const ProfileComponent = () => {
   const {
@@ -37,6 +39,10 @@ const ProfileComponent = () => {
     useState(false);
   const [isApproveModalVisible, setIsApproveModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [responseModalVisible, setResponseModalVisible] = useState(false);
+  const [responseData, setResponseData] = useState(null);
+
+const role = useAuthStore.getState().role;
 
   const handleApprove = (user) => {
     setSelectedUser(user);
@@ -54,17 +60,44 @@ const ProfileComponent = () => {
     { text: "Manager", value: "Manager" },
   ];
 
-  const handleApprovalAction = async (approved) => {
-    if (approved) {
-      // Perform approval action here
+    const handleApprovalAction = async (approved) => {
+      if (approved) {
+        // Perform approval action here
 
-      console.log("selected ", selectedUser);
-      console.log("userid ", userId);
+        const toApprove = {
+          responsibleId : userId ,
+          toApproveId : selectedUser.id
+          
+        } 
+        try{  
+        await approveUserToDirectionMember(toApprove, {
+          onSuccess: (data) => {
+            // Set the response data in state
+            setResponseData(data);
+            // Show the modal after successful response
+            setResponseModalVisible(true);
+          },
+          onError: (error) => {
+            console.error("Failed to add responsible:", error);
+          },
+        });
+  
+        form.resetFields();
+        onCancel();
+      } catch (error) {
+        console.error("Failed to save new responsible:", error);
+      }
+        
+      }
+      setIsApproveModalVisible(false);
+    };
 
-      await approveUserToDirectionMember(userId, selectedUser.id);
-    }
-    setIsApproveModalVisible(false);
-  };
+
+    const handleCloseModal = () => {
+      setResponseModalVisible(false);
+      setResponseData(null);
+    };
+  
 
   const columns = [
     {
@@ -106,7 +139,7 @@ const ProfileComponent = () => {
             status={approved ? "success" : "default"}
             text={approved ? "Approuvé" : "En attente"}
           />
-          {!approved && (
+          {!approved && role =="ADMIN" && (
             <Button
               type="primary"
               onClick={() => handleApprove(record)}
@@ -296,13 +329,19 @@ const ProfileComponent = () => {
           <Button type="primary" onClick={() => setIsUserModalVisible(true)}>
             Ajouter un utilisateur
           </Button>
-          <Button
-            type="primary"
-            style={{ marginLeft: "8px" }}
-            onClick={() => setIsResponsableModalVisible(true)}
-          >
-            Ajouter un responsable direction
-          </Button>
+
+          {
+            role === "ADMIN" && (
+              <Button
+              type="primary"
+              style={{ marginLeft: "8px" }}
+              onClick={() => setIsResponsableModalVisible(true)}
+            >
+              Ajouter un responsable direction
+            </Button>
+            )
+          }
+         
           <Table
             columns={columns}
             dataSource={fetchAllDirectionResponsibles}
@@ -316,6 +355,7 @@ const ProfileComponent = () => {
         visible={isUserModalVisible}
         onCancel={() => setIsUserModalVisible(false)}
       />
+     
       <AddResponsableDirectionModal
         visible={isResponsableModalVisible}
         onCancel={() => setIsResponsableModalVisible(false)}
@@ -348,6 +388,26 @@ const ProfileComponent = () => {
           <Typography.Text strong>Fonction: </Typography.Text>{" "}
           {selectedUser.function}
         </Modal>
+      )}
+
+{responseData && (
+        <ApprobateUserModal
+          title={`Nouveau Responsable du ${responseData?.directionName}`}
+          visible={responseModalVisible}
+          onCancel={handleCloseModal}
+          responseData={responseData}
+        >
+          <div>
+            <p>Direction : {responseData?.directionName}</p>
+            <p>Identifiant : {responseData?.identity}</p>
+            <p>Mot de passe : {responseData?.password}</p>
+            <p>
+              Les informations d'identification ont été enregistrées dans un
+              fichier Excel nommé
+              <strong>{responseData?.name}.xlsx</strong>.
+            </p>
+          </div>
+        </ApprobateUserModal>
       )}
     </div>
   );
