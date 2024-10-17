@@ -1,10 +1,16 @@
-import { Modal, Button } from 'antd';
-import { generateExcelFile } from '../utils/generateExcelfile';
+import { Modal, Button } from "antd";
+import { generateExcelFile } from "../utils/generateExcelfile";
 
-const ApprobateUserModal = ({ title, visible, onCancel, responseData, children }) => {
+const ApprobateUserModal = ({
+  title,
+  visible,
+  onCancel,
+  responseData,
+  children,
+}) => {
   const handleExport = () => {
     if (responseData) {
-      generateExcelFile(responseData); 
+      generateExcelFile(responseData);
     }
   };
 

@@ -3,15 +3,12 @@ import { ToastContainer } from "react-toastify";
 import FirstLoginComponent from "../../components/Login/FirstLogin";
 
 const FirstLoginPage = () => {
-   
   return (
     <div className={`app`}>
-          <DirectionProvider>
-
-         
+      <DirectionProvider>
         <ToastContainer></ToastContainer>
-        <FirstLoginComponent/>
-        </DirectionProvider>
+        <FirstLoginComponent />
+      </DirectionProvider>
     </div>
   );
 };

@@ -7,14 +7,12 @@ import { authProvider } from "../../providers";
 
 const { Title } = Typography;
 
-
-const {signin} = authProvider;
+const { signin } = authProvider;
 
 const FirstLoginComponent = () => {
   const navigate = useNavigate();
-  const username = localStorage.getItem("username")
+  const username = localStorage.getItem("username");
   const [isLoading, setIsLoading] = useState(false);
-
 
   const onFinish = async (values) => {
     setIsLoading(true);
@@ -25,7 +23,10 @@ const FirstLoginComponent = () => {
       console.log("Confirm Password:", values.confirmPassword);
 
       // appel await first login
-      await signin({ oldPassword: values.oldPassword, newPassword: values.newPassword });
+      await signin({
+        oldPassword: values.oldPassword,
+        newPassword: values.newPassword,
+      });
       setTimeout(() => {
         navigate("/"); // Redirection après la connexion réussie
       }, 500);

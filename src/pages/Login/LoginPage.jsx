@@ -9,7 +9,7 @@ const LoginPage = () => {
     <div className={`app app--is-${mode}`}>
       <DirectionProvider>
         <ToastContainer></ToastContainer>
-        
+
         <LoginComponent mode={mode} />
       </DirectionProvider>
     </div>

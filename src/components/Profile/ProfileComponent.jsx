@@ -30,9 +30,7 @@ const ProfileComponent = () => {
 
   //change this from zustand
 
-
-  
-  const userId = localStorage.getItem("userId")
+  const userId = localStorage.getItem("userId");
 
   const [isUserModalVisible, setIsUserModalVisible] = useState(false);
   const [isResponsableModalVisible, setIsResponsableModalVisible] =
@@ -56,16 +54,14 @@ const ProfileComponent = () => {
     { text: "Manager", value: "Manager" },
   ];
 
-  const handleApprovalAction =  async(approved) => {
+  const handleApprovalAction = async (approved) => {
     if (approved) {
       // Perform approval action here
 
-
       console.log("selected ", selectedUser);
       console.log("userid ", userId);
-      
-      
-      await  approveUserToDirectionMember(userId,selectedUser.id);
+
+      await approveUserToDirectionMember(userId, selectedUser.id);
     }
     setIsApproveModalVisible(false);
   };
@@ -83,7 +79,9 @@ const ProfileComponent = () => {
       dataIndex: "fullName",
       key: "fullName",
       render: (_, record) => (
-        <Typography.Text>{toFullName(record.firstName, record.lastName)}</Typography.Text>
+        <Typography.Text>
+          {toFullName(record.firstName, record.lastName)}
+        </Typography.Text>
       ),
     },
     {
@@ -104,7 +102,10 @@ const ProfileComponent = () => {
       onFilter: (value, record) => record.approved === value,
       render: (approved, record) => (
         <>
-          <Badge status={approved ? "success" : "default"} text={approved ? "Approuvé" : "En attente"} />
+          <Badge
+            status={approved ? "success" : "default"}
+            text={approved ? "Approuvé" : "En attente"}
+          />
           {!approved && (
             <Button
               type="primary"
@@ -134,49 +135,145 @@ const ProfileComponent = () => {
         >
           <Row align="middle" gutter={16}>
             <Col span={4} style={{ textAlign: "center" }}>
-              <Avatar size={100} icon={<UserOutlined />} style={{ backgroundColor: "#87d068" }} />
+              <Avatar
+                size={100}
+                icon={<UserOutlined />}
+                style={{ backgroundColor: "#87d068" }}
+              />
             </Col>
             <Col span={20}>
               {/* User Information */}
               <Row>
-                <Col span={12} style={{ display: "flex", flexDirection: "column" }}>
-                  <div style={{ display: "flex", marginBottom: "8px", alignItems: "center" }}>
-                    <Typography.Text strong style={{ minWidth: "150px", textAlign: "right", marginRight: "10px" }}>
+                <Col
+                  span={12}
+                  style={{ display: "flex", flexDirection: "column" }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      marginBottom: "8px",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography.Text
+                      strong
+                      style={{
+                        minWidth: "150px",
+                        textAlign: "right",
+                        marginRight: "10px",
+                      }}
+                    >
                       Grade:
                     </Typography.Text>
                     <Typography.Text>{userInformation.grade}</Typography.Text>
                   </div>
-                  <div style={{ display: "flex", marginBottom: "8px", alignItems: "center" }}>
-                    <Typography.Text strong style={{ minWidth: "150px", textAlign: "right", marginRight: "10px" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      marginBottom: "8px",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography.Text
+                      strong
+                      style={{
+                        minWidth: "150px",
+                        textAlign: "right",
+                        marginRight: "10px",
+                      }}
+                    >
                       Nom:
                     </Typography.Text>
-                    <Typography.Text>{userInformation.lastname} {userInformation.firstname}</Typography.Text>
+                    <Typography.Text>
+                      {userInformation.lastname} {userInformation.firstname}
+                    </Typography.Text>
                   </div>
-                  <div style={{ display: "flex", marginBottom: "8px", alignItems: "center" }}>
-                    <Typography.Text strong style={{ minWidth: "150px", textAlign: "right", marginRight: "10px" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      marginBottom: "8px",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography.Text
+                      strong
+                      style={{
+                        minWidth: "150px",
+                        textAlign: "right",
+                        marginRight: "10px",
+                      }}
+                    >
                       Email:
                     </Typography.Text>
                     <Typography.Text>{userInformation.mail}</Typography.Text>
                   </div>
                 </Col>
-                <Col span={12} style={{ display: "flex", flexDirection: "column" }}>
-                  <div style={{ display: "flex", marginBottom: "8px", alignItems: "center" }}>
-                    <Typography.Text strong style={{ minWidth: "150px", textAlign: "right", marginRight: "10px" }}>
+                <Col
+                  span={12}
+                  style={{ display: "flex", flexDirection: "column" }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      marginBottom: "8px",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography.Text
+                      strong
+                      style={{
+                        minWidth: "150px",
+                        textAlign: "right",
+                        marginRight: "10px",
+                      }}
+                    >
                       Direction:
                     </Typography.Text>
-                    <Typography.Text>{userInformation.direction}</Typography.Text>
+                    <Typography.Text>
+                      {userInformation.direction}
+                    </Typography.Text>
                   </div>
-                  <div style={{ display: "flex", marginBottom: "8px", alignItems: "center" }}>
-                    <Typography.Text strong style={{ minWidth: "100px", textAlign: "left", marginRight: "4px" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      marginBottom: "8px",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography.Text
+                      strong
+                      style={{
+                        minWidth: "100px",
+                        textAlign: "left",
+                        marginRight: "4px",
+                      }}
+                    >
                       Téléphone (WhatsApp):
                     </Typography.Text>
-                    <Typography.Text>{userInformation.phoneNumbers}</Typography.Text>
+                    <Typography.Text>
+                      {userInformation.phoneNumbers}
+                    </Typography.Text>
                   </div>
-                  <div style={{ display: "flex", marginBottom: "8px", alignItems: "center" }}>
-                    <Typography.Text strong style={{ minWidth: "150px", textAlign: "right", marginRight: "10px" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      marginBottom: "8px",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography.Text
+                      strong
+                      style={{
+                        minWidth: "150px",
+                        textAlign: "right",
+                        marginRight: "10px",
+                      }}
+                    >
                       Fonction:
                     </Typography.Text>
-                    <Typography.Text>{userInformation.function}</Typography.Text>
+                    <Typography.Text>
+                      {userInformation.function}
+                    </Typography.Text>
                   </div>
                 </Col>
               </Row>
@@ -188,19 +285,41 @@ const ProfileComponent = () => {
       {isResponsibleLoading ? (
         <Spin size="large" />
       ) : (
-        <Card style={{ width: "100%", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}>
+        <Card
+          style={{
+            width: "100%",
+            borderRadius: "8px",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+          }}
+        >
           <Typography.Title level={4}>Actions</Typography.Title>
-          <Button type="primary" onClick={() => setIsUserModalVisible(true)}>Ajouter un utilisateur</Button>
-          <Button type="primary" style={{ marginLeft: "8px" }} onClick={() => setIsResponsableModalVisible(true)}>
+          <Button type="primary" onClick={() => setIsUserModalVisible(true)}>
+            Ajouter un utilisateur
+          </Button>
+          <Button
+            type="primary"
+            style={{ marginLeft: "8px" }}
+            onClick={() => setIsResponsableModalVisible(true)}
+          >
             Ajouter un responsable direction
           </Button>
-          <Table columns={columns} dataSource={fetchAllDirectionResponsibles} rowKey="id" />
+          <Table
+            columns={columns}
+            dataSource={fetchAllDirectionResponsibles}
+            rowKey="id"
+          />
         </Card>
       )}
 
       {/* Modals */}
-      <AddUserModal visible={isUserModalVisible} onCancel={() => setIsUserModalVisible(false)} />
-      <AddResponsableDirectionModal visible={isResponsableModalVisible} onCancel={() => setIsResponsableModalVisible(false)} />
+      <AddUserModal
+        visible={isUserModalVisible}
+        onCancel={() => setIsUserModalVisible(false)}
+      />
+      <AddResponsableDirectionModal
+        visible={isResponsableModalVisible}
+        onCancel={() => setIsResponsableModalVisible(false)}
+      />
 
       {/* Approve User Modal */}
       {selectedUser && (
@@ -209,15 +328,25 @@ const ProfileComponent = () => {
           title="Détails de l'utilisateur"
           onCancel={() => setIsApproveModalVisible(false)}
           footer={[
-            <Button key="reject" onClick={() => handleApprovalAction(false)}>Refuser</Button>,
-            <Button key="approve" type="primary" onClick={() => handleApprovalAction(true)}>Approuver</Button>,
+            <Button key="reject" onClick={() => handleApprovalAction(false)}>
+              Refuser
+            </Button>,
+            <Button
+              key="approve"
+              type="primary"
+              onClick={() => handleApprovalAction(true)}
+            >
+              Approuver
+            </Button>,
           ]}
         >
-          <Typography.Text strong>Nom: </Typography.Text> {selectedUser.firstName} {selectedUser.lastName}
+          <Typography.Text strong>Nom: </Typography.Text>{" "}
+          {selectedUser.firstName} {selectedUser.lastName}
           <br />
           <Typography.Text strong>Grade: </Typography.Text> {selectedUser.grade}
           <br />
-          <Typography.Text strong>Fonction: </Typography.Text> {selectedUser.function}
+          <Typography.Text strong>Fonction: </Typography.Text>{" "}
+          {selectedUser.function}
         </Modal>
       )}
     </div>

@@ -16,7 +16,7 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
   const [responseData, setResponseData] = useState(null);
 
   if (visible && directionsOptions.length === 0) {
-    const directions = fetchAllDirection; 
+    const directions = fetchAllDirection;
     const options = directions.map((direction) => ({
       value: direction.id,
       label: direction.name, // Set name as the label
@@ -218,21 +218,22 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
 
       {responseData && (
         <ApprobatedUserModal
-        title={`Nouveau Responsable du ${responseData?.directionName}`}
-        visible={responseModalVisible}
-        onCancel={handleCloseModal}
-        responseData={responseData}
-      >
-        <div>
-          <p>Direction : {responseData?.directionName}</p>
-          <p>Identifiant : {responseData?.identity}</p>
-          <p>Mot de passe : {responseData?.password}</p>
-          <p>
-            Les informations d'identification ont été enregistrées dans un fichier Excel nommé 
-            <strong>{responseData?.name}.xlsx</strong>.
-          </p>
-        </div>
-      </ApprobatedUserModal>
+          title={`Nouveau Responsable du ${responseData?.directionName}`}
+          visible={responseModalVisible}
+          onCancel={handleCloseModal}
+          responseData={responseData}
+        >
+          <div>
+            <p>Direction : {responseData?.directionName}</p>
+            <p>Identifiant : {responseData?.identity}</p>
+            <p>Mot de passe : {responseData?.password}</p>
+            <p>
+              Les informations d'identification ont été enregistrées dans un
+              fichier Excel nommé
+              <strong>{responseData?.name}.xlsx</strong>.
+            </p>
+          </div>
+        </ApprobatedUserModal>
       )}
     </>
   );

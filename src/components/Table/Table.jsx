@@ -15,7 +15,6 @@ import { getWeeksInMonth } from "./utils/DateUtils";
 import { useFilesContext } from "../../providers/context/FilesContext";
 import { toast } from "react-toastify";
 
-
 const { Option } = Select;
 
 const TableComponent = ({ mode }) => {

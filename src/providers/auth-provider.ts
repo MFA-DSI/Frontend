@@ -7,7 +7,6 @@ import { errorTranslations } from "./utils/translator/translator";
 import { useAuthStore } from "../hooks";
 import { jwtDecode } from "jwt-decode";
 
-
 export const authProvider = {
   login: async (auth: AuthLogin): Promise<void> => {
     try {
@@ -16,7 +15,7 @@ export const authProvider = {
         {
           pending: "Connexion en cours...",
           success: "Connexion réussie 👌",
-        }
+        },
       );
 
       if (response.status !== 200) {
@@ -28,7 +27,7 @@ export const authProvider = {
       // Cas où un changement de mot de passe est requis
       if (data.message === "You must change your password upon first login") {
         localStorage.setItem("userId", data.userId);
-        localStorage.setItem("username",data.name)
+        localStorage.setItem("username", data.name);
         toast.info("Vous devez changer votre mot de passe");
 
         return data;
@@ -69,14 +68,17 @@ export const authProvider = {
     }
   },
   signin: async (auth: Signin): Promise<void> => {
-    const userId = localStorage.getItem("userId")
+    const userId = localStorage.getItem("userId");
     try {
       const response = await toast.promise(
-        axios.put(`${environment.apiBaseUrl}/users/first_login?userId=${userId}`, auth),
+        axios.put(
+          `${environment.apiBaseUrl}/users/first_login?userId=${userId}`,
+          auth,
+        ),
         {
           pending: "Connexion en cours...",
           success: "Connexion réussie 👌",
-        }
+        },
       );
 
       if (response.status !== 200) {

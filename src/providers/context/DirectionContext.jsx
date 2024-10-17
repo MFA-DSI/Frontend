@@ -17,13 +17,12 @@ export const DirectionProvider = ({ children }) => {
     isResponsibleLoading,
     isUserLoading,
     saveNewResponsible,
-    approveUserToDirectionMember
+    approveUserToDirectionMember,
   } = useDirections();
 
-
-  const getAllResponsible = ()=>{
-    return fetchAllResponsibles.data
-  }
+  const getAllResponsible = () => {
+    return fetchAllResponsibles.data;
+  };
 
   return (
     <DirectionContext.Provider

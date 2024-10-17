@@ -42,7 +42,10 @@ export const useDirections = () => {
   });
   const fetchAllDirectionResponsible = useQuery({
     queryKey: ["responsible"],
-    queryFn: ()=> getDirectionResponsiblesInformation(localStorage.getItem("directionId") || ""),
+    queryFn: () =>
+      getDirectionResponsiblesInformation(
+        localStorage.getItem("directionId") || "",
+      ),
   });
 
   const saveNewUserMutation = useMutation(addUserToDirection, {
@@ -57,11 +60,11 @@ export const useDirections = () => {
     },
   });
 
-  const approveUser = useMutation(approveUserToDirection,{
-    onSuccess: ()=>{
+  const approveUser = useMutation(approveUserToDirection, {
+    onSuccess: () => {
       queryClient.invalidateQueries(["responsible"]);
-    }
-  })
+    },
+  });
 
   return {
     fetchDirections: fetchAllDirections.data,
@@ -71,7 +74,7 @@ export const useDirections = () => {
     fetchAllResponsibles: fetchAllDirectionResponsible,
     saveNewUser: saveNewUserMutation.mutate,
     saveNewResponsible: saveNewResponsibleToDirection.mutate,
-    approveUserToDirectionMember : approveUser.mutate,
+    approveUserToDirectionMember: approveUser.mutate,
     isLoading: fetchAllDirections.isLoading,
     isResponsibleLoading: fetchAllDirectionResponsible.isLoading,
     isUserLoading: fetchDirectionUserInformation.isLoading,

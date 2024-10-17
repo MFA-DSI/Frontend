@@ -16,9 +16,12 @@ const Login = () => {
     setIsLoading(true);
     try {
       // Appel de la fonction login et récupération de la réponse
-      const ress = await login({ email: values.email, password: values.password });
+      const ress = await login({
+        email: values.email,
+        password: values.password,
+      });
       console.log("Response:", ress);
-  
+
       // Si premier login, rediriger vers /signin
       if (ress.message === "You must change your password upon first login") {
         navigate("/signin");
