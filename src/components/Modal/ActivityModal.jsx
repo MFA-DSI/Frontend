@@ -12,7 +12,7 @@ import { EditableField } from "./Forms/ActivityDetails";
 import { TaskList } from "./Forms/TaskDetails";
 import RecommendationModal from "./RecommendationModal";
 
-const ActivityModal = ({ visible, onCancel, activity, mode, onDelete }) => {
+const ActivityModal = ({ visible, onCancel, activity, mode, onDelete,onSave }) => {
   const { deleteActivity, updateMissionActivity } = useActivitiesContext();
   const [isEditing, setIsEditing] = useState(false);
   const [editedActivity, setEditedActivity] = useState({
@@ -64,7 +64,7 @@ const ActivityModal = ({ visible, onCancel, activity, mode, onDelete }) => {
         dueDatetime: editedActivity.dueDatetime,
       };
       await updateMissionActivity(activityUpdate);
-      onCancel();
+      onSave();
       setIsEditing(false);
     } catch (error) {
       message.error(
@@ -142,7 +142,7 @@ const ActivityModal = ({ visible, onCancel, activity, mode, onDelete }) => {
   if (!activity) return null;
 
   return (
-    <Modal visible={visible} onCancel={onCancel} footer={null} width={800}>
+    <Modal visible={visible} onCancel={onCancel} footer={null} centered width={800}>
       <div
         style={{
           display: "flex",

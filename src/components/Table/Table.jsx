@@ -47,6 +47,7 @@ const TableComponent = ({ mode }) => {
   const [selectedIds, setSelectedIds] = useState([]);
 
   useEffect(() => {}, [mode]);
+
   const showModal = (activity) => {
     setSelectedActivity(activity);
     setIsModalVisible(true);
@@ -61,6 +62,13 @@ const TableComponent = ({ mode }) => {
     setIsModalVisible(false);
     setSelectedActivity(null);
   };
+
+  const handleActivitySave = ()=>{
+    setIsModalVisible(false);
+    setTimeout(() => {
+      setIsModalVisible(true); 
+    }, 500);
+  }
 
   const handleMissionCancel = () => {
     setIsMissionModalVisible(false);
@@ -513,6 +521,7 @@ const TableComponent = ({ mode }) => {
         onDelete={onDelete}
         visible={isModalVisible}
         onCancel={handleCancel}
+        onSave = {handleActivitySave}
         activity={selectedActivity}
       />
       <MissionModal
