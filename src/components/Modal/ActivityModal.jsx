@@ -103,11 +103,12 @@ const ActivityModal = ({ visible, onCancel, activity, mode, onDelete,onSave }) =
   };
   const handlePerformanceSave = () => {
     setIsPerformanceModalVisible(false);
-    onCancel();
+    
   };
 
   const handleRecommendationSave = () => {
     setIsRecommendationVisible(false);
+   
   };
   const handleRecommendationCancel = () => {
     setIsRecommendationVisible(false);
@@ -332,7 +333,7 @@ const ActivityModal = ({ visible, onCancel, activity, mode, onDelete,onSave }) =
         reopenMainModal={() => {
           onCancel();
           setTimeout(() => {
-            onCancel(false);
+            onSave()
           }, 200);
         }}
       />
@@ -342,26 +343,16 @@ const ActivityModal = ({ visible, onCancel, activity, mode, onDelete,onSave }) =
         performance={selectedPerformance}
         onSave={handlePerformanceSave}
         activityId={activity}
-        reopenMainModal={() => {
-          onCancel();
-          setTimeout(() => {
-            onCancel(false);
-          }, 200);
-        }}
+        
       />
 
       <RecommendationModal
         visible={isRecommendationVisible}
         onCancel={handleRecommendationCancel}
         activity={selectedActivity}
-        onSave={handleRecommendationSave}
+        onSave={()=>{handleRecommendationSave(),onSave()}}
         recommendation={selectedActivity}
-        onCloseSuccess={() => {
-          onCancel();
-          setTimeout(() => {
-            onCancel(false);
-          }, 200);
-        }}
+       
       />
 
       <DeleteModal

@@ -14,6 +14,7 @@ import "./assets/index.css";
 import { getWeeksInMonth } from "./utils/DateUtils";
 import { useFilesContext } from "../../providers/context/FilesContext";
 import { toast } from "react-toastify";
+import { useDirectionsContext } from "../../providers";
 
 const { Option } = Select;
 
@@ -31,6 +32,7 @@ const TableComponent = ({ mode }) => {
     setDirectionFilter,
   } = useMissionContext();
   const { fetchMissionXLS } = useFilesContext();
+  const {} = useDirectionsContext()
   const [activityType, setActivityType] = useState("all");
   const [dateFilter, setDateFilter] = useState({
     month: null,
@@ -316,138 +318,155 @@ const TableComponent = ({ mode }) => {
             Liste des Activités
           </h2>
           <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              marginTop: mode === "mydirection" ? 30 : 0,
-            }}
-          >
-            <Select
-              value={activityType}
-              style={{ width: 120, marginRight: "5px" }}
-              onChange={(value) => {
-                setActivityType(value);
-                setFilterType(value);
-                setDateFilter({
-                  month: null,
-                  week: null,
-                  year: null,
-                  quarter: null,
-                });
-              }}
-            >
-              <Option value="all">Toutes les Activités</Option>
-              <Option value="weekly">Hebdomadaire</Option>
-              <Option value="monthly">Mensuel</Option>
-              <Option value="quarterly">Trimestriel</Option>
-            </Select>
+  style={{
+    display: "flex",
+    alignItems: "center",
+    marginTop: mode === "mydirection" ? 30 : 0,
+  }}
+>
+  <Select
+    value={activityType}
+    style={{ width: 120, marginRight: "5px" }}
+    onChange={(value) => {
+      setActivityType(value);
+      setFilterType(value);
+      setDateFilter({
+        month: null,
+        week: null,
+        year: null,
+        quarter: null,
+      });
+    }}
+  >
+    <Option value="all">Toutes les Activités</Option>
+    <Option value="weekly">Hebdomadaire</Option>
+    <Option value="monthly">Mensuel</Option>
+    <Option value="quarterly">Trimestriel</Option>
+  </Select>
 
-            <Select
-              defaultValue="all"
-              style={{ width: 120, marginRight: "8px" }}
-              onChange={setDirectionFilter}
-            >
-              <Option value="all">Toutes les Directions</Option>
-              <Option value="Sales">Sales</Option>
-              <Option value="HR">HR</Option>
-              <Option value="IT">IT</Option>
-              <Option value="Finance">Finance</Option>
-            </Select>
+  <Select
+    defaultValue="all"
+    style={{ width: 120, marginRight: "8px" }}
+    onChange={setDirectionFilter}
+  >
+    <Option value="all">Toutes les Directions</Option>
+    <Option value="Sales">Sales</Option>
+    <Option value="HR">HR</Option>
+    <Option value="IT">IT</Option>
+    <Option value="Finance">Finance</Option>
+  </Select>
 
-            {activityType === "weekly" && (
-              <>
-                <Select
-                  placeholder="Mois"
-                  style={{ width: 100, marginRight: "8px" }}
-                  onChange={(value) => {
-                    setDateFilter({ ...dateFilter, month: value });
-                  }}
-                >
-                  {Array.from({ length: 12 }, (_, index) => (
-                    <Option key={index} value={index}>
-                      {new Date(0, index).toLocaleString("fr-FR", {
-                        month: "long",
-                      })}
-                    </Option>
-                  ))}
-                </Select>
-                <Select
-                  placeholder="Semaine"
-                  style={{ width: 200 }}
-                  onChange={(value) =>
-                    setDateFilter({ ...dateFilter, week: value })
-                  }
-                >
-                  {dateFilter.month !== null &&
-                    getWeeksInMonth(
-                      dateFilter.month,
-                      new Date().getFullYear(),
-                    ).map((week, index) => (
-                      <Option key={index} value={week}>
-                        {week}
-                      </Option>
-                    ))}
-                </Select>
-              </>
-            )}
+  {activityType === "weekly" && (
+    <>
+      <Select
+        placeholder="Mois"
+        style={{ width: 100, marginRight: "8px" }}
+        onChange={(value) => {
+          setDateFilter({ ...dateFilter, month: value });
+        }}
+      >
+        {Array.from({ length: 12 }, (_, index) => (
+          <Option key={index} value={index}>
+            {new Date(0, index).toLocaleString("fr-FR", { month: "long" })}
+          </Option>
+        ))}
+      </Select>
+      <Select
+        placeholder="Semaine"
+        style={{ width: 200 }}
+        onChange={(value) => setDateFilter({ ...dateFilter, week: value })}
+      >
+        {dateFilter.month !== null &&
+          getWeeksInMonth(
+            dateFilter.month,
+            new Date().getFullYear(),
+          ).map((week, index) => (
+            <Option key={index} value={week}>
+              {week}
+            </Option>
+          ))}
+      </Select>
+    </>
+  )}
 
-            {activityType === "monthly" && (
-              <>
-                <Select
-                  placeholder="Année"
-                  style={{ width: 100 }}
-                  onChange={(value) =>
-                    setDateFilter({ ...dateFilter, year: value })
-                  }
-                >
-                  <Option value="2023">2023</Option>
-                  <Option value="2024">2024</Option>
-                </Select>
-                <Select
-                  placeholder="Mois"
-                  style={{ width: 100, marginRight: "8px" }}
-                  onChange={(value) =>
-                    setDateFilter({ ...dateFilter, month: value })
-                  }
-                >
-                  {Array.from({ length: 12 }, (_, index) => (
-                    <Option key={index} value={index}>
-                      {new Date(0, index).toLocaleString("fr-FR", {
-                        month: "long",
-                      })}
-                    </Option>
-                  ))}
-                </Select>
-              </>
-            )}
+  {activityType === "monthly" && (
+    <>
+      <Select
+        placeholder="Année"
+        style={{ width: 100 }}
+        onChange={(value) => setDateFilter({ ...dateFilter, year: value })}
+      >
+        <Option value="2023">2023</Option>
+        <Option value="2024">2024</Option>
+      </Select>
+      <Select
+        placeholder="Mois"
+        style={{ width: 100, marginRight: "8px" }}
+        onChange={(value) => setDateFilter({ ...dateFilter, month: value })}
+      >
+        {Array.from({ length: 12 }, (_, index) => (
+          <Option key={index} value={index}>
+            {new Date(0, index).toLocaleString("fr-FR", { month: "long" })}
+          </Option>
+        ))}
+      </Select>
+    </>
+  )}
 
-            {activityType === "quarterly" && (
-              <>
-                <Select
-                  placeholder="Année"
-                  style={{ width: 100, marginRight: "8px" }}
-                  onChange={(value) =>
-                    setDateFilter({ ...dateFilter, year: value })
-                  }
-                >
-                  <Option value="2023">2023</Option>
-                  <Option value="2024">2024</Option>
-                </Select>
-                <Select
-                  placeholder="Trimestre"
-                  style={{ width: 100 }}
-                  onChange={(value) =>
-                    setDateFilter({ ...dateFilter, quarter: value })
-                  }
-                >
-                  <Option value="Q1">Q1</Option>
-                  <Option value="Q2">Q2</Option>
-                  <Option value="Q3">Q3</Option>
-                  <Option value="Q4">Q4</Option>
-                </Select>
-              </>
-            )}
-          </div>
+  {activityType === "quarterly" && (
+    <>
+      <Select
+        placeholder="Année"
+        style={{ width: 100, marginRight: "8px" }}
+        onChange={(value) => setDateFilter({ ...dateFilter, year: value })}
+      >
+        <Option value="2023">2023</Option>
+        <Option value="2024">2024</Option>
+      </Select>
+      <Select
+        placeholder="Trimestre"
+        style={{ width: 100 }}
+        onChange={(value) => setDateFilter({ ...dateFilter, quarter: value })}
+      >
+        <Option value="Q1">Q1</Option>
+        <Option value="Q2">Q2</Option>
+        <Option value="Q3">Q3</Option>
+        <Option value="Q4">Q4</Option>
+      </Select>
+    </>
+  )}
+
+  {/* Boutons de filtrer et réinitialiser */}
+  <Button
+    type="primary"
+    style={{ marginLeft: "10px" }}
+    onClick={() => {
+      // Action de filtrage
+      console.log("Filtrer les résultats");
+    }}
+  >
+    Filtrer
+  </Button>
+
+  <Button
+    type="default"
+    style={{ marginLeft: "10px" }}
+    onClick={() => {
+      // Réinitialiser tous les filtres
+      setActivityType("all");
+      setDirectionFilter("all");
+      setDateFilter({
+        month: null,
+        week: null,
+        year: null,
+        quarter: null,
+      });
+    }}
+  >
+    Réinitialiser
+  </Button>
+</div>
+
         </div>
         <div
           style={{
