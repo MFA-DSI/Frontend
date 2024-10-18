@@ -44,7 +44,7 @@ export const ActivitieProvider = ({ children }) => {
     <ActivityContext.Provider
       value={{
         filteredActivities: filteredActivities(),
-        directionIdQueryActvities: directionIdQuery(),
+        directionIdQueryActvities: directionIdQuery().data,
         deleteActivity: deleteActivity,
         updateMissionActivity,
         addTaskToActivty: addTask,
