@@ -71,7 +71,7 @@ const PerformanceModal = ({
     if (performance && activityId) {
       setRealization(performance.realization);
       setIndicator(performance.indicators);
-      setRealizationType(performance.realizationType || "chiffre");
+      setRealizationType(performance.realizationType === "number" ? "chiffre" : "pourcentage");
     }
   }, [performance, activityId]);
 
@@ -96,6 +96,15 @@ const PerformanceModal = ({
       </div>
 
       <div style={{ marginTop: "16px" }}>
+        <h3> Indicateurs:</h3>
+        <Input
+          value={indicator}
+          onChange={(e) => setIndicator(e.target.value)}
+          placeholder="Entrez un indicateur"
+        />
+      </div>
+
+      <div style={{ marginTop: "16px" }}>
         <h3>Réalisation :</h3>
         <InputNumber
           value={realization}
@@ -110,16 +119,6 @@ const PerformanceModal = ({
           style={{ width: "100%" }}
         />
       </div>
-
-      <div style={{ marginTop: "16px" }}>
-        <h3> Indicateurs:</h3>
-        <Input
-          value={indicator}
-          onChange={(e) => setIndicator(e.target.value)}
-          placeholder="Entrez un indicateur"
-        />
-      </div>
-
       <div
         style={{
           marginTop: "24px",

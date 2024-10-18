@@ -65,7 +65,7 @@ export const useActivitiesContext = () => {
   const context = useContext(ActivityContext);
   if (!context) {
     throw new Error(
-      "useActivitiesContext must be used within a DirectionProvider",
+      "useActivitiesContext must be used within a ActivitiesProvider",
     );
   }
 

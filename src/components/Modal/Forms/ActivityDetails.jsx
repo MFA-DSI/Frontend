@@ -1,5 +1,6 @@
 import { DatePicker, Input } from "antd";
 import react from "react";
+import { dateFormatter } from "../utils/dateFormatter";
 
 export const EditableField = ({
   label,
@@ -20,7 +21,7 @@ export const EditableField = ({
           <Input value={value} onChange={onChange} placeholder={placeholder} />
         )
       ) : (
-        <p>{inputType === "date" ? value?.toLocaleString() : value}</p>
+        <p>{inputType === "date" ? dateFormatter(value?.toLocaleString()).toLocaleString()  : value}</p>
       )}
     </div>
   );

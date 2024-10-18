@@ -30,8 +30,8 @@ export const TaskList = ({
       )}
       {mode === "mydirection" && !isEditing && (
         <Button type="dashed" onClick={() => openTaskModal(null, type)}>
-          + Enregsitrer{" "}
-          {type === "task" ? "cette tâche" : "cette tâche prochaine"}
+          + Ajouter {" "}
+          {type === "task" ? "une tâche" : "une tâche prochaine"}
         </Button>
       )}
     </div>

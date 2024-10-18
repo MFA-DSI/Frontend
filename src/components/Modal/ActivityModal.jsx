@@ -273,7 +273,7 @@ const ActivityModal = ({ visible, onCancel, activity, mode, onDelete }) => {
             ) : (
               <p>Aucune Recommandation</p>
             )}
-            {mode === "mydirection" && !isEditing && (
+            {!isEditing && (
               <Button
                 type="dashed"
                 onClick={() => openRecommendationModal(selectedActivity)}
