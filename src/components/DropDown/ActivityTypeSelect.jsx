@@ -1,6 +1,8 @@
-import {react} from react;
-import { Select,Option } from "antd";
+import React from "react";
+import { Select} from "antd";
 
+
+const { Option } = Select;
 export const ActivityTypeSelect = ({ activityType, setActivityType, setFilterType, setDateFilter }) => (
     <Select
       value={activityType}

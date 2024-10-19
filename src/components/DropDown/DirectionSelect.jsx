@@ -1,6 +1,8 @@
-import { Select,Option } from "antd";
-import {react} from "react";
+import { Select } from "antd";
 
+
+
+const { Option } = Select;
 
 export const DirectionSelect = ({ setDirectionFilter }) => (
     <Select

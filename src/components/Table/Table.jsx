@@ -15,6 +15,11 @@ import { getWeeksInMonth } from "./utils/DateUtils";
 import { useFilesContext } from "../../providers/context/FilesContext";
 import { toast } from "react-toastify";
 import { useDirectionsContext } from "../../providers";
+import { ActivityTypeSelect } from "../DropDown/ActivityTypeSelect";
+import { DirectionSelect } from "../DropDown/DirectionSelect";
+import { WeeklyFilters } from "../DropDown/WeeklyFilters";
+import { MonthlyFilters } from "../DropDown/MonthlyFilter";
+import { QuarterlyFilters } from "../DropDown/QuarterlyFilter";
 
 const { Option } = Select;
 
@@ -324,119 +329,37 @@ const TableComponent = ({ mode }) => {
     marginTop: mode === "mydirection" ? 30 : 0,
   }}
 >
-  <Select
-    value={activityType}
-    style={{ width: 120, marginRight: "5px" }}
-    onChange={(value) => {
-      setActivityType(value);
-      setFilterType(value);
-      setDateFilter({
-        month: null,
-        week: null,
-        year: null,
-        quarter: null,
-      });
-    }}
-  >
-    <Option value="all">Toutes les Activités</Option>
-    <Option value="weekly">Hebdomadaire</Option>
-    <Option value="monthly">Mensuel</Option>
-    <Option value="quarterly">Trimestriel</Option>
-  </Select>
+<ActivityTypeSelect
+    activityType={activityType}
+    setActivityType={setActivityType}
+    setFilterType={setFilterType}
+    setDateFilter={setDateFilter}
+  />
 
-  <Select
-    defaultValue="all"
-    style={{ width: 120, marginRight: "8px" }}
-    onChange={setDirectionFilter}
-  >
-    <Option value="all">Toutes les Directions</Option>
-    <Option value="Sales">Sales</Option>
-    <Option value="HR">HR</Option>
-    <Option value="IT">IT</Option>
-    <Option value="Finance">Finance</Option>
-  </Select>
+  <DirectionSelect setDirectionFilter={setDirectionFilter} />
 
   {activityType === "weekly" && (
-    <>
-      <Select
-        placeholder="Mois"
-        style={{ width: 100, marginRight: "8px" }}
-        onChange={(value) => {
-          setDateFilter({ ...dateFilter, month: value });
-        }}
-      >
-        {Array.from({ length: 12 }, (_, index) => (
-          <Option key={index} value={index}>
-            {new Date(0, index).toLocaleString("fr-FR", { month: "long" })}
-          </Option>
-        ))}
-      </Select>
-      <Select
-        placeholder="Semaine"
-        style={{ width: 200 }}
-        onChange={(value) => setDateFilter({ ...dateFilter, week: value })}
-      >
-        {dateFilter.month !== null &&
-          getWeeksInMonth(
-            dateFilter.month,
-            new Date().getFullYear(),
-          ).map((week, index) => (
-            <Option key={index} value={week}>
-              {week}
-            </Option>
-          ))}
-      </Select>
-    </>
+    <WeeklyFilters
+      dateFilter={dateFilter}
+      setDateFilter={setDateFilter}
+      getWeeksInMonth={getWeeksInMonth}
+    />
   )}
 
   {activityType === "monthly" && (
-    <>
-      <Select
-        placeholder="Année"
-        style={{ width: 100 }}
-        onChange={(value) => setDateFilter({ ...dateFilter, year: value })}
-      >
-        <Option value="2023">2023</Option>
-        <Option value="2024">2024</Option>
-      </Select>
-      <Select
-        placeholder="Mois"
-        style={{ width: 100, marginRight: "8px" }}
-        onChange={(value) => setDateFilter({ ...dateFilter, month: value })}
-      >
-        {Array.from({ length: 12 }, (_, index) => (
-          <Option key={index} value={index}>
-            {new Date(0, index).toLocaleString("fr-FR", { month: "long" })}
-          </Option>
-        ))}
-      </Select>
-    </>
+    <MonthlyFilters
+      dateFilter={dateFilter}
+      setDateFilter={setDateFilter}
+    />
   )}
 
   {activityType === "quarterly" && (
-    <>
-      <Select
-        placeholder="Année"
-        style={{ width: 100, marginRight: "8px" }}
-        onChange={(value) => setDateFilter({ ...dateFilter, year: value })}
-      >
-        <Option value="2023">2023</Option>
-        <Option value="2024">2024</Option>
-      </Select>
-      <Select
-        placeholder="Trimestre"
-        style={{ width: 100 }}
-        onChange={(value) => setDateFilter({ ...dateFilter, quarter: value })}
-      >
-        <Option value="Q1">Q1</Option>
-        <Option value="Q2">Q2</Option>
-        <Option value="Q3">Q3</Option>
-        <Option value="Q4">Q4</Option>
-      </Select>
-    </>
+    <QuarterlyFilters
+      dateFilter={dateFilter}
+      setDateFilter={setDateFilter}
+    />
   )}
 
-  {/* Boutons de filtrer et réinitialiser */}
   <Button
     type="primary"
     style={{ marginLeft: "10px" }}

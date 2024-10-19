@@ -1,7 +1,8 @@
-import { Select,Option } from "antd";
-import {react} from "react";
+import { Select } from "antd";
+import  React from "react";
 
 
+const { Option } = Select;
 export const WeeklyFilters = ({ dateFilter, setDateFilter, getWeeksInMonth }) => (
     <>
       <Select
