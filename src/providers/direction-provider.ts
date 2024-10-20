@@ -20,8 +20,8 @@ interface PostedNewUser {
 }
 
 interface UsertoApprove {
-  reponsibleId :string,
-  toApproveId : string
+  reponsibleId: string;
+  toApproveId: string;
 }
 
 export const fetchDirections = async (): Promise<Direction[]> => {
@@ -86,7 +86,9 @@ export const fetchDirectionName = async (): Promise<Direction | null> => {
   }
 };
 
-export const addUserToDirection = async (usertoAdd: User): Promise<User | null> => {
+export const addUserToDirection = async (
+  usertoAdd: User,
+): Promise<User | null> => {
   try {
     const response = await fetch(`${API_URL}/users/createUser`, {
       method: "POST",
@@ -110,7 +112,9 @@ export const addUserToDirection = async (usertoAdd: User): Promise<User | null> 
   }
 };
 
-export const addReponsibleToDirection = async (usertoAdd: User): Promise<User | null> => {
+export const addReponsibleToDirection = async (
+  usertoAdd: User,
+): Promise<User | null> => {
   try {
     const response = await fetch(`${API_URL}/users/createAdmin`, {
       method: "POST",
@@ -136,13 +140,13 @@ export const addReponsibleToDirection = async (usertoAdd: User): Promise<User | 
 
 export const approveUserToDirection = async (concernedUser) => {
   console.log("concern", concernedUser.responsibleId);
-  
+
   try {
     const response = await fetch(
       `${API_URL}/users/user/approve?userId=${concernedUser.responsibleId}&toApproveId=${concernedUser.toApproveId}`,
       {
         method: "PUT",
-      }
+      },
     );
 
     if (!response.ok) {

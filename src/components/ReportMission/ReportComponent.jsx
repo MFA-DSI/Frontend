@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import { Select, Button, Card, Divider } from "antd";
+import { getWeeksInMonth } from "../Table/utils/DateUtils"; 
+import { useFilesContext } from "../../providers/context/FilesContext";
+import { useAuthStore } from "../../hooks";
 
 const { Option } = Select;
 
 const ReportGenerator = () => {
+  const { fetchWeeklyReportMissionXLS } = useFilesContext();
+  const directionId = useAuthStore.getState().directionId;
   const [activityType, setActivityType] = useState("weekly");
   const [dateFilter, setDateFilter] = useState({
     month: null,
@@ -12,21 +17,55 @@ const ReportGenerator = () => {
     quarter: null,
   });
 
-  const getWeeksInMonth = (month, year) => {
-    const weeks = [];
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
+  const [pageSize, setPageSize] = useState("50"); // Example page size
 
-    for (
-      let date = firstDay;
-      date <= lastDay;
-      date.setDate(date.getDate() + 7)
-    ) {
-      const weekNumber = Math.ceil(date.getDate() / 7);
-      weeks.push(`Semaine ${weekNumber} (${date.toLocaleDateString("fr-FR")})`);
+  const isButtonDisabled = () => {
+    if (activityType === "weekly") {
+      return !dateFilter.month || !dateFilter.week;
+    }
+    if (activityType === "monthly") {
+      return !dateFilter.year || !dateFilter.month;
+    }
+    if (activityType === "quarterly") {
+      return !dateFilter.year || !dateFilter.quarter;
+    }
+    return false;
+  };
+
+  const extractFirstDateFromString = (dateString) => {
+    const regex = /(\d{2}\/\d{2}\/\d{4})/; // Matches the format "dd/mm/yyyy"
+    const match = dateString.match(regex);
+    return match ? match[0] : null; // Return the matched date or null if not found
+  };
+
+  const handleGenerateReport = async () => {
+    let date = "";
+
+    if (activityType === "weekly") {
+      // Assuming your week format string is in this form
+      const weekString = dateFilter.week
+      date = extractFirstDateFromString(weekString); // Extract the first date
+    } else if (activityType === "monthly") {
+      date = `2024-${dateFilter.month + 1}-01`; // Example: format as "YYYY-MM-01"
+    } else if (activityType === "quarterly") {
+      date = `2024-${dateFilter.quarter}`; // Example: format as "YYYY-QX"
     }
 
-    return weeks;
+    console.log("date", date);
+    
+    const reportDetails = {
+      directionId,
+      date,
+      pageSize,
+    };
+
+    try {
+      // Call the function to fetch the report
+      await fetchWeeklyReportMissionXLS(reportDetails);
+      console.log("Report generated successfully!");
+    } catch (error) {
+      console.error("Error generating report:", error);
+    }
   };
 
   return (
@@ -36,7 +75,10 @@ const ReportGenerator = () => {
       <Select
         defaultValue="weekly"
         style={{ width: "100%", marginBottom: "16px" }}
-        onChange={setActivityType}
+        onChange={(value) => {
+          setActivityType(value);
+          setDateFilter({ month: null, week: null, year: null, quarter: null }); // Reset date filters on activity type change
+        }}
       >
         <Option value="weekly">Hebdomadaire</Option>
         <Option value="monthly">Mensuel</Option>
@@ -49,8 +91,7 @@ const ReportGenerator = () => {
             placeholder="Mois"
             style={{ width: "100%", marginBottom: "16px" }}
             onChange={(value) => {
-              setDateFilter({ ...dateFilter, month: value });
-              setDateFilter((prev) => ({ ...prev, week: null })); // Reset week when month changes
+              setDateFilter({ ...dateFilter, month: value, week: null }); // Reset week when month changes
             }}
           >
             {Array.from({ length: 12 }, (_, index) => (
@@ -72,10 +113,10 @@ const ReportGenerator = () => {
             >
               {getWeeksInMonth(dateFilter.month, new Date().getFullYear()).map(
                 (week, index) => (
-                  <Option key={index} value={week}>
+                  <Option key={index} value={week} >
                     {week}
                   </Option>
-                ),
+                )
               )}
             </Select>
           )}
@@ -148,12 +189,8 @@ const ReportGenerator = () => {
       >
         <Button
           type="primary"
-          disabled={
-            !dateFilter.week &&
-            !dateFilter.month &&
-            !dateFilter.year &&
-            !dateFilter.quarter
-          }
+          disabled={isButtonDisabled()}
+          onClick={handleGenerateReport}
         >
           Générer le rapport
         </Button>

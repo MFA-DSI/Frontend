@@ -22,7 +22,10 @@ const FirstLoginComponent = () => {
       console.log("Confirm Password:", values.confirmPassword);
 
       // Simulate first login password change
-      await signin({ oldPassword: values.oldPassword, newPassword: values.newPassword });
+      await signin({
+        oldPassword: values.oldPassword,
+        newPassword: values.newPassword,
+      });
       setTimeout(() => {
         navigate("/");
       }, 500);
@@ -34,18 +37,18 @@ const FirstLoginComponent = () => {
   };
 
   return (
-    <div className="login-container"> {/* Changed to match Login component */}
+    <div className="login-container">
+      {" "}
+      {/* Changed to match Login component */}
       <Card className="login-card" bordered={false} style={{ width: 400 }}>
-        <div className="welcome-container login-logo-container"> {/* Reuse similar structure */}
+        <div className="welcome-container login-logo-container">
+          {" "}
+          {/* Reuse similar structure */}
           <Title level={3} style={{ textAlign: "center" }}>
             Bienvenue, {username}
           </Title>
         </div>
-        <Form
-          name="change_password"
-          className="login-form" 
-          onFinish={onFinish}
-        >
+        <Form name="change_password" className="login-form" onFinish={onFinish}>
           <Form.Item
             name="oldPassword"
             rules={[
@@ -56,7 +59,7 @@ const FirstLoginComponent = () => {
             ]}
           >
             <Input.Password
-              prefix={<LockOutlined className="site-form-item-icon" />} 
+              prefix={<LockOutlined className="site-form-item-icon" />}
               placeholder="Ancien mot de passe"
               size="large"
             />
@@ -72,7 +75,7 @@ const FirstLoginComponent = () => {
             ]}
           >
             <Input.Password
-              prefix={<LockOutlined className="site-form-item-icon" />} 
+              prefix={<LockOutlined className="site-form-item-icon" />}
               placeholder="Nouveau mot de passe"
               size="large"
             />
@@ -92,14 +95,14 @@ const FirstLoginComponent = () => {
                     return Promise.resolve();
                   }
                   return Promise.reject(
-                    new Error("Les mots de passe ne correspondent pas")
+                    new Error("Les mots de passe ne correspondent pas"),
                   );
                 },
               }),
             ]}
           >
             <Input.Password
-              prefix={<LockOutlined className="site-form-item-icon" />} 
+              prefix={<LockOutlined className="site-form-item-icon" />}
               placeholder="Confirmez le mot de passe"
               size="large"
             />
@@ -109,7 +112,7 @@ const FirstLoginComponent = () => {
             <Button
               type="primary"
               htmlType="submit"
-              className="login-form-button" 
+              className="login-form-button"
               block
               size="large"
               loading={isLoading}

@@ -5,6 +5,7 @@ import {
   exportMissionToDOC,
   exportMissionToPDF,
   exportMissionToXLS,
+  ExportReportMissionWeek,
 } from "../providers";
 import { message } from "antd";
 
@@ -27,9 +28,16 @@ export const useFiles = () => {
     },
   });
 
+  const exportReportToMissionXLS = useMutation(ExportReportMissionWeek, {
+    onSuccess: () => {
+      message.success("votre rapport XLS est prêt");
+    },
+  });
+
   return {
     missionToPDF: exportToMissionPDF.mutate,
     missionToDOC: exportToMissionDOC.mutate,
     missionToXLS: exportToMissionXLS.mutate,
+    reportMissionWeekly : exportReportToMissionXLS.mutate
   };
 };

@@ -42,7 +42,7 @@ const ProfileComponent = () => {
   const [responseModalVisible, setResponseModalVisible] = useState(false);
   const [responseData, setResponseData] = useState(null);
 
-const role = useAuthStore.getState().role;
+  const role = useAuthStore.getState().role;
 
   const handleApprove = (user) => {
     setSelectedUser(user);
@@ -60,16 +60,15 @@ const role = useAuthStore.getState().role;
     { text: "Manager", value: "Manager" },
   ];
 
-    const handleApprovalAction = async (approved) => {
-      if (approved) {
-        // Perform approval action here
+  const handleApprovalAction = async (approved) => {
+    if (approved) {
+      // Perform approval action here
 
-        const toApprove = {
-          responsibleId : userId ,
-          toApproveId : selectedUser.id
-          
-        } 
-        try{  
+      const toApprove = {
+        responsibleId: userId,
+        toApproveId: selectedUser.id,
+      };
+      try {
         await approveUserToDirectionMember(toApprove, {
           onSuccess: (data) => {
             // Set the response data in state
@@ -81,23 +80,20 @@ const role = useAuthStore.getState().role;
             console.error("Failed to add responsible:", error);
           },
         });
-  
+
         form.resetFields();
         onCancel();
       } catch (error) {
         console.error("Failed to save new responsible:", error);
       }
-        
-      }
-      setIsApproveModalVisible(false);
-    };
+    }
+    setIsApproveModalVisible(false);
+  };
 
-
-    const handleCloseModal = () => {
-      setResponseModalVisible(false);
-      setResponseData(null);
-    };
-  
+  const handleCloseModal = () => {
+    setResponseModalVisible(false);
+    setResponseData(null);
+  };
 
   const columns = [
     {
@@ -139,7 +135,7 @@ const role = useAuthStore.getState().role;
             status={approved ? "success" : "default"}
             text={approved ? "Approuvé" : "En attente"}
           />
-          {!approved && role =="ADMIN" && (
+          {!approved && role == "ADMIN" && (
             <Button
               type="primary"
               onClick={() => handleApprove(record)}
@@ -330,18 +326,16 @@ const role = useAuthStore.getState().role;
             Ajouter un utilisateur
           </Button>
 
-          {
-            role === "ADMIN" && (
-              <Button
+          {role === "ADMIN" && (
+            <Button
               type="primary"
               style={{ marginLeft: "8px" }}
               onClick={() => setIsResponsableModalVisible(true)}
             >
               Ajouter un responsable direction
             </Button>
-            )
-          }
-         
+          )}
+
           <Table
             columns={columns}
             dataSource={fetchAllDirectionResponsibles}
@@ -355,7 +349,7 @@ const role = useAuthStore.getState().role;
         visible={isUserModalVisible}
         onCancel={() => setIsUserModalVisible(false)}
       />
-     
+
       <AddResponsableDirectionModal
         visible={isResponsableModalVisible}
         onCancel={() => setIsResponsableModalVisible(false)}
@@ -390,7 +384,7 @@ const role = useAuthStore.getState().role;
         </Modal>
       )}
 
-{responseData && (
+      {responseData && (
         <ApprobateUserModal
           title={`Nouveau Responsable du ${responseData?.directionName}`}
           visible={responseModalVisible}

@@ -24,7 +24,7 @@ const RecommendationModal = ({
       };
 
       await addRecommendation(recommandationToUpdate);
-      onSave()
+      onSave();
     } catch (error) {
       message.error(
         "Une erreur s'est produite lors de la modification de cette activité",

@@ -4,7 +4,7 @@ import { useFiles } from "../../hooks";
 const FilesContext = createContext();
 
 export const FilesProvider = ({ children }) => {
-  const { missionToPDF, missionToDOC, missionToXLS } = useFiles();
+  const { missionToPDF, missionToDOC, missionToXLS,reportMissionWeekly } = useFiles();
 
   return (
     <FilesContext.Provider
@@ -12,6 +12,7 @@ export const FilesProvider = ({ children }) => {
         fetchMissionPDF: missionToPDF,
         fetchMissionDOC: missionToDOC,
         fetchMissionXLS: missionToXLS,
+        fetchWeeklyReportMissionXLS : reportMissionWeekly,
       }}
     >
       {children}

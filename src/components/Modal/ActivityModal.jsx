@@ -12,7 +12,14 @@ import { EditableField } from "./Forms/ActivityDetails";
 import { TaskList } from "./Forms/TaskDetails";
 import RecommendationModal from "./RecommendationModal";
 
-const ActivityModal = ({ visible, onCancel, activity, mode, onDelete,onSave }) => {
+const ActivityModal = ({
+  visible,
+  onCancel,
+  activity,
+  mode,
+  onDelete,
+  onSave,
+}) => {
   const { deleteActivity, updateMissionActivity } = useActivitiesContext();
   const [isEditing, setIsEditing] = useState(false);
   const [editedActivity, setEditedActivity] = useState({
@@ -103,12 +110,10 @@ const ActivityModal = ({ visible, onCancel, activity, mode, onDelete,onSave }) =
   };
   const handlePerformanceSave = () => {
     setIsPerformanceModalVisible(false);
-    
   };
 
   const handleRecommendationSave = () => {
     setIsRecommendationVisible(false);
-   
   };
   const handleRecommendationCancel = () => {
     setIsRecommendationVisible(false);
@@ -143,7 +148,13 @@ const ActivityModal = ({ visible, onCancel, activity, mode, onDelete,onSave }) =
   if (!activity) return null;
 
   return (
-    <Modal visible={visible} onCancel={onCancel} footer={null} centered width={800}>
+    <Modal
+      visible={visible}
+      onCancel={onCancel}
+      footer={null}
+      centered
+      width={800}
+    >
       <div
         style={{
           display: "flex",
@@ -333,7 +344,7 @@ const ActivityModal = ({ visible, onCancel, activity, mode, onDelete,onSave }) =
         reopenMainModal={() => {
           onCancel();
           setTimeout(() => {
-            onSave()
+            onSave();
           }, 200);
         }}
       />
@@ -343,16 +354,16 @@ const ActivityModal = ({ visible, onCancel, activity, mode, onDelete,onSave }) =
         performance={selectedPerformance}
         onSave={handlePerformanceSave}
         activityId={activity}
-        
       />
 
       <RecommendationModal
         visible={isRecommendationVisible}
         onCancel={handleRecommendationCancel}
         activity={selectedActivity}
-        onSave={()=>{handleRecommendationSave(),onSave()}}
+        onSave={() => {
+          handleRecommendationSave(), onSave();
+        }}
         recommendation={selectedActivity}
-       
       />
 
       <DeleteModal

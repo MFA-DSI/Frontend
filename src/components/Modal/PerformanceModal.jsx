@@ -71,7 +71,9 @@ const PerformanceModal = ({
     if (performance && activityId) {
       setRealization(performance.realization);
       setIndicator(performance.indicators);
-      setRealizationType(performance.realizationType === "number" ? "chiffre" : "pourcentage");
+      setRealizationType(
+        performance.realizationType === "number" ? "chiffre" : "pourcentage",
+      );
     }
   }, [performance, activityId]);
 

@@ -37,7 +37,7 @@ const TableComponent = ({ mode }) => {
     setDirectionFilter,
   } = useMissionContext();
   const { fetchMissionXLS } = useFilesContext();
-  const {} = useDirectionsContext()
+  const {} = useDirectionsContext();
   const [activityType, setActivityType] = useState("all");
   const [dateFilter, setDateFilter] = useState({
     month: null,
@@ -70,12 +70,12 @@ const TableComponent = ({ mode }) => {
     setSelectedActivity(null);
   };
 
-  const handleActivitySave = ()=>{
+  const handleActivitySave = () => {
     setIsModalVisible(false);
     setTimeout(() => {
-      setIsModalVisible(true); 
+      setIsModalVisible(true);
     }, 500);
-  }
+  };
 
   const handleMissionCancel = () => {
     setIsMissionModalVisible(false);
@@ -323,73 +323,72 @@ const TableComponent = ({ mode }) => {
             Liste des Activités
           </h2>
           <div
-  style={{
-    display: "flex",
-    alignItems: "center",
-    marginTop: mode === "mydirection" ? 30 : 0,
-  }}
->
-<ActivityTypeSelect
-    activityType={activityType}
-    setActivityType={setActivityType}
-    setFilterType={setFilterType}
-    setDateFilter={setDateFilter}
-  />
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginTop: mode === "mydirection" ? 30 : 0,
+            }}
+          >
+            <ActivityTypeSelect
+              activityType={activityType}
+              setActivityType={setActivityType}
+              setFilterType={setFilterType}
+              setDateFilter={setDateFilter}
+            />
 
-  <DirectionSelect setDirectionFilter={setDirectionFilter} />
+            <DirectionSelect setDirectionFilter={setDirectionFilter} />
 
-  {activityType === "weekly" && (
-    <WeeklyFilters
-      dateFilter={dateFilter}
-      setDateFilter={setDateFilter}
-      getWeeksInMonth={getWeeksInMonth}
-    />
-  )}
+            {activityType === "weekly" && (
+              <WeeklyFilters
+                dateFilter={dateFilter}
+                setDateFilter={setDateFilter}
+                getWeeksInMonth={getWeeksInMonth}
+              />
+            )}
 
-  {activityType === "monthly" && (
-    <MonthlyFilters
-      dateFilter={dateFilter}
-      setDateFilter={setDateFilter}
-    />
-  )}
+            {activityType === "monthly" && (
+              <MonthlyFilters
+                dateFilter={dateFilter}
+                setDateFilter={setDateFilter}
+              />
+            )}
 
-  {activityType === "quarterly" && (
-    <QuarterlyFilters
-      dateFilter={dateFilter}
-      setDateFilter={setDateFilter}
-    />
-  )}
+            {activityType === "quarterly" && (
+              <QuarterlyFilters
+                dateFilter={dateFilter}
+                setDateFilter={setDateFilter}
+              />
+            )}
 
-  <Button
-    type="primary"
-    style={{ marginLeft: "10px" }}
-    onClick={() => {
-      // Action de filtrage
-      console.log("Filtrer les résultats");
-    }}
-  >
-    Filtrer
-  </Button>
+            <Button
+              type="primary"
+              style={{ marginLeft: "10px" }}
+              onClick={() => {
+                // Action de filtrage
+                console.log("Filtrer les résultats");
+              }}
+            >
+              Filtrer
+            </Button>
 
-  <Button
-    type="default"
-    style={{ marginLeft: "10px" }}
-    onClick={() => {
-      // Réinitialiser tous les filtres
-      setActivityType("all");
-      setDirectionFilter("all");
-      setDateFilter({
-        month: null,
-        week: null,
-        year: null,
-        quarter: null,
-      });
-    }}
-  >
-    Réinitialiser
-  </Button>
-</div>
-
+            <Button
+              type="default"
+              style={{ marginLeft: "10px" }}
+              onClick={() => {
+                // Réinitialiser tous les filtres
+                setActivityType("all");
+                setDirectionFilter("all");
+                setDateFilter({
+                  month: null,
+                  week: null,
+                  year: null,
+                  quarter: null,
+                });
+              }}
+            >
+              Réinitialiser
+            </Button>
+          </div>
         </div>
         <div
           style={{
@@ -463,7 +462,7 @@ const TableComponent = ({ mode }) => {
         onDelete={onDelete}
         visible={isModalVisible}
         onCancel={handleCancel}
-        onSave = {handleActivitySave}
+        onSave={handleActivitySave}
         activity={selectedActivity}
       />
       <MissionModal

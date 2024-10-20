@@ -19,7 +19,7 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
     const directions = fetchAllDirection;
     const options = directions.map((direction) => ({
       value: direction.id,
-      label: direction.name, 
+      label: direction.name,
     }));
     setDirectionsOptions(options);
   }

@@ -18,8 +18,11 @@ const Login = () => {
       const ress = await login({
         email: values.email,
         password: values.password,
-      });      
-      if (ress && ress.message === "You must change your password upon first login") {
+      });
+      if (
+        ress &&
+        ress.message === "You must change your password upon first login"
+      ) {
         navigate("/signin");
       } else {
         navigate("/");
@@ -30,7 +33,6 @@ const Login = () => {
       setIsLoading(false);
     }
   };
-  
 
   return (
     <div className="login-container">

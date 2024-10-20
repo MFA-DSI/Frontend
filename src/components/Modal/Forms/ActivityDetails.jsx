@@ -21,7 +21,11 @@ export const EditableField = ({
           <Input value={value} onChange={onChange} placeholder={placeholder} />
         )
       ) : (
-        <p>{inputType === "date" ? dateFormatter(value?.toLocaleString()).toLocaleString()  : value}</p>
+        <p>
+          {inputType === "date"
+            ? dateFormatter(value?.toLocaleString()).toLocaleString()
+            : value}
+        </p>
       )}
     </div>
   );
