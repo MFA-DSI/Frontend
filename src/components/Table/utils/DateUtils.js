@@ -25,4 +25,3 @@ export const extractFirstDateFromString = (dateString) => {
   const match = dateString.match(regex); // Search for the date in the string
   return match ? match[0] : null; // Return the matched date or null if not found
 };
-

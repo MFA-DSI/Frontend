@@ -324,12 +324,6 @@ const ActivityModal = ({
               </Button>
             )
           )}
-
-          {mode === "mydirection" && !isEditing && (
-            <Button danger onClick={showDeleteModal}>
-              Supprimer
-            </Button>
-          )}
         </div>
       </div>
 

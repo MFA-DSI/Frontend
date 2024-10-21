@@ -6,7 +6,7 @@ const { Option } = Select;
 
 export const DirectionSelect = ({ setDirectionFilter }) => {
   const { fetchAllDirection } = useDirectionsContext();
-  
+
   return (
     <>
       <Select
@@ -17,7 +17,7 @@ export const DirectionSelect = ({ setDirectionFilter }) => {
         <Option value="all">Toutes les Directions</Option>
         {fetchAllDirection.map((direction) => (
           <Option key={direction.id} value={direction.id}>
-            {direction.name} 
+            {direction.name}
           </Option>
         ))}
       </Select>

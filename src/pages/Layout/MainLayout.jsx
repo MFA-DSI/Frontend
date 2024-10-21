@@ -60,10 +60,6 @@ const MainLayout = ({ children }) => {
           key: "/reports",
           label: "Générer un rapport",
         },
-        {
-          key: "/myDirection/rapport-activite",
-          label: "Rapport d'Activité",
-        },
       ],
     },
     {

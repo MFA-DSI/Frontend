@@ -7,10 +7,11 @@ export const ActivityTypeSelect = ({
   setActivityType,
   setFilterType,
   setDateFilter,
+  style
 }) => (
   <Select
     value={activityType}
-    style={{ width: 120, marginRight: "5px" }}
+    style={style}
     onChange={(value) => {
       setActivityType(value);
       setFilterType(value);

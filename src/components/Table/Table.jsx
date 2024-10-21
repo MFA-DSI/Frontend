@@ -301,6 +301,11 @@ const TableComponent = ({ mode }) => {
   const dataSource =
     activityType === "weekly" ? layoutModeActivities : layoutModeMissions;
 
+    const activityDropdownStyle = { width: 120, marginRight: "5px" }
+
+    const weeklyDropDownStyle = { width: 100, marginRight: "8px" }
+    const monthlyDropDownStyle = { width: 100 }
+
   return (
     <>
       <div
@@ -330,16 +335,20 @@ const TableComponent = ({ mode }) => {
             }}
           >
             <ActivityTypeSelect
+                style={activityDropdownStyle}
               activityType={activityType}
               setActivityType={setActivityType}
               setFilterType={setFilterType}
               setDateFilter={setDateFilter}
             />
 
-            <DirectionSelect setDirectionFilter={setDirectionFilter} />
+            {mode !== "mydirection" && (
+              <DirectionSelect setDirectionFilter={setDirectionFilter} />
+            )}
 
             {activityType === "weekly" && (
               <WeeklyFilters
+              style={weeklyDropDownStyle}
                 dateFilter={dateFilter}
                 setDateFilter={setDateFilter}
                 getWeeksInMonth={getWeeksInMonth}
@@ -348,6 +357,7 @@ const TableComponent = ({ mode }) => {
 
             {activityType === "monthly" && (
               <MonthlyFilters
+              style={monthlyDropDownStyle}
                 dateFilter={dateFilter}
                 setDateFilter={setDateFilter}
               />
@@ -355,6 +365,7 @@ const TableComponent = ({ mode }) => {
 
             {activityType === "quarterly" && (
               <QuarterlyFilters
+              style={weeklyDropDownStyle}
                 dateFilter={dateFilter}
                 setDateFilter={setDateFilter}
               />

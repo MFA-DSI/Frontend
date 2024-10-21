@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { Select, Button, Card, Divider } from "antd";
-import { getWeeksInMonth } from "../Table/utils/DateUtils"; 
+import { getWeeksInMonth } from "../Table/utils/DateUtils";
 import { useFilesContext } from "../../providers/context/FilesContext";
 import { useAuthStore } from "../../hooks";
+import { ActivityTypeSelect } from "../DropDown/ActivityTypeSelect";
+import { WeeklyFilters } from "../DropDown/WeeklyFilters";
+import { MonthlyFilters } from "../DropDown/MonthlyFilter";
+import { QuarterlyFilters } from "../DropDown/QuarterlyFilter";
 
-const { Option } = Select;
 
 const ReportGenerator = () => {
-  const { fetchWeeklyReportMissionXLS } = useFilesContext();
+  const { fetchWeeklyReportMissionXLS, fetchMonthlyReportMissionXLS } = useFilesContext();
   const directionId = useAuthStore.getState().directionId;
   const [activityType, setActivityType] = useState("weekly");
   const [dateFilter, setDateFilter] = useState({
@@ -40,145 +43,90 @@ const ReportGenerator = () => {
 
   const handleGenerateReport = async () => {
     let date = "";
-
+  
     if (activityType === "weekly") {
-      // Assuming your week format string is in this form
-      const weekString = dateFilter.week
-      date = extractFirstDateFromString(weekString); // Extract the first date
+      const weekString = dateFilter.week;
+      date = extractFirstDateFromString(weekString); // Extraire la première date de la semaine
     } else if (activityType === "monthly") {
-      date = `2024-${dateFilter.month + 1}-01`; // Example: format as "YYYY-MM-01"
+      // Appel spécifique pour "monthly"
+      const reportDetailsForMonth = {
+        directionId,
+        year: dateFilter.year, // Utilise l'année sélectionnée
+        month: dateFilter.month + 1, // Mois dans le bon format (commence à 1)
+        pageSize,
+      };
+  
+      try {      
+        // Appeler la fonction pour récupérer le rapport mensuel
+        await fetchMonthlyReportMissionXLS(reportDetailsForMonth);
+        console.log("Rapport mensuel généré avec succès !");
+      } catch (error) {
+        console.error("Erreur lors de la génération du rapport mensuel :", error);
+      }
+      return; // Sortir de la fonction après l'appel mensuel
     } else if (activityType === "quarterly") {
-      date = `2024-${dateFilter.quarter}`; // Example: format as "YYYY-QX"
+      date = `2024-${dateFilter.quarter}`; // Format en "YYYY-QX"
     }
-
+  
     console.log("date", date);
-    
+  
     const reportDetails = {
       directionId,
       date,
       pageSize,
     };
-
+  
     try {
-      // Call the function to fetch the report
+      // Appeler la fonction pour récupérer le rapport hebdomadaire (ou trimestriel)
       await fetchWeeklyReportMissionXLS(reportDetails);
-      console.log("Report generated successfully!");
+      console.log("Rapport généré avec succès !");
     } catch (error) {
-      console.error("Error generating report:", error);
+      console.error("Erreur lors de la génération du rapport :", error);
     }
   };
+  
+
+  const style ={
+    width  : "100%",
+    marginTop : "10px",
+    marginBottom : "10px"
+  }
 
   return (
     <Card title="Générateur de Rapport" style={{ width: 400, margin: "auto" }}>
       <h2>Choisissez les options de rapport</h2>
       <Divider />
-      <Select
-        defaultValue="weekly"
-        style={{ width: "100%", marginBottom: "16px" }}
-        onChange={(value) => {
-          setActivityType(value);
-          setDateFilter({ month: null, week: null, year: null, quarter: null }); // Reset date filters on activity type change
-        }}
-      >
-        <Option value="weekly">Hebdomadaire</Option>
-        <Option value="monthly">Mensuel</Option>
-        <Option value="quarterly">Trimestriel</Option>
-      </Select>
+      <ActivityTypeSelect
+      style={style}
+              activityType={activityType}
+              setActivityType={setActivityType}
+              setDateFilter={setDateFilter}
+            />
 
-      {activityType === "weekly" && (
-        <>
-          <Select
-            placeholder="Mois"
-            style={{ width: "100%", marginBottom: "16px" }}
-            onChange={(value) => {
-              setDateFilter({ ...dateFilter, month: value, week: null }); // Reset week when month changes
-            }}
-          >
-            {Array.from({ length: 12 }, (_, index) => (
-              <Option key={index} value={index}>
-                {new Date(0, index).toLocaleString("fr-FR", {
-                  month: "long",
-                })}
-              </Option>
-            ))}
-          </Select>
+            {activityType === "weekly" && (
+              <WeeklyFilters
+                style={style}
+                dateFilter={dateFilter}
+                setDateFilter={setDateFilter}
+                getWeeksInMonth={getWeeksInMonth}
+              />
+            )}
 
-          {dateFilter.month !== null && (
-            <Select
-              placeholder="Semaine"
-              style={{ width: "100%", marginBottom: "16px" }}
-              onChange={(value) =>
-                setDateFilter({ ...dateFilter, week: value })
-              }
-            >
-              {getWeeksInMonth(dateFilter.month, new Date().getFullYear()).map(
-                (week, index) => (
-                  <Option key={index} value={week} >
-                    {week}
-                  </Option>
-                )
-              )}
-            </Select>
-          )}
-        </>
-      )}
+            {activityType === "monthly" && (
+              <MonthlyFilters
+                style={style}
+                dateFilter={dateFilter}
+                setDateFilter={setDateFilter}
+              />
+            )}
 
-      {activityType === "monthly" && (
-        <>
-          <Select
-            placeholder="Année"
-            style={{ width: "100%", marginBottom: "16px" }}
-            onChange={(value) => setDateFilter({ ...dateFilter, year: value })}
-          >
-            <Option value="2023">2023</Option>
-            <Option value="2024">2024</Option>
-          </Select>
-          {dateFilter.year && (
-            <Select
-              placeholder="Mois"
-              style={{ width: "100%", marginBottom: "16px" }}
-              onChange={(value) =>
-                setDateFilter({ ...dateFilter, month: value })
-              }
-            >
-              {Array.from({ length: 12 }, (_, index) => (
-                <Option key={index} value={index}>
-                  {new Date(0, index).toLocaleString("fr-FR", {
-                    month: "long",
-                  })}
-                </Option>
-              ))}
-            </Select>
-          )}
-        </>
-      )}
-
-      {activityType === "quarterly" && (
-        <>
-          <Select
-            placeholder="Année"
-            style={{ width: "100%", marginBottom: "16px" }}
-            onChange={(value) => setDateFilter({ ...dateFilter, year: value })}
-          >
-            <Option value="2023">2023</Option>
-            <Option value="2024">2024</Option>
-          </Select>
-          {dateFilter.year && (
-            <Select
-              placeholder="Trimestre"
-              style={{ width: "100%", marginBottom: "16px" }}
-              onChange={(value) =>
-                setDateFilter({ ...dateFilter, quarter: value })
-              }
-            >
-              <Option value="Q1">Q1</Option>
-              <Option value="Q2">Q2</Option>
-              <Option value="Q3">Q3</Option>
-              <Option value="Q4">Q4</Option>
-            </Select>
-          )}
-        </>
-      )}
+            {activityType === "quarterly" && (
+              <QuarterlyFilters
+                style={style}
+                dateFilter={dateFilter}
+                setDateFilter={setDateFilter}
+              />
+            )}
 
       <div
         style={{
