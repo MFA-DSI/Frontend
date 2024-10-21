@@ -8,9 +8,8 @@ import { WeeklyFilters } from "../DropDown/WeeklyFilters";
 import { MonthlyFilters } from "../DropDown/MonthlyFilter";
 import { QuarterlyFilters } from "../DropDown/QuarterlyFilter";
 
-
 const ReportGenerator = () => {
-  const { fetchWeeklyReportMissionXLS, fetchMonthlyReportMissionXLS } = useFilesContext();
+  const { fetchWeeklyReportMissionXLS, fetchMonthlyReportMissionXLS, fetchQuarterlyReportMissionXLS } = useFilesContext();
   const directionId = useAuthStore.getState().directionId;
   const [activityType, setActivityType] = useState("weekly");
   const [dateFilter, setDateFilter] = useState({
@@ -43,7 +42,7 @@ const ReportGenerator = () => {
 
   const handleGenerateReport = async () => {
     let date = "";
-  
+
     if (activityType === "weekly") {
       const weekString = dateFilter.week;
       date = extractFirstDateFromString(weekString); // Extraire la première date de la semaine
@@ -55,78 +54,87 @@ const ReportGenerator = () => {
         month: dateFilter.month + 1, // Mois dans le bon format (commence à 1)
         pageSize,
       };
-  
-      try {      
-        // Appeler la fonction pour récupérer le rapport mensuel
+
+      try {
         await fetchMonthlyReportMissionXLS(reportDetailsForMonth);
         console.log("Rapport mensuel généré avec succès !");
       } catch (error) {
         console.error("Erreur lors de la génération du rapport mensuel :", error);
       }
-      return; // Sortir de la fonction après l'appel mensuel
+      return;
     } else if (activityType === "quarterly") {
-      date = `2024-${dateFilter.quarter}`; // Format en "YYYY-QX"
+      // Appel spécifique pour "quarterly"
+      const reportDetailsForQuarter = {
+        directionId,
+        year: dateFilter.year, // Utilise l'année sélectionnée
+        quarter: dateFilter.quarter, // Trimestre sélectionné
+        pageSize,
+      };
+
+      try {
+        await fetchQuarterlyReportMissionXLS(reportDetailsForQuarter);
+        console.log("Rapport trimestriel généré avec succès !");
+      } catch (error) {
+        console.error("Erreur lors de la génération du rapport trimestriel :", error);
+      }
+      return;
     }
-  
-    console.log("date", date);
-  
+
     const reportDetails = {
       directionId,
       date,
       pageSize,
     };
-  
+
     try {
-      // Appeler la fonction pour récupérer le rapport hebdomadaire (ou trimestriel)
       await fetchWeeklyReportMissionXLS(reportDetails);
       console.log("Rapport généré avec succès !");
     } catch (error) {
       console.error("Erreur lors de la génération du rapport :", error);
     }
   };
-  
 
-  const style ={
-    width  : "100%",
-    marginTop : "10px",
-    marginBottom : "10px"
-  }
+  const style = {
+    width: "100%",
+    marginTop: "10px",
+    marginBottom: "10px",
+  };
 
   return (
     <Card title="Générateur de Rapport" style={{ width: 400, margin: "auto" }}>
       <h2>Choisissez les options de rapport</h2>
       <Divider />
       <ActivityTypeSelect
-      style={style}
-              activityType={activityType}
-              setActivityType={setActivityType}
-              setDateFilter={setDateFilter}
-            />
+        style={style}
+        activityType={activityType}
+        setActivityType={setActivityType}
+        setDateFilter={setDateFilter}
+      />
 
-            {activityType === "weekly" && (
-              <WeeklyFilters
-                style={style}
-                dateFilter={dateFilter}
-                setDateFilter={setDateFilter}
-                getWeeksInMonth={getWeeksInMonth}
-              />
-            )}
+      {activityType === "weekly" && (
+        <WeeklyFilters
+          style={style}
+          dateFilter={dateFilter}
+          setDateFilter={setDateFilter}
+          getWeeksInMonth={getWeeksInMonth}
+        />
+      )}
 
-            {activityType === "monthly" && (
-              <MonthlyFilters
-                style={style}
-                dateFilter={dateFilter}
-                setDateFilter={setDateFilter}
-              />
-            )}
+      {activityType === "monthly" && (
+        <MonthlyFilters
+          style={style}
+          dateFilter={dateFilter}
+          setDateFilter={setDateFilter}
+        />
+      )}
 
-            {activityType === "quarterly" && (
-              <QuarterlyFilters
-                style={style}
-                dateFilter={dateFilter}
-                setDateFilter={setDateFilter}
-              />
-            )}
+      {activityType === "quarterly" && (
+        <QuarterlyFilters
+          style={style}
+          dateFilter={dateFilter}
+          setDateFilter={setDateFilter}
+        />
+      )}
 
       <div
         style={{

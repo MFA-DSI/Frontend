@@ -19,10 +19,10 @@ export const QuarterlyFilters = ({ dateFilter, setDateFilter,style }) => (
       style={{ width: 100 }}
       onChange={(value) => setDateFilter({ ...dateFilter, quarter: value })}
     >
-      <Option value="Q1">Q1</Option>
-      <Option value="Q2">Q2</Option>
-      <Option value="Q3">Q3</Option>
-      <Option value="Q4">Q4</Option>
+      <Option value="1">Q1</Option>
+      <Option value="2">Q2</Option>
+      <Option value="3">Q3</Option>
+      <Option value="4">Q4</Option>
     </Select>
   </>
 );
