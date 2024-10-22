@@ -1,10 +1,11 @@
-import {useQuery, useMutation, useQueryClient} from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import {
   fetchMissions,
   getByDirectionId,
   saveMission,
   deleteMission,
   fetchMissionsName,
+  updateMission,
 } from "../providers/mission-provider";
 
 export const useMissions = () => {
@@ -15,27 +16,37 @@ export const useMissions = () => {
     queryFn: fetchMissions,
   });
 
-  const directionIdQuery = (directionId: string) =>
+  const directionIdQuery = () =>
     useQuery({
-      queryKey: ["directionMissions", directionId],
-      queryFn: () => getByDirectionId(directionId),
+      queryKey: ["mission"],
+      queryFn: () =>
+        getByDirectionId(localStorage.getItem("directionId") || ""),
     });
 
-  const directionMissionsName = (directionId: string) =>
+  const directionMissionsName = (id) =>
     useQuery({
-      queryKey: ["missionsName", directionId],
-      queryFn: () => fetchMissionsName(directionId),
+      queryKey: ["mission"],
+      queryFn: () => fetchMissionsName(id),
     });
-
-  const saveMissionMutation = useMutation(saveMission, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("missions");
-    },
-  });
 
   const deleteMissionMutation = useMutation(deleteMission, {
     onSuccess: () => {
       queryClient.invalidateQueries("missions");
+      queryClient.invalidateQueries("mission");
+    },
+  });
+
+  const updateMissionMutation = useMutation(updateMission, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("missions");
+      queryClient.invalidateQueries("mission");
+    },
+  });
+
+  const saveMissionMutation = useMutation(saveMission, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("missions");
+      queryClient.invalidateQueries("mission");
     },
   });
 
@@ -43,8 +54,9 @@ export const useMissions = () => {
     missions: missionsQuery.data,
     directionIdQuery,
     directionMissionsName,
-    saveMission: saveMissionMutation.mutate,
     deleteMission: deleteMissionMutation.mutate,
+    updateMission: updateMissionMutation.mutate,
+    saveMission: saveMissionMutation.mutate,
     isLoading: missionsQuery.isLoading,
     error: missionsQuery.error,
   };

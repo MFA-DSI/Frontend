@@ -1,11 +1,11 @@
-import {toast} from "react-toastify";
-import environment from "../conf/environment"; // Adjust the path as necessary
-import {CreateMission} from "../types";
+import { toast } from "react-toastify";
+import environment from "../conf/environment";
+import { CreateMission, Service } from "../types";
 
-// Define the type for Activity
 interface Mission {
   id: string;
   description: string;
+  serviceId: string;
   activityList: ActivityItem[];
 }
 
@@ -25,7 +25,7 @@ interface MissionName {
   id: string;
   name: string;
 }
-// Fetching all missions from an API
+
 export const fetchMissions = async (): Promise<Mission[]> => {
   try {
     const url =
@@ -54,7 +54,7 @@ export const fetchMissions = async (): Promise<Mission[]> => {
 };
 
 export const fetchMissionsName = async (
-  directionId: string
+  directionId: string,
 ): Promise<MissionName[]> => {
   try {
     const url = `http://localhost:8080/direction/mission/name?directionId=${directionId}`;
@@ -82,10 +82,10 @@ export const fetchMissionsName = async (
 
 // Fetching missions by directionId
 export const getByDirectionId = async (
-  directionId: string
+  directionId: string,
 ): Promise<Mission[]> => {
   try {
-    const url = `http://localhost:8080/direction/mission/directions?directionId=${directionId}`;
+    const url = `http://localhost:8080/direction/mission/directions?directionId=${directionId}&page=1&page_size=100`;
     const response = await fetch(url, {
       method: "GET",
     });
@@ -100,7 +100,7 @@ export const getByDirectionId = async (
     }
 
     const data: Mission[] = await response.json();
-    console.log(data);
+    console.log("mission ", data);
 
     return data;
   } catch (error) {
@@ -110,12 +110,13 @@ export const getByDirectionId = async (
   }
 };
 
-// Save a new mission
 export const saveMission = async (mission: CreateMission): Promise<Mission> => {
   try {
-    const url = "http://localhost:8080/direction/mission/create";
+    const directionId = localStorage.getItem("directionId");
+    const userId = localStorage.getItem("userId");
+    const url = `http://localhost:8080/direction/mission/create?directionId=${directionId}&userId=${userId}`;
     const response = await fetch(url, {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
@@ -140,10 +141,10 @@ export const saveMission = async (mission: CreateMission): Promise<Mission> => {
   }
 };
 
-// Delete a mission
 export const deleteMission = async (id: string): Promise<void> => {
+  const userId = localStorage.getItem("userId");
   try {
-    const url = `http://localhost:8080/direction/mission/delete/${id}`;
+    const url = `http://localhost:8080/direction/mission/delete?userId=${userId}&missionId=${id}`;
     const response = await fetch(url, {
       method: "DELETE",
     });
@@ -158,6 +159,37 @@ export const deleteMission = async (id: string): Promise<void> => {
     }
   } catch (error) {
     console.error("Error deleting mission:", error);
+    toast.error("Une erreur inattendue est survenue.");
+    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+  }
+};
+
+export const updateMission = async (mission: MissionName): Promise<Mission> => {
+  try {
+    const directionId = localStorage.getItem("directionId");
+    const userId = localStorage.getItem("userId");
+    const url = `http://localhost:8080/direction/mission/update?directionId=${directionId}&userId=${userId}&missionId=${mission.id}`;
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(mission),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage =
+        errorData.message ||
+        "Erreur inconnue lors de l'enregistrement de la mission";
+      toast.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    const data: Mission = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error saving mission:", error);
     toast.error("Une erreur inattendue est survenue.");
     throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
   }
