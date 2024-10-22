@@ -1,10 +1,20 @@
-import React, {createContext, useContext, useState} from "react";
-import {useActivities} from "../../hooks";
+import React, { createContext, useContext, useState } from "react";
+import { useActivities } from "../../hooks";
 
 const ActivityContext = createContext();
 
-export const ActivitieProvider = ({children}) => {
-  const {data: activities, isLoading} = useActivities();
+export const ActivitieProvider = ({ children }) => {
+  const {
+    activities,
+    directionIdQuery,
+    isLoading,
+    deleteActivity,
+    updateMissionActivity,
+    addTask,
+    addRecommendation,
+    addPerformance,
+    MissionsActivityIdQuery,
+  } = useActivities();
   const [filterType, setFilterType] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -13,9 +23,6 @@ export const ActivitieProvider = ({children}) => {
 
     let filtered = activities;
 
-    console.log("filtered: " + filtered);
-
-    // Filter by description or performance realization based on the search term
     if (searchTerm) {
       filtered = filtered.filter(
         (activity) =>
@@ -24,9 +31,9 @@ export const ActivitieProvider = ({children}) => {
             .includes(searchTerm.toLowerCase()) ||
           activity.activityList.some((a) =>
             a.performanceRealization.some((r) =>
-              r.realization.toLowerCase().includes(searchTerm.toLowerCase())
-            )
-          )
+              r.realization.toLowerCase().includes(searchTerm.toLowerCase()),
+            ),
+          ),
       );
     }
 
@@ -37,6 +44,13 @@ export const ActivitieProvider = ({children}) => {
     <ActivityContext.Provider
       value={{
         filteredActivities: filteredActivities(),
+        directionIdQueryActvities: directionIdQuery().data,
+        deleteActivity: deleteActivity,
+        updateMissionActivity,
+        addTaskToActivty: addTask,
+        addPerformance: addPerformance,
+        addRecommendation: addRecommendation,
+        activityIdQuery: MissionsActivityIdQuery,
         isLoading,
         setFilterType,
         setSearchTerm,
@@ -48,5 +62,12 @@ export const ActivitieProvider = ({children}) => {
 };
 
 export const useActivitiesContext = () => {
-  return useContext(ActivityContext);
+  const context = useContext(ActivityContext);
+  if (!context) {
+    throw new Error(
+      "useActivitiesContext must be used within a ActivitiesProvider",
+    );
+  }
+
+  return context;
 };

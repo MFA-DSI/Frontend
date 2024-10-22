@@ -1,12 +1,13 @@
-import {useQuery, useMutation, useQueryClient} from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import {
   fetchMissions,
   getByDirectionId,
   saveMission,
   deleteMission,
+  fetchMissionsName,
+  updateMission,
 } from "../providers/mission-provider";
 
-// Custom hook for using missions
 export const useMissions = () => {
   const queryClient = useQueryClient();
 
@@ -15,29 +16,47 @@ export const useMissions = () => {
     queryFn: fetchMissions,
   });
 
-  const directionIdQuery = (directionId: string) =>
+  const directionIdQuery = () =>
     useQuery({
-      queryKey: ["missions", directionId],
-      queryFn: () => getByDirectionId(directionId),
+      queryKey: ["mission"],
+      queryFn: () =>
+        getByDirectionId(localStorage.getItem("directionId") || ""),
     });
 
-  const saveMissionMutation = useMutation(saveMission, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("missions");
-    },
-  });
+  const directionMissionsName = (id) =>
+    useQuery({
+      queryKey: ["mission"],
+      queryFn: () => fetchMissionsName(id),
+    });
 
   const deleteMissionMutation = useMutation(deleteMission, {
     onSuccess: () => {
       queryClient.invalidateQueries("missions");
+      queryClient.invalidateQueries("mission");
+    },
+  });
+
+  const updateMissionMutation = useMutation(updateMission, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("missions");
+      queryClient.invalidateQueries("mission");
+    },
+  });
+
+  const saveMissionMutation = useMutation(saveMission, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("missions");
+      queryClient.invalidateQueries("mission");
     },
   });
 
   return {
     missions: missionsQuery.data,
     directionIdQuery,
-    saveMission: saveMissionMutation.mutate,
+    directionMissionsName,
     deleteMission: deleteMissionMutation.mutate,
+    updateMission: updateMissionMutation.mutate,
+    saveMission: saveMissionMutation.mutate,
     isLoading: missionsQuery.isLoading,
     error: missionsQuery.error,
   };

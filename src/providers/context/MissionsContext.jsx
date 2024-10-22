@@ -1,10 +1,20 @@
-import React, {createContext, useContext, useState} from "react";
-import {useMissions} from "../../hooks/useMissions"; // Adjust the path as necessary
+import React, { createContext, useContext, useState } from "react";
+import { useMissions } from "../../hooks/useMissions"; // Adjust the path as necessary
 
 const MissionContext = createContext();
 
-export const MissionProvider = ({children}) => {
-  const {missions, isLoading} = useMissions();
+const directionId = localStorage.getItem("directionId");
+
+export const MissionProvider = ({ children }) => {
+  const {
+    missions,
+    isLoading,
+    deleteMission,
+    directionIdQuery,
+    directionMissionsName,
+    saveMission,
+    updateMission,
+  } = useMissions();
   const [filterType, setFilterType] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -23,9 +33,9 @@ export const MissionProvider = ({children}) => {
             activity.performanceRealization.some((realization) =>
               realization.realization
                 .toLowerCase()
-                .includes(searchTerm.toLowerCase())
-            )
-          )
+                .includes(searchTerm.toLowerCase()),
+            ),
+          ),
       );
     }
 
@@ -39,10 +49,22 @@ export const MissionProvider = ({children}) => {
     return filtered;
   };
 
+  const directionMission = () => {
+    return directionIdQuery().data;
+  };
+  const missionName = () => {
+    return directionMissionsName().data;
+  };
+
   return (
     <MissionContext.Provider
       value={{
         filteredMissions: filteredMissions(),
+        MissionByDirectionId: directionMission(),
+        MissionNameByDirectionId: missionName(),
+        deleteMission,
+        saveMission,
+        updateMission,
         isLoading,
         setFilterType,
         setSearchTerm,
@@ -54,5 +76,12 @@ export const MissionProvider = ({children}) => {
 };
 
 export const useMissionContext = () => {
-  return useContext(MissionContext);
+  const context = useContext(MissionContext);
+  if (!context) {
+    throw new Error(
+      "useMissionContext must be used within a DirectionProvider",
+    );
+  }
+
+  return context;
 };

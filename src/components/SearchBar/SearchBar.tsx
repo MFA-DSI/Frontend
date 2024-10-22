@@ -1,8 +1,8 @@
 // SearchBar.tsx
-import React, {useState} from "react";
-import {AutoComplete, Input, Button, Dropdown, Menu} from "antd";
-import type {AutoCompleteProps} from "antd";
-import {SearchOutlined} from "@ant-design/icons";
+import React, { useState } from "react";
+import { AutoComplete, Input, Button, Dropdown, Menu } from "antd";
+import type { AutoCompleteProps } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 
 const getRandomInt = (max: number, min = 0) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
@@ -16,7 +16,7 @@ const searchResult = (query: string) =>
       return {
         value: category,
         label: (
-          <div style={{display: "flex", justifyContent: "space-between"}}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
             <span>
               Found {query} on{" "}
               <a

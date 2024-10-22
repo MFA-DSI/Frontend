@@ -1,30 +1,35 @@
-import {toast} from "react-toastify";
-import environment from "../conf/environment"; // Adjust the path as necessary
+import { toast } from "react-toastify";
+import environment from "../conf/environment";
+import { CreateMission, Service } from "../types";
 
-// Define the type for Activity
-export interface Mission {
+interface Mission {
   id: string;
   description: string;
+  serviceId: string;
   activityList: ActivityItem[];
 }
 
-export interface ActivityItem {
+interface ActivityItem {
   id: string;
   description: string;
   performanceRealization: PerformanceRealization[];
 }
 
-export interface PerformanceRealization {
+interface PerformanceRealization {
   id: string;
   indicators: number;
   realization: string;
 }
 
-// Fetching all missions from an API
+interface MissionName {
+  id: string;
+  name: string;
+}
+
 export const fetchMissions = async (): Promise<Mission[]> => {
   try {
     const url =
-      "http://localhost:8080/direction/mission/all?page=1&page_size=50";
+      "http://localhost:8080/direction/mission/all?page=1&page_size=100";
     const response = await fetch(url, {
       method: "GET",
     });
@@ -48,12 +53,39 @@ export const fetchMissions = async (): Promise<Mission[]> => {
   }
 };
 
+export const fetchMissionsName = async (
+  directionId: string,
+): Promise<MissionName[]> => {
+  try {
+    const url = `http://localhost:8080/direction/mission/name?directionId=${directionId}`;
+    const response = await fetch(url, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage =
+        errorData.message ||
+        "Erreur inconnue lors de la récupération des activités";
+      toast.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    const data: MissionName[] = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching missions:", error);
+    toast.error("Une erreur inattendue est survenue.");
+    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+  }
+};
+
 // Fetching missions by directionId
 export const getByDirectionId = async (
-  directionId: string
+  directionId: string,
 ): Promise<Mission[]> => {
   try {
-    const url = `http://localhost:8080/direction/mission/byDirectionId/${directionId}`;
+    const url = `http://localhost:8080/direction/mission/directions?directionId=${directionId}&page=1&page_size=100`;
     const response = await fetch(url, {
       method: "GET",
     });
@@ -68,6 +100,8 @@ export const getByDirectionId = async (
     }
 
     const data: Mission[] = await response.json();
+    console.log("mission ", data);
+
     return data;
   } catch (error) {
     console.error("Error fetching missions by directionId:", error);
@@ -76,12 +110,13 @@ export const getByDirectionId = async (
   }
 };
 
-// Save a new mission
-export const saveMission = async (mission: Mission): Promise<Mission> => {
+export const saveMission = async (mission: CreateMission): Promise<Mission> => {
   try {
-    const url = "http://localhost:8080/direction/mission/save";
+    const directionId = localStorage.getItem("directionId");
+    const userId = localStorage.getItem("userId");
+    const url = `http://localhost:8080/direction/mission/create?directionId=${directionId}&userId=${userId}`;
     const response = await fetch(url, {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
@@ -106,10 +141,10 @@ export const saveMission = async (mission: Mission): Promise<Mission> => {
   }
 };
 
-// Delete a mission
 export const deleteMission = async (id: string): Promise<void> => {
+  const userId = localStorage.getItem("userId");
   try {
-    const url = `http://localhost:8080/direction/mission/delete/${id}`;
+    const url = `http://localhost:8080/direction/mission/delete?userId=${userId}&missionId=${id}`;
     const response = await fetch(url, {
       method: "DELETE",
     });
@@ -124,6 +159,37 @@ export const deleteMission = async (id: string): Promise<void> => {
     }
   } catch (error) {
     console.error("Error deleting mission:", error);
+    toast.error("Une erreur inattendue est survenue.");
+    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+  }
+};
+
+export const updateMission = async (mission: MissionName): Promise<Mission> => {
+  try {
+    const directionId = localStorage.getItem("directionId");
+    const userId = localStorage.getItem("userId");
+    const url = `http://localhost:8080/direction/mission/update?directionId=${directionId}&userId=${userId}&missionId=${mission.id}`;
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(mission),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage =
+        errorData.message ||
+        "Erreur inconnue lors de l'enregistrement de la mission";
+      toast.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    const data: Mission = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error saving mission:", error);
     toast.error("Une erreur inattendue est survenue.");
     throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
   }
