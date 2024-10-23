@@ -18,7 +18,6 @@ import {
   TaskForm,
 } from "./Forms/MissionDetailsForm";
 import { useDirectionsContext } from "../../providers";
-import { json } from "react-router-dom";
 
 const { Step } = Steps;
 const { Option } = Select;
@@ -220,7 +219,7 @@ const AddActivityModal = ({ visible, onCancel }) => {
     {
       title: "Ajouter des prochaines tâches",
       content: (
-        <NextTaskForm nextTasks={nextTasks} setNextTasks={setNextTasks} />
+        <NextTaskForm nextTasks={nextTasks} setNextTasks={setNextTasks} tasks={tasks} />
       ),
     },
     {

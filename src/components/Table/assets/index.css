@@ -35,3 +35,43 @@
   background-color: #da1414;
   border-radius: 10px;
 }
+/* index.css */
+.activity-container {
+  padding: 10px;
+  margin-bottom: 5px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+.activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 12px;
+}
+
+.activity-controls {
+  display: flex;
+  align-items: center;
+}
+
+.activity-buttons {
+  margin-left: 10px;
+}
+
+.activity-export {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.activity-export-button {
+  margin-right: 8px;
+}
+
+.activity-table-container {
+  height: calc(100vh - 250px);
+  overflow: auto;
+  padding-inline: 4.5px;
+}
+

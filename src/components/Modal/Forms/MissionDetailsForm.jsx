@@ -71,7 +71,7 @@ export const TaskForm = ({ tasks, setTasks }) => {
       <ul>
         {tasks.map((task, index) => (
           <li key={index}>
-            {task.description} (Due:{" "}
+            {task.description} (fait :{" "}
             {task.dueDatetime
               ? moment(task.dueDatetime).format("DD/MM/YYYY")
               : "N/A"}
@@ -117,7 +117,7 @@ export const NextTaskForm = ({ nextTasks, setNextTasks }) => {
       <ul>
         {nextTasks.map((nextTask, index) => (
           <li key={index}>
-            {nextTask.description} (Due:{" "}
+            {nextTask.description} (Prévu le :{" "}
             {nextTask.dueDatetime
               ? moment(nextTask.dueDatetime).format("DD/MM/YYYY")
               : "N/A"}

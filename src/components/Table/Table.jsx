@@ -21,8 +21,6 @@ import { WeeklyFilters } from "../DropDown/WeeklyFilters";
 import { MonthlyFilters } from "../DropDown/MonthlyFilter";
 import { QuarterlyFilters } from "../DropDown/QuarterlyFilter";
 
-const { Option } = Select;
-
 const TableComponent = ({ mode }) => {
   const {
     filteredActivities,
@@ -37,7 +35,6 @@ const TableComponent = ({ mode }) => {
     setDirectionFilter,
   } = useMissionContext();
   const { fetchMissionXLS } = useFilesContext();
-  const {} = useDirectionsContext();
   const [activityType, setActivityType] = useState("all");
   const [dateFilter, setDateFilter] = useState({
     month: null,
@@ -308,166 +305,129 @@ const TableComponent = ({ mode }) => {
 
   return (
     <>
-      <div
-        style={{
-          padding: "10px",
-          marginBottom: "5px",
-          backgroundColor: "#f9f9f9",
-          borderRadius: "5px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            borderRadius: "12px",
-          }}
-        >
-          <h2 style={{ marginTop: mode === "mydirection" ? 30 : 0 }}>
-            Liste des Activités
-          </h2>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              marginTop: mode === "mydirection" ? 30 : 0,
-            }}
-          >
-            <ActivityTypeSelect
-                style={activityDropdownStyle}
-              activityType={activityType}
-              setActivityType={setActivityType}
-              setFilterType={setFilterType}
-              setDateFilter={setDateFilter}
-            />
+      <div className="activity-container">
+  <div className="activity-header">
+    <h2 style={{ marginTop: mode === "mydirection" ? 30 : 0 }}>
+      Liste des Activités
+    </h2>
+    <div
+      className="activity-controls"
+      style={{ marginTop: mode === "mydirection" ? 30 : 0 }}
+    >
+      <ActivityTypeSelect
+        style={activityDropdownStyle}
+        activityType={activityType}
+        setActivityType={setActivityType}
+        setFilterType={setFilterType}
+        setDateFilter={setDateFilter}
+      />
 
-            {mode !== "mydirection" && (
-              <DirectionSelect setDirectionFilter={setDirectionFilter} />
-            )}
+      {mode !== "mydirection" && (
+        <DirectionSelect setDirectionFilter={setDirectionFilter} />
+      )}
 
-            {activityType === "weekly" && (
-              <WeeklyFilters
-              style={weeklyDropDownStyle}
-                dateFilter={dateFilter}
-                setDateFilter={setDateFilter}
-                getWeeksInMonth={getWeeksInMonth}
-              />
-            )}
-
-            {activityType === "monthly" && (
-              <MonthlyFilters
-              style={monthlyDropDownStyle}
-                dateFilter={dateFilter}
-                setDateFilter={setDateFilter}
-              />
-            )}
-
-            {activityType === "quarterly" && (
-              <QuarterlyFilters
-              style={weeklyDropDownStyle}
-                dateFilter={dateFilter}
-                setDateFilter={setDateFilter}
-              />
-            )}
-
-            <Button
-              type="primary"
-              style={{ marginLeft: "10px" }}
-              onClick={() => {
-                // Action de filtrage
-                console.log("Filtrer les résultats");
-              }}
-            >
-              Filtrer
-            </Button>
-
-            <Button
-              type="default"
-              style={{ marginLeft: "10px" }}
-              onClick={() => {
-                // Réinitialiser tous les filtres
-                setActivityType("all");
-                setDirectionFilter("all");
-                setDateFilter({
-                  month: null,
-                  week: null,
-                  year: null,
-                  quarter: null,
-                });
-              }}
-            >
-              Réinitialiser
-            </Button>
-          </div>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginTop: "16px",
-          }}
-        >
-          {selectedIds.length > 0 && (
-            <>
-              <span style={{ marginRight: "8px", alignSelf: "center" }}>
-                Exporter en :
-              </span>
-              <Button
-                type="default"
-                icon={<FilePdfOutlined style={{ color: "red" }} />}
-                style={{
-                  marginRight: "8px",
-                  backgroundColor: "white",
-                  color: "black",
-                }}
-                onClick={() => handleExport("PDF")}
-              >
-                PDF
-              </Button>
-              <Button
-                type="primary"
-                icon={<FileExcelOutlined />}
-                style={{
-                  marginRight: "8px",
-                  backgroundColor: "green",
-                  color: "white",
-                }}
-                onClick={() => handleExport("XLS")}
-              >
-                Excel
-              </Button>
-              <Button
-                type="primary"
-                icon={<FileWordOutlined />}
-                onClick={() => handleExport("DOC")}
-              >
-                DOC
-              </Button>
-            </>
-          )}
-        </div>
-      </div>
-      <div
-        style={{
-          height: "calc(100vh - 250px)",
-          overflow: "auto",
-          paddingInline: "4.5px",
-        }}
-        className="custom-ant-table"
-      >
-        <Table
-          columns={getColumns()}
-          dataSource={dataSource}
-          pagination={{
-            pageSize,
-            showSizeChanger: true,
-            pageSizeOptions: ["10", "20", "50", "100"],
-          }}
-          scroll={mode === "all" ? { y: 263.5 } : { y: 250 }}
-          locale={{ emptyText: "Aucune donnée à afficher" }}
+      {activityType === "weekly" && (
+        <WeeklyFilters
+          style={weeklyDropDownStyle}
+          dateFilter={dateFilter}
+          setDateFilter={setDateFilter}
+          getWeeksInMonth={getWeeksInMonth}
         />
-      </div>
+      )}
+
+      {activityType === "monthly" && (
+        <MonthlyFilters
+          style={monthlyDropDownStyle}
+          dateFilter={dateFilter}
+          setDateFilter={setDateFilter}
+        />
+      )}
+
+      {activityType === "quarterly" && (
+        <QuarterlyFilters
+          style={weeklyDropDownStyle}
+          dateFilter={dateFilter}
+          setDateFilter={setDateFilter}
+        />
+      )}
+
+      <Button
+        type="primary"
+        className="activity-buttons"
+        onClick={() => {
+          // Action de filtrage
+          console.log("Filtrer les résultats");
+        }}
+      >
+        Filtrer
+      </Button>
+
+      <Button
+        type="default"
+        className="activity-buttons"
+        onClick={() => {
+          // Réinitialiser tous les filtres
+          setActivityType("all");
+          setDirectionFilter("all");
+          setDateFilter({
+            month: null,
+            week: null,
+            year: null,
+            quarter: null,
+          });
+        }}
+      >
+        Réinitialiser
+      </Button>
+    </div>
+  </div>
+  <div className="activity-export">
+    {selectedIds.length > 0 && (
+      <>
+        <span style={{ marginRight: "8px", alignSelf: "center" }}>
+          Exporter en :
+        </span>
+        <Button
+          type="default"
+          icon={<FilePdfOutlined style={{ color: "red" }} />}
+          className="activity-export-button"
+          onClick={() => handleExport("PDF")}
+        >
+          PDF
+        </Button>
+        <Button
+          type="primary"
+          icon={<FileExcelOutlined />}
+          className="activity-export-button"
+          onClick={() => handleExport("XLS")}
+        >
+          Excel
+        </Button>
+        <Button
+          type="primary"
+          icon={<FileWordOutlined />}
+          onClick={() => handleExport("DOC")}
+        >
+          DOC
+        </Button>
+      </>
+    )}
+  </div>
+</div>
+<div className="activity-table-container custom-ant-table">
+  <Table
+    columns={getColumns()}
+    dataSource={dataSource}
+    pagination={{
+      pageSize,
+      showSizeChanger: true,
+      pageSizeOptions: ["10", "20", "50", "100"],
+    }}
+    scroll={mode === "all" ? { y: 263.5 } : { y: 250 }}
+    locale={{ emptyText: "Aucune donnée à afficher" }}
+  />
+</div>
+
       <ActivityModal
         mode={mode}
         onDelete={onDelete}

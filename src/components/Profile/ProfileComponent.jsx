@@ -81,7 +81,7 @@ const ProfileComponent = () => {
           },
         });
 
-        form.resetFields();
+      
         onCancel();
       } catch (error) {
         console.error("Failed to save new responsible:", error);

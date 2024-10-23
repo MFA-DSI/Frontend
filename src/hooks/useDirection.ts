@@ -42,10 +42,9 @@ export const useDirections = () => {
   });
   const fetchAllDirectionResponsible = useQuery({
     queryKey: ["responsible"],
-    queryFn: () =>
-      getDirectionResponsiblesInformation(
-        localStorage.getItem("directionId") || "",
-      ),
+    queryFn: 
+      getDirectionResponsiblesInformation,
+      
   });
 
   const saveNewUserMutation = useMutation(addUserToDirection, {
@@ -71,7 +70,7 @@ export const useDirections = () => {
     fetchServices: fetchServiceByDirectionId.data,
     fetchActualDirection: fetchActualDirectionName,
     fetchUserInformation: fetchDirectionUserInformation.data,
-    fetchAllResponsibles: fetchAllDirectionResponsible,
+    fetchAllResponsibles: fetchAllDirectionResponsible.data,
     saveNewUser: saveNewUserMutation.mutate,
     saveNewResponsible: saveNewResponsibleToDirection.mutate,
     approveUserToDirectionMember: approveUser.mutate,

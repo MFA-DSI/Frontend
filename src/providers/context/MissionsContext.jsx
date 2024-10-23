@@ -5,6 +5,8 @@ const MissionContext = createContext();
 
 const directionId = localStorage.getItem("directionId");
 
+
+
 export const MissionProvider = ({ children }) => {
   const {
     missions,
@@ -12,6 +14,9 @@ export const MissionProvider = ({ children }) => {
     deleteMission,
     directionIdQuery,
     directionMissionsName,
+    weeklyMissions,
+    monthlyMissions,
+    quarterMissions,
     saveMission,
     updateMission,
   } = useMissions();
@@ -62,6 +67,9 @@ export const MissionProvider = ({ children }) => {
         filteredMissions: filteredMissions(),
         MissionByDirectionId: directionMission(),
         MissionNameByDirectionId: missionName(),
+        weeklyMissions,
+        monthlyMissions,
+        quarterMissions,
         deleteMission,
         saveMission,
         updateMission,

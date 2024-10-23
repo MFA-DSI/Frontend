@@ -20,9 +20,6 @@ export const DirectionProvider = ({ children }) => {
     approveUserToDirectionMember,
   } = useDirections();
 
-  const getAllResponsible = () => {
-    return fetchAllResponsibles.data;
-  };
 
   return (
     <DirectionContext.Provider
@@ -31,7 +28,7 @@ export const DirectionProvider = ({ children }) => {
         fetchAllService: fetchServices,
         fetchActualDirectionName: fetchActualDirection,
         fetchActualUserInformation: fetchUserInformation,
-        fetchAllDirectionResponsibles: getAllResponsible(),
+        fetchAllDirectionResponsibles: fetchAllResponsibles,
         saveNewUser,
         saveNewResponsible,
         approveUserToDirectionMember,
