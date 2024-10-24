@@ -11,13 +11,14 @@ const TableComponent = lazy(() => import("../../components/Table/Table"));
 const HomePage = () => {
   const {filteredMissions} = useMissionContext();
   const {filteredActivities} = useActivitiesContext();
+  const [filterData,setFilterData] = useState([])
   
   return (
     <MainLayout>
       <h2 style={{marginTop: "20px", paddingTop: "20px"}}>
         Toutes les Directions
       </h2>
-      <TableComponent mode="all" dataMission={filteredMissions}  dataActivities={filteredActivities} />
+      <TableComponent mode="all" dataMission={filteredMissions}  dataActivities={filteredActivities} onFilter={setFilterData} filterData={filterData} />
     </MainLayout>
   );
 };

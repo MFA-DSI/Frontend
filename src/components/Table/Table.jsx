@@ -21,7 +21,7 @@ import { WeeklyFilters } from "../DropDown/WeeklyFilters";
 import { MonthlyFilters } from "../DropDown/MonthlyFilter";
 import { QuarterlyFilters } from "../DropDown/QuarterlyFilter";
 
-const TableComponent = ({ mode, dataMission, dataActivities,onFilter }) => {
+const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData }) => {
   const {
     isLoading: isActivityLoading,
   } = useActivitiesContext();
