@@ -48,8 +48,8 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData 
   const [isMissionModalVisible, setIsMissionModalVisible] = useState(false);
   const [pageSize, setPageSize] = useState(20);
   const [selectedIds, setSelectedIds] = useState([]);
-
-  useEffect(() => {}, [mode]);
+  const [directionIdFilter, setDirectionIdFilter] = useState();
+  useEffect(() => {}, [mode,activityType]);
 
   const showModal = (activity) => {
     setSelectedActivity(activity);
@@ -286,22 +286,26 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData 
     }
   };
 
-  if (isMissionLoading || (activityType === "weekly" && isActivityLoading))
+  if (isMissionLoading || (activityType === "weekly" && isActivityLoading) )
+
     return <Spin />;
 
-  const dataSource = activityType === "weekly" ? dataActivities : dataMission;
+  let dataSource;
+  switch(activityType){
+    case "weekly":
+        dataSource=dataActivities
+        break;
+    case "filtered":
+        dataSource=filterData;
+        break;
+    default :
+        dataSource= dataMission
+  }
 
   const handleFilter = async () => {
-    switch (activityType) {
-      case "weekly":
-        const response = [];
-        onFilter(response);
-        break;
-
-      default:
-        break;
-    }
+    setActivityType("filtered")
   };
+  
 
   const activityDropdownStyle = { width: 120, marginRight: "5px" };
 

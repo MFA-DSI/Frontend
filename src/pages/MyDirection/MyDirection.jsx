@@ -6,7 +6,6 @@ import TableComponent from "../../components/Table/Table";
 import AddActivityModal from "../../components/Modal/AddMission";
 import {
   useActivitiesContext,
-  useDirectionsContext,
   useMissionContext,
 } from "../../providers";
 import { DirectionName } from "../../components";
@@ -16,10 +15,11 @@ const MyDirection = () => {
     useState(false);
   const { MissionByDirectionId } = useMissionContext();
   const { directionIdQueryActvities } = useActivitiesContext();
+  
   const showAddActivityModal = () => {
     setIsAddActivityModalVisible(true);
   };
-  
+
   const handleCloseModal = () => {
     setIsAddActivityModalVisible(false);
   };

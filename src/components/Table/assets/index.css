@@ -74,12 +74,3 @@
   overflow: auto;
   padding-inline: 4.5px;
 }
-.activity-export-excel-button {
-  background-color: green;
-  border-color: green;
-}
-
-.activity-export-excel-button:hover {
-  background-color: darkgreen; /* Optional: change the color on hover */
-  border-color: darkgreen;
-}
