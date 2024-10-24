@@ -398,8 +398,8 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData 
                 PDF
               </Button>
               <Button
-                type="primary"
-                icon={<FileExcelOutlined />}
+              color="green"
+                icon={<FileExcelOutlined style={{ color: "green" }} />}
                 className="activity-export-button"
                 onClick={() => handleExport("XLS")}
               >
