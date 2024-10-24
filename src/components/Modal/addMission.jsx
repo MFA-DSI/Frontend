@@ -219,7 +219,11 @@ const AddActivityModal = ({ visible, onCancel }) => {
     {
       title: "Ajouter des prochaines tâches",
       content: (
-        <NextTaskForm nextTasks={nextTasks} setNextTasks={setNextTasks} tasks={tasks} />
+        <NextTaskForm
+          nextTasks={nextTasks}
+          setNextTasks={setNextTasks}
+          tasks={tasks}
+        />
       ),
     },
     {

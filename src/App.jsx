@@ -13,6 +13,7 @@ import Profile from "./pages/Profile/Profile";
 import LoginPage from "./pages/Login/LoginPage";
 import ReportMission from "./pages/ReportMission/ReportMission";
 import FirstLoginPage from "./pages/Login/FirstLoginPage";
+import { HackWebProviders } from "./providers";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,9 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <HackWebProviders>
+
+     
       <ToastContainer />
 
       <Routes location={location}>
@@ -34,6 +38,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signin" element={<FirstLoginPage />} />
       </Routes>
+      </HackWebProviders>
     </QueryClientProvider>
   );
 }

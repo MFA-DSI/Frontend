@@ -81,7 +81,6 @@ const ProfileComponent = () => {
           },
         });
 
-      
         onCancel();
       } catch (error) {
         console.error("Failed to save new responsible:", error);

@@ -20,7 +20,6 @@ export const DirectionProvider = ({ children }) => {
     approveUserToDirectionMember,
   } = useDirections();
 
-
   return (
     <DirectionContext.Provider
       value={{

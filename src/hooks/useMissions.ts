@@ -60,18 +60,16 @@ export const useMissions = () => {
     });
 
   const weeklyMissions = (params) =>
-      useQuery({
-        queryKey: ["mission"],
-        queryFn: () => getMonthlyAtivityByDirectionId(params),
+    useQuery({
+      queryKey: ["mission"],
+      queryFn: () => getMonthlyAtivityByDirectionId(params),
     });
 
-    const quarterMissions = (params) =>
-      useQuery({
-        queryKey: ["mission"],
-        queryFn: () => getQuarterlyAtivityByDirectionId(params),
-      });
-
-  
+  const quarterMissions = (params) =>
+    useQuery({
+      queryKey: ["mission"],
+      queryFn: () => getQuarterlyAtivityByDirectionId(params),
+    });
 
   return {
     missions: missionsQuery.data,

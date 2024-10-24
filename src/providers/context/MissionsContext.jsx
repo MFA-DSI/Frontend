@@ -5,8 +5,6 @@ const MissionContext = createContext();
 
 const directionId = localStorage.getItem("directionId");
 
-
-
 export const MissionProvider = ({ children }) => {
   const {
     missions,

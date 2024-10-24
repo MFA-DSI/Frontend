@@ -42,9 +42,7 @@ export const useDirections = () => {
   });
   const fetchAllDirectionResponsible = useQuery({
     queryKey: ["responsible"],
-    queryFn: 
-      getDirectionResponsiblesInformation,
-      
+    queryFn: getDirectionResponsiblesInformation,
   });
 
   const saveNewUserMutation = useMutation(addUserToDirection, {

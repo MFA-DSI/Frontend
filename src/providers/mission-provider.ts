@@ -27,27 +27,25 @@ interface MissionName {
 }
 
 interface missionFilterWeek {
-  directionId: string,
-  weekStartDate : string,
-  page : number,
-  pageSize : number,
-  
+  directionId: string;
+  weekStartDate: string;
+  page: number;
+  pageSize: number;
 }
 interface missionFilterMonth {
-  directionId: string,
-  month : string,
-  year : string,
-  page : number,
-  pageSize : number,
-  
+  directionId: string;
+  month: string;
+  year: string;
+  page: number;
+  pageSize: number;
 }
 
 interface missionFilterQuarter {
-  directionId : string,
-  quarter : string,
-  year : string,
-  page : number,
-  pageSize : number,
+  directionId: string;
+  quarter: string;
+  year: string;
+  page: number;
+  pageSize: number;
 }
 
 export const fetchMissions = async (): Promise<Mission[]> => {
@@ -217,89 +215,89 @@ export const updateMission = async (mission: MissionName): Promise<Mission> => {
     toast.error("Une erreur inattendue est survenue.");
     throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
   }
-}
-  export const getWeeklyAtivityByDirectionId = async (
-    params : missionFilterWeek
-  ): Promise<Mission[]> => {
-    try {
-      const url = `http://localhost:8080/direction/mission/directions?directionId=${params.directionId}&weekStartDate=${params.weekStartDate}}&page=${params.page}&page_size=${params.pageSize}`;
-      const response = await fetch(url, {
-        method: "GET",
-      });
-  
-      if (!response.ok) {
-        const errorData = await response.json();
-        const errorMessage =
-          errorData.message ||
-          "Erreur inconnue lors de la récupération des missions par direction";
-        toast.error(errorMessage);
-        throw new Error(errorMessage);
-      }
-  
-      const data: Mission[] = await response.json();
-      console.log("mission ", data);
-  
-      return data;
-    } catch (error) {
-      console.error("Error fetching missions by directionId:", error);
-      toast.error("Une erreur inattendue est survenue.");
-      throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
-    }
-  };
+};
+export const getWeeklyAtivityByDirectionId = async (
+  params: missionFilterWeek,
+): Promise<Mission[]> => {
+  try {
+    const url = `http://localhost:8080/direction/mission/directions?directionId=${params.directionId}&weekStartDate=${params.weekStartDate}}&page=${params.page}&page_size=${params.pageSize}`;
+    const response = await fetch(url, {
+      method: "GET",
+    });
 
-  export const getMonthlyAtivityByDirectionId = async (
-    params : missionFilterMonth
-  ): Promise<Mission[]> => {
-    try {
-      const url = `http://localhost:8080/direction/mission/directions?directionId=${params.directionId}&year=${params.year}}&month=${params.month}&page=${params.page}&page_size=${params.pageSize}`;
-      const response = await fetch(url, {
-        method: "GET",
-      });
-  
-      if (!response.ok) {
-        const errorData = await response.json();
-        const errorMessage =
-          errorData.message ||
-          "Erreur inconnue lors de la récupération des missions par direction";
-        toast.error(errorMessage);
-        throw new Error(errorMessage);
-      }
-  
-      const data: Mission[] = await response.json();
-      console.log("mission ", data);
-  
-      return data;
-    } catch (error) {
-      console.error("Error fetching missions by directionId:", error);
-      toast.error("Une erreur inattendue est survenue.");
-      throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage =
+        errorData.message ||
+        "Erreur inconnue lors de la récupération des missions par direction";
+      toast.error(errorMessage);
+      throw new Error(errorMessage);
     }
-  }
 
-  export const getQuarterlyAtivityByDirectionId = async (
-    params : missionFilterQuarter
-  ): Promise<Mission[]> => {
-    try {
-      const url = `http://localhost:8080/direction/mission/directions?directionId=${params.directionId}&quarter=${params.quarter}}&year=${params.year}&page=${params.page}&page_size=${params.pageSize}`;
-      const response = await fetch(url, {
-        method: "GET",
-      });
-  
-      if (!response.ok) {
-        const errorData = await response.json();
-        const errorMessage =
-          errorData.message ||
-          "Erreur inconnue lors de la récupération des missions par direction";
-        toast.error(errorMessage);
-        throw new Error(errorMessage);
-      }
-  
-      const data: Mission[] = await response.json();
-  
-      return data;
-    } catch (error) {
-      console.error("Error fetching missions by directionId:", error);
-      toast.error("Une erreur inattendue est survenue.");
-      throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
-    }
+    const data: Mission[] = await response.json();
+    console.log("mission ", data);
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching missions by directionId:", error);
+    toast.error("Une erreur inattendue est survenue.");
+    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
   }
+};
+
+export const getMonthlyAtivityByDirectionId = async (
+  params: missionFilterMonth,
+): Promise<Mission[]> => {
+  try {
+    const url = `http://localhost:8080/direction/mission/directions?directionId=${params.directionId}&year=${params.year}}&month=${params.month}&page=${params.page}&page_size=${params.pageSize}`;
+    const response = await fetch(url, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage =
+        errorData.message ||
+        "Erreur inconnue lors de la récupération des missions par direction";
+      toast.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    const data: Mission[] = await response.json();
+    console.log("mission ", data);
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching missions by directionId:", error);
+    toast.error("Une erreur inattendue est survenue.");
+    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+  }
+};
+
+export const getQuarterlyAtivityByDirectionId = async (
+  params: missionFilterQuarter,
+): Promise<Mission[]> => {
+  try {
+    const url = `http://localhost:8080/direction/mission/directions?directionId=${params.directionId}&quarter=${params.quarter}}&year=${params.year}&page=${params.page}&page_size=${params.pageSize}`;
+    const response = await fetch(url, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage =
+        errorData.message ||
+        "Erreur inconnue lors de la récupération des missions par direction";
+      toast.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    const data: Mission[] = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching missions by directionId:", error);
+    toast.error("Une erreur inattendue est survenue.");
+    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+  }
+};

@@ -7,18 +7,17 @@ interface reportDetailsForWeek {
   pageSize: string;
 }
 
-
 interface reportDetailsForMonth {
   directionId: string;
   year: number;
-  month : number;
+  month: number;
   pageSize: string;
 }
 
 interface reportDetailsForQuarter {
   directionId: string;
   year: number;
-  quarter : number;
+  quarter: number;
   pageSize: string;
 }
 
@@ -144,7 +143,6 @@ export const ExportReportMissionWeek = async (id: reportDetailsForWeek) => {
       }
     }
 
-
     // Convert the response to a blob
     const blob = await response.blob();
 
@@ -191,7 +189,6 @@ export const ExportReportMissionMonth = async (id: reportDetailsForMonth) => {
       }
     }
 
-
     // Convert the response to a blob
     const blob = await response.blob();
 
@@ -206,8 +203,9 @@ export const ExportReportMissionMonth = async (id: reportDetailsForMonth) => {
   }
 };
 
-
-export const ExportReportMissionQuarter = async (id: reportDetailsForQuarter) => {
+export const ExportReportMissionQuarter = async (
+  id: reportDetailsForQuarter,
+) => {
   try {
     const url = `http://localhost:8080/direction/mydirection/mission/export/quarter/excel?directionId=${id.directionId}&year=${id.year}&quarter=${id.quarter}&pageSize=${id.pageSize}`;
     const response = await fetch(url, {
@@ -238,7 +236,6 @@ export const ExportReportMissionQuarter = async (id: reportDetailsForQuarter) =>
         filename = matches[1].replace(/['"]/g, "");
       }
     }
-
 
     // Convert the response to a blob
     const blob = await response.blob();

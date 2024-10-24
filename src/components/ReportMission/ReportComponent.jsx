@@ -9,7 +9,11 @@ import { MonthlyFilters } from "../DropDown/MonthlyFilter";
 import { QuarterlyFilters } from "../DropDown/QuarterlyFilter";
 
 const ReportGenerator = () => {
-  const { fetchWeeklyReportMissionXLS, fetchMonthlyReportMissionXLS, fetchQuarterlyReportMissionXLS } = useFilesContext();
+  const {
+    fetchWeeklyReportMissionXLS,
+    fetchMonthlyReportMissionXLS,
+    fetchQuarterlyReportMissionXLS,
+  } = useFilesContext();
   const directionId = useAuthStore.getState().directionId;
   const [activityType, setActivityType] = useState("weekly");
   const [dateFilter, setDateFilter] = useState({
@@ -59,7 +63,10 @@ const ReportGenerator = () => {
         await fetchMonthlyReportMissionXLS(reportDetailsForMonth);
         console.log("Rapport mensuel généré avec succès !");
       } catch (error) {
-        console.error("Erreur lors de la génération du rapport mensuel :", error);
+        console.error(
+          "Erreur lors de la génération du rapport mensuel :",
+          error,
+        );
       }
       return;
     } else if (activityType === "quarterly") {
@@ -75,7 +82,10 @@ const ReportGenerator = () => {
         await fetchQuarterlyReportMissionXLS(reportDetailsForQuarter);
         console.log("Rapport trimestriel généré avec succès !");
       } catch (error) {
-        console.error("Erreur lors de la génération du rapport trimestriel :", error);
+        console.error(
+          "Erreur lors de la génération du rapport trimestriel :",
+          error,
+        );
       }
       return;
     }

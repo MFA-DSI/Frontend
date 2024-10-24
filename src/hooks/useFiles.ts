@@ -30,32 +30,35 @@ export const useFiles = () => {
     },
   });
 
-
   const exportWeeklyReportToMissionXLS = useMutation(ExportReportMissionWeek, {
     onSuccess: () => {
       message.success("votre rapport XLS est prêt");
     },
   });
-  const exportMonthlyReportToMissionXLS = useMutation(ExportReportMissionMonth, {
-    onSuccess: () => {
-      message.success("votre rapport XLS est prêt");
+  const exportMonthlyReportToMissionXLS = useMutation(
+    ExportReportMissionMonth,
+    {
+      onSuccess: () => {
+        message.success("votre rapport XLS est prêt");
+      },
     },
-  });
+  );
 
-  const exportQuarterlyReportToMissionXLS = useMutation(ExportReportMissionQuarter, {
-    onSuccess: () => {
-      message.success("votre rapport XLS est prêt");
+  const exportQuarterlyReportToMissionXLS = useMutation(
+    ExportReportMissionQuarter,
+    {
+      onSuccess: () => {
+        message.success("votre rapport XLS est prêt");
+      },
     },
-  });
-
-
+  );
 
   return {
     missionToPDF: exportToMissionPDF.mutate,
     missionToDOC: exportToMissionDOC.mutate,
     missionToXLS: exportToMissionXLS.mutate,
     reportMissionWeekly: exportWeeklyReportToMissionXLS.mutate,
-    reportMissionMonthly : exportMonthlyReportToMissionXLS.mutate,
-    reportMissionQuarterly : exportQuarterlyReportToMissionXLS.mutate,
+    reportMissionMonthly: exportMonthlyReportToMissionXLS.mutate,
+    reportMissionQuarterly: exportQuarterlyReportToMissionXLS.mutate,
   };
 };

@@ -2,7 +2,7 @@ import { Select } from "antd";
 import React from "react";
 
 const { Option } = Select;
-export const MonthlyFilters = ({ dateFilter, setDateFilter,style }) => (
+export const MonthlyFilters = ({ dateFilter, setDateFilter, style }) => (
   <>
     <Select
       placeholder="Année"

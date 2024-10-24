@@ -7,7 +7,7 @@ export const ActivityTypeSelect = ({
   setActivityType,
   setFilterType,
   setDateFilter,
-  style
+  style,
 }) => (
   <Select
     value={activityType}

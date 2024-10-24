@@ -6,7 +6,7 @@ export const WeeklyFilters = ({
   dateFilter,
   setDateFilter,
   getWeeksInMonth,
-  style
+  style,
 }) => (
   <>
     <Select

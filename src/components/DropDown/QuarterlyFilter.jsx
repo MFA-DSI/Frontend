@@ -3,7 +3,7 @@ import React from "react";
 
 const { Option } = Select;
 
-export const QuarterlyFilters = ({ dateFilter, setDateFilter,style }) => (
+export const QuarterlyFilters = ({ dateFilter, setDateFilter, style }) => (
   <>
     <Select
       placeholder="Année"

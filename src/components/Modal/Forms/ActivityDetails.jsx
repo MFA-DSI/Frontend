@@ -22,7 +22,10 @@ export const EditableField = ({
       ) : (
         <p>
           {inputType === "date"
-            ? dateFormatter(value?.toLocaleString()).toLocaleString() === "Invalid date"?"Aucune date":dateFormatter(value?.toLocaleString()).toLocaleString()
+            ? dateFormatter(value?.toLocaleString()).toLocaleString() ===
+              "Invalid date"
+              ? "Aucune date"
+              : dateFormatter(value?.toLocaleString()).toLocaleString()
             : value}
         </p>
       )}
