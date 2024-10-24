@@ -21,16 +21,12 @@ import { WeeklyFilters } from "../DropDown/WeeklyFilters";
 import { MonthlyFilters } from "../DropDown/MonthlyFilter";
 import { QuarterlyFilters } from "../DropDown/QuarterlyFilter";
 
-const TableComponent = ({ mode,dataMission,dataActivities }) => {
+const TableComponent = ({ mode, dataMission, dataActivities,onFilter }) => {
   const {
-    filteredActivities,
     isLoading: isActivityLoading,
-    directionIdQueryActvities,
   } = useActivitiesContext();
   const {
-    filteredMissions,
-    isLoading: isMissionLoading,
-    MissionByDirectionId,
+    isLoading: isMissionLoading,  
     weeklyMissions,
     monthlyMissions,
     quarterMissions,
@@ -293,20 +289,19 @@ const TableComponent = ({ mode,dataMission,dataActivities }) => {
   if (isMissionLoading || (activityType === "weekly" && isActivityLoading))
     return <Spin />;
 
+  const dataSource = activityType === "weekly" ? dataActivities : dataMission;
 
-  const dataSource =
-    activityType === "weekly" ? dataActivities : dataMission;
+  const handleFilter = async () => {
+    switch (activityType) {
+      case "weekly":
+        const response = [];
+        onFilter(response);
+        break;
 
-  const handleFilter = async (params )=>{
-      switch (params.activityType) {
-        case "week":
-           const response = await  weeklyMissions(params);
-          break;
-      
-        default:
-          break;
-      }
-  }
+      default:
+        break;
+    }
+  };
 
   const activityDropdownStyle = { width: 120, marginRight: "5px" };
 
@@ -364,10 +359,7 @@ const TableComponent = ({ mode,dataMission,dataActivities }) => {
             <Button
               type="primary"
               className="activity-buttons"
-              onClick={() => {
-                // Action de filtrage
-                console.log("Filtrer les résultats");
-              }}
+              onClick={handleFilter}
             >
               Filtrer
             </Button>

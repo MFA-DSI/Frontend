@@ -23,21 +23,19 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <HackWebProviders>
+        <ToastContainer />
 
-     
-      <ToastContainer />
-
-      <Routes location={location}>
-        <Route path="/" element={<AuthWrapper />}>
-          <Route index element={<HomePage />} />
-          <Route path="myDirection" element={<MyDirection />} />
-          <Route path="reports" element={<ReportMission />} />
-          <Route path="notifications" element={<Notification />} />
-          <Route path="profile" element={<Profile />} />
-        </Route>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signin" element={<FirstLoginPage />} />
-      </Routes>
+        <Routes location={location}>
+          <Route path="/" element={<AuthWrapper />}>
+            <Route index element={<HomePage />} />
+            <Route path="myDirection" element={<MyDirection />} />
+            <Route path="reports" element={<ReportMission />} />
+            <Route path="notifications" element={<Notification />} />
+            <Route path="profile" element={<Profile />} />
+          </Route>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signin" element={<FirstLoginPage />} />
+        </Routes>
       </HackWebProviders>
     </QueryClientProvider>
   );

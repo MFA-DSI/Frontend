@@ -4,18 +4,22 @@ import { Button } from "antd";
 import MainLayout from "../Layout/MainLayout";
 import TableComponent from "../../components/Table/Table";
 import AddActivityModal from "../../components/Modal/AddMission";
-import { useActivitiesContext, useDirectionsContext, useMissionContext } from "../../providers";
+import {
+  useActivitiesContext,
+  useDirectionsContext,
+  useMissionContext,
+} from "../../providers";
 import { DirectionName } from "../../components";
 
 const MyDirection = () => {
   const [isAddActivityModalVisible, setIsAddActivityModalVisible] =
     useState(false);
-    const {MissionByDirectionId} = useMissionContext();
-    const {directionIdQueryActvities} = useActivitiesContext();
+  const { MissionByDirectionId } = useMissionContext();
+  const { directionIdQueryActvities } = useActivitiesContext();
   const showAddActivityModal = () => {
     setIsAddActivityModalVisible(true);
   };
-
+  
   const handleCloseModal = () => {
     setIsAddActivityModalVisible(false);
   };
@@ -31,7 +35,11 @@ const MyDirection = () => {
         >
           Ajouter une Activité
         </Button>
-        <TableComponent mode="mydirection" dataMission={MissionByDirectionId} dataActivities={directionIdQueryActvities} />
+        <TableComponent
+          mode="mydirection"
+          dataMission={MissionByDirectionId}
+          dataActivities={directionIdQueryActvities}
+        />
       </div>
       <AddActivityModal
         visible={isAddActivityModalVisible}

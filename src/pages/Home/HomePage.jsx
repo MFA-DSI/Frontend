@@ -1,5 +1,5 @@
 // HomePage.jsx
-import React, {lazy, Suspense} from "react";
+import React, {lazy, Suspense, useEffect, useState} from "react";
 import {CSSTransition, TransitionGroup} from "react-transition-group";
 import MainLayout from "../Layout/MainLayout";
 import {Skeleton} from "antd"; // Import Skeleton from Ant Design
@@ -17,7 +17,7 @@ const HomePage = () => {
       <h2 style={{marginTop: "20px", paddingTop: "20px"}}>
         Toutes les Directions
       </h2>
-      <TableComponent mode="all" dataMission={filteredMissions} dataActivities={filteredActivities} />
+      <TableComponent mode="all" dataMission={filteredMissions}  dataActivities={filteredActivities} />
     </MainLayout>
   );
 };
