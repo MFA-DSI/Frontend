@@ -20,19 +20,23 @@ import { DirectionSelect } from "../DropDown/DirectionSelect";
 import { WeeklyFilters } from "../DropDown/WeeklyFilters";
 import { MonthlyFilters } from "../DropDown/MonthlyFilter";
 import { QuarterlyFilters } from "../DropDown/QuarterlyFilter";
+import { useAuthStore } from "../../hooks";
 
-const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData }) => {
+const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData,onReset }) => {
   const {
     isLoading: isActivityLoading,
   } = useActivitiesContext();
   const {
     isLoading: isMissionLoading,  
     getMonthMissions,
-    monthlyMissions,
-    quarterMissions,
+     getQuarterlyMissions,
+    getWeeklyMissions,
     setFilterType,
     setDirectionFilter,
   } = useMissionContext();
+
+  const directionId = useAuthStore.getState().directionId;
+  
   const { fetchMissionXLS } = useFilesContext();
   const [activityType, setActivityType] = useState("all");
   const [dateFilter, setDateFilter] = useState({
@@ -102,21 +106,63 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData 
     }
   };
   const handleFilter = async () => {
-    const weeklyParams = {
-      directionId: directionIdFilter, 
-      month: dateFilter.month+1,  
-      year : parseInt(dateFilter.year),
-      page: 1,  
-      pageSize: 12,  
-    };
-    try {
-        console.log(weeklyParams);
+    switch (activityType) {
+      case "weekly":
+        const weeklyParams = {
+          directionId: mode=== "mydirection" ? directionId  :directionIdFilter,
+          weekStartDate: dateFilter.week,
+          page: currentPage,
+          pageSize: pageSize,
+        };
+        try {
+          const weeklyResponse = await getWeeklyMissions(weeklyParams);
+          onFilter(weeklyResponse);
+        } catch (error) {
+          console.error("Erreur lors de la récupération des missions hebdomadaires", error);
+        }
+        break;
+    
+      case "monthly":
+        const monthlyParams = {
+          directionId: mode === "mydirection" ? directionId  :directionIdFilter,
+          month: dateFilter.month+1,
+          year: parseInt(dateFilter.year),
+          page: 1,
+          pageSize: 20,
+        };
+        try {
+          console.log(monthlyParams);
+          
+          const monthlyResponse = await getMonthMissions(monthlyParams);
         
-      const weeklyResponse = await getMonthMissions(weeklyParams);
-      onFilter(weeklyResponse)
-    } catch (error) {
-      console.error("Erreur lors de la récupération des missions hebdomadaires", error);
-    }     
+          onFilter(monthlyResponse);
+        } catch (error) {
+          console.error("Erreur lors de la récupération des missions mensuelles", error);
+        }
+        break;
+    
+      case "quarterly":
+        const quarterParams = {
+          directionId: mode === "mydirection" ? directionId  :directionIdFilter,
+          quarter: dateFilter.quarter,
+          year: parseInt(dateFilter.year),
+          page: 1,
+          pageSize: 20,
+        };
+        try {
+          
+          const quarterResponse = await  getQuarterlyMissions(quarterParams);
+          console.log("response is", quarterResponse);
+          onFilter(quarterResponse);
+        } catch (error) {
+          console.error("Erreur lors de la récupération des missions trimestrielles", error);
+        }
+        break;
+    
+      default:
+        console.warn("Type d'activité non pris en charge");
+        break;
+    }
 
 };
 
@@ -324,7 +370,7 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData 
   
   const activityDropdownStyle = { width: 120, marginRight: "5px" };
 
-  const weeklyDropDownStyle = { width: 100, marginRight: "8px" };
+  const weeklyDropDownStyle = { width: "100%", marginRight: "8px" };
   const monthlyDropDownStyle = { width: 100 };
 
   return (
@@ -388,7 +434,7 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData 
               type="default"
               className="activity-buttons"
               onClick={() => {
-                
+                onReset()
                 setActivityType("all");
                 setDirectionFilter("all");
                 setDateFilter({

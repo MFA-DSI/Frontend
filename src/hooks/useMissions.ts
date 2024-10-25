@@ -61,24 +61,24 @@ export const useMissions = () => {
     } 
     );
 
-  const weeklyMissions = (params) =>
-    useQuery({
-      queryKey: ["mission"],
-      queryFn: () => getMonthlyAtivityByDirectionId(params),
-    });
+  const weeklyMissions = useMutation(getWeeklyAtivityByDirectionId,{
+    onSuccess : ()=>{
+      queryClient.invalidateQueries("missions");
+    }
+} )
 
-  const quarterMissions = (params) =>
-    useQuery({
-      queryKey: ["mission"],
-      queryFn: () => getQuarterlyAtivityByDirectionId(params),
-    });
+  const quarterMissions = useMutation(getQuarterlyAtivityByDirectionId,{
+    onSuccess : ()=>{
+      queryClient.invalidateQueries("missions");
+    }
+} )
 
   return {
     missions: missionsQuery.data,
     directionIdQuery,
     directionMissionsName,
-    weeklyMissions,
-    quarterMissions,
+    getWeeklyMissions : weeklyMissions.mutateAsync,
+    getQuarterlyMissions : quarterMissions.mutateAsync,
     getMonthMissions : monthlyMissions.mutateAsync,
     deleteMission: deleteMissionMutation.mutate,
     updateMission: updateMissionMutation.mutate,

@@ -277,7 +277,7 @@ export const getQuarterlyAtivityByDirectionId = async (
   params: missionFilterQuarter,
 ): Promise<Mission[]> => {
   try {
-    const url = `http://localhost:8080/direction/mission/directions?directionId=${params.directionId}&quarter=${params.quarter}}&year=${params.year}&page=${params.page}&page_size=${params.pageSize}`;
+    const url = `http://localhost:8080/direction/mission/directions?directionId=${params.directionId}&quarter=${params.quarter}&year=${params.year}&page=${params.page}&page_size=${params.pageSize}`;
     const response = await fetch(url, {
       method: "GET",
     });

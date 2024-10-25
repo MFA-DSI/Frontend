@@ -4,20 +4,29 @@ export const getWeeksInMonth = (month, year) => {
   const weeks = [];
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);
-  const startDate = firstDay.getDate() - firstDay.getDay();
-  const endDate = lastDay.getDate();
+  let currentWeekStart = new Date(firstDay);
 
-  for (let i = startDate; i <= endDate; i += 7) {
-    const weekStartDate = new Date(year, month, i);
-    const weekEndDate = new Date(year, month, i + 6);
-    if (weekStartDate.getDate() <= endDate) {
-      weeks.push(
-        `Semaine du ${weekStartDate.toLocaleDateString()} au ${weekEndDate.toLocaleDateString()}`,
-      );
-    }
+  while (currentWeekStart <= lastDay) {
+    const currentWeekEnd = new Date(
+      currentWeekStart.getFullYear(),
+      currentWeekStart.getMonth(),
+      currentWeekStart.getDate() + 6
+    );
+
+    // Format the start and end dates for the current week
+    weeks.push(
+      `Semaine du ${currentWeekStart.toLocaleDateString()} au ${
+        currentWeekEnd > lastDay ? lastDay.toLocaleDateString() : currentWeekEnd.toLocaleDateString()
+      }`
+    );
+
+    // Move to the next week
+    currentWeekStart.setDate(currentWeekStart.getDate() + 7);
   }
+
   return weeks;
 };
+
 
 export const extractFirstDateFromString = (dateString) => {
   // Use regex to match the first date format in "dd/mm/yyyy"

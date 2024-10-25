@@ -12,12 +12,13 @@ export const MissionProvider = ({ children }) => {
     deleteMission,
     directionIdQuery,
     directionMissionsName,
-    weeklyMissions,
+    getWeeklyMissions,
     getMonthMissions,
-    quarterMissions,
+    getQuarterlyMissions,
     saveMission,
     updateMission,
   } = useMissions();
+
   const [filterType, setFilterType] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -65,9 +66,9 @@ export const MissionProvider = ({ children }) => {
         filteredMissions: filteredMissions(),
         MissionByDirectionId: directionMission(),
         MissionNameByDirectionId: missionName(),
-        weeklyMissions,
+        getQuarterlyMissions,
         getMonthMissions,
-        quarterMissions,
+        getWeeklyMissions,
         deleteMission,
         saveMission,
         updateMission,

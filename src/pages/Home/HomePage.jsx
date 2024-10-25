@@ -8,13 +8,17 @@ const HomePage = () => {
   const {filteredMissions} = useMissionContext();
   const {filteredActivities} = useActivitiesContext();
   const [filterData, setFilterData] = useState([]);
-  const [filtered, setFiltered] = useState(false); // Boolean to track filter status
+  const [filtered, setFiltered] = useState(false); 
 
-  // Handle setting filtered data and update filter status
+  
   const handleFilter = (data) => {
     setFilterData(data);
-    setFiltered(true); // Enable filtered mode
+    setFiltered(true); 
   };
+
+  const resetFilter =()=> {
+    setFiltered(false)
+  }
 
   return (
     <MainLayout>
@@ -25,7 +29,8 @@ const HomePage = () => {
         mode="all" 
         dataMission={filtered ? filterData : filteredMissions} 
         dataActivities={filtered ? filterData : filteredActivities} 
-        onFilter={handleFilter} 
+        onFilter={handleFilter}
+        onReset = {resetFilter} 
         filterData={filterData} 
       />
     </MainLayout>
