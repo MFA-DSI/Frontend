@@ -27,7 +27,7 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData 
   } = useActivitiesContext();
   const {
     isLoading: isMissionLoading,  
-    weeklyMissions,
+    getMonthMissions,
     monthlyMissions,
     quarterMissions,
     setFilterType,
@@ -48,8 +48,9 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData 
   const [isMissionModalVisible, setIsMissionModalVisible] = useState(false);
   const [pageSize, setPageSize] = useState(20);
   const [selectedIds, setSelectedIds] = useState([]);
-  const [directionIdFilter, setDirectionIdFilter] = useState();
-  useEffect(() => {}, [mode,activityType]);
+  const [directionIdFilter, setDirectionIdFilter] = useState("all");
+  const [activityFilterType,setActivityFilterType] = useState("all");
+  useEffect(() => {}, [mode]);
 
   const showModal = (activity) => {
     setSelectedActivity(activity);
@@ -88,7 +89,7 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData 
     });
   };
 
-  //TODO: separate this handler to File.ts
+  
 
   const handleExport = async (type) => {
     if (type === "XLS") {
@@ -100,6 +101,26 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData 
       }
     }
   };
+  const handleFilter = async () => {
+    const weeklyParams = {
+      directionId: directionIdFilter, 
+      month: dateFilter.month,  
+      year : dateFilter.year,
+      page: 1,  
+      pageSize: 12,  
+    };
+    try {
+        console.log(weeklyParams);
+        
+      const weeklyResponse = await getMonthMissions(weeklyParams);
+      console.log("response is ",weeklyResponse);
+      
+    } catch (error) {
+      console.error("Erreur lors de la récupération des missions hebdomadaires", error);
+    }     
+
+};
+
 
   const onDelete = (content) => {
     console.log(content);
@@ -286,27 +307,22 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData 
     }
   };
 
-  if (isMissionLoading || (activityType === "weekly" && isActivityLoading) )
+  if (isMissionLoading || (activityType === "weekly" && isActivityLoading))
 
     return <Spin />;
-
   let dataSource;
   switch(activityType){
     case "weekly":
         dataSource=dataActivities
         break;
     case "filtered":
-        dataSource=filterData;
+        dataSource=filterData
         break;
     default :
         dataSource= dataMission
   }
 
-  const handleFilter = async () => {
-    setActivityType("filtered")
-  };
   
-
   const activityDropdownStyle = { width: 120, marginRight: "5px" };
 
   const weeklyDropDownStyle = { width: 100, marginRight: "8px" };
@@ -329,10 +345,11 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData 
               setActivityType={setActivityType}
               setFilterType={setFilterType}
               setDateFilter={setDateFilter}
+              setActivityTypeFilter={setActivityFilterType}
             />
 
             {mode !== "mydirection" && (
-              <DirectionSelect setDirectionFilter={setDirectionFilter} />
+              <DirectionSelect setDirection={setDirectionIdFilter} />
             )}
 
             {activityType === "weekly" && (
@@ -363,7 +380,7 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData 
             <Button
               type="primary"
               className="activity-buttons"
-              onClick={handleFilter}
+              onClick={()=>handleFilter()}
             >
               Filtrer
             </Button>
@@ -372,7 +389,7 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData 
               type="default"
               className="activity-buttons"
               onClick={() => {
-                // Réinitialiser tous les filtres
+                
                 setActivityType("all");
                 setDirectionFilter("all");
                 setDateFilter({

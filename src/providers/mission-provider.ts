@@ -249,7 +249,7 @@ export const getMonthlyAtivityByDirectionId = async (
   params: missionFilterMonth,
 ): Promise<Mission[]> => {
   try {
-    const url = `http://localhost:8080/direction/mission/directions?directionId=${params.directionId}&year=${params.year}}&month=${params.month}&page=${params.page}&page_size=${params.pageSize}`;
+    const url = `http://localhost:8080/direction/mission/month?directionId=${params.directionId}&year=${params.year}&month=${params.month}&page=${params.page}&pageSize=${params.pageSize}`;
     const response = await fetch(url, {
       method: "GET",
     });
@@ -264,7 +264,6 @@ export const getMonthlyAtivityByDirectionId = async (
     }
 
     const data: Mission[] = await response.json();
-    console.log("mission ", data);
 
     return data;
   } catch (error) {

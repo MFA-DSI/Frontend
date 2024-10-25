@@ -7,6 +7,7 @@ export const ActivityTypeSelect = ({
   setActivityType,
   setFilterType,
   setDateFilter,
+  setActivityTypeFilter,
   style,
 }) => (
   <Select
@@ -21,6 +22,7 @@ export const ActivityTypeSelect = ({
         year: null,
         quarter: null,
       });
+      setActivityTypeFilter(value)
     }}
   >
     <Option value="all">Toutes les Activités</Option>

@@ -53,11 +53,13 @@ export const useMissions = () => {
     },
   });
 
-  const monthlyMissions = (params) =>
-    useQuery({
-      queryKey: ["mission"],
-      queryFn: () => getWeeklyAtivityByDirectionId(params),
-    });
+  const monthlyMissions =
+    useMutation(getMonthlyAtivityByDirectionId,{
+        onSuccess : ()=>{
+          console.log("filterd");    
+        }
+    } 
+    );
 
   const weeklyMissions = (params) =>
     useQuery({
@@ -77,7 +79,7 @@ export const useMissions = () => {
     directionMissionsName,
     weeklyMissions,
     quarterMissions,
-    monthlyMissions,
+    getMonthMissions : monthlyMissions.mutate,
     deleteMission: deleteMissionMutation.mutate,
     updateMission: updateMissionMutation.mutate,
     saveMission: saveMissionMutation.mutate,
