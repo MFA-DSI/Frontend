@@ -79,7 +79,7 @@ export const useMissions = () => {
     directionMissionsName,
     getWeeklyMissions : weeklyMissions.mutateAsync,
     getQuarterlyMissions : quarterMissions.mutateAsync,
-    getMonthMissions : monthlyMissions.mutateAsync,
+    getMonthMissions : monthlyMissions.mutateAsync, 
     deleteMission: deleteMissionMutation.mutate,
     updateMission: updateMissionMutation.mutate,
     saveMission: saveMissionMutation.mutate,

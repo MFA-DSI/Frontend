@@ -11,7 +11,7 @@ import ActivityModal from "../Modal/ActivityModal";
 import MissionModal from "../Modal/MissionModal";
 
 import "./assets/index.css";
-import { getWeeksInMonth } from "./utils/DateUtils";
+import { extractFirstDateFromString, getWeeksInMonth } from "./utils/DateUtils";
 import { useFilesContext } from "../../providers/context/FilesContext";
 import { toast } from "react-toastify";
 import { useDirectionsContext } from "../../providers";
@@ -110,9 +110,9 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData,
       case "weekly":
         const weeklyParams = {
           directionId: mode=== "mydirection" ? directionId  :directionIdFilter,
-          weekStartDate: dateFilter.week,
-          page: currentPage,
-          pageSize: pageSize,
+          weekStartDate: extractFirstDateFromString(dateFilter.week),
+          page: 1,
+          pageSize: 20,
         };
         try {
           const weeklyResponse = await getWeeklyMissions(weeklyParams);
