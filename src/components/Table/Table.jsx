@@ -104,8 +104,8 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData 
   const handleFilter = async () => {
     const weeklyParams = {
       directionId: directionIdFilter, 
-      month: dateFilter.month,  
-      year : dateFilter.year,
+      month: dateFilter.month+1,  
+      year : parseInt(dateFilter.year),
       page: 1,  
       pageSize: 12,  
     };
@@ -113,8 +113,7 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData 
         console.log(weeklyParams);
         
       const weeklyResponse = await getMonthMissions(weeklyParams);
-      console.log("response is ",weeklyResponse);
-      
+      onFilter(weeklyResponse)
     } catch (error) {
       console.error("Erreur lors de la récupération des missions hebdomadaires", error);
     }     
