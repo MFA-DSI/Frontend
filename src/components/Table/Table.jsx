@@ -35,7 +35,7 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData,
     setDirectionFilter,
   } = useMissionContext();
 
-  const directionId = useAuthStore.getState().directionId;
+  const directionId = localStorage.getItem("directionId")
   
   const { fetchMissionXLS } = useFilesContext();
   const [activityType, setActivityType] = useState("all");
@@ -115,7 +115,9 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData,
           pageSize: 20,
         };
         try {
+          
           const weeklyResponse = await getWeeklyMissions(weeklyParams);
+          
           onFilter(weeklyResponse);
         } catch (error) {
           console.error("Erreur lors de la récupération des missions hebdomadaires", error);

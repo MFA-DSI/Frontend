@@ -15,7 +15,18 @@ const MyDirection = () => {
     useState(false);
   const { MissionByDirectionId } = useMissionContext();
   const { directionIdQueryActvities } = useActivitiesContext();
-  
+  const [filterData, setFilterData] = useState([]);
+  const [filtered, setFiltered] = useState(false); 
+
+  const handleFilter = (data) => {
+    setFilterData(data);
+    setFiltered(true); 
+  };
+
+  const resetFilter =()=> {
+    setFiltered(false)
+  }
+
   const showAddActivityModal = () => {
     setIsAddActivityModalVisible(true);
   };
@@ -37,8 +48,12 @@ const MyDirection = () => {
         </Button>
         <TableComponent
           mode="mydirection"
-          dataMission={MissionByDirectionId}
-          dataActivities={directionIdQueryActvities}
+          
+          dataMission={filtered ? filterData : MissionByDirectionId} 
+        dataActivities={filtered ? filterData : directionIdQueryActvities} 
+        onFilter={handleFilter}
+        onReset = {resetFilter} 
+        filterData={filterData} 
         />
       </div>
       <AddActivityModal
