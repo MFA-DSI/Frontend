@@ -20,6 +20,7 @@ export const useDirections = () => {
   // TODO: change this from zustand
 
   const userId = localStorage.getItem("userId");
+  const directionId = localStorage.getItem("directionId");
 
   const fetchAllDirections = useQuery({
     queryKey: ["directions"],
@@ -34,16 +35,18 @@ export const useDirections = () => {
   const fetchActualDirectionName = useQuery({
     queryKey: ["service"],
     queryFn: fetchDirectionName,
+    enabled : !!directionId
   });
 
   const fetchDirectionUserInformation = useQuery({
     queryKey: ["user"],
     queryFn: () => getUserInformation(userId || ""),
+    enabled : !!userId
   });
   const fetchAllDirectionResponsible = useQuery({
     queryKey: ["responsible"],
     queryFn: getDirectionResponsiblesInformation,
-  });
+    enabled : !!directionId  });
 
   const saveNewUserMutation = useMutation(addUserToDirection, {
     onSuccess: () => {

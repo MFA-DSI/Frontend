@@ -60,6 +60,8 @@ const NotificationCardDynamicIcons = () => {
     return () => clearInterval(interval);
   }, [notifications]);
 
+
+
   if (isNotificationLoading) return <Spin />;
   return (
     <Card

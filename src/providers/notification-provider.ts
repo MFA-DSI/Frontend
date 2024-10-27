@@ -51,10 +51,10 @@ export const updateNotificationStatus = async (id: string) => {
       );
     }
 
-    const data: Notification = await response.json();
+    const data = await response.json();
     return data;
   } catch (error) {
     console.error("Failed to update notification status", error);
-    throw error; // Re-throw the error to be handled by the calling function
+    throw error; 
   }
 };

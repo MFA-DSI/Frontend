@@ -80,7 +80,7 @@ export const fetchDirectionName = async (): Promise<Direction | null> => {
     const data: Direction = await response.json();
     return data;
   } catch (error) {
-    message.error("Failed to fetch direction name");
+    
     console.error(error);
     return null;
   }

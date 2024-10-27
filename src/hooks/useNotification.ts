@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import {
   fetchNotification,
   updateNotificationStatus,
@@ -12,8 +12,7 @@ export const useNotification = () => {
     queryFn: fetchNotification,
   });
 
-  const updateNotification = useMutation({
-    mutationFn: (id: string) => updateNotificationStatus(id),
+  const updateNotificationViewStatus = useMutation(updateNotificationStatus, {
     onSuccess: () => {
       queryClient.invalidateQueries("notification");
     },
@@ -21,7 +20,7 @@ export const useNotification = () => {
 
   return {
     fetchAllNotification: fetchNotifications.data,
-    updateNotificationViewStatus: updateNotification.mutate,
+    updateNotificationStatus: updateNotificationViewStatus.mutate,
     isLoading: fetchNotifications.isLoading,
     isError: fetchNotifications.isError,
   };

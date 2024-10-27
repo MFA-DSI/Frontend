@@ -163,10 +163,7 @@ const MainLayout = ({ children }) => {
             <span>MFA-ACTION</span>
           </div>
 
-          <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
-            <SearchBar />
-          </div>
-
+         
           <Button
             type="primary"
             icon={<LogoutOutlined />}

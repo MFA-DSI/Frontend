@@ -134,7 +134,7 @@ const ProfileComponent = () => {
             status={approved ? "success" : "default"}
             text={approved ? "Approuvé" : "En attente"}
           />
-          {!approved && role == "ADMIN" && (
+          {!approved && (role === "ADMIN" || role === "SUPER_ADMIN")&& (
             <Button
               type="primary"
               onClick={() => handleApprove(record)}
@@ -325,7 +325,7 @@ const ProfileComponent = () => {
             Ajouter un utilisateur
           </Button>
 
-          {role === "ADMIN" && (
+          {role === "SUPER_ADMIN" && (
             <Button
               type="primary"
               style={{ marginLeft: "8px" }}

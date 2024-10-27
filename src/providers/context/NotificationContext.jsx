@@ -6,7 +6,7 @@ const NotificationContext = createContext();
 export const NotificationProvider = ({ children }) => {
   const {
     fetchAllNotification,
-    updateNotificationViewStatus,
+     updateNotificationStatus,
     isLoading,
     isError,
   } = useNotification();
@@ -15,7 +15,7 @@ export const NotificationProvider = ({ children }) => {
     <NotificationContext.Provider
       value={{
         fetchNotifications: fetchAllNotification,
-        updateNotification: updateNotificationViewStatus.mutate,
+        updateNotification:  updateNotificationStatus,
         isLoading,
         isError,
       }}
