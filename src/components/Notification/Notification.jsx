@@ -6,7 +6,6 @@ import {
   Typography,
   Badge,
   Space,
-  Skeleton,
   Spin,
 } from "antd";
 import {
@@ -18,6 +17,7 @@ import {
 
 import { convertToJSDate, getTimeSince } from "./utils/TimeSince";
 import { useNotificationContext } from "../../providers/context/NotificationContext";
+import { useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
@@ -33,9 +33,8 @@ const getIconByType = (type) => {
 };
 
 const NotificationCardDynamicIcons = () => {
-  const { fetchNotifications, isLoading: isNotificationLoading } =
-    useNotificationContext();
-
+  const { fetchNotifications, isLoading: isNotificationLoading, updateNotification } = useNotificationContext();
+  const navigate = useNavigate();
   const notifications = fetchNotifications.map((notification) => ({
     ...notification,
     isNew: !notification.viewStatus,
@@ -45,7 +44,7 @@ const NotificationCardDynamicIcons = () => {
     notifications.map((notification) => ({
       id: notification.id,
       timeSince: getTimeSince(convertToJSDate(notification.creationDatetime)),
-    })),
+    }))
   );
 
   useEffect(() => {
@@ -60,7 +59,18 @@ const NotificationCardDynamicIcons = () => {
     return () => clearInterval(interval);
   }, [notifications]);
 
-
+  const handleUpdate = async (notificationId) => {
+    try {
+      await updateNotification(notificationId);
+      navigate("/myDirection");
+      
+    } catch (error) {
+      console.error(error);
+      
+    }
+    
+    
+  };
 
   if (isNotificationLoading) return <Spin />;
   return (
@@ -110,6 +120,7 @@ const NotificationCardDynamicIcons = () => {
               onMouseLeave={(e) =>
                 (e.currentTarget.style.transform = "scale(1)")
               }
+              onClick={() => handleUpdate(notification.id)}
             >
               <List.Item.Meta
                 avatar={
