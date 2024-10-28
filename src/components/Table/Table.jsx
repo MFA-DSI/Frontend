@@ -22,7 +22,7 @@ import { MonthlyFilters } from "../DropDown/MonthlyFilter";
 import { QuarterlyFilters } from "../DropDown/QuarterlyFilter";
 import { useAuthStore } from "../../hooks";
 
-const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData,onReset }) => {
+const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData,onReset,filtered }) => {
   const {
     isLoading: isActivityLoading,
   } = useActivitiesContext();
@@ -54,7 +54,7 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData,
   const [selectedIds, setSelectedIds] = useState([]);
   const [directionIdFilter, setDirectionIdFilter] = useState("all");
   const [activityFilterType,setActivityFilterType] = useState("all");
-  useEffect(() => {}, [mode]);
+  useEffect(() => {}, [mode,activityFilterType,activityType]);
 
   const showModal = (activity) => {
     setSelectedActivity(activity);
@@ -361,6 +361,7 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData,
   if (isMissionLoading || (activityType === "weekly" && isActivityLoading))
 
     return <Spin />;
+
   let dataSource;
   switch(activityType){
     case "weekly":
@@ -394,6 +395,7 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData,
               style={activityDropdownStyle}
               activityType={activityType}
               setActivityType={setActivityType}
+              filtered={filtered}
               setFilterType={setFilterType}
               setDateFilter={setDateFilter}
               setActivityTypeFilter={setActivityFilterType}
@@ -442,13 +444,14 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData,
               onClick={() => {
                 onReset()
                 setActivityType("all");
-                setDirectionFilter("all");
+                setDirectionIdFilter(null)
                 setDateFilter({
                   month: null,
                   week: null,
                   year: null,
                   quarter: null,
                 });
+                
               }}
             >
               Réinitialiser

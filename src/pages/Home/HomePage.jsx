@@ -1,4 +1,4 @@
-import React, {lazy, useState} from "react";
+import React, {lazy, useEffect, useState} from "react";
 import MainLayout from "../Layout/MainLayout";
 import {useActivitiesContext, useMissionContext} from "../../providers";
 
@@ -9,7 +9,6 @@ const HomePage = () => {
   const {filteredActivities} = useActivitiesContext();
   const [filterData, setFilterData] = useState([]);
   const [filtered, setFiltered] = useState(false); 
-
   
   const handleFilter = (data) => {
     setFilterData(data);
@@ -30,6 +29,7 @@ const HomePage = () => {
         dataMission={filtered ? filterData : filteredMissions} 
         dataActivities={filtered ? filterData : filteredActivities} 
         onFilter={handleFilter}
+        filtered = {filtered}
         onReset = {resetFilter} 
         filterData={filterData} 
       />

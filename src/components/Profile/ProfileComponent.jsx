@@ -25,11 +25,11 @@ const ProfileComponent = () => {
     fetchActualUserInformation,
     isResponsibleLoading,
     isUserLoading,
-    approveUserToDirectionMember,
   } = useDirectionsContext();
 
   const {
-    fetchResponsibles
+    fetchResponsibles,
+    approveUserToDirectionMember,
   } = useResponsiblesContext();
 
   const userInformation = fetchActualUserInformation;
