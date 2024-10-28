@@ -80,6 +80,10 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData,
 
   const handleMissionCancel = () => {
     setIsMissionModalVisible(false);
+    setIsModalVisible(false);
+    setTimeout(() => {
+      setIsModalVisible(true);
+    }, 500);
     setSelectedMission(null);
   };
 
@@ -262,7 +266,7 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData,
               ></Badge>
             </div>
           ),
-          width: 250,
+          width: 240,
         },
         {
           title: "Activités",
@@ -284,7 +288,7 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData,
               </div>
             );
           },
-          width: 250,
+          width: 240,
         },
         {
           title: "Indicateur",
@@ -457,14 +461,7 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData,
               <span style={{ marginRight: "8px", alignSelf: "center" }}>
                 Exporter en :
               </span>
-              <Button
-                type="default"
-                icon={<FilePdfOutlined style={{ color: "red" }} />}
-                className="activity-export-button"
-                onClick={() => handleExport("PDF")}
-              >
-                PDF
-              </Button>
+              
               <Button
               color="green"
                 icon={<FileExcelOutlined style={{ color: "green" }} />}
@@ -473,13 +470,7 @@ const TableComponent = ({ mode, dataMission, dataActivities,onFilter,filterData,
               >
                 Excel
               </Button>
-              <Button
-                type="primary"
-                icon={<FileWordOutlined />}
-                onClick={() => handleExport("DOC")}
-              >
-                DOC
-              </Button>
+            
             </>
           )}
         </div>

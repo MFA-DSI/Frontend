@@ -80,120 +80,115 @@ const MissionModal = ({ visible, onCancel, mission, onDelete, mode }) => {
 
   return (
     <>
-      <Modal
-        title="Détails de la Mission"
-        visible={visible}
-        onCancel={onCancel}
-        footer={null}
-        width={800}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-          }}
-        >
+    <Modal
+  title="Détails de la Mission"
+  visible={visible}
+  onCancel={onCancel}
+  footer={null}
+  width={800}
+>
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "flex-start",
+    }}
+  >
+    {/* Left Section with Mission Details */}
+    <div style={{ flex: 1 }}>
+      {editedMission ? (
+        <div>
           <div>
-            {editedMission ? (
-              <div>
-                <div>
-                  <h3>Désignation : </h3>
-                  {isEditing ? (
-                    <Input
-                      value={editedMission.description}
-                      onChange={(e) =>
-                        handleChange("description", e.target.value)
-                      }
-                    />
-                  ) : (
-                    <p>{editedMission.description}</p>
-                  )}
-                </div>
-
-                <h4>Les Activités rattachées :</h4>
-                <div>
-                  <List
-                    itemLayout="vertical"
-                    dataSource={editedMission.activityList}
-                    renderItem={(activity) => (
-                      <List.Item key={activity.id}>
-                        <List.Item.Meta
-                          title={<strong>{activity.description}</strong>}
-                          description={
-                            <ul>
-                              {activity.performanceRealization.map(
-                                (realization) => (
-                                  <li key={realization.id}>
-                                    Indicateurs : {realization.realization}{" "}
-                                    (Réalisations : {realization.indicators})
-                                  </li>
-                                ),
-                              )}
-                            </ul>
-                          }
-                        />
-                      </List.Item>
-                    )}
-                  />
-                </div>
-              </div>
+            <h3>Désignation : </h3>
+            {isEditing ? (
+              <Input
+                value={editedMission.description}
+                onChange={(e) => handleChange("description", e.target.value)}
+              />
             ) : (
-              <p>Aucune mission sélectionnée.</p>
+              <p>{editedMission.description}</p>
             )}
           </div>
 
-          <div style={{ marginInline: "20px" }}>
-            {mode === "mydirection" && (
-              <>
-                {isEditing ? (
-                  <>
-                    <Button
-                      type="primary"
-                      onClick={handleSaveClick}
-                      style={{ marginBottom: "10px", marginRight: "10px" }}
-                    >
-                      Sauvegarder
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        setIsEditing(false);
-                        setEditedMission(
-                          mission || { description: "", activityList: [] },
-                        );
-                      }}
-                    >
-                      Annuler
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <Button
-                      type="primary"
-                      style={{ marginBottom: "10px", marginRight: "10px" }}
-                      onClick={handleEditClick}
-                    >
-                      Modifier
-                    </Button>
-                    <Button danger onClick={showDeleteModal}>
-                      Supprimer
-                    </Button>
-                  </>
-                )}
-              </>
+          <h4>Les Activités rattachées :</h4>
+          <List
+            itemLayout="vertical"
+            dataSource={editedMission.activityList}
+            renderItem={(activity) => (
+              <List.Item key={activity.id}>
+                <List.Item.Meta
+                  title={<strong>{activity.description}</strong>}
+                  description={
+                    <ul>
+                      {activity.performanceRealization.map((realization) => (
+                        <li key={realization.id}>
+                          Indicateur : {realization.realization} (Réalisations :{" "}
+                          {realization.indicators})
+                        </li>
+                      ))}
+                    </ul>
+                  }
+                />
+              </List.Item>
             )}
-          </div>
+          />
         </div>
-      </Modal>
+      ) : (
+        <p>Aucune mission sélectionnée.</p>
+      )}
+    </div>
 
-      <DeleteModal
-        itemType={"mission"}
-        visible={isDeleteModalVisible}
-        onCancel={handleDeleteCancel}
-        onDelete={onDelete}
-        item={mission}
-        onSuccessDelete={handleSuccessDelete}
-      />
+    {/* Right Section with Edit and Delete Buttons */}
+    <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-start",paddingRight: "12px" }}>
+      {mode === "mydirection" && (
+        <>
+          {isEditing ? (
+            <>
+              <Button
+                type="primary"
+                onClick={handleSaveClick}
+                style={{ marginBottom: "10px",marginInline: "12px"}}
+              >
+                Sauvegarder
+              </Button>
+              <Button
+                onClick={() => {
+                  setIsEditing(false);
+                  setEditedMission(mission || { description: "", activityList: [] });
+                }}
+              >
+                Annuler
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                type="primary"
+                style={{ marginBottom: "10px",marginInline: "12px" }}
+                onClick={handleEditClick}
+              >
+                Modifier
+              </Button>
+              <Button danger onClick={showDeleteModal}>
+                Supprimer
+              </Button>
+            </>
+          )}
+        </>
+      )}
+    </div>
+  </div>
+</Modal>
+
+<DeleteModal
+  itemType={"mission"}
+  visible={isDeleteModalVisible}
+  onCancel={handleDeleteCancel}
+  onDelete={onDelete}
+  item={mission}
+  onSuccessDelete={handleSuccessDelete}
+/>
+
     </>
   );
 };

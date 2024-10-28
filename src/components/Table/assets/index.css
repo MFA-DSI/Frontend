@@ -71,6 +71,6 @@
 
 .activity-table-container {
   height: calc(100vh - 250px);
-  overflow: auto;
+  overflow: hidden;
   padding-inline: 4.5px;
 }
