@@ -4,9 +4,15 @@ import { personnelOptions, Grade } from "./utils/Grade";
 import { useDirectionsContext } from "../../providers";
 
 import ApprobatedUserModal from "./Forms/ApprobatedUser";
+import { useResponsible } from "../../hooks/useResponsible";
+import { useResponsiblesContext } from "../../providers/context/ReponsibleContext";
 
 const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
-  const { fetchAllDirection, saveNewResponsible } = useDirectionsContext();
+  const { fetchAllDirection } = useDirectionsContext();
+  const {
+    saveNewResponsible,
+ } = useResponsiblesContext();
+
   const [form] = Form.useForm();
   const [personnelType, setPersonnelType] = useState(null);
   const [gradeOptions, setGradeOptions] = useState([]);

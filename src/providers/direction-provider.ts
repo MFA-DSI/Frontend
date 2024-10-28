@@ -86,6 +86,8 @@ export const fetchDirectionName = async (): Promise<Direction | null> => {
   }
 };
 
+
+
 export const addUserToDirection = async (
   usertoAdd: User,
 ): Promise<User | null> => {
@@ -99,18 +101,21 @@ export const addUserToDirection = async (
     });
 
     if (!response.ok) {
-      throw new Error("Network response was not ok");
+      const errorData = await response.json();
+      message.error(errorData.message || "Une erreur est survenue.");
+      
+      return null;
     }
 
-    const data: User = await response.json();
-    message.success("Utilisateur ajouté avec succès");
+    const data = await response.json();
+    
     return data;
-  } catch (error) {
-    message.error("Failed to add user");
-    console.error(error);
-    return null;
+  } catch (error: any) {
+    message.error(error.message || "Une erreur réseau est survenue.");
+    throw new Error(error);
   }
 };
+
 
 export const addReponsibleToDirection = async (
   usertoAdd: User,
@@ -130,6 +135,8 @@ export const addReponsibleToDirection = async (
 
     const data: User = await response.json();
     message.success("Responsable ajouté avec succès");
+    console.log(data);
+    
     return data;
   } catch (error) {
     message.error("Failed to add responsible user");

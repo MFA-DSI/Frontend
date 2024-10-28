@@ -39,44 +39,19 @@ export const useDirections = () => {
   });
 
   const fetchDirectionUserInformation = useQuery({
-    queryKey: ["user"],
+    queryKey: ["user", userId], 
     queryFn: () => getUserInformation(userId || ""),
-    enabled : !!userId
-  });
-  const fetchAllDirectionResponsible = useQuery({
-    queryKey: ["responsible"],
-    queryFn: getDirectionResponsiblesInformation,
-    enabled : !!directionId  });
+    enabled: !!userId,
+});
 
-  const saveNewUserMutation = useMutation(addUserToDirection, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(["responsible"]);
-    },
-  });
 
-  const saveNewResponsibleToDirection = useMutation(addReponsibleToDirection, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(["responsible"]);
-    },
-  });
-
-  const approveUser = useMutation(approveUserToDirection, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(["responsible"]);
-    },
-  });
 
   return {
     fetchDirections: fetchAllDirections.data,
     fetchServices: fetchServiceByDirectionId.data,
     fetchActualDirection: fetchActualDirectionName,
     fetchUserInformation: fetchDirectionUserInformation.data,
-    fetchAllResponsibles: fetchAllDirectionResponsible.data,
-    saveNewUser: saveNewUserMutation.mutate,
-    saveNewResponsible: saveNewResponsibleToDirection.mutate,
-    approveUserToDirectionMember: approveUser.mutate,
     isLoading: fetchAllDirections.isLoading,
-    isResponsibleLoading: fetchAllDirectionResponsible.isLoading,
     isUserLoading: fetchDirectionUserInformation.isLoading,
     isError: fetchAllDirections.isError,
   };

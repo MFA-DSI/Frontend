@@ -1,13 +1,13 @@
 import React, { lazy } from "react";
 import MainLayout from "../Layout/MainLayout";
 
-const NotificationComponenent = lazy(
+const NotificationComponent = lazy(
   () => import("../../components/Notification/Notification"),
 );
 const Notification = () => {
   return (
     <MainLayout>
-      <NotificationComponenent />
+      <NotificationComponent />
     </MainLayout>
   );
 };

@@ -22,7 +22,7 @@ interface DirectionResponsible {
   function: string;
 }
 
-const directionId = localStorage.getItem("directionId");
+
 export const getUserInformation = async (id: string): Promise<User | void> => {
   try {
     const response = await fetch(`${API_URL}/user/information?id=${id}`, {
@@ -45,7 +45,7 @@ export const getUserInformation = async (id: string): Promise<User | void> => {
 };
 
 export const getDirectionResponsiblesInformation =
-  async (): Promise<DirectionResponsible | void> => {
+  async (directionId): Promise<DirectionResponsible | void> => {
     try {
       const response = await fetch(
         `${API_URL}/direction/responsible?directionId=${directionId}`,

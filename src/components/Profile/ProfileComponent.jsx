@@ -18,18 +18,22 @@ import AddResponsableDirectionModal from "../Modal/AddResponsableModal";
 import { useDirectionsContext } from "../../providers";
 import ApprobateUserModal from "../Modal/Forms/ApprobatedUser";
 import { useAuthStore } from "../../hooks";
+import { useResponsiblesContext } from "../../providers/context/ReponsibleContext";
 
 const ProfileComponent = () => {
   const {
     fetchActualUserInformation,
-    fetchAllDirectionResponsibles,
     isResponsibleLoading,
     isUserLoading,
     approveUserToDirectionMember,
   } = useDirectionsContext();
 
-  const userInformation = fetchActualUserInformation;
+  const {
+    fetchResponsibles
+  } = useResponsiblesContext();
 
+  const userInformation = fetchActualUserInformation;
+  const allDirection =  fetchResponsibles;
   //change this from zustand
 
   const userId = localStorage.getItem("userId");
@@ -80,8 +84,6 @@ const ProfileComponent = () => {
             console.error("Failed to add responsible:", error);
           },
         });
-
-        onCancel();
       } catch (error) {
         console.error("Failed to save new responsible:", error);
       }
@@ -337,7 +339,7 @@ const ProfileComponent = () => {
 
           <Table
             columns={columns}
-            dataSource={fetchAllDirectionResponsibles}
+            dataSource={allDirection}
             rowKey="id"
           />
         </Card>

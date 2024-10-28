@@ -122,7 +122,7 @@ export const authProvider = {
   },
 
   logout: async (): Promise<void> => {
-    localStorage.removeItem("token");
+    localStorage.clear()
     Promise.resolve();
   },
 };

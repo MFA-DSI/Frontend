@@ -1,5 +1,4 @@
-// DirectionContext.tsx
-import React, { createContext, useContext, ReactNode, FC } from "react";
+import React, { createContext, useContext} from "react";
 import { useDirections } from "../../hooks/useDirection";
 
 const DirectionContext = createContext();
@@ -10,14 +9,9 @@ export const DirectionProvider = ({ children }) => {
     fetchServices,
     fetchDirections,
     fetchUserInformation,
-    fetchAllResponsibles,
     isLoading,
     isError,
-    saveNewUser,
-    isResponsibleLoading,
     isUserLoading,
-    saveNewResponsible,
-    approveUserToDirectionMember,
   } = useDirections();
 
   return (
@@ -27,12 +21,7 @@ export const DirectionProvider = ({ children }) => {
         fetchAllService: fetchServices,
         fetchActualDirectionName: fetchActualDirection,
         fetchActualUserInformation: fetchUserInformation,
-        fetchAllDirectionResponsibles: fetchAllResponsibles,
-        saveNewUser,
-        saveNewResponsible,
-        approveUserToDirectionMember,
         isLoading,
-        isResponsibleLoading,
         isUserLoading,
         isError: isError,
       }}

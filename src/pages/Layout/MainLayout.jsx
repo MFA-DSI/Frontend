@@ -12,6 +12,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import { HackWebProviders } from "../../providers";
 import "./assets/index.css";
+import { useQueryClient } from "react-query";
 
 const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu; // Utilisation du SubMenu pour les dropdowns
@@ -30,13 +31,15 @@ const MainLayout = ({ children }) => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+  const queryClient = useQueryClient();
 
   const location = useLocation();
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     localStorage.clear();
+   queryClient.clear();
     message.info("vous êtes déconnecté");
     navigate("/login");
   };

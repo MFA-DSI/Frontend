@@ -1,16 +1,20 @@
 import React, { useState } from "react";
-import { Form, Input, Select, Modal, Button } from "antd";
+import { Form, Input, Select, Modal, Button, message } from "antd";
 import { personnelOptions, Grade } from "./utils/Grade";
 import { useDirectionsContext } from "../../providers";
 import { useAuthStore } from "../../hooks";
+import { Await } from "react-router-dom";
+import { useResponsiblesContext } from "../../providers/context/ReponsibleContext";
 
-const role = useAuthStore.getState().role;
 
 //TODO: change this to state from zustand
 const directionId = localStorage.getItem("directionId");
 
 const AddUserModal = ({ visible, onCancel }) => {
-  const { saveNewUser } = useDirectionsContext();
+  const {
+    saveNewUser 
+} = useResponsiblesContext();
+
   const [form] = Form.useForm();
   const [personnelType, setPersonnelType] = useState(null);
   const [gradeOptions, setGradeOptions] = useState([]);
@@ -21,8 +25,8 @@ const AddUserModal = ({ visible, onCancel }) => {
     setGradeOptions(Grade(value));
   };
 
-  const onSave = (values) => {
-    // Construct the user object according to the interface
+
+  const onSave = async (values) => {
     const user = {
       firstname: values.firstname,
       lastname: values.lastname,
@@ -33,26 +37,33 @@ const AddUserModal = ({ visible, onCancel }) => {
       directionId: directionId,
     };
 
-    saveNewUser(user)
-      .then(() => {
-        console.log("User saved successfully");
+    try {
+      const savedUser = await saveNewUser(user);
+      console.log(savedUser);
+      
+      if (savedUser) {
         form.resetFields();
-      })
-      .catch((error) => {
-        console.error("Error saving user:", error);
-      });
+        
+        return true; // Indicate that the save was successful
+      }
+    } catch (error) {
+      message.error("Error saving user: " + error.message);
+    }
+  
+    return false; // Indicate that the save failed
   };
-
-  const handleSave = () => {
-    form
-      .validateFields()
-      .then((values) => {
-        onSave(values);
-      })
-      .catch((info) => {
-        console.log("Erreur lors de la validation:", info);
-      })
-      .finally(onCancel());
+  
+  const handleSave = async () => {
+    try {
+      const values = await form.validateFields();
+      const isSaved = await onSave(values);      
+      if (isSaved) {
+        message.success("Utilisteur créee avec succés")
+        onCancel(); // Call onCancel only if saving was successful
+      }
+    } catch (info) {
+      console.log("Erreur lors de la validation:", info);
+    }
   };
 
   return (
