@@ -14,6 +14,7 @@ import LoginPage from "./pages/Login/LoginPage";
 import ReportMission from "./pages/ReportMission/ReportMission";
 import FirstLoginPage from "./pages/Login/FirstLoginPage";
 import { HackWebProviders } from "./providers";
+import Statistics from "./pages/Statistics/Statistics";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ function App() {
             <Route path="reports" element={<ReportMission />} />
             <Route path="notifications" element={<Notification />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="statistics" element={<Statistics />} />
           </Route>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signin" element={<FirstLoginPage />} />

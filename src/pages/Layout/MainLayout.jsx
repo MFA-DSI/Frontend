@@ -5,11 +5,10 @@ import {
   UserOutlined,
   NotificationOutlined,
   LogoutOutlined,
-  DownOutlined, // Petite flèche pour le sous-menu
+  UsergroupDeleteOutlined
 } from "@ant-design/icons";
 import { Layout, Menu, Skeleton, message, Button, theme } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import SearchBar from "../../components/SearchBar/SearchBar";
 import { HackWebProviders } from "../../providers";
 import "./assets/index.css";
 import { useQueryClient } from "react-query";
@@ -47,7 +46,7 @@ const MainLayout = ({ children }) => {
   const items = [
     {
       key: "/",
-      icon: <BarChartOutlined />,
+      icon: <UsergroupDeleteOutlined/>,
       label: "Toutes les directions",
     },
     {
@@ -74,6 +73,11 @@ const MainLayout = ({ children }) => {
       key: "/profile",
       icon: <UserOutlined />,
       label: "Mon profil",
+    },
+    {
+      key: "/statistics",
+      icon: <BarChartOutlined  />,
+      label: "Statistiques",
     },
   ];
 
