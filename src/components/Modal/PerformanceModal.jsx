@@ -21,6 +21,7 @@ const PerformanceModal = ({
   );
 
   const validateRealization = () => {
+
     if (realizationType === "pourcentage") {
       if (realization < 0 || realization > 100) {
         message.error("Le pourcentage doit être un nombre entre 0 et 100.");
@@ -28,6 +29,7 @@ const PerformanceModal = ({
         return false;
       }
     }
+  
     return true;
   };
 
@@ -41,6 +43,10 @@ const PerformanceModal = ({
   };
 
   const handleSave = async () => {
+    if (realization === null || realizationType === null || realizationType === null) {
+      message.error("Veuillez vous assurer que toutes les valeurs sont renseignées.");
+      return
+    }
     if (validateRealization()) {
       const performanceData = {
         id: activityId.id,
@@ -52,8 +58,7 @@ const PerformanceModal = ({
       };
 
       try {
-        console.log("performance: ", performanceData);
-
+        
         await addPerformance(performanceData);
 
         onSave(performanceData);
@@ -72,7 +77,7 @@ const PerformanceModal = ({
       setRealization(performance.realization);
       setIndicator(performance.indicators);
       setRealizationType(
-        performance.realizationType === "number" ? "chiffre" : "pourcentage",
+        performance.realizationType === "number" ? "number" : "percentage",
       );
     }
   }, [performance, activityId]);

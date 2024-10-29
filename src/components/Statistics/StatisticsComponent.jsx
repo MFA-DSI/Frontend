@@ -2,73 +2,147 @@ import React, { useState } from 'react';
 import { Table, Card, Row, Col } from 'antd';
 import { LineChart, BarChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-const staticData = [
-  { id: 1, name: 'Réunion de coordination', direction: 'Direction1', type: 'réunion', date: '2024-01-15', status: 'terminé' },
-  { id: 2, name: 'Projet de développement', direction: 'Direction2', type: 'projet', date: '2024-02-10', status: 'en cours' },
-  { id: 3, name: 'Formation continue', direction: 'Direction1', type: 'formation', date: '2024-02-18', status: 'terminé' },
-    { id: 6, name: 'Séminaire sur la gestion de projets', direction: 'Direction1', type: 'formation', date: '2024-05-12', status: 'terminé' },
-    { id: 7, name: 'Rencontre avec partenaires', direction: 'Direction4', type: 'réunion', date: '2024-06-07', status: 'en cours' },
-    { id: 8, name: 'Inspection annuelle', direction: 'Direction5', type: 'audit', date: '2024-06-15', status: 'en retard' },
-    { id: 9, name: 'Formation leadership', direction: 'Direction1', type: 'formation', date: '2024-07-01', status: 'terminé' },
-    { id: 10, name: 'Implémentation nouvelle procédure', direction: 'Direction3', type: 'projet', date: '2024-07-20', status: 'en cours' },
-    { id: 11, name: 'Réunion de crise', direction: 'Direction2', type: 'réunion', date: '2024-08-05', status: 'terminé' },
-    { id: 12, name: 'Projet de digitalisation', direction: 'Direction4', type: 'projet', date: '2024-08-18', status: 'en cours' },
-    { id: 13, name: 'Enquête de satisfaction', direction: 'Direction5', type: 'audit', date: '2024-09-09', status: 'terminé' },
-    { id: 14, name: 'Atelier de renforcement des capacités', direction: 'Direction1', type: 'formation', date: '2024-09-17', status: 'terminé' },
-    { id: 15, name: 'Lancement d’un nouveau produit', direction: 'Direction3', type: 'projet', date: '2024-10-01', status: 'en retard' },
-    { id: 16, name: 'Visite d’usine', direction: 'Direction4', type: 'réunion', date: '2024-10-20', status: 'en cours' },
-    { id: 17, name: 'Formation Excel avancé', direction: 'Direction2', type: 'formation', date: '2024-11-10', status: 'prévu' },
-    { id: 18, name: 'Evaluation semestrielle', direction: 'Direction5', type: 'audit', date: '2024-11-15', status: 'prévu' },
-    { id: 19, name: 'Réunion d’évaluation de projets', direction: 'Direction1', type: 'réunion', date: '2024-12-01', status: 'terminé' },
-    { id: 20, name: 'Projet de cybersécurité', direction: 'Direction2', type: 'projet', date: '2024-12-10', status: 'en cours' },
-    { id: 21, name: 'Suivi des indicateurs de performance', direction: 'Direction4', type: 'audit', date: '2024-12-18', status: 'en cours' },
-    { id: 22, name: 'Atelier sur les techniques de vente', direction: 'Direction5', type: 'formation', date: '2025-01-10', status: 'prévu' },
-    { id: 23, name: 'Révision des contrats', direction: 'Direction3', type: 'projet', date: '2025-01-20', status: 'terminé' },
-    { id: 24, name: 'Réunion de fin d’année', direction: 'Direction1', type: 'réunion', date: '2025-01-28', status: 'prévu' },
-    { id: 25, name: 'Audit de conformité', direction: 'Direction2', type: 'audit', date: '2025-02-05', status: 'en retard' },  
+const updatedData = [
+  {
+    directionId: "550e8400-e29b-41d4-a716-446655440014",
+    directionName: "DSI",
+    totalActivities: 2,
+    completedActivities: 1,
+    ongoingActivities: 1,
+    overdueActivities: 0,
+    efficiencyPercentage: 50.0,
+    averagePerformanceIndicator: 50.0,
+  },
+  {
+    directionId: "550e8400-e29b-41d4-a716-446655440001",
+    directionName: "Finance",
+    totalActivities: 8,
+    completedActivities: 1,
+    ongoingActivities: 7,
+    overdueActivities: 0,
+    efficiencyPercentage: 12.5,
+    averagePerformanceIndicator: 14.0,
+  },
+  {
+    directionId: "550e8400-e29b-41d4-a716-446655440002",
+    directionName: "Ressources Humaines",
+    totalActivities: 5,
+    completedActivities: 3,
+    ongoingActivities: 1,
+    overdueActivities: 1,
+    efficiencyPercentage: 60.0,
+    averagePerformanceIndicator: 45.0,
+  },
+  {
+    directionId: "550e8400-e29b-41d4-a716-446655440003",
+    directionName: "Marketing",
+    totalActivities: 6,
+    completedActivities: 2,
+    ongoingActivities: 3,
+    overdueActivities: 1,
+    efficiencyPercentage: 33.33,
+    averagePerformanceIndicator: 30.0,
+  },
+  {
+    directionId: "550e8400-e29b-41d4-a716-446655440004",
+    directionName: "Commercial",
+    totalActivities: 10,
+    completedActivities: 5,
+    ongoingActivities: 4,
+    overdueActivities: 1,
+    efficiencyPercentage: 50.0,
+    averagePerformanceIndicator: 40.0,
+  },
+  {
+    directionId: "550e8400-e29b-41d4-a716-446655440005",
+    directionName: "Production",
+    totalActivities: 7,
+    completedActivities: 4,
+    ongoingActivities: 2,
+    overdueActivities: 1,
+    efficiencyPercentage: 57.14,
+    averagePerformanceIndicator: 65.0,
+  },
+  {
+    directionId: "550e8400-e29b-41d4-a716-446655440006",
+    directionName: "Recherche et Développement",
+    totalActivities: 3,
+    completedActivities: 1,
+    ongoingActivities: 2,
+    overdueActivities: 0,
+    efficiencyPercentage: 33.33,
+    averagePerformanceIndicator: 55.0,
+  },
+  {
+    directionId: "550e8400-e29b-41d4-a716-446655440007",
+    directionName: "Logistique",
+    totalActivities: 9,
+    completedActivities: 6,
+    ongoingActivities: 2,
+    overdueActivities: 1,
+    efficiencyPercentage: 66.67,
+    averagePerformanceIndicator: 70.0,
+  },
+  {
+    directionId: "550e8400-e29b-41d4-a716-446655440008",
+    directionName: "Qualité",
+    totalActivities: 4,
+    completedActivities: 2,
+    ongoingActivities: 1,
+    overdueActivities: 1,
+    efficiencyPercentage: 50.0,
+    averagePerformanceIndicator: 47.5,
+  },
+  {
+    directionId: "550e8400-e29b-41d4-a716-446655440009",
+    directionName: "Achats",
+    totalActivities: 5,
+    completedActivities: 2,
+    ongoingActivities: 2,
+    overdueActivities: 1,
+    efficiencyPercentage: 40.0,
+    averagePerformanceIndicator: 52.0,
+  },
 ];
 
-const getActivitiesByDirection = (data) => {
-  const activityCount = {};
-  data.forEach((item) => {
-    if (!activityCount[item.direction]) {
-      activityCount[item.direction] = { total: 0, completed: 0, ongoing: 0, overdue: 0 };
-    }
-    activityCount[item.direction].total += 1;
-    if (item.status === 'terminé') activityCount[item.direction].completed += 1;
-    else if (item.status === 'en cours') activityCount[item.direction].ongoing += 1;
-    else if (item.status === 'en retard') activityCount[item.direction].overdue += 1;
-  });
-  return Object.entries(activityCount).map(([key, value]) => ({
-    direction: key,
-    ...value,
-    efficiency: ((value.completed / value.total) * 100).toFixed(2),
-  }));
-};
+
+const activityDataDSI = [
+  { date: "2024-01-01", totalActivities: 2 },
+  { date: "2024-02-01", totalActivities: 3 },
+  { date: "2024-03-01", totalActivities: 4 },
+  { date: "2024-04-01", totalActivities: 5 },
+  { date: "2024-05-01", totalActivities: 6 },
+  { date: "2024-06-01", totalActivities: 7 },
+  { date: "2024-07-01", totalActivities: 5 },
+  { date: "2024-08-01", totalActivities: 6 },
+  { date: "2024-09-01", totalActivities: 8 },
+  { date: "2024-10-01", totalActivities: 9 },
+  { date: "2024-11-01", totalActivities: 7 },
+  { date: "2024-12-01", totalActivities: 10 },
+];
 
 const StatisticsComponents = () => {
-  const [filteredData] = useState(staticData);
-  const directionStats = getActivitiesByDirection(filteredData);
-
+  const [directionStats] = useState(updatedData);
+  const data = activityDataDSI;
   return (
     <div style={{ padding: 20 }}>
       <h2>Statistiques des Activités Interdirections</h2>
 
-      {/* Classement des Directions par Nombre d'Activités avec Virtualisation */}
+      {/* Classement des Directions par Nombre d'Activités */}
       <Card title="Directions les plus actives" style={{ marginBottom: 20 }}>
         <Table
-          dataSource={directionStats.sort((a, b) => b.total - a.total)}
+          dataSource={directionStats.sort((a, b) => b.totalActivities - a.totalActivities)}
           columns={[
-            { title: 'Direction', dataIndex: 'direction', key: 'direction' },
-            { title: 'Total des Activités', dataIndex: 'total', key: 'total' },
-            { title: 'Terminées', dataIndex: 'completed', key: 'completed' },
-            { title: 'En Cours', dataIndex: 'ongoing', key: 'ongoing' },
-            { title: 'En Retard', dataIndex: 'overdue', key: 'overdue' },
-            { title: 'Efficacité (%)', dataIndex: 'efficiency', key: 'efficiency' },
+            { title: 'Direction', dataIndex: 'directionName', key: 'directionName' },
+            { title: 'Total des Activités', dataIndex: 'totalActivities', key: 'totalActivities' },
+            { title: 'Terminées', dataIndex: 'completedActivities', key: 'completedActivities' },
+            { title: 'En Cours', dataIndex: 'ongoingActivities', key: 'ongoingActivities' },
+            { title: 'Efficacité (%)', dataIndex: 'efficiencyPercentage', key: 'efficiencyPercentage' },
+            { title: 'Indicateur Moyenne de Performance', dataIndex: 'averagePerformanceIndicator', key: 'averagePerformanceIndicator' },
           ]}
-          rowKey="direction"
+          rowKey="directionId"
           pagination={false}
-          scroll={{ y: 300 }} // Hauteur fixe pour activer le défilement virtuel
+          scroll={{ y: 300 }}
         />
       </Card>
 
@@ -76,39 +150,35 @@ const StatisticsComponents = () => {
       <Row gutter={16}>
         {/* Évolution des Activités par Direction */}
         <Col span={12}>
-          <Card title="Évolution des Activités par Direction">
+          <Card title="Évolution des Activités de ma Direction">
             <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={filteredData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                {Array.from(new Set(filteredData.map(item => item.direction))).map((direction, index) => (
-                  <Line
-                    key={direction}
-                    type="monotone"
-                    dataKey={() => filteredData.filter(item => item.direction === direction).length}
-                    name={direction}
-                    stroke={['#8884d8', '#82ca9d', '#ffc658'][index % 3]}
-                  />
-                ))}
-              </LineChart>
+            <LineChart
+      width={600}
+      height={300}
+      data={data}
+      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+    >
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="date" />
+      <YAxis />
+      <Tooltip />
+      <Legend />
+      <Line type="monotone" dataKey="totalActivities" stroke="#8884d8" />
+    </LineChart>
             </ResponsiveContainer>
           </Card>
         </Col>
-
-        {/* Efficacité des Directions */}
+        
         <Col span={12}>
           <Card title="Efficacité des Directions">
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={directionStats}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="direction" />
+                <XAxis dataKey="directionName" />
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="efficiency" name="Efficacité (%)" fill="#82ca9d" />
+                <Bar dataKey="efficiencyPercentage" name="Efficacité (%)" fill="#82ca9d" />
               </BarChart>
             </ResponsiveContainer>
           </Card>

@@ -44,6 +44,10 @@ const TaskModal = ({
   }, [task, activityId]);
 
   const handleSave = async () => {
+    if (!taskToEdit.description.trim() || !taskToEdit.dueDatetime) {
+      message.error("Veuillez remplir tous les champs.");
+      return; 
+    }
     const updateTask = {
       ...taskToEdit,
       id: taskToEdit.id,

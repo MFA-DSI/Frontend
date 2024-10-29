@@ -53,7 +53,7 @@ const Login = () => {
             name="email"
             rules={[
               { required: true, message: "Veuillez saisir votre email " },
-              { type: "email", message: "Veuillez entrer un email valide" },
+              
             ]}
           >
             <Input

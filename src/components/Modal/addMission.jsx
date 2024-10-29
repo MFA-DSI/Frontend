@@ -13,6 +13,7 @@ import { useMissionContext } from "../../providers/context/MissionsContext";
 import moment from "moment";
 import {
   ActivityDetailsForm,
+  CombinedTaskForm,
   NextTaskForm,
   PerformanceIndicatorForm,
   TaskForm,
@@ -95,6 +96,8 @@ const AddActivityModal = ({ visible, onCancel }) => {
   };
 
   const handleSubmit = async () => {
+
+  
     const activityData = {
       name:
         missionType === "existing" ? selectedMission : newMissionDescription,
@@ -144,7 +147,6 @@ const AddActivityModal = ({ visible, onCancel }) => {
       title: "Choix de la mission et des services",
       content: (
         <Form>
-          {/* Sélection du type de mission */}
           <Form.Item label="Type de mission">
             <Select
               value={missionType}
@@ -214,17 +216,10 @@ const AddActivityModal = ({ visible, onCancel }) => {
     },
     {
       title: "Ajouter des tâches",
-      content: <TaskForm tasks={tasks} setTasks={setTasks} />,
-    },
-    {
-      title: "Ajouter des prochaines tâches",
-      content: (
-        <NextTaskForm
-          nextTasks={nextTasks}
-          setNextTasks={setNextTasks}
-          tasks={tasks}
-        />
-      ),
+      content: <CombinedTaskForm tasks={tasks}
+      setTasks={setTasks}
+      nextTasks={nextTasks}
+      setNextTasks={setNextTasks} />,
     },
     {
       title: "Indicateurs de performance",
@@ -242,6 +237,7 @@ const AddActivityModal = ({ visible, onCancel }) => {
       title="Ajouter une activité"
       visible={visible}
       onCancel={onCancel}
+      width={900}
       footer={[
         currentStep < steps.length - 1 && (
           <Button key="next" type="primary" onClick={next}>
@@ -269,5 +265,8 @@ const AddActivityModal = ({ visible, onCancel }) => {
     </Modal>
   );
 };
+
+
+
 
 export default AddActivityModal;

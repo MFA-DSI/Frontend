@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Input, Button, Form, Select, DatePicker } from "antd";
+import { Input, Button, Form, Select, DatePicker, message } from "antd";
 import moment from "moment";
 
 export const ActivityDetailsForm = ({ activity, setActivity }) => {
@@ -7,7 +7,11 @@ export const ActivityDetailsForm = ({ activity, setActivity }) => {
 
   return (
     <Form>
-      <Form.Item label="Description de l'activité">
+      <Form.Item
+        label="Description de l'activité"
+        required
+        rules={[{ required: true, message: 'La description est obligatoire' }]}
+      >
         <Input
           value={description}
           onChange={(e) =>
@@ -15,6 +19,7 @@ export const ActivityDetailsForm = ({ activity, setActivity }) => {
           }
         />
       </Form.Item>
+
       <Form.Item label="Observation">
         <Input
           value={observation}
@@ -23,6 +28,7 @@ export const ActivityDetailsForm = ({ activity, setActivity }) => {
           }
         />
       </Form.Item>
+
       <Form.Item label="Prédiction">
         <Input
           value={prediction}
@@ -31,7 +37,12 @@ export const ActivityDetailsForm = ({ activity, setActivity }) => {
           }
         />
       </Form.Item>
-      <Form.Item label="Date d'échéance">
+
+      <Form.Item
+        label="Date d'échéance"
+        required
+        rules={[{ required: true, message: 'La date d\'échéance est obligatoire' }]}
+      >
         <DatePicker
           value={dueDatetime ? moment(dueDatetime) : null}
           onChange={(date) => setActivity({ ...activity, dueDatetime: date })}
@@ -40,11 +51,21 @@ export const ActivityDetailsForm = ({ activity, setActivity }) => {
     </Form>
   );
 };
+
 export const TaskForm = ({ tasks, setTasks }) => {
   const [taskDescription, setTaskDescription] = useState("");
   const [taskDueDate, setTaskDueDate] = useState(null);
 
   const handleAddTask = () => {
+    if (taskDescription.trim() === "") {
+      message.error("La description de la tâche ne peut pas être vide.");
+      return; // Empêche l'ajout de la tâche si la description est vide
+    }
+  
+    if (taskDueDate === null) {
+      message.error("La date limite ne peut pas être vide.");
+      return; // Empêche l'ajout de la tâche si la date limite est null
+    }
     const newTask = { description: taskDescription, dueDatetime: taskDueDate };
     setTasks([...tasks, newTask]);
     setTaskDescription("");
@@ -88,6 +109,15 @@ export const NextTaskForm = ({ nextTasks, setNextTasks }) => {
   const [nextTaskDueDate, setNextTaskDueDate] = useState(null);
 
   const handleAddNextTask = () => {
+    if (nextTaskDescription.trim() === "") {
+      message.error("La description de la prochaine tâche ne peut pas être vide.");
+      return; // Empêche l'ajout de la prochaine tâche si la description est vide
+    }
+  
+    if (nextTaskDueDate === null) {
+      message.error("La date limite ne peut pas être vide.");
+      return; // Empêche l'ajout de la prochaine tâche si la date limite est null
+    }
     const newNextTask = {
       description: nextTaskDescription,
       dueDatetime: nextTaskDueDate,
@@ -139,6 +169,11 @@ export const PerformanceIndicatorForm = ({
   const [errorMessage, setErrorMessage] = useState(""); // For validation error message
 
   const handleAddIndicator = () => {
+
+    if (realization === "" || indicators === "" || realizationType === "") {
+      message.error("Veuillez vous assurer que toutes les valeurs sont renseignées.");
+      return
+    }
     if (realizationType === "percentage" && realization > 100) {
       setErrorMessage(
         "La valeur ne doit pas dépasser 100% pour un pourcentage.",
@@ -216,3 +251,32 @@ export const PerformanceIndicatorForm = ({
     </Form>
   );
 };
+
+
+export const CombinedTaskForm = ({ tasks, setTasks, nextTasks, setNextTasks }) => {
+  return (
+    <div style={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      width: '100%', 
+      height: '50vh', 
+      overflow : 'auto',
+      padding: '20px', 
+      boxSizing: 'border-box', 
+    }}>
+      <div style={{ flex: 1, marginRight: '10px' }}>
+        <h2>Ajouter des tâches</h2>
+        <TaskForm tasks={tasks} setTasks={setTasks} />
+      </div>
+      <div style={{ flex: 1, marginLeft: '10px' }}>
+        <h2>Ajouter des prochaines tâches</h2>
+        <NextTaskForm
+          nextTasks={nextTasks}
+          setNextTasks={setNextTasks}
+          tasks={tasks}
+        />
+      </div>
+    </div>
+  );
+};
+
