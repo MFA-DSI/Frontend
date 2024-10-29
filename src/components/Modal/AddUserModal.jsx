@@ -6,14 +6,11 @@ import { useAuthStore } from "../../hooks";
 import { Await } from "react-router-dom";
 import { useResponsiblesContext } from "../../providers/context/ReponsibleContext";
 
-
 //TODO: change this to state from zustand
 const directionId = localStorage.getItem("directionId");
 
 const AddUserModal = ({ visible, onCancel }) => {
-  const {
-    saveNewUser 
-} = useResponsiblesContext();
+  const { saveNewUser } = useResponsiblesContext();
 
   const [form] = Form.useForm();
   const [personnelType, setPersonnelType] = useState(null);
@@ -24,7 +21,6 @@ const AddUserModal = ({ visible, onCancel }) => {
     setPersonnelType(value);
     setGradeOptions(Grade(value));
   };
-
 
   const onSave = async (values) => {
     const user = {
@@ -40,25 +36,25 @@ const AddUserModal = ({ visible, onCancel }) => {
     try {
       const savedUser = await saveNewUser(user);
       console.log(savedUser);
-      
+
       if (savedUser) {
         form.resetFields();
-        
+
         return true; // Indicate that the save was successful
       }
     } catch (error) {
       message.error("Error saving user: " + error.message);
     }
-  
+
     return false; // Indicate that the save failed
   };
-  
+
   const handleSave = async () => {
     try {
       const values = await form.validateFields();
-      const isSaved = await onSave(values);      
+      const isSaved = await onSave(values);
       if (isSaved) {
-        message.success("Utilisteur créee avec succés")
+        message.success("Utilisteur créee avec succés");
         onCancel(); // Call onCancel only if saving was successful
       }
     } catch (info) {

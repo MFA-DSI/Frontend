@@ -4,7 +4,11 @@ import {
   updateNotificationStatus,
 } from "../providers/notification-provider";
 import { getDirectionResponsiblesInformation } from "../providers";
-import { addReponsibleToDirection, addUserToDirection, approveUserToDirection } from "../providers/direction-provider";
+import {
+  addReponsibleToDirection,
+  addUserToDirection,
+  approveUserToDirection,
+} from "../providers/direction-provider";
 
 export const useResponsible = () => {
   const queryClient = useQueryClient();
@@ -12,11 +16,9 @@ export const useResponsible = () => {
   const directionId = localStorage.getItem("directionId");
 
   const fetchAllDirectionResponsible = useQuery({
-    queryKey: ["responsible", directionId], 
-    queryFn: ()=>getDirectionResponsiblesInformation(directionId)
-    
-});
-
+    queryKey: ["responsible", directionId],
+    queryFn: () => getDirectionResponsiblesInformation(directionId),
+  });
 
   const saveNewUserMutation = useMutation(addUserToDirection, {
     onSuccess: () => {

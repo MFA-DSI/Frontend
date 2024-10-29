@@ -316,24 +316,22 @@ const ActivityModal = ({
           ) : (
             mode === "mydirection" && (
               <>
-                 <Button
-                type="primary"
-                style={{ marginBottom: "10px", marginRight: "10px" }}
-                onClick={handleEdit}
-              >
-                Modifier
-              </Button>
+                <Button
+                  type="primary"
+                  style={{ marginBottom: "10px", marginRight: "10px" }}
+                  onClick={handleEdit}
+                >
+                  Modifier
+                </Button>
 
-              <Button
-                type="primary"
-                style={{ marginBottom: "10px", marginRight: "10px" }}
-                onClick={showDeleteModal}
-              >
-                Supprimer
-              </Button>
+                <Button
+                  type="primary"
+                  style={{ marginBottom: "10px", marginRight: "10px" }}
+                  onClick={showDeleteModal}
+                >
+                  Supprimer
+                </Button>
               </>
-             
-              
             )
           )}
         </div>

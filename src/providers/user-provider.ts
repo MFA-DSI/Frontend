@@ -22,7 +22,6 @@ interface DirectionResponsible {
   function: string;
 }
 
-
 export const getUserInformation = async (id: string): Promise<User | void> => {
   try {
     const response = await fetch(`${API_URL}/user/information?id=${id}`, {
@@ -44,30 +43,31 @@ export const getUserInformation = async (id: string): Promise<User | void> => {
   }
 };
 
-export const getDirectionResponsiblesInformation =
-  async (directionId): Promise<DirectionResponsible | void> => {
-    try {
-      const response = await fetch(
-        `${API_URL}/direction/responsible?directionId=${directionId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+export const getDirectionResponsiblesInformation = async (
+  directionId,
+): Promise<DirectionResponsible | void> => {
+  try {
+    const response = await fetch(
+      `${API_URL}/direction/responsible?directionId=${directionId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+      },
+    );
 
-      if (!response.ok) {
-        return Promise.reject(response.statusText);
-      }
-
-      const data = await response.json();
-
-      return data;
-    } catch (error) {
-      handleAxiosError(error);
+    if (!response.ok) {
+      return Promise.reject(response.statusText);
     }
-  };
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    handleAxiosError(error);
+  }
+};
 export const PostNewUser = async (
   user,
 ): Promise<DirectionResponsible | void> => {

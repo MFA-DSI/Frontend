@@ -53,33 +53,31 @@ export const useMissions = () => {
     },
   });
 
-  const monthlyMissions =
-    useMutation(getMonthlyAtivityByDirectionId,{
-        onSuccess : ()=>{
-          queryClient.invalidateQueries("missions");
-        }
-    } 
-    );
-
-  const weeklyMissions = useMutation(getWeeklyAtivityByDirectionId,{
-    onSuccess : ()=>{
+  const monthlyMissions = useMutation(getMonthlyAtivityByDirectionId, {
+    onSuccess: () => {
       queryClient.invalidateQueries("missions");
-    }
-} )
+    },
+  });
 
-  const quarterMissions = useMutation(getQuarterlyAtivityByDirectionId,{
-    onSuccess : ()=>{
+  const weeklyMissions = useMutation(getWeeklyAtivityByDirectionId, {
+    onSuccess: () => {
       queryClient.invalidateQueries("missions");
-    }
-} )
+    },
+  });
+
+  const quarterMissions = useMutation(getQuarterlyAtivityByDirectionId, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("missions");
+    },
+  });
 
   return {
     missions: missionsQuery.data,
     directionIdQuery,
     directionMissionsName,
-    getWeeklyMissions : weeklyMissions.mutateAsync,
-    getQuarterlyMissions : quarterMissions.mutateAsync,
-    getMonthMissions : monthlyMissions.mutateAsync, 
+    getWeeklyMissions: weeklyMissions.mutateAsync,
+    getQuarterlyMissions: quarterMissions.mutateAsync,
+    getMonthMissions: monthlyMissions.mutateAsync,
     deleteMission: deleteMissionMutation.mutate,
     updateMission: updateMissionMutation.mutate,
     saveMission: saveMissionMutation.mutate,

@@ -115,6 +115,7 @@ const ReportGenerator = () => {
       <h2>Choisissez les options de rapport</h2>
       <Divider />
       <ActivityTypeSelect
+        filtered={false}
         style={style}
         activityType={activityType}
         setActivityType={setActivityType}

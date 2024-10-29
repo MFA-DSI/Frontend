@@ -12,7 +12,9 @@ export const DirectionSelect = ({ setDirection }) => {
       <Select
         defaultValue="all"
         style={{ width: 200, marginRight: "8px" }}
-        onChange={(value)=>{setDirection(value)}}
+        onChange={(value) => {
+          setDirection(value);
+        }}
       >
         <Option value="all">Toutes les Directions</Option>
         {fetchAllDirection.map((direction) => (

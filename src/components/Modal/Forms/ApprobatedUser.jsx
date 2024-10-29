@@ -11,7 +11,7 @@ const ApprobateUserModal = ({
   const handleExport = () => {
     if (responseData) {
       console.log(responseData);
-      
+
       generateExcelFile(responseData);
     }
   };

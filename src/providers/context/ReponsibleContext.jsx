@@ -1,6 +1,5 @@
-import React, { createContext, useContext} from "react";
+import React, { createContext, useContext } from "react";
 import { useResponsible } from "../../hooks/useResponsible";
-
 
 const ResponsibleContext = createContext();
 
@@ -18,14 +17,13 @@ export const ResponsibleProvider = ({ children }) => {
   return (
     <ResponsibleContext.Provider
       value={{
-        fetchResponsibles : fetchAllResponsibles,
+        fetchResponsibles: fetchAllResponsibles,
         saveNewUser,
         saveNewResponsible,
         approveUserToDirectionMember,
         isLoading,
         isResponsibleLoading,
-        isError
-       
+        isError,
       }}
     >
       {children}

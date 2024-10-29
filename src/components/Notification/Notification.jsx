@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Card,
-  List,
-  Avatar,
-  Typography,
-  Badge,
-  Space,
-  Spin,
-} from "antd";
+import { Card, List, Avatar, Typography, Badge, Space, Spin } from "antd";
 import {
   NotificationOutlined,
   FileTextOutlined,
@@ -33,7 +25,11 @@ const getIconByType = (type) => {
 };
 
 const NotificationCardDynamicIcons = () => {
-  const { fetchNotifications, isLoading: isNotificationLoading, updateNotification } = useNotificationContext();
+  const {
+    fetchNotifications,
+    isLoading: isNotificationLoading,
+    updateNotification,
+  } = useNotificationContext();
   const navigate = useNavigate();
   const notifications = fetchNotifications.map((notification) => ({
     ...notification,
@@ -44,7 +40,7 @@ const NotificationCardDynamicIcons = () => {
     notifications.map((notification) => ({
       id: notification.id,
       timeSince: getTimeSince(convertToJSDate(notification.creationDatetime)),
-    }))
+    })),
   );
 
   useEffect(() => {
@@ -63,13 +59,9 @@ const NotificationCardDynamicIcons = () => {
     try {
       await updateNotification(notificationId);
       navigate("/myDirection");
-      
     } catch (error) {
       console.error(error);
-      
     }
-    
-    
   };
 
   if (isNotificationLoading) return <Spin />;

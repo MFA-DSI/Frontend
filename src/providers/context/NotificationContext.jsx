@@ -4,18 +4,14 @@ import { useNotification } from "../../hooks";
 const NotificationContext = createContext();
 
 export const NotificationProvider = ({ children }) => {
-  const {
-    fetchAllNotification,
-     updateNotificationStatus,
-    isLoading,
-    isError,
-  } = useNotification();
+  const { fetchAllNotification, updateNotificationStatus, isLoading, isError } =
+    useNotification();
 
   return (
     <NotificationContext.Provider
       value={{
         fetchNotifications: fetchAllNotification,
-        updateNotification:  updateNotificationStatus,
+        updateNotification: updateNotificationStatus,
         isLoading,
         isError,
       }}

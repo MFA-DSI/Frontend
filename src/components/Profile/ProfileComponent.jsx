@@ -21,19 +21,14 @@ import { useAuthStore } from "../../hooks";
 import { useResponsiblesContext } from "../../providers/context/ReponsibleContext";
 
 const ProfileComponent = () => {
-  const {
-    fetchActualUserInformation,
-    isResponsibleLoading,
-    isUserLoading,
-  } = useDirectionsContext();
+  const { fetchActualUserInformation, isResponsibleLoading, isUserLoading } =
+    useDirectionsContext();
 
-  const {
-    fetchResponsibles,
-    approveUserToDirectionMember,
-  } = useResponsiblesContext();
+  const { fetchResponsibles, approveUserToDirectionMember } =
+    useResponsiblesContext();
 
   const userInformation = fetchActualUserInformation;
-  const allDirection =  fetchResponsibles;
+  const allDirection = fetchResponsibles;
   //change this from zustand
 
   const userId = localStorage.getItem("userId");
@@ -136,7 +131,7 @@ const ProfileComponent = () => {
             status={approved ? "success" : "default"}
             text={approved ? "Approuvé" : "En attente"}
           />
-          {!approved && (role === "ADMIN" || role === "SUPER_ADMIN")&& (
+          {!approved && (role === "ADMIN" || role === "SUPER_ADMIN") && (
             <Button
               type="primary"
               onClick={() => handleApprove(record)}
@@ -337,11 +332,7 @@ const ProfileComponent = () => {
             </Button>
           )}
 
-          <Table
-            columns={columns}
-            dataSource={allDirection}
-            rowKey="id"
-          />
+          <Table columns={columns} dataSource={allDirection} rowKey="id" />
         </Card>
       )}
 

@@ -35,16 +35,14 @@ export const useDirections = () => {
   const fetchActualDirectionName = useQuery({
     queryKey: ["service"],
     queryFn: fetchDirectionName,
-    enabled : !!directionId
+    enabled: !!directionId,
   });
 
   const fetchDirectionUserInformation = useQuery({
-    queryKey: ["user", userId], 
+    queryKey: ["user", userId],
     queryFn: () => getUserInformation(userId || ""),
     enabled: !!userId,
-});
-
-
+  });
 
   return {
     fetchDirections: fetchAllDirections.data,

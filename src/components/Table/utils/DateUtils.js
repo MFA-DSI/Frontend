@@ -10,14 +10,16 @@ export const getWeeksInMonth = (month, year) => {
     const currentWeekEnd = new Date(
       currentWeekStart.getFullYear(),
       currentWeekStart.getMonth(),
-      currentWeekStart.getDate() + 6
+      currentWeekStart.getDate() + 6,
     );
 
     // Format the start and end dates for the current week
     weeks.push(
       `Semaine du ${currentWeekStart.toLocaleDateString()} au ${
-        currentWeekEnd > lastDay ? lastDay.toLocaleDateString() : currentWeekEnd.toLocaleDateString()
-      }`
+        currentWeekEnd > lastDay
+          ? lastDay.toLocaleDateString()
+          : currentWeekEnd.toLocaleDateString()
+      }`,
     );
 
     // Move to the next week
@@ -26,7 +28,6 @@ export const getWeeksInMonth = (month, year) => {
 
   return weeks;
 };
-
 
 export const extractFirstDateFromString = (dateString) => {
   // Use regex to match the first date format in "dd/mm/yyyy"

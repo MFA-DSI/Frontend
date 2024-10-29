@@ -5,7 +5,7 @@ import {
   UserOutlined,
   NotificationOutlined,
   LogoutOutlined,
-  UsergroupDeleteOutlined
+  UsergroupDeleteOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, Skeleton, message, Button, theme } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -38,7 +38,7 @@ const MainLayout = ({ children }) => {
 
   const handleLogout = async () => {
     localStorage.clear();
-   queryClient.clear();
+    queryClient.clear();
     message.info("vous êtes déconnecté");
     navigate("/login");
   };
@@ -46,7 +46,7 @@ const MainLayout = ({ children }) => {
   const items = [
     {
       key: "/",
-      icon: <UsergroupDeleteOutlined/>,
+      icon: <UsergroupDeleteOutlined />,
       label: "Toutes les directions",
     },
     {
@@ -76,7 +76,7 @@ const MainLayout = ({ children }) => {
     },
     {
       key: "/statistics",
-      icon: <BarChartOutlined  />,
+      icon: <BarChartOutlined />,
       label: "Statistiques",
     },
   ];
@@ -170,7 +170,6 @@ const MainLayout = ({ children }) => {
             <span>MFA-ACTION</span>
           </div>
 
-         
           <Button
             type="primary"
             icon={<LogoutOutlined />}

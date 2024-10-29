@@ -1,6 +1,19 @@
-import React, { useState } from 'react';
-import { Table, Card, Row, Col } from 'antd';
-import { LineChart, BarChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import React, { useEffect, useState } from "react";
+import { Table, Card, Row, Col } from "antd";
+import {
+  LineChart,
+  BarChart,
+  Bar,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+import { useDirections } from "../../hooks";
+import { useDirectionsContext } from "../../providers";
 
 const updatedData = [
   {
@@ -105,7 +118,6 @@ const updatedData = [
   },
 ];
 
-
 const activityDataDSI = [
   { date: "2024-01-01", totalActivities: 2 },
   { date: "2024-02-01", totalActivities: 3 },
@@ -123,7 +135,12 @@ const activityDataDSI = [
 
 const StatisticsComponents = () => {
   const [directionStats] = useState(updatedData);
+  const { fetchActualDirectionName } = useDirectionsContext();
+
+  const name = fetchActualDirectionName?.data.name || "Chargement...";
   const data = activityDataDSI;
+  const title = `Évolution des Activités de ma Direction ${name}`;
+  useEffect(() => {}, [name]);
   return (
     <div style={{ padding: 20 }}>
       <h2>Statistiques des Activités Interdirections</h2>
@@ -131,14 +148,40 @@ const StatisticsComponents = () => {
       {/* Classement des Directions par Nombre d'Activités */}
       <Card title="Directions les plus actives" style={{ marginBottom: 20 }}>
         <Table
-          dataSource={directionStats.sort((a, b) => b.totalActivities - a.totalActivities)}
+          dataSource={directionStats.sort(
+            (a, b) => b.totalActivities - a.totalActivities,
+          )}
           columns={[
-            { title: 'Direction', dataIndex: 'directionName', key: 'directionName' },
-            { title: 'Total des Activités', dataIndex: 'totalActivities', key: 'totalActivities' },
-            { title: 'Terminées', dataIndex: 'completedActivities', key: 'completedActivities' },
-            { title: 'En Cours', dataIndex: 'ongoingActivities', key: 'ongoingActivities' },
-            { title: 'Efficacité (%)', dataIndex: 'efficiencyPercentage', key: 'efficiencyPercentage' },
-            { title: 'Indicateur Moyenne de Performance', dataIndex: 'averagePerformanceIndicator', key: 'averagePerformanceIndicator' },
+            {
+              title: "Direction",
+              dataIndex: "directionName",
+              key: "directionName",
+            },
+            {
+              title: "Total des Activités",
+              dataIndex: "totalActivities",
+              key: "totalActivities",
+            },
+            {
+              title: "Terminées",
+              dataIndex: "completedActivities",
+              key: "completedActivities",
+            },
+            {
+              title: "En Cours",
+              dataIndex: "ongoingActivities",
+              key: "ongoingActivities",
+            },
+            {
+              title: "Efficacité (%)",
+              dataIndex: "efficiencyPercentage",
+              key: "efficiencyPercentage",
+            },
+            {
+              title: "Indicateur Moyenne de Performance",
+              dataIndex: "averagePerformanceIndicator",
+              key: "averagePerformanceIndicator",
+            },
           ]}
           rowKey="directionId"
           pagination={false}
@@ -150,25 +193,29 @@ const StatisticsComponents = () => {
       <Row gutter={16}>
         {/* Évolution des Activités par Direction */}
         <Col span={12}>
-          <Card title="Évolution des Activités de ma Direction">
+          <Card title={title}>
             <ResponsiveContainer width="100%" height={300}>
-            <LineChart
-      width={600}
-      height={300}
-      data={data}
-      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-    >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="date" />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      <Line type="monotone" dataKey="totalActivities" stroke="#8884d8" />
-    </LineChart>
+              <LineChart
+                width={600}
+                height={300}
+                data={data}
+                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="totalActivities"
+                  stroke="#8884d8"
+                />
+              </LineChart>
             </ResponsiveContainer>
           </Card>
         </Col>
-        
+
         <Col span={12}>
           <Card title="Efficacité des Directions">
             <ResponsiveContainer width="100%" height={300}>
@@ -178,7 +225,11 @@ const StatisticsComponents = () => {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="efficiencyPercentage" name="Efficacité (%)" fill="#82ca9d" />
+                <Bar
+                  dataKey="efficiencyPercentage"
+                  name="Efficacité (%)"
+                  fill="#82ca9d"
+                />
               </BarChart>
             </ResponsiveContainer>
           </Card>

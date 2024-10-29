@@ -96,8 +96,6 @@ const AddActivityModal = ({ visible, onCancel }) => {
   };
 
   const handleSubmit = async () => {
-
-  
     const activityData = {
       name:
         missionType === "existing" ? selectedMission : newMissionDescription,
@@ -216,10 +214,14 @@ const AddActivityModal = ({ visible, onCancel }) => {
     },
     {
       title: "Ajouter des tâches",
-      content: <CombinedTaskForm tasks={tasks}
-      setTasks={setTasks}
-      nextTasks={nextTasks}
-      setNextTasks={setNextTasks} />,
+      content: (
+        <CombinedTaskForm
+          tasks={tasks}
+          setTasks={setTasks}
+          nextTasks={nextTasks}
+          setNextTasks={setNextTasks}
+        />
+      ),
     },
     {
       title: "Indicateurs de performance",
@@ -265,8 +267,5 @@ const AddActivityModal = ({ visible, onCancel }) => {
     </Modal>
   );
 };
-
-
-
 
 export default AddActivityModal;

@@ -4,10 +4,7 @@ import { Button } from "antd";
 import MainLayout from "../Layout/MainLayout";
 import TableComponent from "../../components/Table/Table";
 import AddActivityModal from "../../components/Modal/AddMission";
-import {
-  useActivitiesContext,
-  useMissionContext,
-} from "../../providers";
+import { useActivitiesContext, useMissionContext } from "../../providers";
 import { DirectionName } from "../../components";
 
 const MyDirection = () => {
@@ -16,16 +13,16 @@ const MyDirection = () => {
   const { MissionByDirectionId } = useMissionContext();
   const { directionIdQueryActvities } = useActivitiesContext();
   const [filterData, setFilterData] = useState([]);
-  const [filtered, setFiltered] = useState(false); 
+  const [filtered, setFiltered] = useState(false);
 
   const handleFilter = (data) => {
     setFilterData(data);
-    setFiltered(true); 
+    setFiltered(true);
   };
 
-  const resetFilter =()=> {
-    setFiltered(false)
-  }
+  const resetFilter = () => {
+    setFiltered(false);
+  };
 
   const showAddActivityModal = () => {
     setIsAddActivityModalVisible(true);
@@ -48,12 +45,11 @@ const MyDirection = () => {
         </Button>
         <TableComponent
           mode="mydirection"
-          
-          dataMission={filtered ? filterData : MissionByDirectionId} 
-        dataActivities={filtered ? filterData : directionIdQueryActvities} 
-        onFilter={handleFilter}
-        onReset = {resetFilter} 
-        filterData={filterData} 
+          dataMission={filtered ? filterData : MissionByDirectionId}
+          dataActivities={filtered ? filterData : directionIdQueryActvities}
+          onFilter={handleFilter}
+          onReset={resetFilter}
+          filterData={filterData}
         />
       </div>
       <AddActivityModal

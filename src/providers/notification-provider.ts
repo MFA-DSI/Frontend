@@ -55,6 +55,6 @@ export const updateNotificationStatus = async (id: string) => {
     return data;
   } catch (error) {
     console.error("Failed to update notification status", error);
-    throw error; 
+    throw error;
   }
 };

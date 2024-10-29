@@ -9,9 +9,7 @@ import { useResponsiblesContext } from "../../providers/context/ReponsibleContex
 
 const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
   const { fetchAllDirection } = useDirectionsContext();
-  const {
-    saveNewResponsible,
- } = useResponsiblesContext();
+  const { saveNewResponsible } = useResponsiblesContext();
 
   const [form] = Form.useForm();
   const [personnelType, setPersonnelType] = useState(null);

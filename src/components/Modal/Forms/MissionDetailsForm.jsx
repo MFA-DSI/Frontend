@@ -10,7 +10,7 @@ export const ActivityDetailsForm = ({ activity, setActivity }) => {
       <Form.Item
         label="Description de l'activité"
         required
-        rules={[{ required: true, message: 'La description est obligatoire' }]}
+        rules={[{ required: true, message: "La description est obligatoire" }]}
       >
         <Input
           value={description}
@@ -41,7 +41,9 @@ export const ActivityDetailsForm = ({ activity, setActivity }) => {
       <Form.Item
         label="Date d'échéance"
         required
-        rules={[{ required: true, message: 'La date d\'échéance est obligatoire' }]}
+        rules={[
+          { required: true, message: "La date d'échéance est obligatoire" },
+        ]}
       >
         <DatePicker
           value={dueDatetime ? moment(dueDatetime) : null}
@@ -61,7 +63,7 @@ export const TaskForm = ({ tasks, setTasks }) => {
       message.error("La description de la tâche ne peut pas être vide.");
       return; // Empêche l'ajout de la tâche si la description est vide
     }
-  
+
     if (taskDueDate === null) {
       message.error("La date limite ne peut pas être vide.");
       return; // Empêche l'ajout de la tâche si la date limite est null
@@ -110,10 +112,12 @@ export const NextTaskForm = ({ nextTasks, setNextTasks }) => {
 
   const handleAddNextTask = () => {
     if (nextTaskDescription.trim() === "") {
-      message.error("La description de la prochaine tâche ne peut pas être vide.");
+      message.error(
+        "La description de la prochaine tâche ne peut pas être vide.",
+      );
       return; // Empêche l'ajout de la prochaine tâche si la description est vide
     }
-  
+
     if (nextTaskDueDate === null) {
       message.error("La date limite ne peut pas être vide.");
       return; // Empêche l'ajout de la prochaine tâche si la date limite est null
@@ -169,10 +173,11 @@ export const PerformanceIndicatorForm = ({
   const [errorMessage, setErrorMessage] = useState(""); // For validation error message
 
   const handleAddIndicator = () => {
-
     if (realization === "" || indicators === "" || realizationType === "") {
-      message.error("Veuillez vous assurer que toutes les valeurs sont renseignées.");
-      return
+      message.error(
+        "Veuillez vous assurer que toutes les valeurs sont renseignées.",
+      );
+      return;
     }
     if (realizationType === "percentage" && realization > 100) {
       setErrorMessage(
@@ -252,23 +257,29 @@ export const PerformanceIndicatorForm = ({
   );
 };
 
-
-export const CombinedTaskForm = ({ tasks, setTasks, nextTasks, setNextTasks }) => {
+export const CombinedTaskForm = ({
+  tasks,
+  setTasks,
+  nextTasks,
+  setNextTasks,
+}) => {
   return (
-    <div style={{
-      display: 'flex',
-      justifyContent: 'space-between',
-      width: '100%', 
-      height: '50vh', 
-      overflow : 'auto',
-      padding: '20px', 
-      boxSizing: 'border-box', 
-    }}>
-      <div style={{ flex: 1, marginRight: '10px' }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        width: "100%",
+        height: "50vh",
+        overflow: "auto",
+        padding: "20px",
+        boxSizing: "border-box",
+      }}
+    >
+      <div style={{ flex: 1, marginRight: "10px" }}>
         <h2>Ajouter des tâches</h2>
         <TaskForm tasks={tasks} setTasks={setTasks} />
       </div>
-      <div style={{ flex: 1, marginLeft: '10px' }}>
+      <div style={{ flex: 1, marginLeft: "10px" }}>
         <h2>Ajouter des prochaines tâches</h2>
         <NextTaskForm
           nextTasks={nextTasks}
@@ -279,4 +290,3 @@ export const CombinedTaskForm = ({ tasks, setTasks, nextTasks, setNextTasks }) =
     </div>
   );
 };
-

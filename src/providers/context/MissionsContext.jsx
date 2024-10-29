@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import { useMissions } from "../../hooks/useMissions"; 
+import { useMissions } from "../../hooks/useMissions";
 
 const MissionContext = createContext();
 

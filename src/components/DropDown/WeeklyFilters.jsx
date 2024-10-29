@@ -25,7 +25,7 @@ export const WeeklyFilters = ({
 
     <Select
       placeholder="Semaine"
-      style={{width: "100%"}}
+      style={{ width: "100%" }}
       onChange={(value) => setDateFilter({ ...dateFilter, week: value })}
     >
       {dateFilter.month !== null &&

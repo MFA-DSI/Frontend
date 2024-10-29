@@ -6,15 +6,15 @@ import { FilesProvider } from "./context/FilesContext";
 import { NotificationProvider } from "./context/NotificationContext";
 import { ResponsibleProvider } from "./context/ReponsibleContext";
 
-export const HackWebProviders = ({ children }) => ( 
+export const HackWebProviders = ({ children }) => (
   <NotificationProvider>
     <DirectionProvider>
-    <ResponsibleProvider>
-      <ActivitieProvider>
-        <FilesProvider>
-          <MissionProvider>{children}</MissionProvider>
-        </FilesProvider>
-      </ActivitieProvider>
+      <ResponsibleProvider>
+        <ActivitieProvider>
+          <FilesProvider>
+            <MissionProvider>{children}</MissionProvider>
+          </FilesProvider>
+        </ActivitieProvider>
       </ResponsibleProvider>
     </DirectionProvider>
   </NotificationProvider>
