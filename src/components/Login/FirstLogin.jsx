@@ -41,12 +41,27 @@ const FirstLoginComponent = () => {
       {" "}
       {/* Changed to match Login component */}
       <Card className="login-card" bordered={false} style={{ width: 400 }}>
-        <div className="welcome-container login-logo-container">
+        <div
+          className="welcome-container login-logo-container"
+          style={{
+            display: "flex",
+            alignItems: "baseline",
+            flexDirection: "column",
+          }}
+        >
           {" "}
           {/* Reuse similar structure */}
-          <Title level={3} style={{ textAlign: "center" }}>
-            Bienvenue, {username}
-          </Title>
+          <div>
+            <Title level={3} style={{ textAlign: "center" }}>
+              Bienvenue, {username}
+            </Title>
+          </div>
+          <div>
+            <h4>
+              Pour votre première connexion au plateforme de gestion des
+              activités au sein de la MFA,veillez changer votre mot de passe
+            </h4>
+          </div>
         </div>
         <Form name="change_password" className="login-form" onFinish={onFinish}>
           <Form.Item

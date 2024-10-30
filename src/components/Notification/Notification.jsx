@@ -84,6 +84,7 @@ const NotificationCardDynamicIcons = () => {
       <List
         itemLayout="horizontal"
         dataSource={notifications}
+        locale={{ emptyText: "Aucune notification" }}
         renderItem={(notification) => {
           const timeElapsed =
             notificationTimes.find((item) => item.id === notification.id)

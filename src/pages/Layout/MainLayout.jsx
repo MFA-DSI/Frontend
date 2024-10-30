@@ -12,9 +12,10 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { HackWebProviders } from "../../providers";
 import "./assets/index.css";
 import { useQueryClient } from "react-query";
+import { useAuthStore } from "../../hooks";
 
 const { Header, Content, Sider } = Layout;
-const { SubMenu } = Menu; // Utilisation du SubMenu pour les dropdowns
+const { SubMenu } = Menu; 
 
 const siderStyle = {
   height: "100vh",
@@ -35,7 +36,7 @@ const MainLayout = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
-
+  const role = useAuthStore.getState().role;
   const handleLogout = async () => {
     localStorage.clear();
     queryClient.clear();
@@ -44,11 +45,11 @@ const MainLayout = ({ children }) => {
   };
 
   const items = [
-    {
+    ...(role === "SUPER_ADMIN" ? [{
       key: "/",
       icon: <UsergroupDeleteOutlined />,
       label: "Toutes les directions",
-    },
+    }] : []),
     {
       key: "/myDirection",
       icon: <CloudOutlined />,

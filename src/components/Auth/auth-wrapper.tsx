@@ -1,5 +1,6 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
+import { useAuthStore } from "../../hooks";
 
 export const AuthWrapper = () => {
   const token = window.localStorage.getItem("token");
@@ -8,3 +9,11 @@ export const AuthWrapper = () => {
   }
   return <Outlet />;
 };
+
+export const SuperAdminWrapper = ()=>{
+  const role = useAuthStore.getState().role;
+  if (role!== "SUPER_ADMIN") {
+    return <Navigate to="/" replace />;
+  }
+  return <Outlet />;
+}

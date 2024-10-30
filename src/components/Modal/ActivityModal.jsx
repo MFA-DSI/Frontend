@@ -167,6 +167,7 @@ const ActivityModal = ({
 
           <div>
             <EditableField
+              editable={true}
               label="Description"
               value={editedActivity.description}
               isEditing={isEditing}
@@ -178,17 +179,19 @@ const ActivityModal = ({
 
           <div>
             <EditableField
-              label="Prédiction"
+              editable={true}
+              label="Prévision"
               value={editedActivity.prediction}
               isEditing={isEditing}
               mode={mode}
               onChange={(e) => handleInputChange("prediction", e.target.value)}
-              placeholder="Modifier la prédiction"
+              placeholder="Modifier la prévision"
             />
           </div>
 
           <div>
             <EditableField
+              editable={true}
               label="Observation"
               value={editedActivity.observation}
               isEditing={isEditing}
@@ -200,6 +203,7 @@ const ActivityModal = ({
 
           <div>
             <EditableField
+              editable={true}
               label="Date Limite"
               value={editedActivity.dueDatetime}
               isEditing={isEditing}
@@ -325,7 +329,9 @@ const ActivityModal = ({
                 </Button>
 
                 <Button
-                  type="primary"
+                  color="danger"
+                  variant="solid"
+                  danger
                   style={{ marginBottom: "10px", marginRight: "10px" }}
                   onClick={showDeleteModal}
                 >

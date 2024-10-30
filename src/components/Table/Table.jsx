@@ -20,7 +20,6 @@ import { DirectionSelect } from "../DropDown/DirectionSelect";
 import { WeeklyFilters } from "../DropDown/WeeklyFilters";
 import { MonthlyFilters } from "../DropDown/MonthlyFilter";
 import { QuarterlyFilters } from "../DropDown/QuarterlyFilter";
-import { useAuthStore } from "../../hooks";
 
 const TableComponent = ({
   mode,
@@ -38,7 +37,6 @@ const TableComponent = ({
     getQuarterlyMissions,
     getWeeklyMissions,
     setFilterType,
-    setDirectionFilter,
   } = useMissionContext();
 
   const directionId = localStorage.getItem("directionId");

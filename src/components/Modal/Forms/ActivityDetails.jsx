@@ -1,4 +1,4 @@
-import { DatePicker, Input } from "antd";
+import { DatePicker, Input, Typography } from "antd";
 import { dateFormatter } from "../utils/dateFormatter";
 
 export const EditableField = ({
@@ -9,25 +9,31 @@ export const EditableField = ({
   onChange,
   inputType,
   placeholder,
+  editable,
 }) => {
   return (
-    <div>
-      <h3>{label}:</h3>
-      {isEditing && mode === "mydirection" ? (
+    <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
+      <Typography.Text
+        strong
+        style={{ minWidth: "150px", marginRight: "10px" }}
+      >
+        {label}:
+      </Typography.Text>
+      {isEditing && mode === "mydirection" && editable ? (
         inputType === "date" ? (
           <DatePicker value={value} onChange={onChange} />
         ) : (
           <Input value={value} onChange={onChange} placeholder={placeholder} />
         )
       ) : (
-        <p>
+        <Typography.Text>
           {inputType === "date"
             ? dateFormatter(value?.toLocaleString()).toLocaleString() ===
               "Invalid date"
               ? "Aucune date"
               : dateFormatter(value?.toLocaleString()).toLocaleString()
             : value}
-        </p>
+        </Typography.Text>
       )}
     </div>
   );

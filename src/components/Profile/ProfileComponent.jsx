@@ -10,6 +10,7 @@ import {
   Badge,
   Modal,
   Spin,
+  message,
 } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { toFullName } from "./utils/nameToFullName";
@@ -19,10 +20,16 @@ import { useDirectionsContext } from "../../providers";
 import ApprobateUserModal from "../Modal/Forms/ApprobatedUser";
 import { useAuthStore } from "../../hooks";
 import { useResponsiblesContext } from "../../providers/context/ReponsibleContext";
+import { EditableField } from "../Modal/Forms/ActivityDetails";
+import { validateEmail } from "../Modal/utils/validateEmail";
 
 const ProfileComponent = () => {
-  const { fetchActualUserInformation, isResponsibleLoading, isUserLoading } =
-    useDirectionsContext();
+  const {
+    fetchActualUserInformation,
+    isResponsibleLoading,
+    isUserLoading,
+    updateUser,
+  } = useDirectionsContext();
 
   const { fetchResponsibles, approveUserToDirectionMember } =
     useResponsiblesContext();
@@ -32,7 +39,11 @@ const ProfileComponent = () => {
   //change this from zustand
 
   const userId = localStorage.getItem("userId");
+  const [isEditing, setIsEditing] = useState(false);
 
+  const handleToggleEdit = () => {
+    setIsEditing(!isEditing);
+  };
   const [isUserModalVisible, setIsUserModalVisible] = useState(false);
   const [isResponsableModalVisible, setIsResponsableModalVisible] =
     useState(false);
@@ -144,6 +155,80 @@ const ProfileComponent = () => {
       ),
     },
   ];
+  const [userInfo, setUserInfo] = useState({
+    userId: userId,
+    grade: userInformation.grade,
+    lastname: userInformation.lastname,
+    firstname: userInformation.firstname,
+    mail: userInformation.mail,
+    direction: userInformation.direction,
+    phoneNumbers: userInformation.phoneNumbers,
+    fonction: userInformation.function,
+  });
+
+  const handleFieldChange = (field, value) => {
+    setUserInfo((prevInfo) => ({
+      ...prevInfo,
+      [field]: value,
+    }));
+  };
+
+  const handleSave = async () => {
+    const {
+      grade,
+      lastname,
+      firstname,
+      mail,
+      direction,
+      phoneNumbers,
+      fonction,
+    } = userInfo;
+
+    // Vérification des validations
+    if (!grade || !lastname || !firstname || !direction || !fonction) {
+      message.error(
+        "Tous les champs sauf l'email et le téléphone sont requis !",
+      );
+      return;
+    }
+
+    // Vérifiez si au moins un des champs mail ou phoneNumbers est rempli
+    if (!mail && !phoneNumbers) {
+      message.error(
+        "Veuillez fournir soit un e-mail soit un numéro de téléphone !",
+      );
+      return;
+    }
+
+    // Validation de l'email si fourni
+    if (mail && !validateEmail(mail)) {
+      message.error("Veuillez entrer une adresse e-mail valide !");
+      return;
+    }
+
+    try {
+      const updatedUserInfo = {
+        firstname,
+        lastname,
+        grade,
+        mail,
+        phoneNumbers,
+        fonction,
+      };
+
+      console.log(updatedUserInfo);
+      const updateParams = { userId, userInfoUpdate: updatedUserInfo };
+
+      // Appel de la fonction udpdateUser avec les données mises à jour
+      await updateUser(updateParams);
+
+      // Réinitialisation de l'édition si la mise à jour réussit
+      setIsEditing(false);
+    } catch (error) {
+      message.error("Échec de la mise à jour des informations.");
+      console.error("Erreur lors de la sauvegarde :", error);
+    }
+  };
 
   return (
     <div style={{ maxWidth: "100%", padding: "24px" }}>
@@ -158,6 +243,12 @@ const ProfileComponent = () => {
             boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
           }}
         >
+          <Button
+            onClick={!isEditing ? handleToggleEdit : handleSave}
+            style={{ float: "right", marginBottom: "16px" }}
+          >
+            {isEditing ? "Sauvegarder" : "Modifier"}
+          </Button>
           <Row align="middle" gutter={16}>
             <Col span={4} style={{ textAlign: "center" }}>
               <Avatar
@@ -167,139 +258,79 @@ const ProfileComponent = () => {
               />
             </Col>
             <Col span={20}>
-              {/* User Information */}
               <Row>
                 <Col
                   span={12}
                   style={{ display: "flex", flexDirection: "column" }}
                 >
-                  <div
-                    style={{
-                      display: "flex",
-                      marginBottom: "8px",
-                      alignItems: "center",
+                  <EditableField
+                    label="Grade"
+                    value={userInfo.grade}
+                    isEditing={isEditing}
+                    mode="mydirection"
+                    onChange={(e) => handleFieldChange("grade", e.target.value)}
+                  />
+                  <EditableField
+                    editable={true}
+                    label="Nom"
+                    value={`${userInfo.lastname} ${userInfo.firstname}`}
+                    isEditing={isEditing}
+                    mode="mydirection"
+                    onChange={(e) => {
+                      const [lastname, firstname] = e.target.value.split(" ");
+                      handleFieldChange(
+                        "lastname",
+                        lastname || userInfo.lastname,
+                      );
+                      handleFieldChange(
+                        "firstname",
+                        firstname || userInfo.firstname,
+                      );
                     }}
-                  >
-                    <Typography.Text
-                      strong
-                      style={{
-                        minWidth: "150px",
-                        textAlign: "right",
-                        marginRight: "10px",
-                      }}
-                    >
-                      Grade:
-                    </Typography.Text>
-                    <Typography.Text>{userInformation.grade}</Typography.Text>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      marginBottom: "8px",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography.Text
-                      strong
-                      style={{
-                        minWidth: "150px",
-                        textAlign: "right",
-                        marginRight: "10px",
-                      }}
-                    >
-                      Nom:
-                    </Typography.Text>
-                    <Typography.Text>
-                      {userInformation.lastname} {userInformation.firstname}
-                    </Typography.Text>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      marginBottom: "8px",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography.Text
-                      strong
-                      style={{
-                        minWidth: "150px",
-                        textAlign: "right",
-                        marginRight: "10px",
-                      }}
-                    >
-                      Email:
-                    </Typography.Text>
-                    <Typography.Text>{userInformation.mail}</Typography.Text>
-                  </div>
+                  />
+                  <EditableField
+                    editable={true}
+                    label="Email"
+                    value={userInfo.mail}
+                    isEditing={isEditing}
+                    mode="mydirection"
+                    onChange={(e) => handleFieldChange("mail", e.target.value)}
+                  />{" "}
                 </Col>
+
                 <Col
                   span={12}
                   style={{ display: "flex", flexDirection: "column" }}
                 >
-                  <div
-                    style={{
-                      display: "flex",
-                      marginBottom: "8px",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography.Text
-                      strong
-                      style={{
-                        minWidth: "150px",
-                        textAlign: "right",
-                        marginRight: "10px",
-                      }}
-                    >
-                      Direction:
-                    </Typography.Text>
-                    <Typography.Text>
-                      {userInformation.direction}
-                    </Typography.Text>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      marginBottom: "8px",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography.Text
-                      strong
-                      style={{
-                        minWidth: "100px",
-                        textAlign: "left",
-                        marginRight: "4px",
-                      }}
-                    >
-                      Téléphone (WhatsApp):
-                    </Typography.Text>
-                    <Typography.Text>
-                      {userInformation.phoneNumbers}
-                    </Typography.Text>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      marginBottom: "8px",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography.Text
-                      strong
-                      style={{
-                        minWidth: "150px",
-                        textAlign: "right",
-                        marginRight: "10px",
-                      }}
-                    >
-                      Fonction:
-                    </Typography.Text>
-                    <Typography.Text>
-                      {userInformation.function}
-                    </Typography.Text>
-                  </div>
+                  <EditableField
+                    label="Direction"
+                    value={userInfo.direction}
+                    isEditing={isEditing}
+                    mode="mydirection"
+                    onChange={(e) =>
+                      handleFieldChange("direction", e.target.value)
+                    }
+                  />
+                  <EditableField
+                    editable={true}
+                    label="Téléphone (WhatsApp)"
+                    value={userInfo.phoneNumbers}
+                    isEditing={isEditing}
+                    mode="mydirection"
+                    onChange={(e) =>
+                      handleFieldChange("phoneNumbers", e.target.value)
+                    }
+                  />
+                  <EditableField
+                    editable={true}
+                    label="Fonction"
+                    value={userInfo.fonction}
+                    isEditing={isEditing}
+                    mode="mydirection"
+                    onChange={(e) =>
+                      handleFieldChange("fonction", e.target.value)
+                    }
+                  />
                 </Col>
               </Row>
             </Col>

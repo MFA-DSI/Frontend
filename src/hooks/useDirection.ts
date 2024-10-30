@@ -12,6 +12,7 @@ import { useMutation, useQueryClient } from "react-query";
 import {
   getDirectionResponsiblesInformation,
   getUserInformation,
+  udpdateUser,
 } from "../providers";
 
 export const useDirections = () => {
@@ -44,11 +45,18 @@ export const useDirections = () => {
     enabled: !!userId,
   });
 
+  const updateUserInformation = useMutation(udpdateUser, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("user");
+    },
+  });
+
   return {
     fetchDirections: fetchAllDirections.data,
     fetchServices: fetchServiceByDirectionId.data,
     fetchActualDirection: fetchActualDirectionName,
     fetchUserInformation: fetchDirectionUserInformation.data,
+    updateUserInformation,
     isLoading: fetchAllDirections.isLoading,
     isUserLoading: fetchDirectionUserInformation.isLoading,
     isError: fetchAllDirections.isError,

@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
-import { Navigate, redirect, useLocation } from "react-router-dom";
+import { Navigate, Outlet, redirect, useLocation } from "react-router-dom";
+import { useAuthStore } from "../../hooks";
 
 type PrivateWrapperProps = {
   children: ReactNode;
@@ -19,3 +20,14 @@ export const PrivateWrapper = ({
   }
   return <>{children}</>;
 };
+
+
+export const SuperAdminWrapper = ()=>{
+  const role = useAuthStore.getState().role;
+
+  
+  if (role !== "SUPER_ADMIN") {
+    return <Navigate to="/" replace />;
+  }
+  return <Outlet />;
+}
