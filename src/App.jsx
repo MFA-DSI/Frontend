@@ -26,6 +26,7 @@ const queryClient = new QueryClient();
 function App() {
   const location = useLocation();
   const role = useAuthStore.getState().role;
+  const isStaff = useAuthStore.getState().isStaff;
   return (
     <QueryClientProvider client={queryClient}>
       <HackWebProviders>
@@ -39,7 +40,10 @@ function App() {
             <Route path="reports" element={<ReportMission />} />
             <Route path="notifications" element={<Notification />} />
             <Route path="profile" element={<Profile />} />
-            <Route path="statistics" element={<Statistics />} />
+            <Route
+  path="statistics"
+  element={isStaff === "true" ? <Statistics /> : <Navigate to="/" />}
+/>
           </Route>
 
           <Route path="/login" element={<LoginPage />} />

@@ -12,7 +12,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { useDirections } from "../../hooks";
+import { useAuthStore, useDirections } from "../../hooks";
 import { useDirectionsContext } from "../../providers";
 
 const updatedData = [
@@ -136,105 +136,94 @@ const activityDataDSI = [
 const StatisticsComponents = () => {
   const [directionStats] = useState(updatedData);
   const { fetchActualDirectionName } = useDirectionsContext();
+  const isStaff = useAuthStore.getState().isStaff;
+  const role = useAuthStore.getState().role;
 
   const name = fetchActualDirectionName?.data.name || "Chargement...";
   const data = activityDataDSI;
   const title = `Évolution des Activités de ma Direction ${name}`;
-  useEffect(() => {}, [name]);
+  useEffect(() => {}, [name,isStaff,role]);
   return (
     <div style={{ padding: 20 }}>
       <h2>Statistiques des Activités Interdirections</h2>
 
       {/* Classement des Directions par Nombre d'Activités */}
-      <Card title="Directions les plus actives" style={{ marginBottom: 20 }}>
-        <Table
-          dataSource={directionStats.sort(
-            (a, b) => b.totalActivities - a.totalActivities,
-          )}
-          columns={[
-            {
-              title: "Direction",
-              dataIndex: "directionName",
-              key: "directionName",
-            },
-            {
-              title: "Total des Activités",
-              dataIndex: "totalActivities",
-              key: "totalActivities",
-            },
-            {
-              title: "Terminées",
-              dataIndex: "completedActivities",
-              key: "completedActivities",
-            },
-            {
-              title: "En Cours",
-              dataIndex: "ongoingActivities",
-              key: "ongoingActivities",
-            },
-            {
-              title: "Efficacité (%)",
-              dataIndex: "efficiencyPercentage",
-              key: "efficiencyPercentage",
-            },
-            {
-              title: "Indicateur Moyenne de Performance",
-              dataIndex: "averagePerformanceIndicator",
-              key: "averagePerformanceIndicator",
-            },
-          ]}
-          rowKey="directionId"
-          pagination={false}
-          scroll={{ y: 300 }}
-        />
-      </Card>
+      {role === "SUPER_ADMIN" && (
+  <Card title="Directions les plus actives" style={{ marginBottom: 20 }}>
+    <Table
+      dataSource={directionStats.sort(
+        (a, b) => b.totalActivities - a.totalActivities,
+      )}
+      columns={[
+        {
+          title: "Direction",
+          dataIndex: "directionName",
+          key: "directionName",
+        },
+        {
+          title: "Total des Activités",
+          dataIndex: "totalActivities",
+          key: "totalActivities",
+        },
+        {
+          title: "Terminées",
+          dataIndex: "completedActivities",
+          key: "completedActivities",
+        },
+        {
+          title: "En Cours",
+          dataIndex: "ongoingActivities",
+          key: "ongoingActivities",
+        },
+        {
+          title: "Efficacité (%)",
+          dataIndex: "efficiencyPercentage",
+          key: "efficiencyPercentage",
+        },
+        {
+          title: "Indicateur Moyenne de Performance",
+          dataIndex: "averagePerformanceIndicator",
+          key: "averagePerformanceIndicator",
+        },
+      ]}
+      rowKey="directionId"
+      pagination={false}
+      scroll={{ y: 300 }}
+    />
+  </Card>
+)}
 
-      {/* Graphiques */}
-      <Row gutter={16}>
-        {/* Évolution des Activités par Direction */}
-        <Col span={12}>
-          <Card title={title}>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart
-                width={600}
-                height={300}
-                data={data}
-                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="totalActivities"
-                  stroke="#8884d8"
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </Card>
-        </Col>
+{isStaff === "true" && (role === "ADMIN" || role === "SUPER_ADMIN") && (
+    <Card title={title}>
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart
+          width={600}
+          height={300}
+          data={data}
+          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="date" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Line
+            type="monotone"
+            dataKey="totalActivities"
+            stroke="#8884d8"
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </Card>
+)}
 
-        <Col span={12}>
-          <Card title="Efficacité des Directions">
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={directionStats}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="directionName" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar
-                  dataKey="efficiencyPercentage"
-                  name="Efficacité (%)"
-                  fill="#82ca9d"
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </Card>
-        </Col>
-      </Row>
+
+
+        
+   
+
+      
+    
     </div>
   );
 };

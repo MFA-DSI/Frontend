@@ -37,6 +37,7 @@ const MainLayout = ({ children }) => {
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const role = useAuthStore.getState().role;
+  const isStaff = useAuthStore.getState().isStaff;
   const handleLogout = async () => {
     localStorage.clear();
     queryClient.clear();
@@ -79,11 +80,15 @@ const MainLayout = ({ children }) => {
       icon: <UserOutlined />,
       label: "Mon profil",
     },
-    {
-      key: "/statistics",
-      icon: <BarChartOutlined />,
-      label: "Statistiques",
-    },
+    ...(role === "admin" || role === "SUPER ADMIN" || (isStaff === "true")
+      ? [
+          {
+            key: "/statistics",
+            icon: <BarChartOutlined />,
+            label: "Statistiques",
+          },
+        ]
+      : []),
   ];
 
   return (
