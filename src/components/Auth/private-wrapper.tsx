@@ -21,13 +21,11 @@ export const PrivateWrapper = ({
   return <>{children}</>;
 };
 
-
-export const SuperAdminWrapper = ()=>{
+export const SuperAdminWrapper = () => {
   const role = useAuthStore.getState().role;
 
-  
   if (role !== "SUPER_ADMIN") {
     return <Navigate to="/" replace />;
   }
   return <Outlet />;
-}
+};

@@ -4,7 +4,10 @@ import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthWrapper } from "./components/Auth/auth-wrapper";
-import { PrivateWrapper, SuperAdminWrapper } from "./components/Auth/private-wrapper";
+import {
+  PrivateWrapper,
+  SuperAdminWrapper,
+} from "./components/Auth/private-wrapper";
 import "./App.css";
 import HomePage from "./pages/Home/HomePage";
 import MyDirection from "./pages/MyDirection/MyDirection";
@@ -16,6 +19,7 @@ import FirstLoginPage from "./pages/Login/FirstLoginPage";
 import { HackWebProviders } from "./providers";
 import Statistics from "./pages/Statistics/Statistics";
 import { useAuthStore } from "./hooks";
+import { AdminWrapper } from "./components/Auth/admin-wrapper";
 
 const queryClient = new QueryClient();
 
@@ -29,16 +33,7 @@ function App() {
 
         <Routes location={location}>
           <Route path="/" element={<AuthWrapper />}>
-            <Route
-              index
-              element={
-                role === "SUPER_ADMIN" ? (
-                  <Navigate to="/allDirection" replace />
-                ) : (
-                  <Navigate to="/myDirection" replace />
-                )
-              }
-            />
+            <Route index element={<AdminWrapper role={role} />} />
             <Route path="allDirection" element={<HomePage />} />
             <Route path="myDirection" element={<MyDirection />} />
             <Route path="reports" element={<ReportMission />} />

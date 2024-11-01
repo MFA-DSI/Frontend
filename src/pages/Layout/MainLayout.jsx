@@ -15,7 +15,7 @@ import { useQueryClient } from "react-query";
 import { useAuthStore } from "../../hooks";
 
 const { Header, Content, Sider } = Layout;
-const { SubMenu } = Menu; 
+const { SubMenu } = Menu;
 
 const siderStyle = {
   height: "100vh",
@@ -45,11 +45,15 @@ const MainLayout = ({ children }) => {
   };
 
   const items = [
-    ...(role === "SUPER_ADMIN" ? [{
-      key: "/",
-      icon: <UsergroupDeleteOutlined />,
-      label: "Toutes les directions",
-    }] : []),
+    ...(role === "SUPER_ADMIN"
+      ? [
+          {
+            key: "/",
+            icon: <UsergroupDeleteOutlined />,
+            label: "Toutes les directions",
+          },
+        ]
+      : []),
     {
       key: "/myDirection",
       icon: <CloudOutlined />,
