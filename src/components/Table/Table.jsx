@@ -41,7 +41,7 @@ const TableComponent = ({
 
   const directionId = localStorage.getItem("directionId");
 
-  const { fetchMissionXLS } = useFilesContext();
+  const { fetchMissionXLS,directionActivitiesToXLS } = useFilesContext();
   const [activityType, setActivityType] = useState("all");
   const [dateFilter, setDateFilter] = useState({
     month: null,
@@ -104,13 +104,19 @@ const TableComponent = ({
   const handleExport = async (type) => {
     if (type === "XLS") {
       try {
-        await fetchMissionXLS(selectedIds);
+        // Check if the activity type is "weekly" before calling the appropriate function
+        if (activityType === "weekly") {
+          await directionActivitiesToXLS(selectedIds);
+        } else {
+          await fetchMissionXLS(selectedIds);
+        }
         setSelectedIds([]);
       } catch (error) {
         toast.error(error.message);
       }
     }
   };
+  
   const handleFilter = async () => {
     switch (activityType) {
       case "weekly":

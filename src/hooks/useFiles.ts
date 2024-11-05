@@ -2,12 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useMutation, useQueryClient } from "react-query";
 import {
+  exportActivityToXLS,
   exportMissionToDOC,
   exportMissionToPDF,
   exportMissionToXLS,
-  ExportReportMissionMonth,
-  ExportReportMissionQuarter,
-  ExportReportMissionWeek,
+  exportReportMissionMonth,
+  exportReportMissionQuarter,
+  exportReportMissionWeek,
+ 
 } from "../providers";
 import { message } from "antd";
 
@@ -23,20 +25,19 @@ export const useFiles = () => {
       message.success("votre fichier Excel est prêt");
     },
   });
-
   const exportToMissionDOC = useMutation(exportMissionToDOC, {
     onSuccess: () => {
       message.success("votre fichier DOC est prêt");
     },
   });
 
-  const exportWeeklyReportToMissionXLS = useMutation(ExportReportMissionWeek, {
+  const exportWeeklyReportToMissionXLS = useMutation(exportReportMissionWeek, {
     onSuccess: () => {
       message.success("votre rapport XLS est prêt");
     },
   });
   const exportMonthlyReportToMissionXLS = useMutation(
-    ExportReportMissionMonth,
+    exportReportMissionMonth,
     {
       onSuccess: () => {
         message.success("votre rapport XLS est prêt");
@@ -45,7 +46,17 @@ export const useFiles = () => {
   );
 
   const exportQuarterlyReportToMissionXLS = useMutation(
-    ExportReportMissionQuarter,
+    exportReportMissionQuarter,
+    {
+      onSuccess: () => {
+        message.success("votre rapport XLS est prêt");
+      },
+    },
+  );
+
+  
+  const exportDirectionActivitytToXLS = useMutation(
+    exportActivityToXLS,
     {
       onSuccess: () => {
         message.success("votre rapport XLS est prêt");
@@ -57,6 +68,7 @@ export const useFiles = () => {
     missionToPDF: exportToMissionPDF.mutate,
     missionToDOC: exportToMissionDOC.mutate,
     missionToXLS: exportToMissionXLS.mutate,
+    activitiesToXLS : exportDirectionActivitytToXLS.mutate,
     reportMissionWeekly: exportWeeklyReportToMissionXLS.mutate,
     reportMissionMonthly: exportMonthlyReportToMissionXLS.mutate,
     reportMissionQuarterly: exportQuarterlyReportToMissionXLS.mutate,

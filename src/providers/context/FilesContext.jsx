@@ -11,6 +11,7 @@ export const FilesProvider = ({ children }) => {
     reportMissionWeekly,
     reportMissionMonthly,
     reportMissionQuarterly,
+    activitiesToXLS,
   } = useFiles();
 
   return (
@@ -19,6 +20,7 @@ export const FilesProvider = ({ children }) => {
         fetchMissionPDF: missionToPDF,
         fetchMissionDOC: missionToDOC,
         fetchMissionXLS: missionToXLS,
+        directionActivitiesToXLS : activitiesToXLS,
         fetchWeeklyReportMissionXLS: reportMissionWeekly,
         fetchMonthlyReportMissionXLS: reportMissionMonthly,
         fetchQuarterlyReportMissionXLS: reportMissionQuarterly,

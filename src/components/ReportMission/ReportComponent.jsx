@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Select, Button, Card, Divider } from "antd";
 import { getWeeksInMonth } from "../Table/utils/DateUtils";
 import { useFilesContext } from "../../providers/context/FilesContext";
@@ -24,6 +24,8 @@ const ReportGenerator = () => {
   });
 
   const [pageSize, setPageSize] = useState("50"); // Example page size
+
+
 
   const isButtonDisabled = () => {
     if (activityType === "weekly") {
@@ -61,7 +63,6 @@ const ReportGenerator = () => {
 
       try {
         await fetchMonthlyReportMissionXLS(reportDetailsForMonth);
-        console.log("Rapport mensuel généré avec succès !");
       } catch (error) {
         console.error(
           "Erreur lors de la génération du rapport mensuel :",
@@ -98,7 +99,6 @@ const ReportGenerator = () => {
 
     try {
       await fetchWeeklyReportMissionXLS(reportDetails);
-      console.log("Rapport généré avec succès !");
     } catch (error) {
       console.error("Erreur lors de la génération du rapport :", error);
     }

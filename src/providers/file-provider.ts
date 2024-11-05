@@ -21,213 +21,32 @@ interface reportDetailsForQuarter {
   pageSize: string;
 }
 
-export const exportMissionToXLS = async (id: string[]) => {
-  try {
-    const url = "http://localhost:8080/direction/mission/export/excel";
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(id),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      const errorMessage =
-        errorData.message ||
-        "Erreur inconnue lors de la récupération des fichiers";
-      toast.error(errorMessage);
-      throw new Error(errorMessage);
-    }
-
-    const blob = await response.blob();
-    saveAs(blob, "missions.xlsx");
-    return blob;
-  } catch (error) {
-    console.error("Error fetching files:", error);
-    toast.error(error instanceof Error ? error.message : "Erreur inconnue");
-    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
-  }
-};
-
-export const exportMissionToPDF = async (id: string[]) => {
-  try {
-    const url = "http://localhost:8080/direction/mission/export/pdf";
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(id),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      const errorMessage =
-        errorData.message ||
-        "Erreur inconnue lors de la récupération des fichiers";
-      toast.error(errorMessage);
-      throw new Error(errorMessage);
-    }
-
-    const data: Blob[] = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error fetching files:", error);
-    toast.error("Une erreur inattendue est survenue.");
-    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
-  }
-};
-
-export const exportMissionToDOC = async (id: string[]) => {
-  try {
-    const url = "http://localhost:8080/direction/mission/export/doc";
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(id),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      const errorMessage =
-        errorData.message ||
-        "Erreur inconnue lors de la récupération des fichiers";
-      toast.error(errorMessage);
-      throw new Error(errorMessage);
-    }
-
-    const data: Blob[] = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error fetching files:", error);
-    toast.error("Une erreur inattendue est survenue.");
-    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
-  }
-};
-
-export const ExportReportMissionWeek = async (id: reportDetailsForWeek) => {
-  try {
-    const url = `http://localhost:8080/direction/mydirection/mission/export/week/excel?directionId=${id.directionId}&date=${id.date}&pageSize=${id.pageSize}`;
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(id),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      const errorMessage =
-        errorData.message ||
-        "Erreur inconnue lors de la récupération des fichiers";
-      toast.error(errorMessage);
-      throw new Error(errorMessage);
-    }
-
-    const contentDisposition = response.headers.get("Content-Disposition");
-
-    let filename = "missions.xlsx";
-
-    if (contentDisposition && contentDisposition.includes("filename=")) {
-      const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-      const matches = filenameRegex.exec(contentDisposition);
-      if (matches != null && matches[1]) {
-        filename = matches[1].replace(/['"]/g, "");
-      }
-    }
-
-    // Convert the response to a blob
-    const blob = await response.blob();
-
-    // Use the filename in the saveAs function
-    saveAs(blob, filename);
-
-    return blob;
-  } catch (error) {
-    console.error("Error fetching files:", error);
-    toast.error(error instanceof Error ? error.message : "Erreur inconnue");
-    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
-  }
-};
-
-export const ExportReportMissionMonth = async (id: reportDetailsForMonth) => {
-  try {
-    const url = `http://localhost:8080/direction/mydirection/mission/export/monthly/excel?directionId=${id.directionId}&year=${id.year}&month=${id.month}&pageSize=${id.pageSize}`;
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(id),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      const errorMessage =
-        errorData.message ||
-        "Erreur inconnue lors de la récupération des fichiers";
-      toast.error(errorMessage);
-      throw new Error(errorMessage);
-    }
-
-    const contentDisposition = response.headers.get("Content-Disposition");
-
-    let filename = "missions.xlsx";
-
-    if (contentDisposition && contentDisposition.includes("filename=")) {
-      const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-      const matches = filenameRegex.exec(contentDisposition);
-      if (matches != null && matches[1]) {
-        filename = matches[1].replace(/['"]/g, "");
-      }
-    }
-
-    // Convert the response to a blob
-    const blob = await response.blob();
-
-    // Use the filename in the saveAs function
-    saveAs(blob, filename);
-
-    return blob;
-  } catch (error) {
-    console.error("Error fetching files:", error);
-    toast.error(error instanceof Error ? error.message : "Erreur inconnue");
-    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
-  }
-};
-
-export const ExportReportMissionQuarter = async (
-  id: reportDetailsForQuarter,
+// Utility function to handle fetch requests and download files
+const fetchAndDownloadFile = async (
+  url: string,
+  requestData: any,
+  defaultFilename: string,
+  toastMessage: string
 ) => {
+  const loadingToastId = toast.loading(toastMessage);
+
   try {
-    const url = `http://localhost:8080/direction/mydirection/mission/export/quarter/excel?directionId=${id.directionId}&year=${id.year}&quarter=${id.quarter}&pageSize=${id.pageSize}`;
     const response = await fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(id),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestData),
     });
 
     if (!response.ok) {
       const errorData = await response.json();
       const errorMessage =
-        errorData.message ||
-        "Erreur inconnue lors de la récupération des fichiers";
+        errorData.message || "Erreur inconnue lors de la récupération des fichiers";
       toast.error(errorMessage);
       throw new Error(errorMessage);
     }
 
     const contentDisposition = response.headers.get("Content-Disposition");
-
-    let filename = "missions.xlsx";
+    let filename = defaultFilename;
 
     if (contentDisposition && contentDisposition.includes("filename=")) {
       const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
@@ -237,16 +56,71 @@ export const ExportReportMissionQuarter = async (
       }
     }
 
-    // Convert the response to a blob
     const blob = await response.blob();
-
-    // Use the filename in the saveAs function
     saveAs(blob, filename);
-
+    toast.dismiss(loadingToastId);
     return blob;
   } catch (error) {
     console.error("Error fetching files:", error);
     toast.error(error instanceof Error ? error.message : "Erreur inconnue");
-    throw new Error(error instanceof Error ? error.message : "Erreur inconnue");
+    toast.dismiss(loadingToastId);
+    throw error;
   }
 };
+
+// Export functions for different reports
+export const exportMissionToXLS = async (id: string[]) =>
+  fetchAndDownloadFile(
+    "http://localhost:8080/direction/mission/export/excel",
+    id,
+    "missions.xlsx",
+    "Génération du rapport en cours..."
+  );
+
+export const exportMissionToPDF = async (id: string[]) =>
+  fetchAndDownloadFile(
+    "http://localhost:8080/direction/mission/export/pdf",
+    id,
+    "missions.pdf",
+    "Génération du rapport en cours..."
+  );
+
+export const exportMissionToDOC = async (id: string[]) =>
+  fetchAndDownloadFile(
+    "http://localhost:8080/direction/mission/export/doc",
+    id,
+    "missions.doc",
+    "Génération du rapport en cours..."
+  );
+
+export const exportReportMissionWeek = async (id: reportDetailsForWeek) =>
+  fetchAndDownloadFile(
+    `http://localhost:8080/direction/mydirection/mission/export/week/excel?directionId=${id.directionId}&date=${id.date}&pageSize=${id.pageSize}`,
+    id,
+    "missions_week.xlsx",
+    "Génération du rapport hebdomadaire en cours..."
+  );
+
+export const exportReportMissionMonth = async (id: reportDetailsForMonth) =>
+  fetchAndDownloadFile(
+    `http://localhost:8080/direction/mydirection/mission/export/monthly/excel?directionId=${id.directionId}&year=${id.year}&month=${id.month}&pageSize=${id.pageSize}`,
+    id,
+    "missions_month.xlsx",
+    "Génération du rapport mensuel en cours..."
+  );
+
+export const exportReportMissionQuarter = async (id: reportDetailsForQuarter) =>
+  fetchAndDownloadFile(
+    `http://localhost:8080/direction/mydirection/mission/export/quarter/excel?directionId=${id.directionId}&year=${id.year}&quarter=${id.quarter}&pageSize=${id.pageSize}`,
+    id,
+    "missions_quarter.xlsx",
+    "Génération du rapport trimestriel en cours..."
+  );
+
+export const exportActivityToXLS = async (id: string[]) =>
+  fetchAndDownloadFile(
+    "http://localhost:8080/direction/activity/export/excel",
+    id,
+    "activities.xlsx",
+    "Génération du rapport d'activités en cours..."
+  );
