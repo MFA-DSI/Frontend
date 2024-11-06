@@ -6,9 +6,9 @@ import {
   deleteMission,
   fetchMissionsName,
   updateMission,
-  getWeeklyAtivityByDirectionId,
-  getMonthlyAtivityByDirectionId,
-  getQuarterlyAtivityByDirectionId,
+  getWeeklyActivityByDirectionId,
+  getMonthlyActivityByDirectionId,
+  getQuarterlyActivityByDirectionId,
 } from "../providers/mission-provider";
 
 export const useMissions = () => {
@@ -53,23 +53,25 @@ export const useMissions = () => {
     },
   });
 
-  const monthlyMissions = useMutation(getMonthlyAtivityByDirectionId, {
+  const monthlyMissions = useMutation(getMonthlyActivityByDirectionId, {
     onSuccess: () => {
       queryClient.invalidateQueries("missions");
     },
   });
 
-  const weeklyMissions = useMutation(getWeeklyAtivityByDirectionId, {
+  const weeklyMissions = useMutation(getWeeklyActivityByDirectionId, {
     onSuccess: () => {
       queryClient.invalidateQueries("missions");
     },
   });
 
-  const quarterMissions = useMutation(getQuarterlyAtivityByDirectionId, {
+  const quarterMissions = useMutation(getQuarterlyActivityByDirectionId, {
     onSuccess: () => {
       queryClient.invalidateQueries("missions");
     },
   });
+
+  
 
   return {
     missions: missionsQuery.data,
