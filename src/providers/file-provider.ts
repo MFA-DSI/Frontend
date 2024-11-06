@@ -1,20 +1,20 @@
 import { toast } from "react-toastify";
 import { saveAs } from "file-saver";
 
-interface reportDetailsForWeek {
+interface ReportDetailsForWeek {
   directionId: string;
   date: string;
   pageSize: string;
 }
 
-interface reportDetailsForMonth {
+interface ReportDetailsForMonth {
   directionId: string;
   year: number;
   month: number;
   pageSize: string;
 }
 
-interface reportDetailsForQuarter {
+interface ReportDetailsForQuarter {
   directionId: string;
   year: number;
   quarter: number;
@@ -39,22 +39,13 @@ const fetchAndDownloadFile = async (
 
     if (!response.ok) {
       const errorData = await response.json();
-      const errorMessage =
-        errorData.message || "Erreur inconnue lors de la récupération des fichiers";
+      const errorMessage = errorData.message || "Erreur inconnue lors de la récupération des fichiers";
       toast.error(errorMessage);
       throw new Error(errorMessage);
     }
 
     const contentDisposition = response.headers.get("Content-Disposition");
-    let filename = defaultFilename;
-
-    if (contentDisposition && contentDisposition.includes("filename=")) {
-      const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-      const matches = filenameRegex.exec(contentDisposition);
-      if (matches != null && matches[1]) {
-        filename = matches[1].replace(/['"]/g, "");
-      }
-    }
+    const filename = contentDisposition?.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/)?.[1]?.replace(/['"]/g, "") || defaultFilename;
 
     const blob = await response.blob();
     saveAs(blob, filename);
@@ -93,26 +84,26 @@ export const exportMissionToDOC = async (id: string[]) =>
     "Génération du rapport en cours..."
   );
 
-export const exportReportMissionWeek = async (id: reportDetailsForWeek) =>
+export const exportReportMissionWeek = async (details: ReportDetailsForWeek) =>
   fetchAndDownloadFile(
-    `http://localhost:8080/direction/mydirection/mission/export/week/excel?directionId=${id.directionId}&date=${id.date}&pageSize=${id.pageSize}`,
-    id,
+    `http://localhost:8080/direction/mydirection/mission/export/week/excel?directionId=${details.directionId}&date=${details.date}&pageSize=${details.pageSize}`,
+    details,
     "missions_week.xlsx",
     "Génération du rapport hebdomadaire en cours..."
   );
 
-export const exportReportMissionMonth = async (id: reportDetailsForMonth) =>
+export const exportReportMissionMonth = async (details: ReportDetailsForMonth) =>
   fetchAndDownloadFile(
-    `http://localhost:8080/direction/mydirection/mission/export/monthly/excel?directionId=${id.directionId}&year=${id.year}&month=${id.month}&pageSize=${id.pageSize}`,
-    id,
+    `http://localhost:8080/direction/mydirection/mission/export/monthly/excel?directionId=${details.directionId}&year=${details.year}&month=${details.month}&pageSize=${details.pageSize}`,
+    details,
     "missions_month.xlsx",
     "Génération du rapport mensuel en cours..."
   );
 
-export const exportReportMissionQuarter = async (id: reportDetailsForQuarter) =>
+export const exportReportMissionQuarter = async (details: ReportDetailsForQuarter) =>
   fetchAndDownloadFile(
-    `http://localhost:8080/direction/mydirection/mission/export/quarter/excel?directionId=${id.directionId}&year=${id.year}&quarter=${id.quarter}&pageSize=${id.pageSize}`,
-    id,
+    `http://localhost:8080/direction/mydirection/mission/export/quarter/excel?directionId=${details.directionId}&year=${details.year}&quarter=${details.quarter}&pageSize=${details.pageSize}`,
+    details,
     "missions_quarter.xlsx",
     "Génération du rapport trimestriel en cours..."
   );

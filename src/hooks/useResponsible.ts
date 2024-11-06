@@ -5,7 +5,7 @@ import {
 } from "../providers/notification-provider";
 import { getDirectionResponsiblesInformation } from "../providers";
 import {
-  addReponsibleToDirection,
+  addResponsibleToDirection,
   addUserToDirection,
   approveUserToDirection,
 } from "../providers/direction-provider";
@@ -26,7 +26,7 @@ export const useResponsible = () => {
     },
   });
 
-  const saveNewResponsibleToDirection = useMutation(addReponsibleToDirection, {
+  const saveNewResponsibleToDirection = useMutation(addResponsibleToDirection, {
     onSuccess: () => {
       queryClient.invalidateQueries("responsible");
     },

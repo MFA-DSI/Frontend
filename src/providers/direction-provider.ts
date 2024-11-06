@@ -1,166 +1,87 @@
 import { message } from "antd";
-import { Direction, Service } from "../types";
+import { Direction, Service, User, PostedNewUser } from "../types";
 
-const API_URL: string = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
-interface User {
-  id: string;
-  firstname: string;
-  lastname: string;
-  email: string;
-  phoneNumbers: string;
-  grade: string;
-  function: string;
-  directionId: string;
-}
-
-interface PostedNewUser {
-  identity: string;
-  password: string;
-}
-
-interface UsertoApprove {
-  reponsibleId: string;
-  toApproveId: string;
-}
-
-export const fetchDirections = async (): Promise<Direction[]> => {
+const fetchData = async <T>(url: string, options: RequestInit, errorMessage: string): Promise<T | null> => {
   try {
-    const response = await fetch(`${API_URL}/direction/all`, {
-      method: "GET",
-    });
+    const response = await fetch(url, options);
+    if (!response.ok) throw new Error(errorMessage);
 
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-
-    const data: Direction[] = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    message.error("Failed to fetch directions");
-    console.error(error);
-    return [];
-  }
-};
-
-export const fetchDirectionServices = async (): Promise<Service[]> => {
-  try {
-    const directionId = localStorage.getItem("directionId");
-    const response = await fetch(
-      `${API_URL}/direction/service/all?directionId=${directionId}`,
-      {
-        method: "GET",
-      },
-    );
-
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-
-    const data: Service[] = await response.json();
-    return data;
-  } catch (error) {
-    message.error("Failed to fetch services");
-    console.error(error);
-    return [];
-  }
-};
-
-export const fetchDirectionName = async (): Promise<Direction | null> => {
-  try {
-    const directionId = localStorage.getItem("directionId");
-    const response = await fetch(`${API_URL}/direction/name/${directionId}`, {
-      method: "GET",
-    });
-
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-
-    const data: Direction = await response.json();
-    return data;
-  } catch (error) {
+    message.error(errorMessage);
     console.error(error);
     return null;
   }
 };
 
-export const addUserToDirection = async (
-  usertoAdd: User,
-): Promise<User | null> => {
+export const fetchDirections = async (): Promise<Direction[]> => {
+  return (await fetchData<Direction[]>(`${API_URL}/direction/all`, { method: "GET" }, "Failed to fetch directions")) || [];
+};
+
+export const fetchDirectionServices = async (): Promise<Service[]> => {
+  const directionId = localStorage.getItem("directionId");
+  return (
+    (await fetchData<Service[]>(
+      `${API_URL}/direction/service/all?directionId=${directionId}`,
+      { method: "GET" },
+      "Failed to fetch services"
+    )) || []
+  );
+};
+
+
+export const fetchDirectionName = async (): Promise<Direction | null> => {
+  const directionId = localStorage.getItem("directionId");
+  return fetchData<Direction>(
+    `${API_URL}/direction/name/${directionId}`,
+    { method: "GET" },
+    "Failed to fetch direction name"
+  );
+};
+
+const postData = async <T>(url: string, data: T, successMessage: string, errorMessage: string): Promise<T | null> => {
   try {
-    const response = await fetch(`${API_URL}/users/createUser`, {
+    const response = await fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(usertoAdd),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      message.error(errorData.message || "Une erreur est survenue.");
-
+      message.error(errorData.message || errorMessage);
       return null;
     }
 
-    const data = await response.json();
-
-    return data;
-  } catch (error: any) {
-    message.error(error.message || "Une erreur réseau est survenue.");
-    throw new Error(error);
-  }
-};
-
-export const addReponsibleToDirection = async (
-  usertoAdd: User,
-): Promise<User | null> => {
-  try {
-    const response = await fetch(`${API_URL}/users/createAdmin`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(usertoAdd),
-    });
-
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-
-    const data: User = await response.json();
-    message.success("Responsable ajouté avec succès");
-    console.log(data);
-
-    return data;
+    const responseData = await response.json();
+    message.success(successMessage);
+    return responseData;
   } catch (error) {
-    message.error("Failed to add responsible user");
+    message.error(errorMessage);
     console.error(error);
     return null;
   }
 };
 
-export const approveUserToDirection = async (concernedUser) => {
-  console.log("concern", concernedUser.responsibleId);
+export const addUserToDirection = (userToAdd: User): Promise<User | null> =>
+  postData<User>(
+    `${API_URL}/users/createUser`,
+    userToAdd,
+    "User added successfully",
+    "Failed to add user"
+  );
 
-  try {
-    const response = await fetch(
-      `${API_URL}/users/user/approve?userId=${concernedUser.responsibleId}&toApproveId=${concernedUser.toApproveId}`,
-      {
-        method: "PUT",
-      },
-    );
+export const addResponsibleToDirection = (userToAdd: User): Promise<User | null> =>
+  postData<User>(
+    `${API_URL}/users/createAdmin`,
+    userToAdd,
+    "Responsable ajouté avec succès",
+    "Failed to add responsible user"
+  );
 
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-
-    const data: PostedNewUser = await response.json();
-    return data;
-  } catch (error) {
-    message.error("Failed to approve user");
-    console.error(error);
-    return null;
-  }
+export const approveUserToDirection = async (concernedUser: { responsibleId: string; toApproveId: string }): Promise<PostedNewUser | null> => {
+  const url = `${API_URL}/users/user/approve?userId=${concernedUser.responsibleId}&toApproveId=${concernedUser.toApproveId}`;
+  return fetchData<PostedNewUser>(url, { method: "PUT" }, "Failed to approve user");
 };
