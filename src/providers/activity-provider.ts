@@ -37,6 +37,21 @@ interface RecommendationUpdate {
   committerId: string;
   description: string;
 }
+export interface FetchActivitiesForDirectionParams {
+  weekStartDate: string;
+  page?: number;          // Paramètre optionnel
+  pageSize?: number;      // Paramètre optionnel
+}
+
+export interface FetchOwnDirectionStatisticsParams {
+  directionId: string;
+  year  : number;  // Utilisation de string pour simplifier la gestion des dates au niveau de l'API
+  page?: number;          // Paramètre optionnel, par défaut 1
+  pageSize?: number;      // Paramètre optionnel, par défaut 15
+}
+
+
+
 
 const BASE_URL = environment.apiBaseUrl || "http://localhost:8080";
 
@@ -173,4 +188,42 @@ export const addRecommendationToActivity = async (recommendation: Recommendation
     toast.error("Une erreur inattendue est survenue.");
     throw error instanceof Error ? error : new Error("Erreur inconnue");
   }
+  
 };
+
+export const fetchActivitiesStatistics = async (params: FetchActivitiesForDirectionParams): Promise<Activity[]> => {
+  const { weekStartDate, page = 1, pageSize = 15 } = params;
+
+  try {
+    const response = await fetch(`${BASE_URL}/direction/activity/direction?weekStartDate=${weekStartDate}&page=${page}&pageSize=${pageSize}`);
+    
+    if (!response.ok) await handleErrorResponse(response, "Erreur lors de la récupération des activités");
+
+    return await response.json();
+  } catch (error) {
+    toast.error("Une erreur inattendue est survenue.");
+    throw error instanceof Error ? error : new Error("Erreur inconnue");
+  }
+};
+
+export const fetchOwnDirectionStatistics = async (params: FetchOwnDirectionStatisticsParams): Promise<any> => {
+  const { directionId, year, page = 1, pageSize = 15 } = params;
+
+  
+  try {
+    const response = await fetch(`${BASE_URL}/direction/activities/statistics?year=${year}&directionId=${directionId}&page=${page}&pageSize=${pageSize}`);
+    
+    if (!response.ok) await handleErrorResponse(response, "Erreur lors de la récupération des statistiques");
+    const data = await response.json();
+    console.log(data);
+    
+    return data;
+
+  } catch (error) {
+    toast.error("Une erreur inattendue est survenue.");
+    throw error instanceof Error ? error : new Error("Erreur inconnue");
+  }
+};
+
+
+

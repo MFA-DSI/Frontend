@@ -1,229 +1,132 @@
-import React, { useEffect, useState } from "react";
-import { Table, Card, Row, Col } from "antd";
-import {
-  LineChart,
-  BarChart,
-  Bar,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
-import { useAuthStore, useDirections } from "../../hooks";
-import { useDirectionsContext } from "../../providers";
+import { Card, Table, Select, Button } from 'antd';
+import { useState, useEffect } from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { useAuthStore } from '../../hooks';
+import { useDirectionsContext } from '../../providers';
+import { useActivitiesContext } from '../../providers';
 
-const updatedData = [
-  {
-    directionId: "550e8400-e29b-41d4-a716-446655440014",
-    directionName: "DSI",
-    totalActivities: 2,
-    completedActivities: 1,
-    ongoingActivities: 1,
-    overdueActivities: 0,
-    efficiencyPercentage: 50.0,
-    averagePerformanceIndicator: 50.0,
-  },
-  {
-    directionId: "550e8400-e29b-41d4-a716-446655440001",
-    directionName: "Finance",
-    totalActivities: 8,
-    completedActivities: 1,
-    ongoingActivities: 7,
-    overdueActivities: 0,
-    efficiencyPercentage: 12.5,
-    averagePerformanceIndicator: 14.0,
-  },
-  {
-    directionId: "550e8400-e29b-41d4-a716-446655440002",
-    directionName: "Ressources Humaines",
-    totalActivities: 5,
-    completedActivities: 3,
-    ongoingActivities: 1,
-    overdueActivities: 1,
-    efficiencyPercentage: 60.0,
-    averagePerformanceIndicator: 45.0,
-  },
-  {
-    directionId: "550e8400-e29b-41d4-a716-446655440003",
-    directionName: "Marketing",
-    totalActivities: 6,
-    completedActivities: 2,
-    ongoingActivities: 3,
-    overdueActivities: 1,
-    efficiencyPercentage: 33.33,
-    averagePerformanceIndicator: 30.0,
-  },
-  {
-    directionId: "550e8400-e29b-41d4-a716-446655440004",
-    directionName: "Commercial",
-    totalActivities: 10,
-    completedActivities: 5,
-    ongoingActivities: 4,
-    overdueActivities: 1,
-    efficiencyPercentage: 50.0,
-    averagePerformanceIndicator: 40.0,
-  },
-  {
-    directionId: "550e8400-e29b-41d4-a716-446655440005",
-    directionName: "Production",
-    totalActivities: 7,
-    completedActivities: 4,
-    ongoingActivities: 2,
-    overdueActivities: 1,
-    efficiencyPercentage: 57.14,
-    averagePerformanceIndicator: 65.0,
-  },
-  {
-    directionId: "550e8400-e29b-41d4-a716-446655440006",
-    directionName: "Recherche et Développement",
-    totalActivities: 3,
-    completedActivities: 1,
-    ongoingActivities: 2,
-    overdueActivities: 0,
-    efficiencyPercentage: 33.33,
-    averagePerformanceIndicator: 55.0,
-  },
-  {
-    directionId: "550e8400-e29b-41d4-a716-446655440007",
-    directionName: "Logistique",
-    totalActivities: 9,
-    completedActivities: 6,
-    ongoingActivities: 2,
-    overdueActivities: 1,
-    efficiencyPercentage: 66.67,
-    averagePerformanceIndicator: 70.0,
-  },
-  {
-    directionId: "550e8400-e29b-41d4-a716-446655440008",
-    directionName: "Qualité",
-    totalActivities: 4,
-    completedActivities: 2,
-    ongoingActivities: 1,
-    overdueActivities: 1,
-    efficiencyPercentage: 50.0,
-    averagePerformanceIndicator: 47.5,
-  },
-  {
-    directionId: "550e8400-e29b-41d4-a716-446655440009",
-    directionName: "Achats",
-    totalActivities: 5,
-    completedActivities: 2,
-    ongoingActivities: 2,
-    overdueActivities: 1,
-    efficiencyPercentage: 40.0,
-    averagePerformanceIndicator: 52.0,
-  },
-];
-
-const activityDataDSI = [
-  { date: "2024-01-01", totalActivities: 2 },
-  { date: "2024-02-01", totalActivities: 3 },
-  { date: "2024-03-01", totalActivities: 4 },
-  { date: "2024-04-01", totalActivities: 5 },
-  { date: "2024-05-01", totalActivities: 6 },
-  { date: "2024-06-01", totalActivities: 7 },
-  { date: "2024-07-01", totalActivities: 5 },
-  { date: "2024-08-01", totalActivities: 6 },
-  { date: "2024-09-01", totalActivities: 8 },
-  { date: "2024-10-01", totalActivities: 9 },
-  { date: "2024-11-01", totalActivities: 7 },
-  { date: "2024-12-01", totalActivities: 10 },
-];
+const { Option } = Select;
 
 const StatisticsComponents = () => {
-  const [directionStats] = useState(updatedData);
+
   const { fetchActualDirectionName } = useDirectionsContext();
+  const { ownDiretionStatistics } = useActivitiesContext();  // Fetch function for statistics
   const isStaff = useAuthStore.getState().isStaff;
   const role = useAuthStore.getState().role;
+  const directionId = useAuthStore.getState().directionId;
+  const [selectedYear, setSelectedYear] = useState(null);
+  const [ownDirectionData, setOwnDirectionData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(15);
 
-  const name = fetchActualDirectionName?.data.name || "Chargement...";
-  const data = activityDataDSI;
+  const name = fetchActualDirectionName?.data?.name || "Chargement...";
+
   const title = `Évolution des Activités de ma Direction ${name}`;
-  useEffect(() => {}, [name,isStaff,role]);
+
+  // Function to fetch statistics based on directionId and selectedYear
+  const fetchStatistics = async () => {
+    if (directionId && selectedYear) {
+      try {
+        const params = { directionId, year: selectedYear, page, pageSize };
+        const response = await ownDiretionStatistics(params);
+              
+        setOwnDirectionData(response || []);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des statistiques", error);
+      }
+    }
+  };
+
+  // Trigger fetch when selectedYear or directionId changes
+  useEffect(() => {
+  }, [directionId, selectedYear, page]);
+
+  // Extract unique years from data for dropdown options
+  const years = Array.from({ length: 36 }, (_, i) => 2015 + i);
+
+
   return (
     <div style={{ padding: 20 }}>
       <h2>Statistiques des Activités Interdirections</h2>
 
       {/* Classement des Directions par Nombre d'Activités */}
-      {role === "SUPER_ADMIN" && (
-  <Card title="Directions les plus actives" style={{ marginBottom: 20 }}>
-    <Table
-      dataSource={directionStats.sort(
-        (a, b) => b.totalActivities - a.totalActivities,
-      )}
-      columns={[
-        {
-          title: "Direction",
-          dataIndex: "directionName",
-          key: "directionName",
-        },
-        {
-          title: "Total des Activités",
-          dataIndex: "totalActivities",
-          key: "totalActivities",
-        },
-        {
-          title: "Terminées",
-          dataIndex: "completedActivities",
-          key: "completedActivities",
-        },
-        {
-          title: "En Cours",
-          dataIndex: "ongoingActivities",
-          key: "ongoingActivities",
-        },
-        {
-          title: "Efficacité (%)",
-          dataIndex: "efficiencyPercentage",
-          key: "efficiencyPercentage",
-        },
-        {
-          title: "Indicateur Moyenne de Performance",
-          dataIndex: "averagePerformanceIndicator",
-          key: "averagePerformanceIndicator",
-        },
-      ]}
-      rowKey="directionId"
-      pagination={false}
-      scroll={{ y: 300 }}
-    />
-  </Card>
-)}
-
-{isStaff === "true" && (role === "ADMIN" || role === "SUPER_ADMIN") && (
-    <Card title={title}>
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart
-          width={600}
-          height={300}
-          data={data}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Line
-            type="monotone"
-            dataKey="totalActivities"
-            stroke="#8884d8"
+      {/* {role === "SUPER_ADMIN" && (
+        <Card title="Directions les plus actives" style={{ marginBottom: 20 }}>
+          <Table
+            dataSource={directionStats.sort(
+              (a, b) => b.totalActivities - a.totalActivities
+            )}
+            columns={[
+              { title: "Direction", dataIndex: "directionName", key: "directionName" },
+              { title: "Total des Activités", dataIndex: "totalActivities", key: "totalActivities" },
+              { title: "Terminées", dataIndex: "completedActivities", key: "completedActivities" },
+              { title: "En Cours", dataIndex: "ongoingActivities", key: "ongoingActivities" },
+              { title: "Efficacité (%)", dataIndex: "efficiencyPercentage", key: "efficiencyPercentage" },
+              { title: "Indicateur Moyenne de Performance", dataIndex: "averagePerformanceIndicator", key: "averagePerformanceIndicator" },
+            ]}
+            rowKey="directionId"
+            pagination={false}
+            scroll={{ y: 300 }}
           />
-        </LineChart>
-      </ResponsiveContainer>
-    </Card>
-)}
+        </Card>
+      )} */}
 
+      {isStaff === "true" && (role === "ADMIN" || role === "SUPER_ADMIN") && (
+        <Card title={title} style={{ marginBottom: 20 }}>
+          {/* Dropdown for selecting year */}
+          <Select
+            placeholder="Sélectionner une année"
+            onChange={setSelectedYear}
+            style={{ width: 200, marginBottom: 20 }}
+            allowClear
+          >
+            {years.map(year => (
+              <Option key={year} value={year}>
+                {year}
+              </Option>
+            ))}
+          </Select>
+          <Button 
+            type="primary" 
+            onClick={fetchStatistics}
+            disabled={!selectedYear}
+            style={{ marginBottom: 20,marginInline : "12px" }}
+          >
+            Obtenir la statistique de cette année
+          </Button>
 
+          {/* Line chart showing activities over time */}
+          <ResponsiveContainer width="100%" height={300}>
+  <LineChart
+    width={600}
+    height={300}
+    data={ownDirectionData}
+    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+  >
+    <CartesianGrid strokeDasharray="3 3" />
+    <XAxis dataKey="date" />
+    <YAxis />
+    <Tooltip 
+      labelFormatter={(label) => `Date: ${label}`}
+      formatter={(value, name) => [
+        value,
+        name === "totalActivities" ? "nombre total d'activités" : name
+      ]}
+    />
+    <Legend formatter={(value) => 
+      value === "totalActivities" ? "nombre total d'activités" : value
+    } />
+    <Line
+      type="monotone"
+      dataKey="totalActivities"
+      stroke="#8884d8"
+      name="nombre total d'activités"  // Custom label for legend
+    />
+  </LineChart>
+</ResponsiveContainer>
 
-        
-   
-
-      
-    
+        </Card>
+      )}
     </div>
   );
 };

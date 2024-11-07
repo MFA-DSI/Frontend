@@ -5,6 +5,8 @@ import {
   addTaskToActivity,
   deleteActivity,
   fetchActivities,
+  fetchActivitiesStatistics,
+  fetchOwnDirectionStatistics,
   getActivityByDirectionId,
   getActivityById,
   updateActivity,
@@ -71,6 +73,28 @@ export const useActivities = () => {
     },
   );
 
+
+
+  const fetchAllStatisticsMutation = useMutation(
+    fetchActivitiesStatistics,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("statistics");
+      },
+    },
+  );
+  
+  // Convert fetchOwnStatistics to a mutation
+  const fetchOwnStatisticsMutation =  useMutation(
+    fetchOwnDirectionStatistics,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("statistics");
+      },
+    },
+  );
+
+
   return {
     activities: activitiesQuery.data,
     directionIdQuery,
@@ -80,6 +104,8 @@ export const useActivities = () => {
     addTask: udpateActivityTaskMutation.mutate,
     addPerformance: udpatePerformanceRealizationMutation.mutate,
     addRecommendation: udpateRecommendationMutation.mutate,
+    fetchAllDirectionStatistics : fetchAllStatisticsMutation.mutateAsync,
+    fetchUserDirectionStatistics: fetchOwnStatisticsMutation.mutateAsync,
     isLoading: activitiesQuery.isLoading,
     error: activitiesQuery.error,
   };
