@@ -195,7 +195,7 @@ export const fetchActivitiesStatistics = async (params: FetchActivitiesForDirect
   const { weekStartDate, page = 1, pageSize = 15 } = params;
 
   try {
-    const response = await fetch(`${BASE_URL}/direction/activity/direction?weekStartDate=${weekStartDate}&page=${page}&pageSize=${pageSize}`);
+    const response = await fetch(`${BASE_URL}/direction/activities/top?weekStartDate=${weekStartDate}&page=${page}&pageSize=${pageSize}`);
     
     if (!response.ok) await handleErrorResponse(response, "Erreur lors de la récupération des activités");
 

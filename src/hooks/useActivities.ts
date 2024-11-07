@@ -89,7 +89,7 @@ export const useActivities = () => {
     fetchOwnDirectionStatistics,
     {
       onSuccess: () => {
-        queryClient.invalidateQueries("statistics");
+        queryClient.invalidateQueries("statistic");
       },
     },
   );
