@@ -41,9 +41,11 @@ function App() {
             <Route path="notifications" element={<Notification />} />
             <Route path="profile" element={<Profile />} />
             <Route
-  path="statistics"
-  element={isStaff === "true" ? <Statistics /> : <Navigate to="/" />}
-/>
+              path="statistics"
+              element={
+                isStaff === "true" ? <Statistics /> : <Navigate to="/" />
+              }
+            />
           </Route>
 
           <Route path="/login" element={<LoginPage />} />

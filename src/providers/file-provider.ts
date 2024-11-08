@@ -26,7 +26,7 @@ const fetchAndDownloadFile = async (
   url: string,
   requestData: any,
   defaultFilename: string,
-  toastMessage: string
+  toastMessage: string,
 ) => {
   const loadingToastId = toast.loading(toastMessage);
 
@@ -39,13 +39,18 @@ const fetchAndDownloadFile = async (
 
     if (!response.ok) {
       const errorData = await response.json();
-      const errorMessage = errorData.message || "Erreur inconnue lors de la récupération des fichiers";
+      const errorMessage =
+        errorData.message ||
+        "Erreur inconnue lors de la récupération des fichiers";
       toast.error(errorMessage);
       throw new Error(errorMessage);
     }
 
     const contentDisposition = response.headers.get("Content-Disposition");
-    const filename = contentDisposition?.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/)?.[1]?.replace(/['"]/g, "") || defaultFilename;
+    const filename =
+      contentDisposition
+        ?.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/)?.[1]
+        ?.replace(/['"]/g, "") || defaultFilename;
 
     const blob = await response.blob();
     saveAs(blob, filename);
@@ -65,7 +70,7 @@ export const exportMissionToXLS = async (id: string[]) =>
     "http://localhost:8080/direction/mission/export/excel",
     id,
     "missions.xlsx",
-    "Génération du rapport en cours..."
+    "Génération du rapport en cours...",
   );
 
 export const exportMissionToPDF = async (id: string[]) =>
@@ -73,7 +78,7 @@ export const exportMissionToPDF = async (id: string[]) =>
     "http://localhost:8080/direction/mission/export/pdf",
     id,
     "missions.pdf",
-    "Génération du rapport en cours..."
+    "Génération du rapport en cours...",
   );
 
 export const exportMissionToDOC = async (id: string[]) =>
@@ -81,7 +86,7 @@ export const exportMissionToDOC = async (id: string[]) =>
     "http://localhost:8080/direction/mission/export/doc",
     id,
     "missions.doc",
-    "Génération du rapport en cours..."
+    "Génération du rapport en cours...",
   );
 
 export const exportReportMissionWeek = async (details: ReportDetailsForWeek) =>
@@ -89,23 +94,27 @@ export const exportReportMissionWeek = async (details: ReportDetailsForWeek) =>
     `http://localhost:8080/direction/mydirection/mission/export/week/excel?directionId=${details.directionId}&date=${details.date}&pageSize=${details.pageSize}`,
     details,
     "missions_week.xlsx",
-    "Génération du rapport hebdomadaire en cours..."
+    "Génération du rapport hebdomadaire en cours...",
   );
 
-export const exportReportMissionMonth = async (details: ReportDetailsForMonth) =>
+export const exportReportMissionMonth = async (
+  details: ReportDetailsForMonth,
+) =>
   fetchAndDownloadFile(
     `http://localhost:8080/direction/mydirection/mission/export/monthly/excel?directionId=${details.directionId}&year=${details.year}&month=${details.month}&pageSize=${details.pageSize}`,
     details,
     "missions_month.xlsx",
-    "Génération du rapport mensuel en cours..."
+    "Génération du rapport mensuel en cours...",
   );
 
-export const exportReportMissionQuarter = async (details: ReportDetailsForQuarter) =>
+export const exportReportMissionQuarter = async (
+  details: ReportDetailsForQuarter,
+) =>
   fetchAndDownloadFile(
     `http://localhost:8080/direction/mydirection/mission/export/quarter/excel?directionId=${details.directionId}&year=${details.year}&quarter=${details.quarter}&pageSize=${details.pageSize}`,
     details,
     "missions_quarter.xlsx",
-    "Génération du rapport trimestriel en cours..."
+    "Génération du rapport trimestriel en cours...",
   );
 
 export const exportActivityToXLS = async (id: string[]) =>
@@ -113,5 +122,5 @@ export const exportActivityToXLS = async (id: string[]) =>
     "http://localhost:8080/direction/activity/export/excel",
     id,
     "activities.xlsx",
-    "Génération du rapport d'activités en cours..."
+    "Génération du rapport d'activités en cours...",
   );

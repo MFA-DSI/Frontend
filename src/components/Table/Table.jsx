@@ -41,7 +41,7 @@ const TableComponent = ({
 
   const directionId = localStorage.getItem("directionId");
 
-  const { fetchMissionXLS,directionActivitiesToXLS } = useFilesContext();
+  const { fetchMissionXLS, directionActivitiesToXLS } = useFilesContext();
   const [activityType, setActivityType] = useState("all");
   const [dateFilter, setDateFilter] = useState({
     month: null,
@@ -116,7 +116,7 @@ const TableComponent = ({
       }
     }
   };
-  
+
   const handleFilter = async () => {
     switch (activityType) {
       case "weekly":

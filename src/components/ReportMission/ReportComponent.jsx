@@ -25,8 +25,6 @@ const ReportGenerator = () => {
 
   const [pageSize, setPageSize] = useState("50"); // Example page size
 
-
-
   const isButtonDisabled = () => {
     if (activityType === "weekly") {
       return !dateFilter.month || !dateFilter.week;

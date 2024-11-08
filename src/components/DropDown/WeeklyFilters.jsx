@@ -3,7 +3,12 @@ import React from "react";
 
 const { Option } = Select;
 
-export const WeeklyFilters = ({ dateFilter, setDateFilter, getWeeksInMonth, style }) => {
+export const WeeklyFilters = ({
+  dateFilter,
+  setDateFilter,
+  getWeeksInMonth,
+  style,
+}) => {
   const handleMonthChange = (value) => {
     // Mettre à jour le mois et réinitialiser la semaine
     setDateFilter({ ...dateFilter, month: value, week: null });
@@ -42,7 +47,7 @@ export const WeeklyFilters = ({ dateFilter, setDateFilter, getWeeksInMonth, styl
               <Option key={index} value={week}>
                 {week}
               </Option>
-            )
+            ),
           )}
       </Select>
     </>

@@ -15,7 +15,7 @@ export const ActivitieProvider = ({ children }) => {
     addPerformance,
     MissionsActivityIdQuery,
     fetchAllDirectionStatistics,
-    fetchUserDirectionStatistics
+    fetchUserDirectionStatistics,
   } = useActivities();
   const [filterType, setFilterType] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
@@ -53,8 +53,8 @@ export const ActivitieProvider = ({ children }) => {
         addPerformance: addPerformance,
         addRecommendation: addRecommendation,
         activityIdQuery: MissionsActivityIdQuery,
-        allDirectionStatistics : fetchAllDirectionStatistics,
-        ownDiretionStatistics : fetchUserDirectionStatistics,
+        allDirectionStatistics: fetchAllDirectionStatistics,
+        ownDiretionStatistics: fetchUserDirectionStatistics,
         isLoading,
         setFilterType,
         setSearchTerm,

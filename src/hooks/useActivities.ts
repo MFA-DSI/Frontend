@@ -73,27 +73,18 @@ export const useActivities = () => {
     },
   );
 
-
-
-  const fetchAllStatisticsMutation = useMutation(
-    fetchActivitiesStatistics,
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("statistics");
-      },
+  const fetchAllStatisticsMutation = useMutation(fetchActivitiesStatistics, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("statistics");
     },
-  );
-  
+  });
+
   // Convert fetchOwnStatistics to a mutation
-  const fetchOwnStatisticsMutation =  useMutation(
-    fetchOwnDirectionStatistics,
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("statistic");
-      },
+  const fetchOwnStatisticsMutation = useMutation(fetchOwnDirectionStatistics, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("statistic");
     },
-  );
-
+  });
 
   return {
     activities: activitiesQuery.data,
@@ -104,7 +95,7 @@ export const useActivities = () => {
     addTask: udpateActivityTaskMutation.mutate,
     addPerformance: udpatePerformanceRealizationMutation.mutate,
     addRecommendation: udpateRecommendationMutation.mutate,
-    fetchAllDirectionStatistics : fetchAllStatisticsMutation.mutateAsync,
+    fetchAllDirectionStatistics: fetchAllStatisticsMutation.mutateAsync,
     fetchUserDirectionStatistics: fetchOwnStatisticsMutation.mutateAsync,
     isLoading: activitiesQuery.isLoading,
     error: activitiesQuery.error,

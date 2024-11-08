@@ -9,7 +9,6 @@ import {
   exportReportMissionMonth,
   exportReportMissionQuarter,
   exportReportMissionWeek,
- 
 } from "../providers";
 import { message } from "antd";
 
@@ -54,21 +53,17 @@ export const useFiles = () => {
     },
   );
 
-  
-  const exportDirectionActivitytToXLS = useMutation(
-    exportActivityToXLS,
-    {
-      onSuccess: () => {
-        message.success("votre rapport XLS est prêt");
-      },
+  const exportDirectionActivitytToXLS = useMutation(exportActivityToXLS, {
+    onSuccess: () => {
+      message.success("votre rapport XLS est prêt");
     },
-  );
+  });
 
   return {
     missionToPDF: exportToMissionPDF.mutate,
     missionToDOC: exportToMissionDOC.mutate,
     missionToXLS: exportToMissionXLS.mutate,
-    activitiesToXLS : exportDirectionActivitytToXLS.mutate,
+    activitiesToXLS: exportDirectionActivitytToXLS.mutate,
     reportMissionWeekly: exportWeeklyReportToMissionXLS.mutate,
     reportMissionMonthly: exportMonthlyReportToMissionXLS.mutate,
     reportMissionQuarterly: exportQuarterlyReportToMissionXLS.mutate,

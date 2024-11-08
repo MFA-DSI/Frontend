@@ -1,14 +1,28 @@
-import { Card, Table, DatePicker, Button } from 'antd';
-import { useState, useEffect } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { useAuthStore } from '../../hooks';
-import { useDirectionsContext } from '../../providers';
-import { useActivitiesContext } from '../../providers';
-import moment from 'moment';
+import { Card, Table, DatePicker, Button } from "antd";
+import { useState, useEffect } from "react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+import { useAuthStore } from "../../hooks";
+import { useDirectionsContext } from "../../providers";
+import { useActivitiesContext } from "../../providers";
+import moment from "moment";
+import {
+  dateFormatter,
+  formatDateToLocalDate,
+} from "../Modal/utils/dateFormatter";
 
 const StatisticsComponents = () => {
   const { fetchActualDirectionName } = useDirectionsContext();
-  const { ownDiretionStatistics, allDirectionStatistics } = useActivitiesContext();
+  const { ownDiretionStatistics, allDirectionStatistics } =
+    useActivitiesContext();
   const isStaff = useAuthStore.getState().isStaff;
   const role = useAuthStore.getState().role;
   const directionId = useAuthStore.getState().directionId;
@@ -40,17 +54,27 @@ const StatisticsComponents = () => {
   const fetchAllDirectionStatistics = async () => {
     if (selectedDate) {
       try {
-        const params = { weekStartDate: moment(selectedDate).format("YYYY-MM-DD"), page, pageSize };
+        const params = {
+          weekStartDate: formatDateToLocalDate(selectedDate),
+          page,
+          pageSize,
+        };
+        console.log(params.weekStartDate);
+
         const response = await allDirectionStatistics(params);
+        console.log(response);
+
         setAllDirectionData(response || []);
       } catch (error) {
-        console.error("Erreur lors de la récupération des statistiques interdirections", error);
+        console.error(
+          "Erreur lors de la récupération des statistiques interdirections",
+          error,
+        );
       }
     }
   };
 
-  useEffect(() => {
-  }, [directionId, selectedYear, selectedDate, page]);
+  useEffect(() => {}, [directionId, selectedYear, selectedDate, page]);
 
   return (
     <div style={{ padding: 20 }}>
@@ -65,8 +89,8 @@ const StatisticsComponents = () => {
             format="DD-MM-YYYY"
             style={{ marginBottom: 20, marginRight: 12 }}
           />
-          <Button 
-            type="default" 
+          <Button
+            type="default"
             onClick={fetchAllDirectionStatistics}
             disabled={!selectedDate}
             style={{ marginBottom: 20 }}
@@ -76,15 +100,39 @@ const StatisticsComponents = () => {
 
           <Table
             dataSource={allDirectionData.sort(
-              (a, b) => b.totalActivities - a.totalActivities
+              (a, b) => b.totalActivities - a.totalActivities,
             )}
             columns={[
-              { title: "Direction", dataIndex: "directionName", key: "directionName" },
-              { title: "Total des Activités", dataIndex: "totalActivities", key: "totalActivities" },
-              { title: "Terminées", dataIndex: "completedActivities", key: "completedActivities" },
-              { title: "En Cours", dataIndex: "ongoingActivities", key: "ongoingActivities" },
-              { title: "Efficacité (%)", dataIndex: "efficiencyPercentage", key: "efficiencyPercentage" },
-              { title: "Indicateur Moyenne de Performance", dataIndex: "averagePerformanceIndicator", key: "averagePerformanceIndicator" },
+              {
+                title: "Direction",
+                dataIndex: "directionName",
+                key: "directionName",
+              },
+              {
+                title: "Total des Activités",
+                dataIndex: "totalActivities",
+                key: "totalActivities",
+              },
+              {
+                title: "Terminées",
+                dataIndex: "completedActivities",
+                key: "completedActivities",
+              },
+              {
+                title: "En Cours",
+                dataIndex: "ongoingActivities",
+                key: "ongoingActivities",
+              },
+              {
+                title: "Efficacité (%)",
+                dataIndex: "efficiencyPercentage",
+                key: "efficiencyPercentage",
+              },
+              {
+                title: "Indicateur Moyenne de Performance",
+                dataIndex: "averagePerformanceIndicator",
+                key: "averagePerformanceIndicator",
+              },
             ]}
             rowKey="directionId"
             pagination={false}
@@ -103,8 +151,8 @@ const StatisticsComponents = () => {
             style={{ width: 200, marginBottom: 20 }}
             allowClear
           />
-          <Button 
-            type="primary" 
+          <Button
+            type="primary"
             onClick={fetchOwnDirectionStatistics}
             disabled={!selectedYear}
             style={{ marginBottom: 20, marginLeft: 12 }}
@@ -122,16 +170,22 @@ const StatisticsComponents = () => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
               <YAxis />
-              <Tooltip 
+              <Tooltip
                 labelFormatter={(label) => `Date: ${label}`}
                 formatter={(value, name) => [
                   value,
-                  name === "totalActivities" ? "nombre total d'activités" : name
+                  name === "totalActivities"
+                    ? "nombre total d'activités"
+                    : name,
                 ]}
               />
-              <Legend formatter={(value) => 
-                value === "totalActivities" ? "nombre total d'activités" : value
-              } />
+              <Legend
+                formatter={(value) =>
+                  value === "totalActivities"
+                    ? "nombre total d'activités"
+                    : value
+                }
+              />
               <Line
                 type="monotone"
                 dataKey="totalActivities"

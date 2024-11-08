@@ -3,12 +3,10 @@
   padding: 8px;
   display: block;
   transition: background-color 0.3s ease;
-  font-family:  Quicksand, sans-serif;
+  font-family: Quicksand, sans-serif;
   font-size: 14.4px;
   font-weight: 500;
   line-height: 23.04px;
-
-
 }
 
 .menu-item-link:hover {

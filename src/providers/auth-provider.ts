@@ -48,7 +48,7 @@ export const authProvider = {
           userId: token.userId,
           token: token.token.accessToken,
           role: role,
-          isStaff : isStaff
+          isStaff: isStaff,
         });
 
         return Promise.resolve();
@@ -88,26 +88,25 @@ export const authProvider = {
       const data = response.data;
 
       // Cas où l'authentification est réussie et un token est reçu
-        // Cas où l'authentification est réussie et un token est reçu
-        const token: AuthReponse = data;
-        const decodedToken: any = jwtDecode(token.token.accessToken);
-        const role = decodedToken.role ? decodedToken.role[0] : null;
-  
-        // Stocker les informations dans le localStorage
-        localStorage.setItem("token", token.token.accessToken);
-        localStorage.setItem("directionId", token.directionId);
-        localStorage.setItem("userId", token.userId);
-        localStorage.setItem("role", role);
-  
-        // Mettre à jour le store d'authentification
-        useAuthStore.setState({
-          directionId: token.directionId,
-          userId: token.userId,
-          token: token.token.accessToken,
-          role: role,
-        });
-  
-    
+      // Cas où l'authentification est réussie et un token est reçu
+      const token: AuthReponse = data;
+      const decodedToken: any = jwtDecode(token.token.accessToken);
+      const role = decodedToken.role ? decodedToken.role[0] : null;
+
+      // Stocker les informations dans le localStorage
+      localStorage.setItem("token", token.token.accessToken);
+      localStorage.setItem("directionId", token.directionId);
+      localStorage.setItem("userId", token.userId);
+      localStorage.setItem("role", role);
+
+      // Mettre à jour le store d'authentification
+      useAuthStore.setState({
+        directionId: token.directionId,
+        userId: token.userId,
+        token: token.token.accessToken,
+        role: role,
+      });
+
       return Promise.resolve();
     } catch (error: any) {
       const errorCode = error.response?.data?.message;

@@ -18,14 +18,16 @@ const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
 
 const MainLayout = ({ children }) => {
-  const { token: { colorBgContainer, borderRadiusLG } } = theme.useToken();
+  const {
+    token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken();
   const queryClient = useQueryClient();
   const location = useLocation();
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
 
   const { role, isStaff } = useAuthStore.getState();
-  
+
   const handleLogout = async () => {
     localStorage.clear();
     queryClient.clear();
@@ -34,11 +36,15 @@ const MainLayout = ({ children }) => {
   };
 
   const menuItems = [
-    ...(role === "SUPER_ADMIN" ? [{
-      key: "/",
-      icon: <UsergroupDeleteOutlined />,
-      label: "Toutes directions",
-    }] : []),
+    ...(role === "SUPER_ADMIN"
+      ? [
+          {
+            key: "/",
+            icon: <UsergroupDeleteOutlined />,
+            label: "Toutes directions",
+          },
+        ]
+      : []),
     {
       key: "/myDirection",
       icon: <CloudOutlined />,
@@ -48,13 +54,21 @@ const MainLayout = ({ children }) => {
         { key: "/reports", label: "Générer un rapport" },
       ],
     },
-    { key: "/notifications", icon: <NotificationOutlined />, label: "Notification(s)" },
+    {
+      key: "/notifications",
+      icon: <NotificationOutlined />,
+      label: "Notification(s)",
+    },
     { key: "/profile", icon: <UserOutlined />, label: "Mon profil" },
-    ...(role === "admin" || role === "SUPER ADMIN" || isStaff === "true" ? [{
-      key: "/statistics",
-      icon: <BarChartOutlined />,
-      label: "Statistiques",
-    }] : []),
+    ...(role === "admin" || role === "SUPER ADMIN" || isStaff === "true"
+      ? [
+          {
+            key: "/statistics",
+            icon: <BarChartOutlined />,
+            label: "Statistiques",
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -72,41 +86,54 @@ const MainLayout = ({ children }) => {
             selectedKeys={[location.pathname]}
             style={styles.menuStyle}
           >
-            {menuItems.map(item => item.children ? (
-              <SubMenu
-                key={item.key}
-                icon={item.icon}
-                title={item.label}
-                style={styles.subMenuStyle}
-              >
-                {item.children.map(subItem => (
-                  <Menu.Item key={subItem.key}>
-                    <Link to={subItem.key} className="menu-item-link">
-                      {subItem.label}
-                    </Link>
-                  </Menu.Item>
-                ))}
-              </SubMenu>
-            ) : (
-              <Menu.Item
-                key={item.key}
-                icon={item.icon}
-                style={styles.menuItemStyle}
-              >
-                <Link to={item.key} className="menu-item-link">
-                  <span style={{ marginLeft: collapsed ? 0 : "10px" }}>{item.label}</span>
-                </Link>
-              </Menu.Item>
-            ))}
+            {menuItems.map((item) =>
+              item.children ? (
+                <SubMenu
+                  key={item.key}
+                  icon={item.icon}
+                  title={item.label}
+                  style={styles.subMenuStyle}
+                >
+                  {item.children.map((subItem) => (
+                    <Menu.Item key={subItem.key}>
+                      <Link to={subItem.key} className="menu-item-link">
+                        {subItem.label}
+                      </Link>
+                    </Menu.Item>
+                  ))}
+                </SubMenu>
+              ) : (
+                <Menu.Item
+                  key={item.key}
+                  icon={item.icon}
+                  style={styles.menuItemStyle}
+                >
+                  <Link to={item.key} className="menu-item-link">
+                    <span style={{ marginLeft: collapsed ? 0 : "10px" }}>
+                      {item.label}
+                    </span>
+                  </Link>
+                </Menu.Item>
+              ),
+            )}
           </Menu>
         </Sider>
 
         <Header style={styles.headerStyle}>
           <div style={styles.logoContainer}>
-            <img src="src/assets/logo.jpg" alt="Logo" style={styles.logoStyle} />
+            <img
+              src="src/assets/logo.jpg"
+              alt="Logo"
+              style={styles.logoStyle}
+            />
             <span>MFA-ACTION</span>
           </div>
-          <Button type="primary" icon={<LogoutOutlined />} onClick={handleLogout} danger>
+          <Button
+            type="primary"
+            icon={<LogoutOutlined />}
+            onClick={handleLogout}
+            danger
+          >
             Déconnexion
           </Button>
         </Header>
@@ -138,7 +165,6 @@ const styles = {
     fontSize: "15px",
     flex: 1,
     marginTop: "10vh",
-    
   },
   subMenuStyle: {
     margin: "10px 0",
@@ -179,7 +205,6 @@ const styles = {
   },
   contentContainer: {
     textAlign: "center",
-  
   },
 };
 

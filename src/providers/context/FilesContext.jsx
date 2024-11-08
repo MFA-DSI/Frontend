@@ -20,7 +20,7 @@ export const FilesProvider = ({ children }) => {
         fetchMissionPDF: missionToPDF,
         fetchMissionDOC: missionToDOC,
         fetchMissionXLS: missionToXLS,
-        directionActivitiesToXLS : activitiesToXLS,
+        directionActivitiesToXLS: activitiesToXLS,
         fetchWeeklyReportMissionXLS: reportMissionWeekly,
         fetchMonthlyReportMissionXLS: reportMissionMonthly,
         fetchQuarterlyReportMissionXLS: reportMissionQuarterly,

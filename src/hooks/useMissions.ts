@@ -71,8 +71,6 @@ export const useMissions = () => {
     },
   });
 
-  
-
   return {
     missions: missionsQuery.data,
     directionIdQuery,
