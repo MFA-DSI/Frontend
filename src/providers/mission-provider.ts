@@ -114,6 +114,8 @@ export const saveMission = async (mission: CreateMission): Promise<Mission> => {
   const userId = localStorage.getItem("userId");
   const url = `${BASE_URL}/direction/mission/create?directionId=${directionId}&userId=${userId}`;
 
+  console.log(mission);
+
   return fetchData<Mission>(
     url,
     {

@@ -1,4 +1,5 @@
 export type CreateMission = {
+  id: string;
   name: string;
   activityList: addActivityItem[];
 };

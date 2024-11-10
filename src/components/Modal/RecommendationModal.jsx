@@ -1,6 +1,7 @@
 import { Modal, Button, Input } from "antd";
 import { useEffect, useState } from "react";
 import { useActivitiesContext } from "../../providers";
+import { useAuthStore } from "../../hooks";
 
 const { TextArea } = Input;
 
@@ -15,16 +16,19 @@ const RecommendationModal = ({
   const { addRecommendation } = useActivitiesContext();
   const [recommendationUpdate, setRecommendationUpdate] = useState("");
   const [activityTitle, setActivityTitle] = useState("");
+  const userId = useAuthStore.getState().userId;
 
   const handleSend = async () => {
     try {
       const recommandationToUpdate = {
         activityId: activity.id,
         description: recommendationUpdate,
+        committerId: userId,
       };
 
       await addRecommendation(recommandationToUpdate);
       onSave();
+      onCloseSuccess();
     } catch (error) {
       message.error(
         "Une erreur s'est produite lors de la modification de cette activité",

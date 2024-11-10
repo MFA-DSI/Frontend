@@ -48,6 +48,7 @@ const MyDirection = () => {
           dataMission={filtered ? filterData : MissionByDirectionId}
           dataActivities={filtered ? filterData : directionIdQueryActvities}
           onFilter={handleFilter}
+          filtered={filtered}
           onReset={resetFilter}
           filterData={filterData}
         />

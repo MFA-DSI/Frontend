@@ -97,8 +97,11 @@ const AddActivityModal = ({ visible, onCancel }) => {
 
   const handleSubmit = async () => {
     const activityData = {
+      id: selectedMission?.id,
       name:
-        missionType === "existing" ? selectedMission : newMissionDescription,
+        missionType === "existing"
+          ? selectedMission.description
+          : newMissionDescription,
       serviceId: selectedServices,
       activityList: [
         {
@@ -164,12 +167,18 @@ const AddActivityModal = ({ visible, onCancel }) => {
           {missionType === "existing" && (
             <Form.Item label="Sélectionner une mission">
               <Select
-                value={selectedMission}
-                onChange={(value) => setSelectedMission(value)}
+                value={selectedMission?.id} // Utiliser l'ID comme valeur pour éviter l'erreur
+                onChange={(value) => {
+                  // Cherche la mission correspondante par ID et met à jour l'état
+                  const selected = existingMissions?.find(
+                    (mission) => mission.id === value,
+                  );
+                  setSelectedMission(selected);
+                }}
                 placeholder="Sélectionner une mission existante"
               >
                 {existingMissions?.map((mission) => (
-                  <Option key={mission.id} value={mission.description}>
+                  <Option key={mission.id} value={mission.id}>
                     {mission.description}
                   </Option>
                 ))}

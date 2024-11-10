@@ -19,7 +19,7 @@ import FirstLoginPage from "./pages/Login/FirstLoginPage";
 import { HackWebProviders } from "./providers";
 import Statistics from "./pages/Statistics/Statistics";
 import { useAuthStore } from "./hooks";
-import { AdminWrapper } from "./components/Auth/admin-wrapper";
+import { AdminWrapper, RoleWrapper } from "./components/Auth/admin-wrapper";
 
 const queryClient = new QueryClient();
 
@@ -34,8 +34,23 @@ function App() {
 
         <Routes location={location}>
           <Route path="/" element={<AuthWrapper />}>
-            <Route index element={<AdminWrapper role={role} />} />
-            <Route path="allDirection" element={<HomePage />} />
+            <Route
+              index
+              path="/"
+              element={
+                <AdminWrapper role={role}>
+                  <HomePage />
+                </AdminWrapper>
+              }
+            />
+            <Route
+              path="allDirection"
+              element={
+                <RoleWrapper role={role}>
+                  <HomePage />
+                </RoleWrapper>
+              }
+            />
             <Route path="myDirection" element={<MyDirection />} />
             <Route path="reports" element={<ReportMission />} />
             <Route path="notifications" element={<Notification />} />
@@ -47,9 +62,22 @@ function App() {
               }
             />
           </Route>
-
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signin" element={<FirstLoginPage />} />
+          <Route
+            path="/login"
+            element={
+              <PrivateWrapper>
+                <LoginPage />
+              </PrivateWrapper>
+            }
+          ></Route>
+          <Route
+            path="/signin"
+            element={
+              <PrivateWrapper>
+                <FirstLoginPage />
+              </PrivateWrapper>
+            }
+          ></Route>
         </Routes>
       </HackWebProviders>
     </QueryClientProvider>

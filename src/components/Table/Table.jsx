@@ -58,7 +58,12 @@ const TableComponent = ({
   const [selectedIds, setSelectedIds] = useState([]);
   const [directionIdFilter, setDirectionIdFilter] = useState("all");
   const [activityFilterType, setActivityFilterType] = useState("all");
-  useEffect(() => {}, [mode, activityFilterType, activityType]);
+  useEffect(() => {}, [
+    mode,
+    activityFilterType,
+    activityType,
+    directionIdFilter,
+  ]);
 
   const showModal = (activity) => {
     setSelectedActivity(activity);
@@ -455,7 +460,7 @@ const TableComponent = ({
               onClick={() => {
                 onReset();
                 setActivityType("all");
-                setDirectionIdFilter(null);
+                setDirectionIdFilter("all");
                 setDateFilter({
                   month: null,
                   week: null,

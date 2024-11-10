@@ -69,6 +69,7 @@ export const useActivities = () => {
       onSuccess: () => {
         queryClient.invalidateQueries("activities");
         queryClient.invalidateQueries("activity");
+        queryClient.invalidateQueries("missions");
       },
     },
   );

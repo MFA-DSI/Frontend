@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 export const AdminWrapper = ({ role }) => {
   if (role === "SUPER_ADMIN") {
@@ -7,4 +7,14 @@ export const AdminWrapper = ({ role }) => {
   } else {
     return <Navigate to="/myDirection" replace />;
   }
+};
+
+export const RoleWrapper = ({ children, role }) => {
+  const location = useLocation();
+
+  if (role !== "SUPER_ADMIN") {
+    return <Navigate to={location.state?.from || "/"} replace />;
+  }
+
+  return children;
 };

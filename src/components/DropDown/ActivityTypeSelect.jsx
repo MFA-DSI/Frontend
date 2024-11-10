@@ -13,7 +13,7 @@ export const ActivityTypeSelect = ({
   filtered,
 }) => (
   <>
-    <Tooltip title="Veuillez réinitialiser votre filtre" visible={filtered}>
+    <Tooltip title={filtered ? "Veuillez réinitialiser votre filtre" : ""}>
       <span>
         <Select
           value={activityType}
