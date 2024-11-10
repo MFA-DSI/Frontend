@@ -3,7 +3,7 @@ import { saveAs } from "file-saver";
 
 export const generateExcelFile = (data) => {
   const excelData = [
-    ["Email", "Password"],
+    ["identifiant", "mot de passe"],
     [data.identity, data.password],
   ];
 
@@ -12,5 +12,5 @@ export const generateExcelFile = (data) => {
   const blob = new Blob([buffer], {
     type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   });
-  saveAs(blob, `${data.name}_MFA-ACTION.xlsx`);
+  saveAs(blob, ` ${data.name}_MFA-ACTION.xlsx`);
 };

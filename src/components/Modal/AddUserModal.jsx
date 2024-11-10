@@ -92,7 +92,7 @@ const AddUserModal = ({ visible, onCancel }) => {
         <Form.Item
           label="Prénom"
           name="lastname"
-          rules={[{ required: true, message: "Veuillez entrer un prénom" }]}
+          rules={[{ message: "Veuillez entrer un prénom" }]}
         >
           <Input placeholder="Entrez le prénom" />
         </Form.Item>
