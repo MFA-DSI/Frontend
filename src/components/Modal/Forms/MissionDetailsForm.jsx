@@ -1,15 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input, Button, Form, Select, DatePicker, message } from "antd";
 import moment from "moment";
 
-export const ActivityDetailsForm = ({ activity, setActivity }) => {
+
+
+export const ActivityDetailsForm = ({ activity, setActivity, setActivityDetailsValid }) => {
+  const [form] = Form.useForm();
   const { description, observation, prediction, dueDatetime } = activity;
 
+  useEffect(() => {
+    form.validateFields()
+      .then(() => setActivityDetailsValid(true))
+      .catch(() => setActivityDetailsValid(false));
+  }, [description, dueDatetime]);
+
   return (
-    <Form>
+    <Form form={form} layout="vertical">
       <Form.Item
-        label="Description de l'activité"
-        required
+        label="Description de l'activité *"
+        name="description"
         rules={[{ required: true, message: "La description est obligatoire" }]}
       >
         <Input
@@ -20,7 +29,7 @@ export const ActivityDetailsForm = ({ activity, setActivity }) => {
         />
       </Form.Item>
 
-      <Form.Item label="Observation">
+      <Form.Item label="Observation" name="observation">
         <Input
           value={observation}
           onChange={(e) =>
@@ -29,7 +38,7 @@ export const ActivityDetailsForm = ({ activity, setActivity }) => {
         />
       </Form.Item>
 
-      <Form.Item label="Prédiction">
+      <Form.Item label="Prédiction" name="prediction">
         <Input
           value={prediction}
           onChange={(e) =>
@@ -39,8 +48,8 @@ export const ActivityDetailsForm = ({ activity, setActivity }) => {
       </Form.Item>
 
       <Form.Item
-        label="Date d'échéance"
-        required
+        label="Date d'échéance *"
+        name="dueDatetime"
         rules={[
           { required: true, message: "La date d'échéance est obligatoire" },
         ]}
@@ -53,6 +62,7 @@ export const ActivityDetailsForm = ({ activity, setActivity }) => {
     </Form>
   );
 };
+
 
 export const TaskForm = ({ tasks, setTasks }) => {
   const [taskDescription, setTaskDescription] = useState("");

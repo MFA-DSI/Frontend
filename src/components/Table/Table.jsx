@@ -418,7 +418,10 @@ const TableComponent = ({
             />
 
             {mode !== "mydirection" && (
-              <DirectionSelect value={directionIdFilter} setDirection={setDirectionIdFilter} />
+              <DirectionSelect
+                value={directionIdFilter}
+                setDirection={setDirectionIdFilter}
+              />
             )}
 
             {activityType === "weekly" && (

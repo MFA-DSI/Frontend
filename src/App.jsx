@@ -19,7 +19,10 @@ import FirstLoginPage from "./pages/Login/FirstLoginPage";
 import { HackWebProviders } from "./providers";
 import Statistics from "./pages/Statistics/Statistics";
 import { useAuthStore } from "./hooks";
-import StaffWrapper, { AdminWrapper, RoleWrapper } from "./components/Auth/admin-wrapper";
+import StaffWrapper, {
+  AdminWrapper,
+  RoleWrapper,
+} from "./components/Auth/admin-wrapper";
 
 const queryClient = new QueryClient();
 
@@ -59,7 +62,7 @@ function App() {
               path="statistics"
               element={
                 <StaffWrapper isStaff={isStaff}>
-                    <Statistics />
+                  <Statistics />
                 </StaffWrapper>
               }
             />

@@ -43,6 +43,7 @@ const AddActivityModal = ({ visible, onCancel }) => {
   const [newMissionDescription, setNewMissionDescription] = useState("");
   const [selectedServices, setSelectedServices] = useState(null);
   const [missionType, setMissionType] = useState("");
+  const [activityDetailsValid, setActivityDetailsValid] = useState(false);
   const existingMissions = MissionNameByDirectionId;
   const existingService = fetchAllService;
 
@@ -84,7 +85,7 @@ const AddActivityModal = ({ visible, onCancel }) => {
     setNewMissionDescription("");
     setSelectedMission(null);
     setMissionType("");
-    setSelectedServices([])
+    setSelectedServices([]);
     setActivity({
       description: "",
       observation: "",
@@ -167,48 +168,48 @@ const AddActivityModal = ({ visible, onCancel }) => {
 
           {/* Sélectionner une mission si existante */}
           {missionType === "existing" && (
-
-<Form.Item label="Sélectionner une mission">
-    <AutoComplete
-        value={selectedMission ? selectedMission.description : ''} // Affiche la description de la mission
-        onChange={(value) => {
-            // Cherche la mission correspondante par description et met à jour l'état avec l'ID
-            const selected = existingMissions?.find(
-                (mission) => mission.description === value
-            );
-            if (selected) {              
-                setSelectedMission(selected); // Met à jour l'ID de la mission sélectionnée
-                setSelectedServices(selected.service.id); // Met à jour l'ID de la mission sélectionnée
-                
-            }
-        }}
-        placeholder="Sélectionner une mission existante"
-        options={!isLoading
-            ? existingMissions.map((mission) => ({
-              key : mission.id,
-                value: mission.description,  // Affiche la description dans l'input
-                label: (
-                    <>
-                        {mission.description}
-                        <Badge
-                            count={mission.service.name}
-                            style={{
-                                backgroundColor: '#52c41a', // Couleur du badge
-                                marginLeft: '8px', // Espace entre la description et le badge
-                            }}
-                        />
-                    </>
-                ),
-            }))
-            : []
-        }
-        filterOption={(inputValue, option) =>
-            option.value.toLowerCase().includes(inputValue.toLowerCase()) // Filtrage par description
-        }
-    />
-</Form.Item>
-
-           
+            <Form.Item label="Sélectionner une mission">
+              <AutoComplete
+                value={selectedMission ? selectedMission.description : ""} // Affiche la description de la mission
+                onChange={(value) => {
+                  // Cherche la mission correspondante par description et met à jour l'état avec l'ID
+                  const selected = existingMissions?.find(
+                    (mission) => mission.description === value,
+                  );
+                  if (selected) {
+                    setSelectedMission(selected); // Met à jour l'ID de la mission sélectionnée
+                    setSelectedServices(selected.service.id); // Met à jour l'ID de la mission sélectionnée
+                  }
+                }}
+                placeholder="Sélectionner une mission existante"
+                options={
+                  !isLoading
+                    ? existingMissions.map((mission) => ({
+                        key: mission.id,
+                        value: mission.description, // Affiche la description dans l'input
+                        label: (
+                          <>
+                            {mission.description}
+                            <Badge
+                              count={mission.service.name}
+                              style={{
+                                backgroundColor: "#52c41a", // Couleur du badge
+                                marginLeft: "8px", // Espace entre la description et le badge
+                              }}
+                            />
+                          </>
+                        ),
+                      }))
+                    : []
+                }
+                filterOption={
+                  (inputValue, option) =>
+                    option.value
+                      .toLowerCase()
+                      .includes(inputValue.toLowerCase()) // Filtrage par description
+                }
+              />
+            </Form.Item>
           )}
 
           {/* Description de la nouvelle mission */}
@@ -223,35 +224,34 @@ const AddActivityModal = ({ visible, onCancel }) => {
           )}
 
           {/* Sélection des services rattachés */}
-          
-          {missionType !== "existing" && (
-    <Form.Item label="Services rattachés">
-        <Select
-            value={selectedServices}
-            onChange={(value) =>{
-              console.log(value);
-              
-              setSelectedServices(value)
-            } }
-            placeholder="Sélectionner les services rattachés"
-        >
-            {!isLoading &&
-                existingService.map((service) => (
-                    <Option key={service.id} value={service.id}>
-                        {service.name}
-                    </Option>
-                ))}
-        </Select>
-    </Form.Item>
-)}
 
+          {missionType !== "existing" && (
+            <Form.Item label="Services rattachés">
+              <Select
+                value={selectedServices}
+                onChange={(value) => {
+                  console.log(value);
+
+                  setSelectedServices(value);
+                }}
+                placeholder="Sélectionner les services rattachés"
+              >
+                {!isLoading &&
+                  existingService.map((service) => (
+                    <Option key={service.id} value={service.id}>
+                      {service.name}
+                    </Option>
+                  ))}
+              </Select>
+            </Form.Item>
+          )}
         </Form>
       ),
     },
     {
       title: "Informations sur l'activité",
       content: (
-        <ActivityDetailsForm activity={activity} setActivity={setActivity} />
+        <ActivityDetailsForm activity={activity} setActivity={setActivity} setActivityDetailsValid={setActivityDetailsValid}/>
       ),
     },
     {
@@ -284,7 +284,12 @@ const AddActivityModal = ({ visible, onCancel }) => {
       width={900}
       footer={[
         currentStep < steps.length - 1 && (
-          <Button key="next" type="primary" onClick={next}>
+          <Button
+            key="next"
+            type="primary"
+            onClick={next}
+            disabled={currentStep === 1 && !activityDetailsValid} // Désactive "Suivant" si les champs obligatoires ne sont pas remplis
+          >
             Suivant
           </Button>
         ),
