@@ -8,6 +8,8 @@ import {
   Select,
   DatePicker,
   message,
+  Badge,
+  AutoComplete,
 } from "antd";
 import { useMissionContext } from "../../providers/context/MissionsContext";
 import moment from "moment";
@@ -39,7 +41,7 @@ const AddActivityModal = ({ visible, onCancel }) => {
   const [performanceIndicators, setPerformanceIndicators] = useState([]);
   const [selectedMission, setSelectedMission] = useState(null);
   const [newMissionDescription, setNewMissionDescription] = useState("");
-  const [selectedServices, setSelectedServices] = useState([]);
+  const [selectedServices, setSelectedServices] = useState(null);
   const [missionType, setMissionType] = useState("");
   const existingMissions = MissionNameByDirectionId;
   const existingService = fetchAllService;
@@ -82,7 +84,7 @@ const AddActivityModal = ({ visible, onCancel }) => {
     setNewMissionDescription("");
     setSelectedMission(null);
     setMissionType("");
-
+    setSelectedServices([])
     setActivity({
       description: "",
       observation: "",
@@ -165,25 +167,48 @@ const AddActivityModal = ({ visible, onCancel }) => {
 
           {/* Sélectionner une mission si existante */}
           {missionType === "existing" && (
-            <Form.Item label="Sélectionner une mission">
-              <Select
-                value={selectedMission?.id} // Utiliser l'ID comme valeur pour éviter l'erreur
-                onChange={(value) => {
-                  // Cherche la mission correspondante par ID et met à jour l'état
-                  const selected = existingMissions?.find(
-                    (mission) => mission.id === value,
-                  );
-                  setSelectedMission(selected);
-                }}
-                placeholder="Sélectionner une mission existante"
-              >
-                {existingMissions?.map((mission) => (
-                  <Option key={mission.id} value={mission.id}>
-                    {mission.description}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
+
+<Form.Item label="Sélectionner une mission">
+    <AutoComplete
+        value={selectedMission ? selectedMission.description : ''} // Affiche la description de la mission
+        onChange={(value) => {
+            // Cherche la mission correspondante par description et met à jour l'état avec l'ID
+            const selected = existingMissions?.find(
+                (mission) => mission.description === value
+            );
+            if (selected) {              
+                setSelectedMission(selected); // Met à jour l'ID de la mission sélectionnée
+                setSelectedServices(selected.service.id); // Met à jour l'ID de la mission sélectionnée
+                
+            }
+        }}
+        placeholder="Sélectionner une mission existante"
+        options={!isLoading
+            ? existingMissions.map((mission) => ({
+              key : mission.id,
+                value: mission.description,  // Affiche la description dans l'input
+                label: (
+                    <>
+                        {mission.description}
+                        <Badge
+                            count={mission.service.name}
+                            style={{
+                                backgroundColor: '#52c41a', // Couleur du badge
+                                marginLeft: '8px', // Espace entre la description et le badge
+                            }}
+                        />
+                    </>
+                ),
+            }))
+            : []
+        }
+        filterOption={(inputValue, option) =>
+            option.value.toLowerCase().includes(inputValue.toLowerCase()) // Filtrage par description
+        }
+    />
+</Form.Item>
+
+           
           )}
 
           {/* Description de la nouvelle mission */}
@@ -198,20 +223,28 @@ const AddActivityModal = ({ visible, onCancel }) => {
           )}
 
           {/* Sélection des services rattachés */}
-          <Form.Item label="Services rattachés">
-            <Select
-              value={selectedServices}
-              onChange={(value) => setSelectedServices(value)}
-              placeholder="Sélectionner les services rattachés"
-            >
-              {!isLoading &&
+          
+          {missionType !== "existing" && (
+    <Form.Item label="Services rattachés">
+        <Select
+            value={selectedServices}
+            onChange={(value) =>{
+              console.log(value);
+              
+              setSelectedServices(value)
+            } }
+            placeholder="Sélectionner les services rattachés"
+        >
+            {!isLoading &&
                 existingService.map((service) => (
-                  <Option key={service.id} value={service.id}>
-                    {service.name}
-                  </Option>
+                    <Option key={service.id} value={service.id}>
+                        {service.name}
+                    </Option>
                 ))}
-            </Select>
-          </Form.Item>
+        </Select>
+    </Form.Item>
+)}
+
         </Form>
       ),
     },
