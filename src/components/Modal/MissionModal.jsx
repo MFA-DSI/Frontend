@@ -3,6 +3,7 @@ import { Modal, List, Button, message, Input } from "antd";
 import DeleteModal from "./DeleteModal";
 import { useMissionContext } from "../../providers";
 import { toast } from "react-toastify";
+import { useAuthStore } from "../../hooks";
 
 const MissionModal = ({ visible, onCancel, mission, onDelete, mode }) => {
   const { deleteMission, updateMission } = useMissionContext();
@@ -12,6 +13,7 @@ const MissionModal = ({ visible, onCancel, mission, onDelete, mode }) => {
     mission || { description: "", activityList: [] },
   );
 
+  const role = useAuthStore.getState().role;
   useEffect(() => {
     if (mission) {
       setEditedMission(mission);
@@ -182,9 +184,17 @@ const MissionModal = ({ visible, onCancel, mission, onDelete, mode }) => {
                     >
                       Modifier
                     </Button>
-                    <Button danger onClick={showDeleteModal}>
-                      Supprimer
-                    </Button>
+                    {(role === "ADMIN" || role === "SUPER_ADMIN") && (
+      <Button
+        color="danger"
+        variant="solid"
+        danger
+        style={{ marginBottom: "10px", marginRight: "10px" }}
+        onClick={showDeleteModal}
+      >
+        Supprimer
+      </Button>
+    )}
                   </>
                 )}
               </>

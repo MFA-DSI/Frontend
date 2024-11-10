@@ -11,6 +11,7 @@ import PerformanceModal from "./PerformanceModal";
 import { EditableField } from "./Forms/ActivityDetails";
 import { TaskList } from "./Forms/TaskDetails";
 import RecommendationModal from "./RecommendationModal";
+import { useAuthStore } from "../../hooks";
 
 const ActivityModal = ({
   visible,
@@ -38,7 +39,7 @@ const ActivityModal = ({
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [isRecommendationVisible, setIsRecommendationVisible] = useState(null);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-
+  const role = useAuthStore.getState().role;
   useEffect(() => {
     if (activity) {
       setEditedActivity({
@@ -328,15 +329,17 @@ const ActivityModal = ({
                   Modifier
                 </Button>
 
-                <Button
-                  color="danger"
-                  variant="solid"
-                  danger
-                  style={{ marginBottom: "10px", marginRight: "10px" }}
-                  onClick={showDeleteModal}
-                >
-                  Supprimer
-                </Button>
+                {(role === "ADMIN" || role === "SUPER_ADMIN") && (
+      <Button
+        color="danger"
+        variant="solid"
+        danger
+        style={{ marginBottom: "10px", marginRight: "10px" }}
+        onClick={showDeleteModal}
+      >
+        Supprimer
+      </Button>
+    )}
               </>
             )
           )}
