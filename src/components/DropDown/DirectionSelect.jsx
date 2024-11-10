@@ -4,7 +4,7 @@ import { useDirectionsContext } from "../../providers";
 
 const { Option } = Select;
 
-export const DirectionSelect = ({ setDirection }) => {
+export const DirectionSelect = ({ setDirection, value  }) => {
   const { fetchAllDirection } = useDirectionsContext();
 
   return (
@@ -12,9 +12,8 @@ export const DirectionSelect = ({ setDirection }) => {
       <Select
         defaultValue="all"
         style={{ width: 200, marginRight: "8px" }}
-        onChange={(value) => {
-          setDirection(value);
-        }}
+        value={value}
+            onChange={(e) => setDirection(e)}
       >
         <Option value="all">Toutes les Directions</Option>
         {fetchAllDirection.map((direction) => (
