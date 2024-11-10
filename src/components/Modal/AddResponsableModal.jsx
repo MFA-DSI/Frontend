@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, Select, Modal, Button, message } from "antd";
 import { personnelOptions, Grade } from "./utils/Grade";
 import { useDirectionsContext } from "../../providers";
@@ -18,7 +18,11 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
   const [directionsOptions, setDirectionsOptions] = useState([]);
   const [responseModalVisible, setResponseModalVisible] = useState(false);
   const [responseData, setResponseData] = useState(null);
-
+  useEffect(() => {
+    
+    return () => {
+    };
+  }, [contactType]);
   if (visible && directionsOptions.length === 0) {
     const directions = fetchAllDirection;
     const options = directions.map((direction) => ({
@@ -39,18 +43,16 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
 
       // Map form values to the NewResponsible interface
       const newResponsible = {
-        firstname: values.firstname,
-        lastname: values.lastname,
-        grade: values.personnelType,
-        directionId: values.direction,
-        function: values.fonction,
-        ...(contactType === "email"
-          ? { email: values.contactValue }
-          : { phone: values.contactValue }),
-        ...(personnelType && personnelType !== "PC"
-          ? { grade: values.grade }
-          : {}),
-      };
+     
+          firstname: values.firstname,
+          lastname: values?.lastname || "",
+          email: contactType === "email" ? values.contactValue : null,
+          phoneNumbers: contactType === "phone" ? values.contactValue : null,
+          grade: personnelType !== "PC" ? values.grade : "PC",
+          function: values.fonction,
+          directionId: values.direction
+        };
+      
 
       // Call the async saveNewResponsible function with the mapped object
       await saveNewResponsible(newResponsible, {
@@ -97,70 +99,90 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
         cancelText="Annuler"
       >
         <Form form={form} layout="vertical">
-          <Form.Item
-            label="Nom"
-            name="firstname"
-            rules={[{ required: true, message: "Veuillez entrer un nom" }]}
-          >
-            <Input placeholder="Entrez le nom" />
-          </Form.Item>
+        <Form.Item
+  label="Nom"
+  name="firstname"
+  rules={[
+    { required: true, message: "Veuillez entrer votre nom" },
+    {
+      pattern: /^[A-Za-zÀ-ÿ]+$/,
+      message: "Le nom ne doit contenir que des lettres",
+    },
+  ]}
+>
+  <Input placeholder="Entrez le nom" />
+</Form.Item>
 
-          <Form.Item
-            label="Prénom"
-            name="lastname"
-            rules={[{ required: true, message: "Veuillez entrer un prénom" }]}
-          >
-            <Input placeholder="Entrez le prénom" />
-          </Form.Item>
+<Form.Item
+  label="Prénom"
+  name="lastname"
+  rules={[
+    {  message: "Veuillez entrer votre prénom" },
+    {
+      pattern: /^[A-Za-zÀ-ÿ]+$/,
+      message: "Le prénom ne doit contenir que des lettres",
+    },
+  ]}
+>
+  <Input placeholder="Entrez le prénom" />
+</Form.Item>
 
           <Form.Item label="Contact">
-            <Input.Group compact>
-              <Form.Item name="contactType" noStyle>
-                <Select
-                  defaultValue="email"
-                  onChange={(value) => setContactType(value)}
-                  style={{ width: "30%" }}
-                  options={[
-                    { value: "email", label: "Email" },
-                    { value: "phone", label: "Téléphone" },
-                  ]}
-                />
-              </Form.Item>
+  <Input.Group compact>
+    <Form.Item name="contactType" noStyle>
+      <Select
+        defaultValue="email"
+        onChange={(value) => setContactType(value)}
+        style={{ width: "30%" }}
+        options={[
+          { value: "email", label: "Email" },
+          { value: "phone", label: "Téléphone" },
+        ]}
+      />
+    </Form.Item>
 
-              <Form.Item
-                name="contactValue"
-                noStyle
-                rules={[
-                  {
-                    required: true,
-                    message: `Veuillez entrer ${
-                      contactType === "email"
-                        ? "un email"
-                        : "un numéro de téléphone"
-                    }`,
-                  },
-                  contactType === "email"
-                    ? {
-                        type: "email",
-                        message: "Veuillez entrer un email valide",
-                      }
-                    : {
-                        pattern: /^[0-9]+$/,
-                        message: "Veuillez entrer un numéro valide",
-                      },
-                ]}
-              >
-                <Input
-                  placeholder={
-                    contactType === "email"
-                      ? "Entrez l'adresse email"
-                      : "Entrez le numéro de téléphone"
-                  }
-                  style={{ width: "70%" }}
-                />
-              </Form.Item>
-            </Input.Group>
-          </Form.Item>
+    <Form.Item
+      name="contactValue"
+      noStyle
+      rules={[
+        {
+          required: true,
+          message: `Veuillez entrer ${
+            contactType === "email" ? "votre email" : "votre numéro de téléphone"
+          }`,
+        },
+        contactType === "email"
+          ? {
+              type: "email",
+              message: "Veuillez entrer votre email valide",
+            }
+          : {
+              pattern: /^(034|039|038|037|033|032)\d{7}$/,
+              message:
+                "Veuillez entrer votre numéro de téléphone valide (commençant par 034, 039, 038, 032, 037, ou 033 et comportant 10 chiffres).",
+            },
+      ]}
+    >
+      <Input
+        placeholder={
+          contactType === "email"
+            ? "Entrez l'adresse email"
+            : "Entrez le numéro de téléphone"
+        }
+        style={{ width: "70%" }}
+        maxLength={contactType === "phone" ? 10 : undefined} // Limite à 10 caractères uniquement pour téléphone
+        onChange={(e) => {
+          // Filtrer uniquement les chiffres
+          if (contactType === "phone") {
+            const onlyNums = e.target.value.replace(/[^0-9]/g, "");
+            e.target.value = onlyNums;
+          }
+        }}
+      />
+    </Form.Item>
+  </Input.Group>
+</Form.Item>
+
 
           <Form.Item
             label="Type de personnel"

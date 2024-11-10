@@ -2,10 +2,13 @@ export const errorTranslations = {
   fr: {
     "Incorrect password": "Mot de passe incorrect",
     "account locked": "Compte verrouillé",
-    "Invalid crédentials": "Identifiant Invalide",
+    "Invalid credentials": "Identifiant Invalide",
+    "Current password is incorrect": "L'ancien mot de passe est incorrect",
+    "New password cannot be the same as the old password": "Le nouveau mot de passe ne peut pas être identique à l'ancien mot de passe",
   },
   mg: {
     "Incorrect password": "Hamarino ny teny miafinao",
-    account_locked: "Nohidiana io kaonty io",
+    "account locked": "Nohidiana io kaonty io",
+    "New password cannot be the same as the old password": "Tsy mety mitovy amin'ny teny miafina taloha ny vaovao",
   },
 };

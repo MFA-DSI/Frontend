@@ -80,25 +80,24 @@ export const authProvider = {
           success: "Connexion réussie 👌",
         },
       );
-
+  
       if (response.status !== 200) {
         return Promise.reject(response.statusText);
       }
-
+  
       const data = response.data;
-
-      // Cas où l'authentification est réussie et un token est reçu
+  
       // Cas où l'authentification est réussie et un token est reçu
       const token: AuthReponse = data;
       const decodedToken: any = jwtDecode(token.token.accessToken);
       const role = decodedToken.role ? decodedToken.role[0] : null;
-
+  
       // Stocker les informations dans le localStorage
       localStorage.setItem("token", token.token.accessToken);
       localStorage.setItem("directionId", token.directionId);
       localStorage.setItem("userId", token.userId);
       localStorage.setItem("role", role);
-
+  
       // Mettre à jour le store d'authentification
       useAuthStore.setState({
         directionId: token.directionId,
@@ -106,14 +105,24 @@ export const authProvider = {
         token: token.token.accessToken,
         role: role,
       });
-
+  
       return Promise.resolve();
     } catch (error: any) {
       const errorCode = error.response?.data?.message;
-      const language = "mg"; // Ou utiliser un paramètre dynamique pour la langue
-
-      const translatedError = errorTranslations[language][errorCode];
-
+      const language = "fr"; // Ou utiliser un paramètre dynamique pour la langue
+  
+      // Vérifier si l'erreur correspond à un message spécifique
+      let translatedError = errorTranslations[language][errorCode];
+  
+      // Si l'erreur n'a pas de traduction spécifique, vérifier d'autres messages d'erreur
+      if (!translatedError) {
+        if (errorCode === "Current password is incorrect.") {
+          translatedError = errorTranslations[language]["Current password is incorrect"];
+        } else if (errorCode === "New password cannot be the same as the old password.") {
+          translatedError = errorTranslations[language]["New password cannot be the same as the old password"];
+        }
+      }
+  
       if (translatedError) {
         toast.error(translatedError);
       } else {
@@ -122,7 +131,8 @@ export const authProvider = {
       return Promise.reject(error);
     }
   },
-
+  
+  
   logout: async (): Promise<void> => {
     localStorage.clear();
     Promise.resolve();

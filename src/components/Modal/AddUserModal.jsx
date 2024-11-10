@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, Select, Modal, Button, message } from "antd";
 import { personnelOptions, Grade } from "./utils/Grade";
 import { useDirectionsContext } from "../../providers";
@@ -17,6 +17,12 @@ const AddUserModal = ({ visible, onCancel }) => {
   const [gradeOptions, setGradeOptions] = useState([]);
   const [contactType, setContactType] = useState("email");
 
+  useEffect(() => {
+    
+    return () => {
+      
+    };
+  }, [contactType]);
   const handlePersonnelTypeChange = (value) => {
     setPersonnelType(value);
     setGradeOptions(Grade(value));
@@ -25,7 +31,7 @@ const AddUserModal = ({ visible, onCancel }) => {
   const onSave = async (values) => {
     const user = {
       firstname: values.firstname,
-      lastname: values.lastname,
+      lastname: values?.lastname || "",
       email: contactType === "email" ? values.contactValue : null,
       phoneNumbers: contactType === "phone" ? values.contactValue : null,
       grade: personnelType !== "PC" ? values.grade : "PC",
@@ -54,7 +60,7 @@ const AddUserModal = ({ visible, onCancel }) => {
       const values = await form.validateFields();
       const isSaved = await onSave(values);
       if (isSaved) {
-        message.success("Utilisteur créee avec succés");
+    
         onCancel(); // Call onCancel only if saving was successful
       }
     } catch (info) {
@@ -129,55 +135,63 @@ const AddUserModal = ({ visible, onCancel }) => {
             />
           </Form.Item>
         )}
+<Form.Item label="Contact">
+  <Input.Group compact>
+    <Form.Item name="contactType" noStyle>
+      <Select
+        defaultValue="email"
+        onChange={(value) => setContactType(value)}
+        style={{ width: "30%" }}
+        options={[
+          { value: "email", label: "Email" },
+          { value: "phone", label: "Téléphone" },
+        ]}
+      />
+    </Form.Item>
 
-        <Form.Item label="Contact">
-          <Input.Group compact>
-            <Form.Item name="contactType" noStyle>
-              <Select
-                defaultValue="email"
-                onChange={(value) => setContactType(value)}
-                style={{ width: "30%" }}
-                options={[
-                  { value: "email", label: "Email" },
-                  { value: "phone", label: "Téléphone" },
-                ]}
-              />
-            </Form.Item>
+    <Form.Item
+      name="contactValue"
+      noStyle
+      rules={[
+        {
+          required: true,
+          message: `Veuillez entrer ${
+            contactType === "email" ? "un email" : "un numéro de téléphone"
+          }`,
+        },
+        contactType === "email"
+          ? {
+              type: "email",
+              message: "Veuillez entrer un email valide",
+            }
+          : {
+              pattern: /^(034|039|038|037|033)\d{7}$/,
+              message:
+                "Veuillez entrer un numéro de téléphone valide (commençant par 034, 039, 038, 037, ou 033 et comportant 10 chiffres).",
+            },
+      ]}
+    >
+      <Input
+        placeholder={
+          contactType === "email"
+            ? "Entrez l'adresse email"
+            : "Entrez le numéro de téléphone"
+        }
+        style={{ width: "70%" }}
+        maxLength={contactType === "phone" ? 10 : undefined} // Limite à 10 caractères uniquement pour téléphone
+        onChange={(e) => {
+          // Filtrer uniquement les chiffres
+          if (contactType === "phone") {
+            const onlyNums = e.target.value.replace(/[^0-9]/g, "");
+            e.target.value = onlyNums;
+          }
+        }}
+      />
+    </Form.Item>
+  </Input.Group>
+</Form.Item>
 
-            <Form.Item
-              name="contactValue"
-              noStyle
-              rules={[
-                {
-                  required: true,
-                  message: `Veuillez entrer ${
-                    contactType === "email"
-                      ? "un email"
-                      : "un numéro de téléphone"
-                  }`,
-                },
-                contactType === "email"
-                  ? {
-                      type: "email",
-                      message: "Veuillez entrer un email valide",
-                    }
-                  : {
-                      pattern: /^[0-9]+$/,
-                      message: "Veuillez entrer un numéro valide",
-                    },
-              ]}
-            >
-              <Input
-                placeholder={
-                  contactType === "email"
-                    ? "Entrez l'adresse email"
-                    : "Entrez le numéro de téléphone"
-                }
-                style={{ width: "70%" }}
-              />
-            </Form.Item>
-          </Input.Group>
-        </Form.Item>
+
 
         <Form.Item
           label="Fonction"

@@ -83,8 +83,8 @@ export const addUserToDirection = (userToAdd: User): Promise<User | null> =>
   postData<User>(
     `${API_URL}/users/createUser`,
     userToAdd,
-    "User added successfully",
-    "Failed to add user",
+    "Utilisateur créée avec succées",
+    "Une erreur s'est produite lors de la création de l'utilisateur",
   );
 
 export const addResponsibleToDirection = (
@@ -93,8 +93,8 @@ export const addResponsibleToDirection = (
   postData<User>(
     `${API_URL}/users/createAdmin`,
     userToAdd,
-    "Responsable ajouté avec succès",
-    "Failed to add responsible user",
+    "Responsable créée avec succées",
+    "Une erreur s'est produite lors de la création de l'utilisateur",
   );
 
 export const approveUserToDirection = async (concernedUser: {
