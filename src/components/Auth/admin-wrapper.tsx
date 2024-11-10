@@ -18,3 +18,13 @@ export const RoleWrapper = ({ children, role }) => {
 
   return children;
 };
+
+const StaffWrapper = ({ children, isStaff }) => {
+    if (isStaff !== "true") {
+        return <Navigate to="/" replace />;
+    }
+
+    return children;
+};
+
+export default StaffWrapper;

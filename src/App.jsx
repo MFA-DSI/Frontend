@@ -19,7 +19,7 @@ import FirstLoginPage from "./pages/Login/FirstLoginPage";
 import { HackWebProviders } from "./providers";
 import Statistics from "./pages/Statistics/Statistics";
 import { useAuthStore } from "./hooks";
-import { AdminWrapper, RoleWrapper } from "./components/Auth/admin-wrapper";
+import StaffWrapper, { AdminWrapper, RoleWrapper } from "./components/Auth/admin-wrapper";
 
 const queryClient = new QueryClient();
 
@@ -58,7 +58,9 @@ function App() {
             <Route
               path="statistics"
               element={
-                isStaff === "true" ? <Statistics /> : <Navigate to="/" />
+                <StaffWrapper isStaff={isStaff}>
+                    <Statistics />
+                </StaffWrapper>
               }
             />
           </Route>
