@@ -1,5 +1,6 @@
 import { message } from "antd";
 import { Direction, Service, User, PostedNewUser } from "../types";
+import { errorTranslations } from "./utils/translator/translator";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -10,11 +11,25 @@ const fetchData = async <T>(
 ): Promise<T | null> => {
   try {
     const response = await fetch(url, options);
+
     if (!response.ok) throw new Error(errorMessage);
 
     return await response.json();
-  } catch (error) {
-    message.error(errorMessage);
+  } catch (error: any) {
+    const language = "fr"; // Adjust dynamically if needed
+
+    let translatedError = errorTranslations[language][errorMessage] || errorMessage;
+
+    // Check if the error contains an email address dynamically
+    const emailRegex = /User with the email address: (.+) already exists/;
+    const emailMatch = error.message.match(emailRegex);
+
+    if (emailMatch) {
+      const email = emailMatch[1];
+      translatedError = errorTranslations[language]["User with the email address already exists"]?.replace("{email}", email);
+    }
+
+    message.error(translatedError || `Erreur inconnue: ${error.message}`);
     console.error(error);
     return null;
   }
