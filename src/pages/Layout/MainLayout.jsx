@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import {
   BarChartOutlined,
   CloudOutlined,
@@ -7,12 +7,13 @@ import {
   LogoutOutlined,
   UsergroupDeleteOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu, Skeleton, message, Button, theme } from "antd";
+import { Layout, Menu, Skeleton, message, Button, theme, Badge } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { HackWebProviders } from "../../providers";
 import { useQueryClient } from "react-query";
 import { useAuthStore } from "../../hooks";
 import "./assets/index.css";
+import { useNotificationContext } from "../../providers/context/NotificationContext";
 
 const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -25,9 +26,21 @@ const MainLayout = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
+  const {fetchNotifications ,isLoading: isNotificationLoading,} = useNotificationContext();
 
   const { role, isStaff } = useAuthStore.getState();
+  const [unreadCount, setUnreadCount] = useState(0);
 
+  const notifications = fetchNotifications;
+  useEffect(() => {
+    // Met à jour le compteur des notifications non lues si elles sont chargées
+    if (!isNotificationLoading) {
+      const count = notifications.filter((notif) => notif.viewStatus === false).length;
+      console.log(notifications);
+      
+      setUnreadCount(count);
+    }
+  }, [notifications, isNotificationLoading]);
   const handleLogout = async () => {
     localStorage.clear();
     queryClient.clear();
@@ -39,33 +52,37 @@ const MainLayout = ({ children }) => {
     ...(role === "SUPER_ADMIN"
       ? [
           {
-            key: "/",
+            key: "/allDirection",
             icon: <UsergroupDeleteOutlined />,
-            label: "Toutes directions",
+            label: <span style={{ color: "white" }}>Toutes directions</span>,
           },
         ]
       : []),
     {
       key: "/myDirection",
       icon: <CloudOutlined />,
-      label: "Ma direction",
+      label: <span style={{ color: "white",fontFamily: "Quicksand, sans-serif" }}>Ma direction</span>,
       children: [
-        { key: "/myDirection", label: "Listes des Missions" },
-        { key: "/reports", label: "Générer un rapport" },
+        { key: "/myDirection", label: <span style={{ color: "white" }}>Listes des Missions</span> },
+        { key: "/reports", label: <span style={{ color: "white" }}>Générer un rapport</span> },
       ],
     },
     {
       key: "/notifications",
       icon: <NotificationOutlined />,
-      label: "Notification(s)",
+      label:  (
+        <Badge count={unreadCount} offset={[10, 0]}>
+          <span style={{ color: "white" }}>Notification(s)</span> 
+        </Badge>
+      ),
     },
-    { key: "/profile", icon: <UserOutlined />, label: "Mon profil" },
+    { key: "/profile", icon: <UserOutlined />, label: <span style={{ color: "white" }}>Mon profil</span> },
     ...(role === "admin" || role === "SUPER ADMIN" || isStaff === "true"
       ? [
           {
             key: "/statistics",
             icon: <BarChartOutlined />,
-            label: "Statistiques",
+            label: <span style={{ color: "white" }}>Statistiques</span>,  
           },
         ]
       : []),

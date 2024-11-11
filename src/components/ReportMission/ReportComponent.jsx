@@ -109,58 +109,70 @@ const ReportGenerator = () => {
   };
 
   return (
-    <Card title="Générateur de Rapport" style={{ width: 400, margin: "auto" }}>
-      <h2>Choisissez les options de rapport</h2>
-      <Divider />
-      <ActivityTypeSelect
-        filtered={false}
-        style={style}
-        activityType={activityType}
-        setActivityType={setActivityType}
-        setDateFilter={setDateFilter}
-      />
-
-      {activityType === "weekly" && (
-        <WeeklyFilters
+    <div style={{ 
+      display: "flex", 
+      justifyContent: "center", 
+      alignItems: "center", 
+      height: "87vh", 
+      overflow: "hidden",
+      margin: 0,
+      padding: 0 
+    }}>
+      <Card title="Générateur de Rapport" style={{ width: 400 }}>
+        <h2>Choisissez les options de rapport</h2>
+        <Divider />
+        <ActivityTypeSelect
+          filtered={false}
           style={style}
-          dateFilter={dateFilter}
-          setDateFilter={setDateFilter}
-          getWeeksInMonth={getWeeksInMonth}
-        />
-      )}
-
-      {activityType === "monthly" && (
-        <MonthlyFilters
-          style={style}
-          dateFilter={dateFilter}
+          activityType={activityType}
+          setActivityType={setActivityType}
           setDateFilter={setDateFilter}
         />
-      )}
-
-      {activityType === "quarterly" && (
-        <QuarterlyFilters
-          style={style}
-          dateFilter={dateFilter}
-          setDateFilter={setDateFilter}
-        />
-      )}
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          marginTop: "16px",
-        }}
-      >
-        <Button
-          type="primary"
-          disabled={isButtonDisabled()}
-          onClick={handleGenerateReport}
+    
+        {activityType === "weekly" && (
+          <WeeklyFilters
+            style={style}
+            dateFilter={dateFilter}
+            setDateFilter={setDateFilter}
+            getWeeksInMonth={getWeeksInMonth}
+          />
+        )}
+    
+        {activityType === "monthly" && (
+          <MonthlyFilters
+            style={style}
+            dateFilter={dateFilter}
+            setDateFilter={setDateFilter}
+          />
+        )}
+    
+        {activityType === "quarterly" && (
+          <QuarterlyFilters
+            style={style}
+            dateFilter={dateFilter}
+            setDateFilter={setDateFilter}
+          />
+        )}
+    
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            marginTop: "16px",
+          }}
         >
-          Générer le rapport
-        </Button>
-      </div>
-    </Card>
+          <Button
+            type="primary"
+            disabled={isButtonDisabled()}
+            onClick={handleGenerateReport}
+          >
+            Générer le rapport
+          </Button>
+        </div>
+      </Card>
+    </div>
+    
+  
   );
 };
 
