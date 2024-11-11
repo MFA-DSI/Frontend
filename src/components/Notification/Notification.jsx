@@ -57,12 +57,20 @@ const NotificationCardDynamicIcons = () => {
 
   const handleUpdate = async (notificationId) => {
     try {
-      await updateNotification(notificationId);
-      navigate("/myDirection");
+      // Mise à jour de la notification
+      const updatedNotification = await updateNotification(notificationId.id);
+  
+      // Vérifie le statut de la notification
+      if (notificationId.status === 'user_added') {
+        navigate("/profile");  // Redirection vers le profil
+      } else {
+        navigate("/myDirection");  // Sinon, redirection vers "myDirection"
+      }
     } catch (error) {
       console.error(error);
     }
   };
+  
 
   if (isNotificationLoading) return <Spin />;
   return (
@@ -113,7 +121,7 @@ const NotificationCardDynamicIcons = () => {
               onMouseLeave={(e) =>
                 (e.currentTarget.style.transform = "scale(1)")
               }
-              onClick={() => handleUpdate(notification.id)}
+              onClick={() => handleUpdate(notification)}
             >
               <List.Item.Meta
                 avatar={

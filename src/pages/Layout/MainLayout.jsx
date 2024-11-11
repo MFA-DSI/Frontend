@@ -31,16 +31,15 @@ const MainLayout = ({ children }) => {
   const { role, isStaff } = useAuthStore.getState();
   const [unreadCount, setUnreadCount] = useState(0);
 
-  const notifications = fetchNotifications;
   useEffect(() => {
     // Met à jour le compteur des notifications non lues si elles sont chargées
-    if (!isNotificationLoading) {
-      const count = notifications.filter((notif) => notif.viewStatus === false).length;
-      console.log(notifications);
+    if (!isNotificationLoading && fetchNotifications.length > 0) {       
+      const count = fetchNotifications.filter((notif) => notif.viewStatus === false).length;
+    
       
       setUnreadCount(count);
     }
-  }, [notifications, isNotificationLoading]);
+  }, [fetchNotifications, isNotificationLoading]);
   const handleLogout = async () => {
     localStorage.clear();
     queryClient.clear();

@@ -23,12 +23,14 @@ export const useResponsible = () => {
   const saveNewUserMutation = useMutation(addUserToDirection, {
     onSuccess: () => {
       queryClient.invalidateQueries("responsible");
+      queryClient.invalidateQueries("notification");
     },
   });
 
   const saveNewResponsibleToDirection = useMutation(addResponsibleToDirection, {
     onSuccess: () => {
       queryClient.invalidateQueries("responsible");
+      queryClient.invalidateQueries("notification");
     },
   });
 

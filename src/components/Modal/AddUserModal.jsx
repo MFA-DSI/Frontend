@@ -165,9 +165,9 @@ const AddUserModal = ({ visible, onCancel }) => {
               message: "Veuillez entrer un email valide",
             }
           : {
-              pattern: /^(034|039|038|037|033)\d{7}$/,
+              pattern: /^(034|039|038|037|033|032)\d{7}$/,
               message:
-                "Veuillez entrer un numéro de téléphone valide (commençant par 034, 039, 038, 037, ou 033 et comportant 10 chiffres).",
+                "Veuillez entrer un numéro de téléphone valide (commençant par 034, 032, 039, 038, 037, ou 033 et comportant 10 chiffres).",
             },
       ]}
     >
