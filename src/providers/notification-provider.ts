@@ -1,8 +1,14 @@
+import { message } from "antd";
 import { useAuthStore } from "../hooks";
 import { Notification } from "../types";
 
 const API_URL: string = import.meta.env.VITE_API_URL;
 
+
+interface DeleteNotificationParams {
+  id: string,
+  userId: string
+}
 export const fetchNotification = async (userId): Promise<Notification[]> => {
 
 
@@ -52,6 +58,30 @@ export const updateNotificationStatus = async (id: string) => {
     }
 
     const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Failed to update notification status", error);
+    throw error;
+  }
+};
+export const deleteNotification = async (id: DeleteNotificationParams) => {
+  try {
+    const url = new URL(`${API_URL}/direction/notification/delete?id=${id.id}&userId=${id.userId}`);
+
+    console.log(url);
+    
+    const response = await fetch(url.toString(), {
+      method: "POST",
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Error updating notification status: ${response.statusText}`,
+      );
+    }
+
+    const data = await response.json();
+    message.success("notification supprimé avec succées")
     return data;
   } catch (error) {
     console.error("Failed to update notification status", error);

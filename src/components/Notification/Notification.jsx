@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Card, List, Avatar, Typography, Badge, Space, Spin } from "antd";
+import { Card, List, Avatar, Typography, Badge, Space, Spin, Dropdown, Button, Menu, message } from "antd";
 import {
   NotificationOutlined,
   FileTextOutlined,
   BulbOutlined,
   PlusCircleOutlined,
+  EllipsisOutlined,
 } from "@ant-design/icons";
 
 import { convertToJSDate, getTimeSince } from "./utils/TimeSince";
 import { useNotificationContext } from "../../providers/context/NotificationContext";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../hooks";
 
 const { Title, Text } = Typography;
 
@@ -27,10 +29,12 @@ const getIconByType = (type) => {
 const NotificationCardDynamicIcons = () => {
   const {
     fetchNotifications,
+    deleteNotification,
     isLoading: isNotificationLoading,
     updateNotification,
   } = useNotificationContext();
   const navigate = useNavigate();
+  const userId = useAuthStore.getState().userId;
   const notifications = fetchNotifications.map((notification) => ({
     ...notification,
     isNew: !notification.viewStatus,
@@ -60,16 +64,45 @@ const NotificationCardDynamicIcons = () => {
       // Mise à jour de la notification
       const updatedNotification = await updateNotification(notificationId.id);
   
-      // Vérifie le statut de la notification
-      if (notificationId.status === 'user_added') {
-        navigate("/profile");  // Redirection vers le profil
-      } else {
-        navigate("/myDirection");  // Sinon, redirection vers "myDirection"
+      // Vérifie le statut de la notification et la vue
+      if (notificationId.viewStatus === false) {
+        // Si la notification n'est pas vue, on vérifie le statut
+        if (updatedNotification.status === 'user_created') {
+          navigate("/profile");  // Redirection vers le profil
+        } else {
+          navigate("/myDirection");  // Sinon, redirection vers "myDirection"
+        }
       }
+      // Si viewStatus est true, aucune redirection ne se fait
     } catch (error) {
       console.error(error);
     }
   };
+  
+  const handleDelete = async(notification) => {
+
+  
+    const params = {
+      id : notification.id,
+      userId : userId
+    }
+    console.log(params);
+    
+
+   try {
+    await deleteNotification(params)
+   } catch (error) {
+    message.error(error);
+   }
+  };
+  
+  const menu = (notification) => (
+    <Menu>
+      <Menu.Item key="1" onClick={() => handleDelete(notification)}>
+        Supprimer
+      </Menu.Item>
+    </Menu>
+  );
   
 
   if (isNotificationLoading) return <Spin />;
@@ -169,7 +202,23 @@ const NotificationCardDynamicIcons = () => {
               >
                 {timeElapsed}
               </div>
+              <Dropdown
+    overlay={menu(notification)}
+    trigger={['click']}
+    placement="bottomRight"
+  >
+    <Button
+      icon={<EllipsisOutlined />}
+      style={{
+        border: "none",
+        background: "transparent",
+        color: "#8c8c8c",
+        fontSize: "16px",
+      }}
+    />
+  </Dropdown>
             </List.Item>
+            
           );
         }}
       />

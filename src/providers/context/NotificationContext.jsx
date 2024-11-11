@@ -1,10 +1,11 @@
 import React, { createContext, useContext } from "react";
 import { useNotification } from "../../hooks";
+import { deleteNotification } from "../notification-provider";
 
 const NotificationContext = createContext();
 
 export const NotificationProvider = ({ children }) => {
-  const { fetchAllNotification, updateNotificationStatus, isLoading, isError } =
+  const { fetchAllNotification, updateNotificationStatus,deleteSpecifiedNotification, isLoading, isError } =
     useNotification();
 
   return (
@@ -12,6 +13,7 @@ export const NotificationProvider = ({ children }) => {
       value={{
         fetchNotifications: fetchAllNotification,
         updateNotification: updateNotificationStatus,
+        deleteNotification : deleteSpecifiedNotification,
         isLoading,
         isError,
       }}
