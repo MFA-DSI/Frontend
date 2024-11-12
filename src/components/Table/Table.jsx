@@ -1,27 +1,50 @@
-import React, {useState} from "react";
-import {Table, Select, Spin, Button, Checkbox, Badge} from "antd";
-import {useActivitiesContext} from "../../providers/context/ActivitiesContext";
-import {useMissionContext} from "../../providers/context/MissionsContext";
+import React, { useEffect, useState } from "react";
+import { Table, Select, Spin, Button, Checkbox, Badge } from "antd";
+import { useActivitiesContext } from "../../providers/context/ActivitiesContext";
+import { useMissionContext } from "../../providers/context/MissionsContext";
 import {
   FilePdfOutlined,
   FileExcelOutlined,
   FileWordOutlined,
 } from "@ant-design/icons";
-import ModalComponent from "../Modal/Modal";
-import MissionModal from "../Modal/MissionModal"; // Import the MissionModal
+import ActivityModal from "../Modal/ActivityModal";
+import MissionModal from "../Modal/MissionModal";
 
-const {Option} = Select;
+import "./assets/index.css";
+import {
+  extractFirstDateFromString,
+  getWeeksInMonthWithOverflow,
+} from "./utils/DateUtils";
+import { useFilesContext } from "../../providers/context/FilesContext";
+import { toast } from "react-toastify";
+import { useDirectionsContext } from "../../providers";
+import { ActivityTypeSelect } from "../DropDown/ActivityTypeSelect";
+import { DirectionSelect } from "../DropDown/DirectionSelect";
+import { WeeklyFilters } from "../DropDown/WeeklyFilters";
+import { MonthlyFilters } from "../DropDown/MonthlyFilter";
+import { QuarterlyFilters } from "../DropDown/QuarterlyFilter";
 
-const TableComponent = ({mode}) => {
-  const {filteredActivities, isLoading: isActivityLoading} =
-    useActivitiesContext();
+const TableComponent = ({
+  mode,
+  dataMission,
+  dataActivities,
+  onFilter,
+  filterData,
+  onReset,
+  filtered,
+}) => {
+  const { isLoading: isActivityLoading } = useActivitiesContext();
   const {
-    filteredMissions,
     isLoading: isMissionLoading,
+    getMonthMissions,
+    getQuarterlyMissions,
+    getWeeklyMissions,
     setFilterType,
-    setDirectionFilter,
   } = useMissionContext();
 
+  const directionId = localStorage.getItem("directionId");
+
+  const { fetchMissionXLS, directionActivitiesToXLS } = useFilesContext();
   const [activityType, setActivityType] = useState("all");
   const [dateFilter, setDateFilter] = useState({
     month: null,
@@ -31,11 +54,19 @@ const TableComponent = ({mode}) => {
   });
 
   const [selectedActivity, setSelectedActivity] = useState(null);
-  const [selectedMission, setSelectedMission] = useState(null); // State for selected mission
-  const [isModalVisible, setIsModalVisible] = useState(false); // For activity modal
-  const [isMissionModalVisible, setIsMissionModalVisible] = useState(false); // For mission modal
-  const [pageSize, setPageSize] = useState(50);
+  const [selectedMission, setSelectedMission] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isMissionModalVisible, setIsMissionModalVisible] = useState(false);
+  const [pageSize, setPageSize] = useState(20);
   const [selectedIds, setSelectedIds] = useState([]);
+  const [directionIdFilter, setDirectionIdFilter] = useState("all");
+  const [activityFilterType, setActivityFilterType] = useState("all");
+  useEffect(() => {}, [
+    mode,
+    activityFilterType,
+    activityType,
+    directionIdFilter,
+  ]);
 
   const showModal = (activity) => {
     setSelectedActivity(activity);
@@ -52,8 +83,19 @@ const TableComponent = ({mode}) => {
     setSelectedActivity(null);
   };
 
+  const handleActivitySave = () => {
+    setIsModalVisible(false);
+    setTimeout(() => {
+      setIsModalVisible(true);
+    }, 500);
+  };
+
   const handleMissionCancel = () => {
     setIsMissionModalVisible(false);
+    setIsModalVisible(false);
+    setTimeout(() => {
+      setIsModalVisible(true);
+    }, 500);
     setSelectedMission(null);
   };
 
@@ -65,6 +107,95 @@ const TableComponent = ({mode}) => {
         return [...prev, id];
       }
     });
+  };
+
+  const handleExport = async (type) => {
+    if (type === "XLS") {
+      try {
+        // Check if the activity type is "weekly" before calling the appropriate function
+        if (activityType === "weekly") {
+          await directionActivitiesToXLS(selectedIds);
+        } else {
+          await fetchMissionXLS(selectedIds);
+        }
+        setSelectedIds([]);
+      } catch (error) {
+        toast.error(error.message);
+      }
+    }
+  };
+
+  const handleFilter = async () => {
+    switch (activityType) {
+      case "weekly":
+        const weeklyParams = {
+          directionId: mode === "mydirection" ? directionId : directionIdFilter,
+          weekStartDate: extractFirstDateFromString(dateFilter.week),
+          page: 1,
+          pageSize: 20,
+        };
+        try {
+          const weeklyResponse = await getWeeklyMissions(weeklyParams);
+
+          onFilter(weeklyResponse);
+        } catch (error) {
+          console.error(
+            "Erreur lors de la récupération des missions hebdomadaires",
+            error,
+          );
+        }
+        break;
+
+      case "monthly":
+        const monthlyParams = {
+          directionId: mode === "mydirection" ? directionId : directionIdFilter,
+          month: dateFilter.month + 1,
+          year: parseInt(dateFilter.year),
+          page: 1,
+          pageSize: 20,
+        };
+        try {
+          console.log(monthlyParams);
+
+          const monthlyResponse = await getMonthMissions(monthlyParams);
+
+          onFilter(monthlyResponse);
+        } catch (error) {
+          console.error(
+            "Erreur lors de la récupération des missions mensuelles",
+            error,
+          );
+        }
+        break;
+
+      case "quarterly":
+        const quarterParams = {
+          directionId: mode === "mydirection" ? directionId : directionIdFilter,
+          quarter: dateFilter.quarter,
+          year: parseInt(dateFilter.year),
+          page: 1,
+          pageSize: 20,
+        };
+        try {
+          const quarterResponse = await getQuarterlyMissions(quarterParams);
+          console.log("response is", quarterResponse);
+          onFilter(quarterResponse);
+        } catch (error) {
+          console.error(
+            "Erreur lors de la récupération des missions trimestrielles",
+            error,
+          );
+        }
+        break;
+
+      default:
+        console.warn("Type d'activité non pris en charge");
+        break;
+    }
+  };
+
+  const onDelete = (content) => {
+    console.log(content);
   };
 
   const getColumns = () => {
@@ -93,7 +224,7 @@ const TableComponent = ({mode}) => {
             <div>
               {taskList.length > 0
                 ? taskList.map((task) => (
-                    <div key={task.id}>{task.description}</div>
+                    <div key={task.id}>- {task.description}</div>
                   ))
                 : "Aucune tâche"}
             </div>
@@ -106,7 +237,9 @@ const TableComponent = ({mode}) => {
           render: (nextTaskList) => (
             <div>
               {nextTaskList.length > 0
-                ? nextTaskList[0].description
+                ? nextTaskList.map((task) => (
+                    <div key={task.id}>- {task.description}</div>
+                  ))
                 : "Aucune tâche prochaine"}
             </div>
           ),
@@ -144,8 +277,17 @@ const TableComponent = ({mode}) => {
         {
           title: "Missions",
           dataIndex: "description",
-          render: (description, record) => <div>{description}</div>,
-          width: 250,
+          render: (description, record) => (
+            <div>
+              {description}{" "}
+              <Badge
+                count={`${record.service.name}`}
+                style={{ marginLeft: 10 }}
+                color="green"
+              ></Badge>
+            </div>
+          ),
+          width: 240,
         },
         {
           title: "Activités",
@@ -159,15 +301,15 @@ const TableComponent = ({mode}) => {
                 {firstActivity ? firstActivity.description : "Aucune activité"}
                 {otherActivitiesCount > 0 && (
                   <Badge
-                    count={`${otherActivitiesCount} autres`}
+                    count={`${otherActivitiesCount} autre(s)`}
                     color={"green"}
-                    style={{marginLeft: 8}}
+                    style={{ marginLeft: 8 }}
                   />
                 )}
               </div>
             );
           },
-          width: 250,
+          width: 240,
         },
         {
           title: "Indicateur",
@@ -186,9 +328,9 @@ const TableComponent = ({mode}) => {
                   : "Aucun indicateur"}
                 {otherIndicatorsCount > 0 && (
                   <Badge
-                    count={`${otherIndicatorsCount} autres`}
+                    count={`${otherIndicatorsCount} autre(s)`}
                     color={"blue"}
-                    style={{marginLeft: 8}}
+                    style={{ marginLeft: 8 }}
                   />
                 )}
               </div>
@@ -213,9 +355,9 @@ const TableComponent = ({mode}) => {
                   : "Aucune réalisation"}
                 {otherRealizationsCount > 0 && (
                   <Badge
-                    count={`${otherRealizationsCount} autres`}
-                    color={"green"}
-                    style={{marginLeft: 8}}
+                    count={`${otherRealizationsCount} autre(s)`}
+                    color={"yellow"}
+                    style={{ marginLeft: 8 }}
                   />
                 )}
               </div>
@@ -240,34 +382,91 @@ const TableComponent = ({mode}) => {
   if (isMissionLoading || (activityType === "weekly" && isActivityLoading))
     return <Spin />;
 
-  const dataSource =
-    activityType === "weekly" ? filteredActivities : filteredMissions;
+  let dataSource;
+  switch (activityType) {
+    case "weekly":
+      dataSource = dataActivities;
+      break;
+    case "filtered":
+      dataSource = filterData;
+      break;
+    default:
+      dataSource = dataMission;
+  }
+
+  const activityDropdownStyle = { width: 120, marginRight: "5px" };
+
+  const weeklyDropDownStyle = { width: "100%", marginRight: "8px" };
+  const monthlyDropDownStyle = { width: 100 };
 
   return (
     <>
-      <div
-        style={{
-          padding: "10px",
-          marginBottom: "16px",
-          backgroundColor: "#f9f9f9",
-          borderRadius: "4px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <h2 style={{marginTop: 50}}>Liste des Activités</h2>
-          <div style={{display: "flex", alignItems: "center", marginTop: 50}}>
-            <Select
-              value={activityType}
-              style={{width: 120, marginRight: "8px"}}
-              onChange={(value) => {
-                setActivityType(value);
-                setFilterType(value);
+      <div className="activity-container">
+        <div className="activity-header">
+          <h2 style={{ marginTop: mode === "mydirection" ? 30 : 0 }}>
+            Liste des Activités
+          </h2>
+          <div
+            className="activity-controls"
+            style={{ marginTop: mode === "mydirection" ? 30 : 0 }}
+          >
+            <ActivityTypeSelect
+              style={activityDropdownStyle}
+              activityType={activityType}
+              setActivityType={setActivityType}
+              filtered={filtered}
+              setFilterType={setFilterType}
+              setDateFilter={setDateFilter}
+              setActivityTypeFilter={setActivityFilterType}
+            />
+
+            {mode !== "mydirection" && (
+              <DirectionSelect
+                value={directionIdFilter}
+                setDirection={setDirectionIdFilter}
+              />
+            )}
+
+            {activityType === "weekly" && (
+              <WeeklyFilters
+                style={weeklyDropDownStyle}
+                dateFilter={dateFilter}
+                setDateFilter={setDateFilter}
+                getWeeksInMonth={getWeeksInMonthWithOverflow}
+              />
+            )}
+
+            {activityType === "monthly" && (
+              <MonthlyFilters
+                style={monthlyDropDownStyle}
+                dateFilter={dateFilter}
+                setDateFilter={setDateFilter}
+              />
+            )}
+
+            {activityType === "quarterly" && (
+              <QuarterlyFilters
+                style={weeklyDropDownStyle}
+                dateFilter={dateFilter}
+                setDateFilter={setDateFilter}
+              />
+            )}
+
+            <Button
+              type="primary"
+              className="activity-buttons"
+              onClick={() => handleFilter()}
+            >
+              Filtrer
+            </Button>
+
+            <Button
+              type="default"
+              className="activity-buttons"
+              onClick={() => {
+                onReset();
+                setActivityType("all");
+                setDirectionIdFilter("all");
                 setDateFilter({
                   month: null,
                   week: null,
@@ -276,193 +475,54 @@ const TableComponent = ({mode}) => {
                 });
               }}
             >
-              <Option value="all">Toutes les Activités</Option>
-              <Option value="weekly">Hebdomadaire</Option>
-              <Option value="monthly">Mensuel</Option>
-              <Option value="quarterly">Trimestriel</Option>
-            </Select>
-            <Select
-              defaultValue="all"
-              style={{width: 120, marginRight: "8px"}}
-              onChange={setDirectionFilter}
-            >
-              <Option value="all">Toutes les Directions</Option>
-              <Option value="Sales">Sales</Option>
-              <Option value="HR">HR</Option>
-              <Option value="IT">IT</Option>
-              <Option value="Finance">Finance</Option>
-            </Select>
-
-            {activityType === "weekly" && (
-              <>
-                <Select
-                  placeholder="Mois"
-                  style={{width: 100, marginRight: "8px"}}
-                  onChange={(value) => {
-                    setDateFilter({...dateFilter, month: value});
-                  }}
-                >
-                  {Array.from({length: 12}, (_, index) => (
-                    <Option key={index} value={index}>
-                      {new Date(0, index).toLocaleString("fr-FR", {
-                        month: "long",
-                      })}
-                    </Option>
-                  ))}
-                </Select>
-                <Select
-                  placeholder="Semaine"
-                  style={{width: 200}}
-                  onChange={(value) =>
-                    setDateFilter({...dateFilter, week: value})
-                  }
-                >
-                  {dateFilter.month !== null &&
-                    getWeeksInMonth(
-                      dateFilter.month,
-                      new Date().getFullYear()
-                    ).map((week, index) => (
-                      <Option key={index} value={week}>
-                        {week}
-                      </Option>
-                    ))}
-                </Select>
-              </>
-            )}
-
-            {activityType === "monthly" && (
-              <>
-                <Select
-                  placeholder="Année"
-                  style={{width: 100}}
-                  onChange={(value) =>
-                    setDateFilter({...dateFilter, year: value})
-                  }
-                >
-                  <Option value="2023">2023</Option>
-                  <Option value="2024">2024</Option>
-                </Select>
-                <Select
-                  placeholder="Mois"
-                  style={{width: 100, marginRight: "8px"}}
-                  onChange={(value) =>
-                    setDateFilter({...dateFilter, month: value})
-                  }
-                >
-                  {Array.from({length: 12}, (_, index) => (
-                    <Option key={index} value={index}>
-                      {new Date(0, index).toLocaleString("fr-FR", {
-                        month: "long",
-                      })}
-                    </Option>
-                  ))}
-                </Select>
-              </>
-            )}
-
-            {activityType === "quarterly" && (
-              <>
-                <Select
-                  placeholder="Année"
-                  style={{width: 100, marginRight: "8px"}}
-                  onChange={(value) =>
-                    setDateFilter({...dateFilter, year: value})
-                  }
-                >
-                  <Option value="2023">2023</Option>
-                  <Option value="2024">2024</Option>
-                </Select>
-                <Select
-                  placeholder="Trimestre"
-                  style={{width: 100}}
-                  onChange={(value) =>
-                    setDateFilter({...dateFilter, quarter: value})
-                  }
-                >
-                  <Option value="Q1">Q1</Option>
-                  <Option value="Q2">Q2</Option>
-                  <Option value="Q3">Q3</Option>
-                  <Option value="Q4">Q4</Option>
-                </Select>
-              </>
-            )}
+              Réinitialiser
+            </Button>
           </div>
         </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginTop: "16px",
-          }}
-        >
+        <div className="activity-export">
           {selectedIds.length > 0 && (
             <>
-              <span style={{marginRight: "8px", alignSelf: "center"}}>
+              <span style={{ marginRight: "8px", alignSelf: "center" }}>
                 Exporter en :
               </span>
+
               <Button
-                type="default"
-                icon={<FilePdfOutlined style={{color: "red"}} />}
-                style={{
-                  marginRight: "8px",
-                  backgroundColor: "white",
-                  color: "black",
-                }}
-                onClick={() => handleExport("PDF")}
-              >
-                PDF
-              </Button>
-              <Button
-                type="primary"
-                icon={<FileExcelOutlined />}
-                style={{
-                  marginRight: "8px",
-                  backgroundColor: "green",
-                  color: "white",
-                }}
-                onClick={() => handleExport("Excel")}
+                color="green"
+                icon={<FileExcelOutlined style={{ color: "green" }} />}
+                className="activity-export-button"
+                onClick={() => handleExport("XLS")}
               >
                 Excel
-              </Button>
-              <Button
-                type="primary"
-                icon={<FileWordOutlined />}
-                onClick={() => handleExport("DOC")}
-              >
-                DOC
               </Button>
             </>
           )}
         </div>
       </div>
-      <div
-        style={{
-          height: "calc(100vh - 210px)",
-          overflow: "auto",
-          paddingRight: "9px",
-        }}
-      >
+      <div className="activity-table-container custom-ant-table">
         <Table
           columns={getColumns()}
-          dataSource={
-            activityType === "weekly" ? filteredActivities : filteredMissions
-          }
+          dataSource={dataSource}
           pagination={{
             pageSize,
             showSizeChanger: true,
             pageSizeOptions: ["10", "20", "50", "100"],
           }}
-          scroll={mode === "all" ? {y: 290} : {y: 290}}
-          locale={{emptyText: "Aucune donnée à afficher"}}
+          scroll={mode === "all" ? { y: 263.5 } : { y: 250 }}
+          locale={{ emptyText: "Aucune donnée à afficher" }}
         />
       </div>
-      <ModalComponent
+      <ActivityModal
+        mode={mode}
+        onDelete={onDelete}
         visible={isModalVisible}
         onCancel={handleCancel}
+        onSave={handleActivitySave}
         activity={selectedActivity}
       />
       <MissionModal
+        mode={mode}
         visible={isMissionModalVisible}
+        onDelete={onDelete}
         onCancel={handleMissionCancel}
         mission={selectedMission}
       />
