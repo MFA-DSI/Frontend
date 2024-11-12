@@ -229,8 +229,8 @@ const ProfileComponent = () => {
   };
 
   const buttonStyle = {
-    marginBottom : "12px",
-  }
+    marginBottom: "12px",
+  };
 
   return (
     <div style={{ maxWidth: "100%", padding: "24px" }}>
@@ -357,15 +357,18 @@ const ProfileComponent = () => {
           }}
         >
           <Typography.Title level={4}>Actions</Typography.Title>
-          <Button type="primary" style={buttonStyle} onClick={() => setIsUserModalVisible(true)}>
+          <Button
+            type="primary"
+            style={buttonStyle}
+            onClick={() => setIsUserModalVisible(true)}
+          >
             Ajouter un utilisateur
           </Button>
 
           {role === "SUPER_ADMIN" && (
             <Button
               type="primary"
-              style={ {...buttonStyle, marginLeft: "8px" }}
-           
+              style={{ ...buttonStyle, marginLeft: "8px" }}
               onClick={() => setIsResponsableModalVisible(true)}
             >
               Ajouter un responsable direction

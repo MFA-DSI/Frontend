@@ -29,10 +29,8 @@ const MainLayout = ({ children }) => {
   const { fetchNotifications, isLoading: isNotificationLoading } =
     useNotificationContext();
 
-
   const { role, isStaff } = useAuthStore.getState();
   const [unreadCount, setUnreadCount] = useState(0);
-
 
   useEffect(() => {
     // Met à jour le compteur des notifications non lues si elles sont chargées

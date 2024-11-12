@@ -25,7 +25,7 @@ import { useDirectionsContext } from "../../providers";
 const { Step } = Steps;
 const { Option } = Select;
 
-const AddActivityModal = ({ visible, onCancel }) => {
+const AddMissionModal = ({ visible, onCancel }) => {
   const { MissionNameByDirectionId, saveMission } = useMissionContext();
   const { fetchAllService, isLoading } = useDirectionsContext();
   const [currentStep, setCurrentStep] = useState(0);
@@ -319,4 +319,4 @@ const AddActivityModal = ({ visible, onCancel }) => {
   );
 };
 
-export default AddActivityModal;
+export default AddMissionModal;

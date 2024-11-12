@@ -3,12 +3,12 @@ import React, { useState } from "react";
 import { Button } from "antd";
 import MainLayout from "../Layout/MainLayout";
 import TableComponent from "../../components/Table/Table";
-import AddActivityModal from "../../components/Modal/AddMission";
+import AddMissionModal from "../../components/Modal/AddMission";
 import { useActivitiesContext, useMissionContext } from "../../providers";
 import { DirectionName } from "../../components";
 
 const MyDirection = () => {
-  const [isAddActivityModalVisible, setIsAddActivityModalVisible] =
+  const [isAddMissionModalVisible, setIsAddMissionModalVisible] =
     useState(false);
   const { MissionByDirectionId } = useMissionContext();
   const { directionIdQueryActvities } = useActivitiesContext();
@@ -24,12 +24,12 @@ const MyDirection = () => {
     setFiltered(false);
   };
 
-  const showAddActivityModal = () => {
-    setIsAddActivityModalVisible(true);
+  const showAddMissionModal = () => {
+    setIsAddMissionModalVisible(true);
   };
 
   const handleCloseModal = () => {
-    setIsAddActivityModalVisible(false);
+    setIsAddMissionModalVisible(false);
   };
 
   return (
@@ -39,7 +39,7 @@ const MyDirection = () => {
         <Button
           type="primary"
           style={{ position: "fixed", left: "210px" }}
-          onClick={showAddActivityModal}
+          onClick={showAddMissionModal}
         >
           Ajouter une Activité
         </Button>
@@ -53,8 +53,8 @@ const MyDirection = () => {
           filterData={filterData}
         />
       </div>
-      <AddActivityModal
-        visible={isAddActivityModalVisible}
+      <AddMissionModal
+        visible={isAddMissionModalVisible}
         onCancel={handleCloseModal}
       />
     </MainLayout>

@@ -54,8 +54,9 @@ export const fetchDirections = async (): Promise<Direction[]> => {
   );
 };
 
-export const fetchDirectionServices = async (directionId): Promise<Service[]> => {
- 
+export const fetchDirectionServices = async (
+  directionId,
+): Promise<Service[]> => {
   return (
     (await fetchData<Service[]>(
       `${API_URL}/direction/service/all?directionId=${directionId}`,
@@ -65,8 +66,9 @@ export const fetchDirectionServices = async (directionId): Promise<Service[]> =>
   );
 };
 
-export const fetchDirectionName = async (directionId): Promise<Direction | null> => {
-
+export const fetchDirectionName = async (
+  directionId,
+): Promise<Direction | null> => {
   return fetchData<Direction>(
     `${API_URL}/direction/name/${directionId}`,
     { method: "GET" },

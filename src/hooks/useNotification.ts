@@ -7,7 +7,7 @@ import {
 
 export const useNotification = () => {
   const queryClient = useQueryClient();
- 
+
   const fetchNotifications = useQuery({
     queryKey: ["notification"],
     queryFn: () => fetchNotification(localStorage.getItem("userId") || ""),

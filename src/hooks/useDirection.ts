@@ -30,13 +30,13 @@ export const useDirections = () => {
 
   const fetchServiceByDirectionId = useQuery({
     queryKey: ["services"],
-    queryFn: ()=>fetchDirectionServices(localStorage.getItem("directionId")!),
+    queryFn: () => fetchDirectionServices(localStorage.getItem("directionId")!),
     enabled: !!localStorage.getItem("directionId"),
   });
 
   const fetchActualDirectionName = useQuery({
     queryKey: ["service"],
-    queryFn: ()=>fetchDirectionName(localStorage.getItem("directionId")!),
+    queryFn: () => fetchDirectionName(localStorage.getItem("directionId")!),
     enabled: !!localStorage.getItem("directionId"),
   });
 

@@ -9,14 +9,14 @@ export const getWeeksInMonthWithOverflow = (month, year) => {
     const currentWeekEnd = new Date(
       currentWeekStart.getFullYear(),
       currentWeekStart.getMonth(),
-      currentWeekStart.getDate() + 6
+      currentWeekStart.getDate() + 6,
     );
 
     // Affiche la semaine avec overflow possible vers le mois suivant
     weeks.push(
-      `Semaine du ${currentWeekStart.toLocaleDateString('fr-FR')} au ${
-        currentWeekEnd.toLocaleDateString('fr-FR')
-      }`
+      `Semaine du ${currentWeekStart.toLocaleDateString("fr-FR")} au ${currentWeekEnd.toLocaleDateString(
+        "fr-FR",
+      )}`,
     );
 
     // Avancer de 7 jours pour commencer la semaine suivante
@@ -24,10 +24,7 @@ export const getWeeksInMonthWithOverflow = (month, year) => {
   }
 
   return weeks;
- 
-  };
-  
-
+};
 
 export const extractFirstDateFromString = (dateString) => {
   // Use regex to match the first date format in "dd/mm/yyyy"

@@ -30,9 +30,7 @@ function App() {
   const location = useLocation();
   const role = useAuthStore.getState().role;
   const isStaff = useAuthStore.getState().isStaff;
- 
 
- 
   return (
     <QueryClientProvider client={queryClient}>
       <HackWebProviders>

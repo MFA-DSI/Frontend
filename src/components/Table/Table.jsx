@@ -11,7 +11,10 @@ import ActivityModal from "../Modal/ActivityModal";
 import MissionModal from "../Modal/MissionModal";
 
 import "./assets/index.css";
-import { extractFirstDateFromString, getWeeksInMonthWithOverflow } from "./utils/DateUtils";
+import {
+  extractFirstDateFromString,
+  getWeeksInMonthWithOverflow,
+} from "./utils/DateUtils";
 import { useFilesContext } from "../../providers/context/FilesContext";
 import { toast } from "react-toastify";
 import { useDirectionsContext } from "../../providers";

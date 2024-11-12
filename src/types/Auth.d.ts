@@ -15,7 +15,7 @@ export type AuthToSignUp = {
 };
 
 export type Signin = {
-  id :string , 
-  oldpassword : string,
-  newpaswword : string
-}
+  id: string;
+  oldpassword: string;
+  newpaswword: string;
+};
