@@ -57,10 +57,10 @@ const FirstLoginComponent = () => {
             </Title>
           </div>
           <div>
-            <h4>
+            <i>
               Pour votre première connexion au plateforme de gestion des
               activités au sein de la MFA,veillez changer votre mot de passe
-            </h4>
+            </i>
           </div>
         </div>
         <Form name="change_password" className="login-form" onFinish={onFinish}>
