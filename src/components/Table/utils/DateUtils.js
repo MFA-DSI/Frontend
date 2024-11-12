@@ -1,33 +1,33 @@
 import moment from "moment";
-
-export const getWeeksInMonth = (month, year) => {
+export const getWeeksInMonthWithOverflow = (month, year) => {
   const weeks = [];
   const firstDay = new Date(year, month, 1);
-  const lastDay = new Date(year, month + 1, 0);
   let currentWeekStart = new Date(firstDay);
 
-  while (currentWeekStart <= lastDay) {
+  // Boucle tant que la semaine commence dans le mois sélectionné
+  while (currentWeekStart.getMonth() === month) {
     const currentWeekEnd = new Date(
       currentWeekStart.getFullYear(),
       currentWeekStart.getMonth(),
-      currentWeekStart.getDate() + 6,
+      currentWeekStart.getDate() + 6
     );
 
-    // Format the start and end dates for the current week
+    // Affiche la semaine avec overflow possible vers le mois suivant
     weeks.push(
-      `Semaine du ${currentWeekStart.toLocaleDateString()} au ${
-        currentWeekEnd > lastDay
-          ? lastDay.toLocaleDateString()
-          : currentWeekEnd.toLocaleDateString()
-      }`,
+      `Semaine du ${currentWeekStart.toLocaleDateString('fr-FR')} au ${
+        currentWeekEnd.toLocaleDateString('fr-FR')
+      }`
     );
 
-    // Move to the next week
+    // Avancer de 7 jours pour commencer la semaine suivante
     currentWeekStart.setDate(currentWeekStart.getDate() + 7);
   }
 
   return weeks;
-};
+ 
+  };
+  
+
 
 export const extractFirstDateFromString = (dateString) => {
   // Use regex to match the first date format in "dd/mm/yyyy"

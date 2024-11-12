@@ -13,3 +13,9 @@ export type AuthToSignUp = {
   directionId: string;
   post: string;
 };
+
+export type Signin = {
+  id :string , 
+  oldpassword : string,
+  newpaswword : string
+}

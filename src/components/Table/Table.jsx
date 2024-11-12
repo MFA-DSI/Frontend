@@ -11,7 +11,7 @@ import ActivityModal from "../Modal/ActivityModal";
 import MissionModal from "../Modal/MissionModal";
 
 import "./assets/index.css";
-import { extractFirstDateFromString, getWeeksInMonth } from "./utils/DateUtils";
+import { extractFirstDateFromString, getWeeksInMonthWithOverflow } from "./utils/DateUtils";
 import { useFilesContext } from "../../providers/context/FilesContext";
 import { toast } from "react-toastify";
 import { useDirectionsContext } from "../../providers";
@@ -429,7 +429,7 @@ const TableComponent = ({
                 style={weeklyDropDownStyle}
                 dateFilter={dateFilter}
                 setDateFilter={setDateFilter}
-                getWeeksInMonth={getWeeksInMonth}
+                getWeeksInMonth={getWeeksInMonthWithOverflow}
               />
             )}
 
