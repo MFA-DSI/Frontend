@@ -26,17 +26,21 @@ const MainLayout = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
-  const {fetchNotifications ,isLoading: isNotificationLoading,} = useNotificationContext();
+  const { fetchNotifications, isLoading: isNotificationLoading } =
+    useNotificationContext();
+
 
   const { role, isStaff } = useAuthStore.getState();
   const [unreadCount, setUnreadCount] = useState(0);
 
+
   useEffect(() => {
     // Met à jour le compteur des notifications non lues si elles sont chargées
-    if (!isNotificationLoading && fetchNotifications.length > 0) {       
-      const count = fetchNotifications.filter((notif) => notif.viewStatus === false).length;
-    
-      
+    if (!isNotificationLoading && fetchNotifications.length > 0) {
+      const count = fetchNotifications.filter(
+        (notif) => notif.viewStatus === false,
+      ).length;
+
       setUnreadCount(count);
     }
   }, [fetchNotifications, isNotificationLoading]);
@@ -60,28 +64,42 @@ const MainLayout = ({ children }) => {
     {
       key: "/myDirection",
       icon: <CloudOutlined />,
-      label: <span style={{ color: "white",fontFamily: "Quicksand, sans-serif" }}>Ma direction</span>,
+      label: (
+        <span style={{ color: "white", fontFamily: "Quicksand, sans-serif" }}>
+          Ma direction
+        </span>
+      ),
       children: [
-        { key: "/myDirection", label: <span style={{ color: "white" }}>Listes des Missions</span> },
-        { key: "/reports", label: <span style={{ color: "white" }}>Générer un rapport</span> },
+        {
+          key: "/myDirection",
+          label: <span style={{ color: "white" }}>Listes des Missions</span>,
+        },
+        {
+          key: "/reports",
+          label: <span style={{ color: "white" }}>Générer un rapport</span>,
+        },
       ],
     },
     {
       key: "/notifications",
       icon: <NotificationOutlined />,
-      label:  (
+      label: (
         <Badge count={unreadCount} offset={[10, 0]}>
-          <span style={{ color: "white" }}>Notification(s)</span> 
+          <span style={{ color: "white" }}>Notification(s)</span>
         </Badge>
       ),
     },
-    { key: "/profile", icon: <UserOutlined />, label: <span style={{ color: "white" }}>Mon profil</span> },
+    {
+      key: "/profile",
+      icon: <UserOutlined />,
+      label: <span style={{ color: "white" }}>Mon profil</span>,
+    },
     ...(role === "admin" || role === "SUPER ADMIN" || isStaff === "true"
       ? [
           {
             key: "/statistics",
             icon: <BarChartOutlined />,
-            label: <span style={{ color: "white" }}>Statistiques</span>,  
+            label: <span style={{ color: "white" }}>Statistiques</span>,
           },
         ]
       : []),

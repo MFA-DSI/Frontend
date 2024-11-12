@@ -4,15 +4,13 @@ import {
   fetchNotification,
   updateNotificationStatus,
 } from "../providers/notification-provider";
-import { useAuthStore } from "./useAuthStore";
-import { deleteMission } from "../providers/mission-provider";
 
 export const useNotification = () => {
   const queryClient = useQueryClient();
-  const user = useAuthStore.getState().userId;
+ 
   const fetchNotifications = useQuery({
     queryKey: ["notification"],
-    queryFn: ()=>fetchNotification(user),
+    queryFn: () => fetchNotification(localStorage.getItem("userId") || ""),
   });
 
   const updateNotificationViewStatus = useMutation(updateNotificationStatus, {
@@ -21,16 +19,16 @@ export const useNotification = () => {
     },
   });
 
-  const deleteUserNotification = useMutation(deleteNotification,{
+  const deleteUserNotification = useMutation(deleteNotification, {
     onSuccess: () => {
       queryClient.invalidateQueries("notification");
     },
-  })
+  });
 
   return {
     fetchAllNotification: fetchNotifications.data,
     updateNotificationStatus: updateNotificationViewStatus.mutate,
-    deleteSpecifiedNotification : deleteUserNotification.mutate,
+    deleteSpecifiedNotification: deleteUserNotification.mutate,
     isLoading: fetchNotifications.isLoading,
     isError: fetchNotifications.isError,
   };

@@ -4,14 +4,11 @@ import { Notification } from "../types";
 
 const API_URL: string = import.meta.env.VITE_API_URL;
 
-
 interface DeleteNotificationParams {
-  id: string,
-  userId: string
+  id: string;
+  userId: string;
 }
 export const fetchNotification = async (userId): Promise<Notification[]> => {
-
-
   if (!userId) {
     throw new Error("User ID is not available in session storage");
   }
@@ -66,10 +63,12 @@ export const updateNotificationStatus = async (id: string) => {
 };
 export const deleteNotification = async (id: DeleteNotificationParams) => {
   try {
-    const url = new URL(`${API_URL}/direction/notification/delete?id=${id.id}&userId=${id.userId}`);
+    const url = new URL(
+      `${API_URL}/direction/notification/delete?id=${id.id}&userId=${id.userId}`,
+    );
 
     console.log(url);
-    
+
     const response = await fetch(url.toString(), {
       method: "POST",
     });
@@ -81,7 +80,7 @@ export const deleteNotification = async (id: DeleteNotificationParams) => {
     }
 
     const data = await response.json();
-    message.success("notification supprimé avec succées")
+    message.success("notification supprimé avec succées");
     return data;
   } catch (error) {
     console.error("Failed to update notification status", error);

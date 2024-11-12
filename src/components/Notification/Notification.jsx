@@ -1,5 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Card, List, Avatar, Typography, Badge, Space, Spin, Dropdown, Button, Menu, message } from "antd";
+import {
+  Card,
+  List,
+  Avatar,
+  Typography,
+  Badge,
+  Space,
+  Spin,
+  Dropdown,
+  Button,
+  Menu,
+  message,
+} from "antd";
 import {
   NotificationOutlined,
   FileTextOutlined,
@@ -63,14 +75,14 @@ const NotificationCardDynamicIcons = () => {
     try {
       // Mise à jour de la notification
       const updatedNotification = await updateNotification(notificationId.id);
-  
+
       // Vérifie le statut de la notification et la vue
       if (notificationId.viewStatus === false) {
         // Si la notification n'est pas vue, on vérifie le statut
-        if (updatedNotification.status === 'user_created') {
-          navigate("/profile");  // Redirection vers le profil
+        if (updatedNotification.status === "user_created") {
+          navigate("/profile"); // Redirection vers le profil
         } else {
-          navigate("/myDirection");  // Sinon, redirection vers "myDirection"
+          navigate("/myDirection"); // Sinon, redirection vers "myDirection"
         }
       }
       // Si viewStatus est true, aucune redirection ne se fait
@@ -78,24 +90,21 @@ const NotificationCardDynamicIcons = () => {
       console.error(error);
     }
   };
-  
-  const handleDelete = async(notification) => {
 
-  
+  const handleDelete = async (notification) => {
     const params = {
-      id : notification.id,
-      userId : userId
-    }
+      id: notification.id,
+      userId: userId,
+    };
     console.log(params);
-    
 
-   try {
-    await deleteNotification(params)
-   } catch (error) {
-    message.error(error);
-   }
+    try {
+      await deleteNotification(params);
+    } catch (error) {
+      message.error(error);
+    }
   };
-  
+
   const menu = (notification) => (
     <Menu>
       <Menu.Item key="1" onClick={() => handleDelete(notification)}>
@@ -103,7 +112,6 @@ const NotificationCardDynamicIcons = () => {
       </Menu.Item>
     </Menu>
   );
-  
 
   if (isNotificationLoading) return <Spin />;
   return (
@@ -203,22 +211,21 @@ const NotificationCardDynamicIcons = () => {
                 {timeElapsed}
               </div>
               <Dropdown
-    overlay={menu(notification)}
-    trigger={['click']}
-    placement="bottomRight"
-  >
-    <Button
-      icon={<EllipsisOutlined />}
-      style={{
-        border: "none",
-        background: "transparent",
-        color: "#8c8c8c",
-        fontSize: "16px",
-      }}
-    />
-  </Dropdown>
+                overlay={menu(notification)}
+                trigger={["click"]}
+                placement="bottomRight"
+              >
+                <Button
+                  icon={<EllipsisOutlined />}
+                  style={{
+                    border: "none",
+                    background: "transparent",
+                    color: "#8c8c8c",
+                    fontSize: "16px",
+                  }}
+                />
+              </Dropdown>
             </List.Item>
-            
           );
         }}
       />

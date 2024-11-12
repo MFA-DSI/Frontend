@@ -20,9 +20,7 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
   const [responseData, setResponseData] = useState(null);
   const [isStaff, setIsStaff] = useState(false);
   useEffect(() => {
-    
-    return () => {
-    };
+    return () => {};
   }, [contactType]);
   if (visible && directionsOptions.length === 0) {
     const directions = fetchAllDirection;
@@ -44,17 +42,15 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
 
       // Map form values to the NewResponsible interface
       const newResponsible = {
-     
-          firstname: values.firstname,
-          lastname: values?.lastname || "",
-          email: contactType === "email" ? values.contactValue : null,
-          phoneNumbers: contactType === "phone" ? values.contactValue : null,
-          isStaff : isStaff,
-          grade: personnelType !== "PC" ? values.grade : "PC",
-          function: values.fonction,
-          directionId: values.direction
-        };
-      
+        firstname: values.firstname,
+        lastname: values?.lastname || "",
+        email: contactType === "email" ? values.contactValue : null,
+        phoneNumbers: contactType === "phone" ? values.contactValue : null,
+        isStaff: isStaff,
+        grade: personnelType !== "PC" ? values.grade : "PC",
+        function: values.fonction,
+        directionId: values.direction,
+      };
 
       // Call the async saveNewResponsible function with the mapped object
       await saveNewResponsible(newResponsible, {
@@ -83,135 +79,176 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
 
   return (
     <>
-       <Modal
-      visible={visible}
-      title="Ajouter un Responsable de Direction"
-      onCancel={() => {
-        form.resetFields();
-        onCancel();
-      }}
-      footer={[
-        <Button key="back" onClick={onCancel}>
-          Annuler
-        </Button>,
-        <Button key="submit" type="primary" onClick={handleSave}>
-          Enregistrer
-        </Button>,
-      ]}
-      cancelText="Annuler"
-    >
-      <Form form={form} layout="vertical">
-        {/* Champ Nom */}
-        <Form.Item
-          label="Nom"
-          name="firstname"
-          rules={[
-            { required: true, message: "Veuillez entrer votre nom" },
-            { pattern: /^[A-Za-zÀ-ÿ]+$/, message: "Le nom ne doit contenir que des lettres" },
-          ]}
-        >
-          <Input placeholder="Entrez le nom" />
-        </Form.Item>
+      <Modal
+        visible={visible}
+        title="Ajouter un Responsable de Direction"
+        onCancel={() => {
+          form.resetFields();
+          onCancel();
+        }}
+        footer={[
+          <Button key="back" onClick={onCancel}>
+            Annuler
+          </Button>,
+          <Button key="submit" type="primary" onClick={handleSave}>
+            Enregistrer
+          </Button>,
+        ]}
+        cancelText="Annuler"
+      >
+        <Form form={form} layout="vertical">
+          {/* Champ Nom */}
+          <Form.Item
+            label="Nom"
+            name="firstname"
+            rules={[
+              { required: true, message: "Veuillez entrer votre nom" },
+              {
+                pattern: /^[A-Za-zÀ-ÿ]+$/,
+                message: "Le nom ne doit contenir que des lettres",
+              },
+            ]}
+          >
+            <Input placeholder="Entrez le nom" />
+          </Form.Item>
 
-        {/* Champ Prénom */}
-        <Form.Item
-          label="Prénom"
-          name="lastname"
-          rules={[
-            { message: "Veuillez entrer votre prénom" },
-            { pattern: /^[A-Za-zÀ-ÿ]+$/, message: "Le prénom ne doit contenir que des lettres" },
-          ]}
-        >
-          <Input placeholder="Entrez le prénom" />
-        </Form.Item>
+          {/* Champ Prénom */}
+          <Form.Item
+            label="Prénom"
+            name="lastname"
+            rules={[
+              { message: "Veuillez entrer votre prénom" },
+              {
+                pattern: /^[A-Za-zÀ-ÿ]+$/,
+                message: "Le prénom ne doit contenir que des lettres",
+              },
+            ]}
+          >
+            <Input placeholder="Entrez le prénom" />
+          </Form.Item>
 
-        {/* Champ Contact */}
-        <Form.Item label="Contact">
-          <Input.Group compact>
-            <Form.Item name="contactType" noStyle>
-              <Select
-                defaultValue="email"
-                onChange={(value) => setContactType(value)}
-                style={{ width: "30%" }}
-                options={[
-                  { value: "email", label: "Email" },
-                  { value: "phone", label: "Téléphone" },
+          {/* Champ Contact */}
+          <Form.Item label="Contact">
+            <Input.Group compact>
+              <Form.Item name="contactType" noStyle>
+                <Select
+                  defaultValue="email"
+                  onChange={(value) => setContactType(value)}
+                  style={{ width: "30%" }}
+                  options={[
+                    { value: "email", label: "Email" },
+                    { value: "phone", label: "Téléphone" },
+                  ]}
+                />
+              </Form.Item>
+
+              <Form.Item
+                name="contactValue"
+                noStyle
+                rules={[
+                  {
+                    required: true,
+                    message: `Veuillez entrer ${contactType === "email" ? "votre email" : "votre numéro de téléphone"}`,
+                  },
+                  contactType === "email"
+                    ? {
+                        type: "email",
+                        message: "Veuillez entrer votre email valide",
+                      }
+                    : {
+                        pattern: /^(034|039|038|037|033|032)\d{7}$/,
+                        message:
+                          "Veuillez entrer votre numéro de téléphone valide (commençant par 034, 039, 038, 032, 037, ou 033 et comportant 10 chiffres).",
+                      },
                 ]}
-              />
-            </Form.Item>
-
-            <Form.Item
-              name="contactValue"
-              noStyle
-              rules={[
-                {
-                  required: true,
-                  message: `Veuillez entrer ${contactType === "email" ? "votre email" : "votre numéro de téléphone"}`,
-                },
-                contactType === "email"
-                  ? { type: "email", message: "Veuillez entrer votre email valide" }
-                  : {
-                      pattern: /^(034|039|038|037|033|032)\d{7}$/,
-                      message: "Veuillez entrer un numéro de téléphone valide.",
-                    },
-              ]}
-            >
-              <Input
-                placeholder={contactType === "email" ? "Entrez l'adresse email" : "Entrez le numéro de téléphone"}
-                style={{ width: "70%" }}
-                maxLength={contactType === "phone" ? 10 : undefined}
-                onChange={(e) => {
-                  if (contactType === "phone") {
-                    e.target.value = e.target.value.replace(/[^0-9]/g, "");
+              >
+                <Input
+                  placeholder={
+                    contactType === "email"
+                      ? "Entrez l'adresse email"
+                      : "Entrez le numéro de téléphone"
                   }
-                }}
-              />
-            </Form.Item>
-          </Input.Group>
-        </Form.Item>
+                  style={{ width: "70%" }}
+                  maxLength={contactType === "phone" ? 10 : undefined}
+                  onChange={(e) => {
+                    if (contactType === "phone") {
+                      e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                    }
+                  }}
+                />
+              </Form.Item>
+            </Input.Group>
+          </Form.Item>
 
-        {/* Champ Type de personnel */}
-        <Form.Item
-          label="Type de personnel"
-          name="personnelType"
-          rules={[{ required: true, message: "Veuillez choisir un type de personnel" }]}
-        >
-          <Select
-            options={personnelOptions}
-            onChange={handlePersonnelTypeChange}
-            placeholder="Sélectionnez le type de personnel"
-          />
-        </Form.Item>
-
-        {/* Champ Grade */}
-        {personnelType && personnelType !== "PC" && (
-          <Form.Item label="Grade" name="grade" rules={[{ required: true, message: "Veuillez choisir un grade" }]}>
+          {/* Champ Type de personnel */}
+          <Form.Item
+            label="Type de personnel"
+            name="personnelType"
+            rules={[
+              {
+                required: true,
+                message: "Veuillez choisir un type de personnel",
+              },
+            ]}
+          >
             <Select
-              options={gradeOptions.map((grade) => ({ value: grade, label: grade }))}
-              placeholder="Sélectionnez le grade"
+              options={personnelOptions}
+              onChange={handlePersonnelTypeChange}
+              placeholder="Sélectionnez le type de personnel"
             />
           </Form.Item>
-        )}
 
-        {/* Champ Direction */}
-        <Form.Item label="Direction" name="direction" rules={[{ required: true, message: "Veuillez choisir une direction" }]}>
-          <Select options={directionsOptions} placeholder="Sélectionnez une direction" />
-        </Form.Item>
+          {/* Champ Grade */}
+          {personnelType && personnelType !== "PC" && (
+            <Form.Item
+              label="Grade"
+              name="grade"
+              rules={[{ required: true, message: "Veuillez choisir un grade" }]}
+            >
+              <Select
+                options={gradeOptions.map((grade) => ({
+                  value: grade,
+                  label: grade,
+                }))}
+                placeholder="Sélectionnez le grade"
+              />
+            </Form.Item>
+          )}
 
-        <Form.Item name="isStaff" valuePropName="checked">
-          <Checkbox onChange={(e) => setIsStaff(e.target.checked)}>Est un membre du Staff</Checkbox>
-        </Form.Item>
+          {/* Champ Direction */}
+          <Form.Item
+            label="Direction"
+            name="direction"
+            rules={[
+              { required: true, message: "Veuillez choisir une direction" },
+            ]}
+          >
+            <Select
+              options={directionsOptions}
+              placeholder="Sélectionnez une direction"
+            />
+          </Form.Item>
 
-        {/* Champ Fonction */}
-        <Form.Item label="Fonction" name="fonction" rules={[{ required: true, message: "Veuillez entrer une fonction" }]}>
-          <Input placeholder="Entrez la fonction" />
-        </Form.Item>
+          <Form.Item name="isStaff" valuePropName="checked">
+            <Checkbox onChange={(e) => setIsStaff(e.target.checked)}>
+              Est un membre du Staff
+            </Checkbox>
+          </Form.Item>
 
-        {/* Checkbox Est un membre Staff */}
-       
-      </Form>
-    </Modal>
-  
+          {/* Champ Fonction */}
+          <Form.Item
+            label="Fonction"
+            name="fonction"
+            rules={[
+              { required: true, message: "Veuillez entrer une fonction" },
+            ]}
+          >
+            <Input placeholder="Entrez la fonction" />
+          </Form.Item>
+
+          {/* Checkbox Est un membre Staff */}
+        </Form>
+      </Modal>
 
       {responseData && (
         <ApprobatedUserModal

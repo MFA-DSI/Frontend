@@ -185,16 +185,16 @@ const MissionModal = ({ visible, onCancel, mission, onDelete, mode }) => {
                       Modifier
                     </Button>
                     {(role === "ADMIN" || role === "SUPER_ADMIN") && (
-      <Button
-        color="danger"
-        variant="solid"
-        danger
-        style={{ marginBottom: "10px", marginRight: "10px" }}
-        onClick={showDeleteModal}
-      >
-        Supprimer
-      </Button>
-    )}
+                      <Button
+                        color="danger"
+                        variant="solid"
+                        danger
+                        style={{ marginBottom: "10px", marginRight: "10px" }}
+                        onClick={showDeleteModal}
+                      >
+                        Supprimer
+                      </Button>
+                    )}
                   </>
                 )}
               </>

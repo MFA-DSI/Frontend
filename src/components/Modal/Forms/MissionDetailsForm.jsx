@@ -2,14 +2,17 @@ import React, { useEffect, useState } from "react";
 import { Input, Button, Form, Select, DatePicker, message } from "antd";
 import moment from "moment";
 
-
-
-export const ActivityDetailsForm = ({ activity, setActivity, setActivityDetailsValid }) => {
+export const ActivityDetailsForm = ({
+  activity,
+  setActivity,
+  setActivityDetailsValid,
+}) => {
   const [form] = Form.useForm();
   const { description, observation, prediction, dueDatetime } = activity;
 
   useEffect(() => {
-    form.validateFields()
+    form
+      .validateFields()
       .then(() => setActivityDetailsValid(true))
       .catch(() => setActivityDetailsValid(false));
   }, [description, dueDatetime]);
@@ -62,7 +65,6 @@ export const ActivityDetailsForm = ({ activity, setActivity, setActivityDetailsV
     </Form>
   );
 };
-
 
 export const TaskForm = ({ tasks, setTasks }) => {
   const [taskDescription, setTaskDescription] = useState("");

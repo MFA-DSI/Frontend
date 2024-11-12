@@ -5,15 +5,20 @@ import { deleteNotification } from "../notification-provider";
 const NotificationContext = createContext();
 
 export const NotificationProvider = ({ children }) => {
-  const { fetchAllNotification, updateNotificationStatus,deleteSpecifiedNotification, isLoading, isError } =
-    useNotification();
+  const {
+    fetchAllNotification,
+    updateNotificationStatus,
+    deleteSpecifiedNotification,
+    isLoading,
+    isError,
+  } = useNotification();
 
   return (
     <NotificationContext.Provider
       value={{
         fetchNotifications: fetchAllNotification,
         updateNotification: updateNotificationStatus,
-        deleteNotification : deleteSpecifiedNotification,
+        deleteNotification: deleteSpecifiedNotification,
         isLoading,
         isError,
       }}

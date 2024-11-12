@@ -10,6 +10,7 @@ export const EditableField = ({
   inputType,
   placeholder,
   editable,
+  required,
 }) => {
   return (
     <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
@@ -23,7 +24,12 @@ export const EditableField = ({
         inputType === "date" ? (
           <DatePicker value={value} onChange={onChange} />
         ) : (
-          <Input value={value} onChange={onChange} placeholder={placeholder} />
+          <Input
+            required={required}
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder}
+          />
         )
       ) : (
         <Typography.Text>

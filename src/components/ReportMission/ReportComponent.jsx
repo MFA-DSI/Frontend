@@ -109,15 +109,17 @@ const ReportGenerator = () => {
   };
 
   return (
-    <div style={{ 
-      display: "flex", 
-      justifyContent: "center", 
-      alignItems: "center", 
-      height: "87vh", 
-      overflow: "hidden",
-      margin: 0,
-      padding: 0 
-    }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "87vh",
+        overflow: "hidden",
+        margin: 0,
+        padding: 0,
+      }}
+    >
       <Card title="Générateur de Rapport" style={{ width: 400 }}>
         <h2>Choisissez les options de rapport</h2>
         <Divider />
@@ -128,7 +130,7 @@ const ReportGenerator = () => {
           setActivityType={setActivityType}
           setDateFilter={setDateFilter}
         />
-    
+
         {activityType === "weekly" && (
           <WeeklyFilters
             style={style}
@@ -137,7 +139,7 @@ const ReportGenerator = () => {
             getWeeksInMonth={getWeeksInMonth}
           />
         )}
-    
+
         {activityType === "monthly" && (
           <MonthlyFilters
             style={style}
@@ -145,7 +147,7 @@ const ReportGenerator = () => {
             setDateFilter={setDateFilter}
           />
         )}
-    
+
         {activityType === "quarterly" && (
           <QuarterlyFilters
             style={style}
@@ -153,7 +155,7 @@ const ReportGenerator = () => {
             setDateFilter={setDateFilter}
           />
         )}
-    
+
         <div
           style={{
             display: "flex",
@@ -171,8 +173,6 @@ const ReportGenerator = () => {
         </div>
       </Card>
     </div>
-    
-  
   );
 };
 

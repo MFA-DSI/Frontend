@@ -251,7 +251,11 @@ const AddActivityModal = ({ visible, onCancel }) => {
     {
       title: "Informations sur l'activité",
       content: (
-        <ActivityDetailsForm activity={activity} setActivity={setActivity} setActivityDetailsValid={setActivityDetailsValid}/>
+        <ActivityDetailsForm
+          activity={activity}
+          setActivity={setActivity}
+          setActivityDetailsValid={setActivityDetailsValid}
+        />
       ),
     },
     {

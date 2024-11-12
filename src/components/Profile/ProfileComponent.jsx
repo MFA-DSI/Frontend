@@ -159,10 +159,10 @@ const ProfileComponent = () => {
     userId: userId,
     grade: userInformation.grade,
     lastname: userInformation.lastname,
-    firstname: userInformation.firstname,
+    firstname: userInformation?.firstname || "",
     mail: userInformation.mail,
     direction: userInformation.direction,
-    phoneNumbers: userInformation.phoneNumbers,
+    phoneNumbers: userInformation?.phoneNumbers,
     fonction: userInformation.function,
   });
 
@@ -185,10 +185,8 @@ const ProfileComponent = () => {
     } = userInfo;
 
     // Vérification des validations
-    if (!grade || !lastname || !firstname || !direction || !fonction) {
-      message.error(
-        "Tous les champs sauf l'email et le téléphone sont requis !",
-      );
+    if (!lastname) {
+      message.error("Votre nom est requis !");
       return;
     }
 
@@ -229,6 +227,10 @@ const ProfileComponent = () => {
       console.error("Erreur lors de la sauvegarde :", error);
     }
   };
+
+  const buttonStyle = {
+    marginBottom : "12px",
+  }
 
   return (
     <div style={{ maxWidth: "100%", padding: "24px" }}>
@@ -273,19 +275,25 @@ const ProfileComponent = () => {
                   <EditableField
                     editable={true}
                     label="Nom"
-                    value={`${userInfo.lastname} ${userInfo.firstname}`}
+                    value={userInfo.lastname}
                     isEditing={isEditing}
                     mode="mydirection"
                     onChange={(e) => {
-                      const [lastname, firstname] = e.target.value.split(" ");
                       handleFieldChange(
                         "lastname",
-                        lastname || userInfo.lastname,
+                        e.target.value || userInfo.lastname,
                       );
-                      handleFieldChange(
-                        "firstname",
-                        firstname || userInfo.firstname,
-                      );
+                    }}
+                  />
+                  <EditableField
+                    editable={true}
+                    label="Prénom"
+                    value={userInfo.firstname}
+                    isEditing={isEditing}
+                    required={false}
+                    mode="mydirection"
+                    onChange={(e) => {
+                      handleFieldChange("firstname", e.target.value);
                     }}
                   />
                   <EditableField
@@ -349,14 +357,15 @@ const ProfileComponent = () => {
           }}
         >
           <Typography.Title level={4}>Actions</Typography.Title>
-          <Button type="primary" onClick={() => setIsUserModalVisible(true)}>
+          <Button type="primary" style={buttonStyle} onClick={() => setIsUserModalVisible(true)}>
             Ajouter un utilisateur
           </Button>
 
           {role === "SUPER_ADMIN" && (
             <Button
               type="primary"
-              style={{ marginLeft: "8px" }}
+              style={ {...buttonStyle, marginLeft: "8px" }}
+           
               onClick={() => setIsResponsableModalVisible(true)}
             >
               Ajouter un responsable direction
@@ -382,7 +391,7 @@ const ProfileComponent = () => {
       {selectedUser && (
         <Modal
           visible={isApproveModalVisible}
-          title="Détails de l'utilisateur"  
+          title="Détails de l'utilisateur"
           onCancel={() => setIsApproveModalVisible(false)}
           footer={[
             <Button key="reject" onClick={() => handleApprovalAction(false)}>

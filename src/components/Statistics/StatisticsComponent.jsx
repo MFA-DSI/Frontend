@@ -142,7 +142,7 @@ const StatisticsComponents = () => {
       )}
 
       {/* Own Direction Statistics */}
-      {isStaff === "true" && (role === "ADMIN" || role === "SUPER_ADMIN") && (
+      {isStaff === "true" && (
         <Card title={title} style={{ marginBottom: 20 }}>
           <DatePicker
             picker="year"

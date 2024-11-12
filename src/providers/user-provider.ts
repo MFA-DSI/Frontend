@@ -10,7 +10,7 @@ interface NewUserInformation {
   firstname: string;
   lastname: string;
   grade: string;
-  function: string;
+  fonction: string;
   mail: string;
   phoneNumbers: string;
 }
