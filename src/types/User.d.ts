@@ -14,8 +14,13 @@ export type NewResponsible = {
   lastname: string;
   email?: string;
   phone?: string;
+  isStaff?: boolean,
   personnelType: string;
   grade?: string;
   directionId: string;
   fonction: string;
 };
+export type  PostedNewUser ={
+  identity: string;
+  password: string;
+}

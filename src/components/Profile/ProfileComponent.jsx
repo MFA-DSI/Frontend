@@ -382,7 +382,7 @@ const ProfileComponent = () => {
       {selectedUser && (
         <Modal
           visible={isApproveModalVisible}
-          title="Détails de l'utilisateur"
+          title="Détails de l'utilisateur"  
           onCancel={() => setIsApproveModalVisible(false)}
           footer={[
             <Button key="reject" onClick={() => handleApprovalAction(false)}>

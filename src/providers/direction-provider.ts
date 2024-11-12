@@ -1,5 +1,5 @@
 import { message } from "antd";
-import { Direction, Service, User, PostedNewUser } from "../types";
+import { Direction, Service, User, PostedNewUser, NewResponsible } from "../types";
 import { errorTranslations } from "./utils/translator/translator";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -103,9 +103,9 @@ export const addUserToDirection = (userToAdd: User): Promise<User | null> =>
   );
 
 export const addResponsibleToDirection = (
-  userToAdd: User,
-): Promise<User | null> =>
-  postData<User>(
+  userToAdd: NewResponsible,
+): Promise<NewResponsible | null> =>
+  postData<NewResponsible>(
     `${API_URL}/users/createAdmin`,
     userToAdd,
     "Responsable créée avec succées",
