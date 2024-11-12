@@ -54,8 +54,8 @@ export const fetchDirections = async (): Promise<Direction[]> => {
   );
 };
 
-export const fetchDirectionServices = async (): Promise<Service[]> => {
-  const directionId = localStorage.getItem("directionId");
+export const fetchDirectionServices = async (directionId): Promise<Service[]> => {
+ 
   return (
     (await fetchData<Service[]>(
       `${API_URL}/direction/service/all?directionId=${directionId}`,
@@ -65,8 +65,8 @@ export const fetchDirectionServices = async (): Promise<Service[]> => {
   );
 };
 
-export const fetchDirectionName = async (): Promise<Direction | null> => {
-  const directionId = localStorage.getItem("directionId");
+export const fetchDirectionName = async (directionId): Promise<Direction | null> => {
+
   return fetchData<Direction>(
     `${API_URL}/direction/name/${directionId}`,
     { method: "GET" },

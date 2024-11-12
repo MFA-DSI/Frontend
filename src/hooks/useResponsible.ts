@@ -18,6 +18,7 @@ export const useResponsible = () => {
   const fetchAllDirectionResponsible = useQuery({
     queryKey: ["responsible", directionId],
     queryFn: () => getDirectionResponsiblesInformation(directionId),
+    enabled: !!directionId,
   });
 
   const saveNewUserMutation = useMutation(addUserToDirection, {

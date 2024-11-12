@@ -30,19 +30,20 @@ export const useDirections = () => {
 
   const fetchServiceByDirectionId = useQuery({
     queryKey: ["services"],
-    queryFn: fetchDirectionServices,
+    queryFn: ()=>fetchDirectionServices(localStorage.getItem("directionId")!),
+    enabled: !!localStorage.getItem("directionId"),
   });
 
   const fetchActualDirectionName = useQuery({
     queryKey: ["service"],
-    queryFn: fetchDirectionName,
-    enabled: !!directionId,
+    queryFn: ()=>fetchDirectionName(localStorage.getItem("directionId")!),
+    enabled: !!localStorage.getItem("directionId"),
   });
 
   const fetchDirectionUserInformation = useQuery({
     queryKey: ["user", userId],
     queryFn: () => getUserInformation(userId || ""),
-    enabled: !!userId,
+    enabled: !!localStorage.getItem("userId"),
   });
 
   const updateUserInformation = useMutation(udpdateUser, {

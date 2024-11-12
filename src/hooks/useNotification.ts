@@ -11,6 +11,7 @@ export const useNotification = () => {
   const fetchNotifications = useQuery({
     queryKey: ["notification"],
     queryFn: () => fetchNotification(localStorage.getItem("userId") || ""),
+    enabled: !!localStorage.getItem("userId"),
   });
 
   const updateNotificationViewStatus = useMutation(updateNotificationStatus, {

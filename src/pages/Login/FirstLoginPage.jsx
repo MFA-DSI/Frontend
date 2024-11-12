@@ -6,10 +6,10 @@ import { DirectionProvider } from "../../providers";
 const FirstLoginPage = () => {
   return (
     <div className={`app`}>
-      <DirectionProvider>
+    
         <ToastContainer></ToastContainer>
         <FirstLoginComponent />
-      </DirectionProvider>
+     
     </div>
   );
 };

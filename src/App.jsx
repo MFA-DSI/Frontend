@@ -30,7 +30,7 @@ function App() {
   const location = useLocation();
   const role = useAuthStore.getState().role;
   const isStaff = useAuthStore.getState().isStaff;
-  const user = useAuthStore.getState().userId;
+ 
 
  
   return (

@@ -24,6 +24,7 @@ export const useMissions = () => {
       queryKey: ["mission"],
       queryFn: () =>
         getByDirectionId(localStorage.getItem("directionId") || ""),
+      enabled : !!localStorage.getItem("userId")
     });
 
   const directionMissionsName = (id) =>
