@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 import environment from "../conf/environment";
 import { CreateMission, Service } from "../types";
+import { message } from "antd";
 
 // Define interfaces
 interface Mission {
@@ -57,7 +58,7 @@ const BASE_URL = environment.apiBaseUrl;
 const handleError = async (response: Response, defaultMessage: string) => {
   const errorData = await response.json();
   const errorMessage = errorData.message || defaultMessage;
-  toast.error(errorMessage);
+  message.error("une erreur s'est produite")
   throw new Error(errorMessage);
 };
 
@@ -66,11 +67,14 @@ const fetchData = async <T>(
   url: string,
   options: RequestInit,
   errorMessage: string,
+  succesMessage?: string 
 ): Promise<T> => {
   const response = await fetch(url, options);
   if (!response.ok) {
     await handleError(response, errorMessage);
   }
+ 
+  
   return response.json();
 };
 
@@ -110,9 +114,8 @@ export const getByDirectionId = async (
 
 // Save a new mission
 export const saveMission = async (mission: CreateMission): Promise<Mission> => {
-  const directionId = localStorage.getItem("directionId");
-  const userId = localStorage.getItem("userId");
-  const url = `${BASE_URL}/direction/mission/create?directionId=${directionId}&userId=${userId}`;
+
+  const url = `${BASE_URL}/direction/mission/create?directionId=${mission.directionId}&userId=${mission.userId}`;
 
   console.log(mission);
 
@@ -135,6 +138,7 @@ export const deleteMission = async (id: string): Promise<void> => {
   await fetchData<void>(
     url,
     { method: "DELETE" },
+    "mission supprimée avec succées",
     "Erreur lors de la suppression de la mission",
   );
 };
@@ -152,6 +156,7 @@ export const updateMission = async (mission: MissionName): Promise<Mission> => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(mission),
     },
+    "mission à jours",
     "Erreur lors de la mise à jour de la mission",
   );
 };

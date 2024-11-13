@@ -136,9 +136,9 @@ const ActivityModal = ({
       onCancel();
     } catch (error) {
       message.error(
-        "Une erreur s'est produite lors de la suppression de cette activity",
+        "Une erreur s'est produite lors de la suppression de cette activité",
       );
-      toast.error(error.message);
+    
     }
   };
 

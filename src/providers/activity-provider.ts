@@ -74,7 +74,7 @@ export const fetchActivities = async (): Promise<Activity[]> => {
       );
     return await response.json();
   } catch (error) {
-    toast.error("Une erreur inattendue est survenue.");
+    message.error("Une erreur inattendue est survenue.");
     throw error instanceof Error ? error : new Error("Erreur inconnue");
   }
 };
@@ -93,7 +93,7 @@ export const getActivityByDirectionId = async (
       );
     return await response.json();
   } catch (error) {
-    toast.error("Une erreur inattendue est survenue.");
+    message.error("Une erreur inattendue est survenue.");
     throw error instanceof Error ? error : new Error("Erreur inconnue");
   }
 };
@@ -108,7 +108,7 @@ export const getActivityById = async (id: string): Promise<Activity> => {
       );
     return await response.json();
   } catch (error) {
-    toast.error("Une erreur inattendue est survenue.");
+    message.error("Une erreur inattendue est survenue.");
     throw error instanceof Error ? error : new Error("Erreur inconnue");
   }
 };
@@ -127,7 +127,7 @@ export const updateActivity = async (activity: Activity): Promise<Activity> => {
       );
     return await response.json();
   } catch (error) {
-    toast.error("Une erreur inattendue est survenue.");
+    message.error("Une erreur inattendue est survenue.");
     throw error instanceof Error ? error : new Error("Erreur inconnue");
   }
 };
@@ -166,7 +166,7 @@ export const addTaskToActivity = async (
     if (!response.ok)
       await handleErrorResponse(response, "Erreur lors de l'ajout de la tâche");
   } catch (error) {
-    toast.error("Une erreur inattendue est survenue.");
+    message.error("Une erreur inattendue est survenue.");
     throw error instanceof Error ? error : new Error("Erreur inconnue");
   }
 };
@@ -183,7 +183,7 @@ export const detachTaskFromActivity = async (taskId: string): Promise<void> => {
         "Erreur lors de la suppression de la tâche",
       );
   } catch (error) {
-    toast.error("Une erreur inattendue est survenue.");
+    message.error("Une erreur inattendue est survenue.");
     throw error instanceof Error ? error : new Error("Erreur inconnue");
   }
 };
@@ -207,7 +207,7 @@ export const addPerformanceToActivity = async (
       );
     message.success("Performance ajoutée avec succès !");
   } catch (error) {
-    toast.error("Une erreur inattendue est survenue.");
+    message.error("Une erreur inattendue est survenue.");
     throw error instanceof Error ? error : new Error("Erreur inconnue");
   }
 };
@@ -226,7 +226,7 @@ export const detachPerformanceFromActivity = async (
         "Erreur lors de la suppression de la performance",
       );
   } catch (error) {
-    toast.error("Une erreur inattendue est survenue.");
+    message.error("Une erreur inattendue est survenue.");
     throw error instanceof Error ? error : new Error("Erreur inconnue");
   }
 };
@@ -253,7 +253,7 @@ export const addRecommendationToActivity = async (
       );
     message.success("Recommandation envoyée avec succès !");
   } catch (error) {
-    toast.error("Une erreur inattendue est survenue.");
+    message.error("Une erreur inattendue est survenue.");
     throw error instanceof Error ? error : new Error("Erreur inconnue");
   }
 };
@@ -276,7 +276,7 @@ export const fetchActivitiesStatistics = async (
 
     return await response.json();
   } catch (error) {
-    toast.error("Une erreur inattendue est survenue.");
+    message.error("Une erreur inattendue est survenue.");
     throw error instanceof Error ? error : new Error("Erreur inconnue");
   }
 };

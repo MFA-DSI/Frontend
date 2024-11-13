@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table, Select, Spin, Button, Checkbox, Badge } from "antd";
+import { Table, Select, Spin, Button, Checkbox, Badge, message } from "antd";
 import { useActivitiesContext } from "../../providers/context/ActivitiesContext";
 import { useMissionContext } from "../../providers/context/MissionsContext";
 import {
@@ -120,7 +120,7 @@ const TableComponent = ({
         }
         setSelectedIds([]);
       } catch (error) {
-        toast.error(error.message);
+        message.error("une erreur s'est produite")
       }
     }
   };

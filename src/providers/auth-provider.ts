@@ -6,6 +6,7 @@ import environment from "../conf/environment";
 import { errorTranslations } from "./utils/translator/translator";
 import { useAuthStore } from "../hooks";
 import { jwtDecode } from "jwt-decode";
+import { message } from "antd";
 
 export const authProvider = {
   login: async (auth: AuthLogin): Promise<void> => {
@@ -60,9 +61,9 @@ export const authProvider = {
       const translatedError = errorTranslations[language][errorCode];
 
       if (translatedError) {
-        toast.error(translatedError);
+        message.error(translatedError);
       } else {
-        toast.error(`Erreur inconnue: ${errorCode}`);
+        message.error(`Erreur inconnue: ${errorCode}`);
       }
       return Promise.reject(error);
     }
@@ -130,9 +131,9 @@ export const authProvider = {
       }
 
       if (translatedError) {
-        toast.error(translatedError);
+        message.error(translatedError);
       } else {
-        toast.error(`Erreur inconnue: ${errorCode}`);
+        message.error(`Erreur inconnue: ${errorCode}`);
       }
       return Promise.reject(error);
     }

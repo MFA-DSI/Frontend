@@ -1,4 +1,6 @@
 export type CreateMission = {
+  userId : string,
+  directionId: string,
   id: string;
   name: string;
   activityList: addActivityItem[];

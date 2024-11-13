@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 import { saveAs } from "file-saver";
 import environment from "../conf/environment";
+import { message } from "antd";
 
 // Assume `API_BASE_URL` is defined in the environment configuration file
 const API_BASE_URL = environment.apiBaseUrl;
@@ -45,7 +46,7 @@ const fetchAndDownloadFile = async (
       const errorMessage =
         errorData.message ||
         "Erreur inconnue lors de la récupération des fichiers";
-      toast.error(errorMessage);
+      message.error(errorMessage);
       throw new Error(errorMessage);
     }
 
@@ -60,7 +61,7 @@ const fetchAndDownloadFile = async (
     // If no filename is found, throw an error or use a default
     if (!filename) {
       const errorMessage = "Nom du fichier non trouvé dans le header";
-      toast.error(errorMessage);
+      message.error(errorMessage);
       throw new Error(errorMessage);
     }
 

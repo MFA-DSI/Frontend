@@ -38,12 +38,12 @@ const MissionModal = ({ visible, onCancel, mission, onDelete, mode }) => {
       await deleteMission(mission.id);
       setDeleteModalVisible(false);
       onCancel();
-      message.success("Mission supprimée avec succès !");
+      
     } catch (error) {
       message.error(
         "Une erreur s'est produite lors de la suppression de cette mission",
       );
-      toast.error(error.message);
+     
     }
   };
 
@@ -72,7 +72,7 @@ const MissionModal = ({ visible, onCancel, mission, onDelete, mode }) => {
       message.error(
         "Une erreur s'est produite lors de la suppression de cette mission",
       );
-      toast.error(error.message);
+      
     }
   };
 
