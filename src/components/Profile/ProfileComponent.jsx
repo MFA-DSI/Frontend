@@ -22,6 +22,7 @@ import { useAuthStore } from "../../hooks";
 import { useResponsiblesContext } from "../../providers/context/ReponsibleContext";
 import { EditableField } from "../Modal/Forms/ActivityDetails";
 import { validateEmail } from "../Modal/utils/validateEmail";
+import { all } from "axios";
 
 const ProfileComponent = () => {
   const {
@@ -102,14 +103,23 @@ const ProfileComponent = () => {
     setResponseData(null);
   };
 
+  const localeSettings = {
+    filterConfirm: 'Filtrer ',  // Remplace "OK" par "Valider"
+    filterReset: 'Réinitialiser', // Remplace "Reset" par "Réinitialiser"
+    emptyText: "Aucune utilisateur correpondante"
+  };
   const columns = [
     {
       title: "Grade",
       dataIndex: "grade",
       key: "grade",
-      filters: grades.sort((a, b) => a.text.localeCompare(b.text)),
+      filters: [...new Set(allDirection.map((item) => item.grade))] // Valeurs uniques pour les grades
+        .sort((a, b) => a.localeCompare(b)) // Tri alphabétique
+        .map((value) => ({ text: value, value })), // Transformation en objets de filtre
+      onFilter: (value, record) => record.grade === value, // Logique de filtrage
       render: (text) => <Typography.Text>{text}</Typography.Text>,
-    },
+    }
+    ,
     {
       title: "Nom et Prénom",
       dataIndex: "fullName",
@@ -124,8 +134,11 @@ const ProfileComponent = () => {
       title: "Fonction",
       dataIndex: "function",
       key: "function",
-      filters: functions.sort((a, b) => a.text.localeCompare(b.text)),
-      render: (text) => <Typography.Text>{text}</Typography.Text>,
+      filters: [...new Set(allDirection.map((item) => item.function))] // Utilisation des valeurs uniques
+      .sort((a, b) => a.localeCompare(b)) // Tri alphabétique
+      .map((value) => ({ text: value, value })), // Transformation en structure de filtre
+    onFilter: (value, record) => record.function === value, // Logique de filtrage
+    render: (text) => <Typography.Text>{text}</Typography.Text>,
     },
     {
       title: "Personnel",
@@ -214,7 +227,7 @@ const ProfileComponent = () => {
         fonction,
       };
 
-      console.log(updatedUserInfo);
+    
       const updateParams = { userId, userInfoUpdate: updatedUserInfo };
 
       // Appel de la fonction udpdateUser avec les données mises à jour
@@ -375,7 +388,7 @@ const ProfileComponent = () => {
             </Button>
           )}
 
-          <Table columns={columns} dataSource={allDirection} rowKey="id" />
+          <Table columns={columns} dataSource={allDirection}  locale={localeSettings} rowKey="id" />
         </Card>
       )}
 

@@ -52,28 +52,6 @@ export const militaireGrades = [
   "CAL", // Caporal
   "S1C", // Soldat de 1° Classe
   "S2C", // Soldat de 2° Classe
-
-  // Grades de la Marine
-  "AMIRAL", // Amiral
-  "VAE", // Vice-Amiral d'Escadre
-  "VAM", // Vice-Amiral
-  "CAM", // Contre-Amiral
-  "CVA", // Capitaine de Vaisseau
-  "CFR", // Capitaine de Frégate
-  "CCO", // Capitaine de Corvette
-  "LTV", // Lieutenant de Vaisseau
-  "EV1", // Enseigne de Vaisseau de 1° Classe
-  "EV2", // Enseigne de Vaisseau de 2° Classe
-  "MAP", // Maître Principal
-  "PMA", // Premier Maître
-  "PM", // Maître
-  "SMAC", // Second Maître Hors Classe
-  "SM1", // Second Maître de 1° Classe
-  "SM2", // Second Maître de 2° Classe
-  "QM1", // Quartier-Maître de 1° Classe
-  "QM2", // Quartier-Maître de 2° Classe
-  "MO1", // Matelot de 1° Classe
-  "MO2", // Matelot de 2° Classe
 ];
 
 // Fonction pour obtenir le grade en fonction du type de personnel

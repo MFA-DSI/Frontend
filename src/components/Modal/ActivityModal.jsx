@@ -313,7 +313,8 @@ const ActivityModal = ({
               </Button>
               <Button
                 style={{ marginBottom: "10px", marginRight: "10px" }}
-                onClick={() => setIsEditing(false)}
+                onClick={() => {
+                  setIsEditing(false),onCancel()}}
               >
                 Annuler
               </Button>

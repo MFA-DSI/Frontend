@@ -63,7 +63,7 @@ export const authProvider = {
       if (translatedError) {
         message.error(translatedError);
       } else {
-        message.error(`Erreur inconnue: ${errorCode}`);
+        message.error(`Erreur : ${errorCode}`);
       }
       return Promise.reject(error);
     }
@@ -133,7 +133,7 @@ export const authProvider = {
       if (translatedError) {
         message.error(translatedError);
       } else {
-        message.error(`Erreur inconnue: ${errorCode}`);
+        message.error(`Erreur : ${errorCode}`);
       }
       return Promise.reject(error);
     }

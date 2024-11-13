@@ -72,6 +72,10 @@ const NotificationCardDynamicIcons = () => {
   }, [notifications]);
 
   const handleUpdate = async (notificationId) => {
+
+    if(!notificationId.viewStatus){
+      return
+    }
     try {
       // Mise à jour de la notification
       const updatedNotification = await updateNotification(notificationId.id);
@@ -79,7 +83,7 @@ const NotificationCardDynamicIcons = () => {
       // Vérifie le statut de la notification et la vue
       if (notificationId.viewStatus === false) {
         // Si la notification n'est pas vue, on vérifie le statut
-        if (updatedNotification.status === "user_created") {
+        if (updatedNotification.status === "user_added") {
           navigate("/profile"); // Redirection vers le profil
         } else {
           navigate("/myDirection"); // Sinon, redirection vers "myDirection"
@@ -96,7 +100,7 @@ const NotificationCardDynamicIcons = () => {
       id: notification.id,
       userId: userId,
     };
-    console.log(params);
+  
 
     try {
       await deleteNotification(params);
