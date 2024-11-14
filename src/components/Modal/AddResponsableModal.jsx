@@ -156,7 +156,7 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
                         message: "Veuillez entrer votre email valide",
                       }
                     : {
-                        pattern: /^(034|039|038|037|033|032)\d{7}$/,
+                        pattern: /^(034|038|032|037|020|033|039)\d{7}$/,
                         message:
                           "Veuillez entrer votre numéro de téléphone valide (commençant par 034, 039, 038, 032, 037, ou 033 et comportant 10 chiffres).",
                       },

@@ -62,7 +62,7 @@ const ProfileComponent = () => {
   };
   const name = fetchActualDirectionName?.data?.acronym || "Chargement...";
 
-  useEffect(() => {}, [name]);
+  
   const handleApprovalAction = async (approved) => {
     if (approved) {
       // Perform approval action here
@@ -170,6 +170,8 @@ const ProfileComponent = () => {
     fonction: userInformation.function,
   });
 
+  useEffect(() => {}, [name,userInfo]);
+
   const handleFieldChange = (field, value) => {
     setUserInfo((prevInfo) => ({
       ...prevInfo,
@@ -201,6 +203,11 @@ const ProfileComponent = () => {
       );
       return;
     }
+    const phonePattern = /^(034|038|032|037|020|033|039)\d{7}$/;
+if (phoneNumbers && !phonePattern.test(phoneNumbers)) {
+  message.error("Le numéro de téléphone doit commencer par 034, 038, 032, 037, 020, 033, ou 039 et contenir exactement 10 chiffres.");
+  return;
+}
 
     // Validation de l'email si fourni
     if (mail && !validateEmail(mail)) {
@@ -233,6 +240,14 @@ const ProfileComponent = () => {
 
   const buttonStyle = {
     marginBottom: "12px",
+  };
+
+  const validatePhoneNumber = (phoneNumber) => {
+    const phonePattern = /^(034|038|032|037|020|033|039)\d{7}$/;
+    if (!phonePattern.test(phoneNumber)) {
+      return "Le numéro de téléphone doit commencer par 034, 038, 032, 037, 020, 033, ou 039 et contenir exactement 10 chiffres.";
+    }
+    return null; // No error
   };
 
   return (
@@ -332,6 +347,7 @@ const ProfileComponent = () => {
                     onChange={(e) =>
                       handleFieldChange("phoneNumbers", e.target.value)
                     }
+                    validate={validatePhoneNumber} 
                   />
                   <EditableField
                     editable={true}
