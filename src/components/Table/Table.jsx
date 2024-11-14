@@ -61,11 +61,13 @@ const TableComponent = ({
   const [selectedIds, setSelectedIds] = useState([]);
   const [directionIdFilter, setDirectionIdFilter] = useState("all");
   const [activityFilterType, setActivityFilterType] = useState("all");
+  const [activityCount,setActivityCount] = useState(0)
   useEffect(() => {}, [
     mode,
     activityFilterType,
     activityType,
     directionIdFilter,
+    activityCount
   ]);
 
   const showModal = (activity) => {
@@ -295,7 +297,7 @@ const TableComponent = ({
           render: (activityList) => {
             const firstActivity = activityList[0];
             const otherActivitiesCount = activityList.length - 1;
-
+              setActivityCount(otherActivitiesCount)
             return (
               <div>
                 {firstActivity ? firstActivity.description : "Aucune activité"}
@@ -323,12 +325,15 @@ const TableComponent = ({
 
             return (
               <div>
-                {performanceRealizations && performanceRealizations.length > 0
+
+
+
+                {performanceRealizations
                   ? performanceRealizations[0].realization
                   : "Aucun indicateur"}
-                {otherIndicatorsCount > 0 && (
+                {activityCount > 0 && (
                   <Badge
-                    count={`${otherIndicatorsCount} autre(s)`}
+                    count={`${activityCount} autre(s)`}
                     color={"blue"}
                     style={{ marginLeft: 8 }}
                   />
@@ -353,9 +358,9 @@ const TableComponent = ({
                 {performanceRealizations && performanceRealizations.length > 0
                   ? performanceRealizations[0].indicators
                   : "Aucune réalisation"}
-                {otherRealizationsCount > 0 && (
+                {activityCount > 0 && (
                   <Badge
-                    count={`${otherRealizationsCount} autre(s)`}
+                    count={`${activityCount} autre(s)`}
                     color={"yellow"}
                     style={{ marginLeft: 8 }}
                   />

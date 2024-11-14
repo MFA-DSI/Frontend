@@ -35,7 +35,7 @@ export const useMissions = () => {
 
   const deleteMissionMutation = useMutation(deleteMission, {
     onSuccess: () => {
-      queryClient.invalidateQueries("missions");
+      queryClient.invalidateQueries("activity");
       queryClient.invalidateQueries("mission");
     },
   });
@@ -49,7 +49,7 @@ export const useMissions = () => {
 
   const saveMissionMutation = useMutation(saveMission, {
     onSuccess: () => {
-      queryClient.invalidateQueries("missions");
+      queryClient.invalidateQueries("activity");
       queryClient.invalidateQueries("mission");
     },
   });
