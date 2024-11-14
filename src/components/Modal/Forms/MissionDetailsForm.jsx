@@ -49,19 +49,23 @@ export const ActivityDetailsForm = ({
           }
         />
       </Form.Item>
-
       <Form.Item
-        label="Date d'échéance *"
-        name="dueDatetime"
-        rules={[
-          { required: true, message: "La date d'échéance est obligatoire" },
-        ]}
-      >
-        <DatePicker
-          value={dueDatetime ? moment(dueDatetime) : null}
-          onChange={(date) => setActivity({ ...activity, dueDatetime: date })}
-        />
-      </Form.Item>
+  label="Date d'échéance *"
+  name="dueDatetime"
+  rules={[
+    { required: true, message: "La date d'échéance est obligatoire" },
+    
+  ]}
+
+  disabledDate={(current) => current && current.isBefore(moment(), 'day')}
+>
+  <DatePicker
+    value={dueDatetime ? moment(dueDatetime) : null}
+    onChange={(date) => setActivity({ ...activity, dueDatetime: date })}
+    disabledDate={(current) => current && current.isBefore(moment(), 'day')}
+  />
+</Form.Item>
+
     </Form>
   );
 };
@@ -97,6 +101,7 @@ export const TaskForm = ({ tasks, setTasks }) => {
       <Form.Item label="Date de la Tâche">
         <DatePicker
           value={taskDueDate}
+          disabledDate={(current) => current && current.isBefore(moment(), 'day')}
           onChange={(date) => setTaskDueDate(date)}
         />
       </Form.Item>
@@ -154,6 +159,7 @@ export const NextTaskForm = ({ nextTasks, setNextTasks }) => {
       <Form.Item label="Date de la Tâche Prochaine">
         <DatePicker
           value={nextTaskDueDate}
+          disabledDate={(current) => current && current.isBefore(moment(), 'day')}
           onChange={(date) => setNextTaskDueDate(date)}
         />
       </Form.Item>

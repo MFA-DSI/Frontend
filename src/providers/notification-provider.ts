@@ -66,9 +66,6 @@ export const deleteNotification = async (id: DeleteNotificationParams) => {
     const url = new URL(
       `${API_URL}/direction/notification/delete?id=${id.id}&userId=${id.userId}`,
     );
-
-    console.log(url);
-
     const response = await fetch(url.toString(), {
       method: "POST",
     });
@@ -79,9 +76,9 @@ export const deleteNotification = async (id: DeleteNotificationParams) => {
       );
     }
 
-    const data = await response.json();
+   
     message.success("notification supprimé avec succées");
-    return data;
+    return null
   } catch (error) {
     console.error("Failed to update notification status", error);
     throw error;
