@@ -58,7 +58,7 @@ const BASE_URL = environment.apiBaseUrl;
 const handleError = async (response: Response, defaultMessage: string) => {
   const errorData = await response.json();
   const errorMessage = errorData.message || defaultMessage;
-  message.error("une erreur s'est produite")
+  message.error("une erreur s'est produite");
   throw new Error(errorMessage);
 };
 
@@ -67,14 +67,13 @@ const fetchData = async <T>(
   url: string,
   options: RequestInit,
   errorMessage: string,
-  succesMessage?: string 
+  succesMessage?: string,
 ): Promise<T> => {
   const response = await fetch(url, options);
   if (!response.ok) {
     await handleError(response, errorMessage);
   }
- 
-  
+
   return response.json();
 };
 
@@ -114,7 +113,6 @@ export const getByDirectionId = async (
 
 // Save a new mission
 export const saveMission = async (mission: CreateMission): Promise<Mission> => {
-
   const url = `${BASE_URL}/direction/mission/create?directionId=${mission.directionId}&userId=${mission.userId}`;
 
   console.log(mission);

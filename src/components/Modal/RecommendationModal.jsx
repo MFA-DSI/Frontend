@@ -33,7 +33,6 @@ const RecommendationModal = ({
       message.error(
         "Une erreur s'est produite lors de la modification de cette activité",
       );
-     
     } finally {
       onCancel();
     }

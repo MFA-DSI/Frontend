@@ -120,7 +120,7 @@ const TableComponent = ({
         }
         setSelectedIds([]);
       } catch (error) {
-        message.error("une erreur s'est produite")
+        message.error("une erreur s'est produite");
       }
     }
   };
@@ -281,7 +281,7 @@ const TableComponent = ({
             <div>
               {description}{" "}
               <Badge
-                count={`${record.service.name}`}
+                count={`${record.directionName}/${record.service.acronym}`}
                 style={{ marginLeft: 10 }}
                 color="green"
               ></Badge>
@@ -504,7 +504,6 @@ const TableComponent = ({
           dataSource={dataSource}
           pagination={{
             pageSize,
-            showSizeChanger: true,
             pageSizeOptions: ["10", "20", "50", "100"],
           }}
           scroll={mode === "all" ? { y: 263.5 } : { y: 250 }}

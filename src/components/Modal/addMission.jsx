@@ -30,7 +30,7 @@ const AddMissionModal = ({ visible, onCancel }) => {
   const { MissionNameByDirectionId, saveMission } = useMissionContext();
   const { fetchAllService, isLoading } = useDirectionsContext();
   const [currentStep, setCurrentStep] = useState(0);
-  const {userId,directionId} = useAuthStore.getState();
+  const { userId, directionId } = useAuthStore.getState();
   const [activity, setActivity] = useState({
     description: "",
     observation: "",
@@ -99,18 +99,15 @@ const AddMissionModal = ({ visible, onCancel }) => {
     setCurrentStep(0); // Go back to the first step
   };
 
-
-  
   const handleSubmit = async () => {
-
-    if(performanceIndicators.length <= 0){
-      message.error("les indicateurs de performance ne peut pas être nulle");
+    if (performanceIndicators.length <= 0) {
+      message.error("les indicateurs de performance ne peuvent pas être nulles");
       return;
     }
 
     const activityData = {
-      userId : userId,
-      directionId : directionId,
+      userId: userId,
+      directionId: directionId,
       id: selectedMission?.id,
       name:
         missionType === "existing"

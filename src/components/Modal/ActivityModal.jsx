@@ -138,7 +138,6 @@ const ActivityModal = ({
       message.error(
         "Une erreur s'est produite lors de la suppression de cette activité",
       );
-    
     }
   };
 
@@ -314,7 +313,8 @@ const ActivityModal = ({
               <Button
                 style={{ marginBottom: "10px", marginRight: "10px" }}
                 onClick={() => {
-                  setIsEditing(false),onCancel()}}
+                  setIsEditing(false), onCancel();
+                }}
               >
                 Annuler
               </Button>

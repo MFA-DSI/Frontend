@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   Avatar,
@@ -23,6 +23,7 @@ import { useResponsiblesContext } from "../../providers/context/ReponsibleContex
 import { EditableField } from "../Modal/Forms/ActivityDetails";
 import { validateEmail } from "../Modal/utils/validateEmail";
 import { all } from "axios";
+import { DirectionName } from "../Table/utils/DirectionUtils";
 
 const ProfileComponent = () => {
   const {
@@ -52,25 +53,16 @@ const ProfileComponent = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [responseModalVisible, setResponseModalVisible] = useState(false);
   const [responseData, setResponseData] = useState(null);
-
+  const { fetchActualDirectionName } = useDirectionsContext();
   const role = useAuthStore.getState().role;
 
   const handleApprove = (user) => {
     setSelectedUser(user);
     setIsApproveModalVisible(true);
   };
-  const grades = [
-    { text: "A", value: "A" },
-    { text: "B", value: "B" },
-    { text: "C", value: "C" },
-  ];
+  const name = fetchActualDirectionName?.data?.acronym || "Chargement...";
 
-  const functions = [
-    { text: "Designer", value: "Designer" },
-    { text: "Developer", value: "Developer" },
-    { text: "Manager", value: "Manager" },
-  ];
-
+  useEffect(() => {}, [name]);
   const handleApprovalAction = async (approved) => {
     if (approved) {
       // Perform approval action here
@@ -104,9 +96,9 @@ const ProfileComponent = () => {
   };
 
   const localeSettings = {
-    filterConfirm: 'Filtrer ',  // Remplace "OK" par "Valider"
-    filterReset: 'Réinitialiser', // Remplace "Reset" par "Réinitialiser"
-    emptyText: "Aucune utilisateur correpondante"
+    filterConfirm: "Filtrer ", // Remplace "OK" par "Valider"
+    filterReset: "Réinitialiser", // Remplace "Reset" par "Réinitialiser"
+    emptyText: "Aucune utilisateur correpondante",
   };
   const columns = [
     {
@@ -118,8 +110,7 @@ const ProfileComponent = () => {
         .map((value) => ({ text: value, value })), // Transformation en objets de filtre
       onFilter: (value, record) => record.grade === value, // Logique de filtrage
       render: (text) => <Typography.Text>{text}</Typography.Text>,
-    }
-    ,
+    },
     {
       title: "Nom et Prénom",
       dataIndex: "fullName",
@@ -135,10 +126,10 @@ const ProfileComponent = () => {
       dataIndex: "function",
       key: "function",
       filters: [...new Set(allDirection.map((item) => item.function))] // Utilisation des valeurs uniques
-      .sort((a, b) => a.localeCompare(b)) // Tri alphabétique
-      .map((value) => ({ text: value, value })), // Transformation en structure de filtre
-    onFilter: (value, record) => record.function === value, // Logique de filtrage
-    render: (text) => <Typography.Text>{text}</Typography.Text>,
+        .sort((a, b) => a.localeCompare(b)) // Tri alphabétique
+        .map((value) => ({ text: value, value })), // Transformation en structure de filtre
+      onFilter: (value, record) => record.function === value, // Logique de filtrage
+      render: (text) => <Typography.Text>{text}</Typography.Text>,
     },
     {
       title: "Personnel",
@@ -227,7 +218,6 @@ const ProfileComponent = () => {
         fonction,
       };
 
-    
       const updateParams = { userId, userInfoUpdate: updatedUserInfo };
 
       // Appel de la fonction udpdateUser avec les données mises à jour
@@ -279,6 +269,7 @@ const ProfileComponent = () => {
                   style={{ display: "flex", flexDirection: "column" }}
                 >
                   <EditableField
+                  editable={true}
                     label="Grade"
                     value={userInfo.grade}
                     isEditing={isEditing}
@@ -288,25 +279,25 @@ const ProfileComponent = () => {
                   <EditableField
                     editable={true}
                     label="Nom"
-                    value={userInfo.lastname}
+                    value={userInfo.firstname}
                     isEditing={isEditing}
                     mode="mydirection"
                     onChange={(e) => {
                       handleFieldChange(
-                        "lastname",
-                        e.target.value || userInfo.lastname,
+                        "firstname",
+                        e.target.value || userInfo.firstname,
                       );
                     }}
                   />
                   <EditableField
                     editable={true}
                     label="Prénom"
-                    value={userInfo.firstname}
+                    value={userInfo.lastname}
                     isEditing={isEditing}
                     required={false}
                     mode="mydirection"
                     onChange={(e) => {
-                      handleFieldChange("firstname", e.target.value);
+                      handleFieldChange("lastname", e.target.value);
                     }}
                   />
                   <EditableField
@@ -369,7 +360,20 @@ const ProfileComponent = () => {
             boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
           }}
         >
-          <Typography.Title level={4}>Actions</Typography.Title>
+        
+            
+            <div >
+            {role === 'SUPER_ADMIN' ? (
+        <h3>
+          Personnel de la {name} et administrateurs de la MFA-ACTION :
+        </h3>
+      ) : (
+        <h3>
+          Personnels de la {name}
+        </h3>
+      )}
+              </div>
+          
           <Button
             type="primary"
             style={buttonStyle}
@@ -388,7 +392,12 @@ const ProfileComponent = () => {
             </Button>
           )}
 
-          <Table columns={columns} dataSource={allDirection}  locale={localeSettings} rowKey="id" />
+          <Table
+            columns={columns}
+            dataSource={allDirection}
+            locale={localeSettings}
+            rowKey="id"
+          />
         </Card>
       )}
 
