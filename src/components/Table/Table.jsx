@@ -401,7 +401,7 @@ const TableComponent = ({
 
   const activityDropdownStyle = { width: 120, marginRight: "5px" };
 
-  const weeklyDropDownStyle = { width: "100%", marginRight: "8px" };
+  const weeklyDropDownStyle = { width: 240, marginRight: "8px" };
   const monthlyDropDownStyle = { width: 100 };
 
   return (

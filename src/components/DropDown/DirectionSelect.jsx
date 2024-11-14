@@ -18,7 +18,7 @@ export const DirectionSelect = ({ setDirection, value }) => {
         <Option value="all">Toutes les Directions</Option>
         {fetchAllDirection.map((direction) => (
           <Option key={direction.id} value={direction.id}>
-            {direction.name}
+            {direction.acronym}
           </Option>
         ))}
       </Select>

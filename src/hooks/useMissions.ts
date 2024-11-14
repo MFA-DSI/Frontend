@@ -51,6 +51,7 @@ export const useMissions = () => {
     onSuccess: () => {
       queryClient.invalidateQueries("activity");
       queryClient.invalidateQueries("mission");
+      queryClient.invalidateQueries("notification");
     },
   });
 
