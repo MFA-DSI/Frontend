@@ -2,7 +2,7 @@ import { ConfigProvider, DatePicker, Input, Typography } from "antd";
 import { dateFormatter } from "../utils/dateFormatter";
 import { useState } from "react";
 import moment from "moment";
-import frLocale from 'antd/locale/fr_FR';
+import frLocale from "antd/locale/fr_FR";
 
 export const EditableField = ({
   label,
@@ -19,14 +19,12 @@ export const EditableField = ({
   const [error, setError] = useState(null); // State to hold validation error message
 
   const handleChange = (e) => {
-  
-    
     // If validate function is provided, check the input
     if (validate) {
       const validationError = validate(e);
       setError(validationError);
     }
-    
+
     onChange(e); // Update the value
   };
 
@@ -40,9 +38,15 @@ export const EditableField = ({
       </Typography.Text>
       {isEditing && mode === "mydirection" && editable ? (
         inputType === "date" ? (
-
-    <ConfigProvider locale={frLocale}>
-          <DatePicker locale="fr_FR" value={value} onChange={onChange}  disabledDate={(current) => current && current.isBefore(moment(), 'day')} />
+          <ConfigProvider locale={frLocale}>
+            <DatePicker
+              locale="fr_FR"
+              value={value}
+              onChange={onChange}
+              disabledDate={(current) =>
+                current && current.isBefore(moment(), "day")
+              }
+            />
           </ConfigProvider>
         ) : (
           <div>
@@ -51,7 +55,7 @@ export const EditableField = ({
               value={value}
               onChange={handleChange}
               placeholder={placeholder}
-              status={error ? 'error' : ''}
+              status={error ? "error" : ""}
             />
             {error && (
               <Typography.Text type="danger" style={{ fontSize: "12px" }}>

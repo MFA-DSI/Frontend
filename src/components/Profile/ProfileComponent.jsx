@@ -39,7 +39,7 @@ const ProfileComponent = () => {
   //change this from zustand
 
   const userId = localStorage.getItem("userId");
-  const directionId = localStorage.getItem("directionId")
+  const directionId = localStorage.getItem("directionId");
   const [isEditing, setIsEditing] = useState(false);
 
   const handleToggleEdit = () => {
@@ -61,7 +61,6 @@ const ProfileComponent = () => {
   };
   const name = fetchActualDirectionName?.data?.acronym || "Chargement...";
 
-  
   const handleApprovalAction = async (approved) => {
     if (approved) {
       // Perform approval action here
@@ -169,7 +168,7 @@ const ProfileComponent = () => {
     fonction: userInformation.function,
   });
 
-  useEffect(() => {}, [name,userInfo]);
+  useEffect(() => {}, [name, userInfo]);
 
   const handleFieldChange = (field, value) => {
     setUserInfo((prevInfo) => ({
@@ -203,10 +202,12 @@ const ProfileComponent = () => {
       return;
     }
     const phonePattern = /^(034|038|032|037|020|033|039)\d{7}$/;
-if (phoneNumbers && !phonePattern.test(phoneNumbers)) {
-  message.error("Le numéro de téléphone doit commencer par 034, 038, 032, 037, 020, 033, ou 039 et contenir exactement 10 chiffres.");
-  return;
-}
+    if (phoneNumbers && !phonePattern.test(phoneNumbers)) {
+      message.error(
+        "Le numéro de téléphone doit commencer par 034, 038, 032, 037, 020, 033, ou 039 et contenir exactement 10 chiffres.",
+      );
+      return;
+    }
 
     // Validation de l'email si fourni
     if (mail && !validateEmail(mail)) {
@@ -221,7 +222,7 @@ if (phoneNumbers && !phonePattern.test(phoneNumbers)) {
         grade,
         mail,
         phoneNumbers,
-        fonction
+        fonction,
       };
 
       const updateParams = { userId, userInfoUpdate: updatedUserInfo };
@@ -283,7 +284,7 @@ if (phoneNumbers && !phonePattern.test(phoneNumbers)) {
                   style={{ display: "flex", flexDirection: "column" }}
                 >
                   <EditableField
-                  editable={true}
+                    editable={true}
                     label="Grade"
                     value={userInfo.grade}
                     isEditing={isEditing}
@@ -346,7 +347,7 @@ if (phoneNumbers && !phonePattern.test(phoneNumbers)) {
                     onChange={(e) =>
                       handleFieldChange("phoneNumbers", e.target.value)
                     }
-                    validate={validatePhoneNumber} 
+                    validate={validatePhoneNumber}
                   />
                   <EditableField
                     editable={true}
@@ -375,20 +376,16 @@ if (phoneNumbers && !phonePattern.test(phoneNumbers)) {
             boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
           }}
         >
-        
-            
-            <div >
-            {role === 'SUPER_ADMIN' ? (
-        <h3>
-          Personnel de la {name} et administrateurs de la MFA-ACTION :
-        </h3>
-      ) : (
-        <h3>
-          Personnels de la {name}
-        </h3>
-      )}
-              </div>
-          
+          <div>
+            {role === "SUPER_ADMIN" ? (
+              <h3>
+                Personnel de la {name} et administrateurs de la MFA-ACTION :
+              </h3>
+            ) : (
+              <h3>Personnels de la {name}</h3>
+            )}
+          </div>
+
           <Button
             type="primary"
             style={buttonStyle}

@@ -76,9 +76,8 @@ export const deleteNotification = async (id: DeleteNotificationParams) => {
       );
     }
 
-   
     message.success("notification supprimé avec succées");
-    return null
+    return null;
   } catch (error) {
     console.error("Failed to update notification status", error);
     throw error;

@@ -4,7 +4,7 @@ import moment from "moment";
 import { useActivitiesContext } from "../../providers";
 import { toast } from "react-toastify";
 
-import frLocale from 'antd/locale/fr_FR';
+import frLocale from "antd/locale/fr_FR";
 const TaskModal = ({
   visible,
   onCancel,
@@ -95,20 +95,21 @@ const TaskModal = ({
       <div>
         <h3>Date Limite:</h3>
 
-       
         <ConfigProvider locale={frLocale}>
-        <DatePicker
-        disabledDate={(current) => current && current.isBefore(moment(), 'day')}
-          value={taskToEdit.dueDatetime}
-          onChange={(date) => updateTask("dueDatetime", date)}
-          placeholder="Date limite"
-          getPopupContainer={(trigger) => trigger.parentNode} // Assure que le popup reste dans le même conteneur
-          dropdownAlign={{
-            points: ['tl', 'bl'], // Définit le point d'alignement (always bottom)
-            offset: [0, 10], // Ajuste l'espace entre le champ et le popup
-          }}
-        />
-         </ConfigProvider>
+          <DatePicker
+            disabledDate={(current) =>
+              current && current.isBefore(moment(), "day")
+            }
+            value={taskToEdit.dueDatetime}
+            onChange={(date) => updateTask("dueDatetime", date)}
+            placeholder="Date limite"
+            getPopupContainer={(trigger) => trigger.parentNode} // Assure que le popup reste dans le même conteneur
+            dropdownAlign={{
+              points: ["tl", "bl"], // Définit le point d'alignement (always bottom)
+              offset: [0, 10], // Ajuste l'espace entre le champ et le popup
+            }}
+          />
+        </ConfigProvider>
       </div>
     </Modal>
   );

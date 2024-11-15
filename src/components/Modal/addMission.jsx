@@ -101,7 +101,9 @@ const AddMissionModal = ({ visible, onCancel }) => {
 
   const handleSubmit = async () => {
     if (performanceIndicators.length <= 0) {
-      message.error("les indicateurs de performance ne peuvent pas être nulles");
+      message.error(
+        "les indicateurs de performance ne peuvent pas être nulles",
+      );
       return;
     }
 

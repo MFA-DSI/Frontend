@@ -61,13 +61,13 @@ const TableComponent = ({
   const [selectedIds, setSelectedIds] = useState([]);
   const [directionIdFilter, setDirectionIdFilter] = useState("all");
   const [activityFilterType, setActivityFilterType] = useState("all");
-  const [activityCount,setActivityCount] = useState(0)
+  const [activityCount, setActivityCount] = useState(0);
   useEffect(() => {}, [
     mode,
     activityFilterType,
     activityType,
     directionIdFilter,
-    activityCount
+    activityCount,
   ]);
 
   const showModal = (activity) => {
@@ -297,7 +297,7 @@ const TableComponent = ({
           render: (activityList) => {
             const firstActivity = activityList[0];
             const otherActivitiesCount = activityList.length - 1;
-              setActivityCount(otherActivitiesCount)
+            setActivityCount(otherActivitiesCount);
             return (
               <div>
                 {firstActivity ? firstActivity.description : "Aucune activité"}
@@ -325,9 +325,6 @@ const TableComponent = ({
 
             return (
               <div>
-
-
-
                 {performanceRealizations
                   ? performanceRealizations[0].realization
                   : "Aucun indicateur"}
@@ -349,7 +346,6 @@ const TableComponent = ({
           render: (activityList) => {
             const performanceRealizations =
               activityList[0]?.performanceRealization;
-         
 
             return (
               <div>

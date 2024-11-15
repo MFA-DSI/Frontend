@@ -37,7 +37,7 @@ const AddUserModal = ({ visible, onCancel }) => {
     };
 
     console.log(user);
-    
+
     try {
       const savedUser = await saveNewUser(user);
       console.log(savedUser);

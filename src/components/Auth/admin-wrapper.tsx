@@ -21,7 +21,7 @@ export const RoleWrapper = ({ children, role }) => {
 };
 
 const StaffWrapper = ({ children, isStaff }) => {
-  const role = localStorage.getItem("role")
+  const role = localStorage.getItem("role");
   if (role === "user" || isStaff !== "true") {
     return <Navigate to="/" replace />;
   }
@@ -30,4 +30,3 @@ const StaffWrapper = ({ children, isStaff }) => {
 };
 
 export default StaffWrapper;
-

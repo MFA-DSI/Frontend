@@ -92,7 +92,7 @@ const MainLayout = ({ children }) => {
       icon: <UserOutlined />,
       label: <span style={{ color: "white" }}>Mon profil</span>,
     },
-    ...( role !== "user" && isStaff === "true"
+    ...(role !== "user" && isStaff === "true"
       ? [
           {
             key: "/statistics",
