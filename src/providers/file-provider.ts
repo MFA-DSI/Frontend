@@ -72,7 +72,6 @@ const fetchAndDownloadFile = async (
     return blob;
   } catch (error) {
     console.error("Error fetching files:", error);
-    toast.error(error instanceof Error ? error.message : "Erreur inconnue");
     toast.dismiss(loadingToastId);
     throw error;
   }

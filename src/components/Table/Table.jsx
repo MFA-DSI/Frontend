@@ -333,7 +333,7 @@ const TableComponent = ({
                   : "Aucun indicateur"}
                 {activityCount > 0 && (
                   <Badge
-                    count={`${activityCount} autre(s)`}
+                    count={`${performanceRealizations.length} autre(s)`}
                     color={"blue"}
                     style={{ marginLeft: 8 }}
                   />
@@ -349,18 +349,16 @@ const TableComponent = ({
           render: (activityList) => {
             const performanceRealizations =
               activityList[0]?.performanceRealization;
-            const otherRealizationsCount = performanceRealizations
-              ? performanceRealizations.length - 1
-              : 0;
+         
 
             return (
               <div>
                 {performanceRealizations && performanceRealizations.length > 0
-                  ? performanceRealizations[0].indicators
+                  ? `${performanceRealizations[0].indicators}${performanceRealizations[0].realizationType == "percentage" ? "%" : ""}`
                   : "Aucune réalisation"}
                 {activityCount > 0 && (
                   <Badge
-                    count={`${activityCount} autre(s)`}
+                    count={`${performanceRealizations.length} autre(s)`}
                     color={"yellow"}
                     style={{ marginLeft: 8 }}
                   />

@@ -1,5 +1,6 @@
 import React from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { useAuthStore } from "../../hooks";
 
 export const AdminWrapper = ({ role }) => {
   if (role === "SUPER_ADMIN") {
@@ -20,7 +21,8 @@ export const RoleWrapper = ({ children, role }) => {
 };
 
 const StaffWrapper = ({ children, isStaff }) => {
-  if (isStaff !== "true") {
+  const role = localStorage.getItem("role")
+  if (role === "user" || isStaff !== "true") {
     return <Navigate to="/" replace />;
   }
 
@@ -28,3 +30,4 @@ const StaffWrapper = ({ children, isStaff }) => {
 };
 
 export default StaffWrapper;
+
