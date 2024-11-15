@@ -22,8 +22,6 @@ import { useAuthStore } from "../../hooks";
 import { useResponsiblesContext } from "../../providers/context/ReponsibleContext";
 import { EditableField } from "../Modal/Forms/ActivityDetails";
 import { validateEmail } from "../Modal/utils/validateEmail";
-import { all } from "axios";
-import { DirectionName } from "../Table/utils/DirectionUtils";
 
 const ProfileComponent = () => {
   const {
@@ -41,6 +39,7 @@ const ProfileComponent = () => {
   //change this from zustand
 
   const userId = localStorage.getItem("userId");
+  const directionId = localStorage.getItem("directionId")
   const [isEditing, setIsEditing] = useState(false);
 
   const handleToggleEdit = () => {
@@ -191,7 +190,7 @@ const ProfileComponent = () => {
     } = userInfo;
 
     // Vérification des validations
-    if (!lastname) {
+    if (!firstname) {
       message.error("Votre nom est requis !");
       return;
     }
@@ -222,7 +221,7 @@ if (phoneNumbers && !phonePattern.test(phoneNumbers)) {
         grade,
         mail,
         phoneNumbers,
-        fonction,
+        fonction
       };
 
       const updateParams = { userId, userInfoUpdate: updatedUserInfo };

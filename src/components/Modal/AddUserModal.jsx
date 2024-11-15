@@ -36,6 +36,8 @@ const AddUserModal = ({ visible, onCancel }) => {
       directionId: directionId,
     };
 
+    console.log(user);
+    
     try {
       const savedUser = await saveNewUser(user);
       console.log(savedUser);

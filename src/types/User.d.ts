@@ -6,7 +6,7 @@ export type User = {
   function: string;
   grade: string;
   password: string;
-  direction: string;
+  directionId: string;
 };
 
 export type NewResponsible = {

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Input, Button, Form, Select, DatePicker, message } from "antd";
+import { Input, Button, Form, Select, DatePicker, message, ConfigProvider } from "antd";
 import moment from "moment";
+import frLocale from 'antd/locale/fr_FR';
+
 
 export const ActivityDetailsForm = ({
   activity,
@@ -49,22 +51,22 @@ export const ActivityDetailsForm = ({
           }
         />
       </Form.Item>
+      <ConfigProvider locale={frLocale}>
       <Form.Item
-  label="Date d'échéance *"
-  name="dueDatetime"
-  rules={[
-    { required: true, message: "La date d'échéance est obligatoire" },
-    
-  ]}
-
-  disabledDate={(current) => current && current.isBefore(moment(), 'day')}
->
-  <DatePicker
-    value={dueDatetime ? moment(dueDatetime) : null}
-    onChange={(date) => setActivity({ ...activity, dueDatetime: date })}
-    disabledDate={(current) => current && current.isBefore(moment(), 'day')}
-  />
-</Form.Item>
+        label="Date d'échéance *"
+        name="dueDatetime"
+        rules={[
+          { required: true, message: "La date d'échéance est obligatoire" },
+        ]}
+      >
+        <DatePicker
+        locale="fr_FR"
+          value={activity.dueDatetime ? moment(activity.dueDatetime) : null}
+          onChange={(date) => setActivity({ ...activity, dueDatetime: date })}
+          disabledDate={(current) => current && current.isBefore(moment(), 'day')}
+        />
+      </Form.Item>
+    </ConfigProvider>
 
     </Form>
   );
@@ -98,6 +100,8 @@ export const TaskForm = ({ tasks, setTasks }) => {
           onChange={(e) => setTaskDescription(e.target.value)}
         />
       </Form.Item>
+      
+      <ConfigProvider locale={frLocale}>
       <Form.Item label="Date de la Tâche">
         <DatePicker
           value={taskDueDate}
@@ -105,6 +109,7 @@ export const TaskForm = ({ tasks, setTasks }) => {
           onChange={(date) => setTaskDueDate(date)}
         />
       </Form.Item>
+      </ConfigProvider>
       <Button type="primary" onClick={handleAddTask}>
         Enregister cette Tâche
       </Button>
@@ -156,6 +161,8 @@ export const NextTaskForm = ({ nextTasks, setNextTasks }) => {
           onChange={(e) => setNextTaskDescription(e.target.value)}
         />
       </Form.Item>
+
+      <ConfigProvider locale={frLocale}>
       <Form.Item label="Date de la Tâche Prochaine">
         <DatePicker
           value={nextTaskDueDate}
@@ -163,6 +170,7 @@ export const NextTaskForm = ({ nextTasks, setNextTasks }) => {
           onChange={(date) => setNextTaskDueDate(date)}
         />
       </Form.Item>
+      </ConfigProvider>
       <Button type="primary" onClick={handleAddNextTask}>
         Enregistrer cette Tâche Prochaine
       </Button>

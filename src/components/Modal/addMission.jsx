@@ -173,8 +173,6 @@ const AddMissionModal = ({ visible, onCancel }) => {
               <Option value="new">Nouvelle mission</Option>
             </Select>
           </Form.Item>
-
-          {/* Sélectionner une mission si existante */}
           {missionType === "existing" && (
             <Form.Item label="Sélectionner une mission">
               <AutoComplete

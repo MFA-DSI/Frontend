@@ -1,6 +1,8 @@
-import { DatePicker, Input, Typography } from "antd";
+import { ConfigProvider, DatePicker, Input, Typography } from "antd";
 import { dateFormatter } from "../utils/dateFormatter";
 import { useState } from "react";
+import moment from "moment";
+import frLocale from 'antd/locale/fr_FR';
 
 export const EditableField = ({
   label,
@@ -38,7 +40,10 @@ export const EditableField = ({
       </Typography.Text>
       {isEditing && mode === "mydirection" && editable ? (
         inputType === "date" ? (
-          <DatePicker value={value} onChange={onChange} />
+
+    <ConfigProvider locale={frLocale}>
+          <DatePicker locale="fr_FR" value={value} onChange={onChange}  disabledDate={(current) => current && current.isBefore(moment(), 'day')} />
+          </ConfigProvider>
         ) : (
           <div>
             <Input
