@@ -24,27 +24,27 @@ const ReportGenerator = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [rejectComment, setRejectComment] = useState("");
   const [rejectRecordId, setRejectRecordId] = useState(null);
-  
+
   // Ouvrir la modal
   const handleReject = (id) => {
     setRejectRecordId(id);
     setIsModalVisible(true);
   };
-  
+
   // Fermer la modal
   const handleModalClose = () => {
     setIsModalVisible(false);
     setRejectComment("");
     setRejectRecordId(null);
   };
-  
+
   // Gérer le refus
   const handleRejectConfirm = () => {
     console.log("Refusé avec le commentaire :", rejectComment);
     console.log("ID de la demande refusée :", rejectRecordId);
-  
+
     // Logique pour envoyer le commentaire au backend
-  
+
     handleModalClose(); // Ferme la modal après action
   };
   // Example data for the tables
@@ -55,21 +55,24 @@ const ReportGenerator = () => {
 
   const acceptedReports = [
     { key: 1, title: "Rapport 1", status: "Accepté" },
-    { key: 2, title: "Rappodqsjdqlkjshdlkqgdkjqghsdkhfsldkjfhsldjgfskjdgfksjdgjgkjhlkqjshdklqjshdlqkhrt 2", status: "Accepté" },
+    {
+      key: 2,
+      title:
+        "Rappodqsjdqlkjshdlkqgdkjqghsdkhfsldkjfhsldjgfskjdgfksjdgjgkjhlkqjshdklqjshdlqkhrt 2",
+      status: "Accepté",
+    },
   ];
 
   const tableStyle = {
     width: "100%",
     overflowX: "auto", // Pour éviter les débordements
   };
-  
+
   const columnStyle = {
     whiteSpace: "normal", // Autorise le wrapping du texte
     wordWrap: "break-word", // Coupe le texte si nécessaire
     wordBreak: "break-word", // Prend en charge les longues chaînes sans espaces
   };
-  
-
 
   const handleRemindReport = (record) => {
     console.log(`Rappeler la demande de rapport pour : ${record.title}`);
@@ -159,7 +162,6 @@ const ReportGenerator = () => {
       console.error("Erreur lors de la génération du rapport :", error);
     }
   };
-  
 
   const reportRequestColumns = [
     { title: "Titre", dataIndex: "title", key: "title" },
@@ -175,30 +177,27 @@ const ReportGenerator = () => {
       key: "acceptedDate",
       render: (text) => <div style={columnStyle}>{text}</div>,
     },
-   
+
     { title: "Statut", dataIndex: "status", key: "status" },
-   
+
     {
       title: "Action",
       key: "action",
       render: (_, record) => (
         <div style={{ display: "flex", gap: "8px" }}>
-          <Button
-            type="primary"
-            onClick={() => handleApprove(record.id)}
-          >
+          <Button type="primary" onClick={() => handleApprove(record.id)}>
             Approuver
           </Button>
-          <Button
-            type="danger"
-            onClick={() => handleReject(record.id)}
-          >
+          <Button type="danger" onClick={() => handleReject(record.id)}>
             Refuser
           </Button>
 
-          <Button type="primary-outlined" onClick={() => handleReminder(record.id)}>
-          Rappeler
-        </Button>
+          <Button
+            type="primary-outlined"
+            onClick={() => handleReminder(record.id)}
+          >
+            Rappeler
+          </Button>
         </div>
       ),
     },
@@ -219,7 +218,7 @@ const ReportGenerator = () => {
       key: "createdDate",
       render: (text) => <div style={columnStyle}>{text}</div>,
     },
-   
+
     {
       title: "Action",
       key: "action",
@@ -230,8 +229,6 @@ const ReportGenerator = () => {
       ),
     },
   ];
-
-  
 
   return (
     <div
@@ -276,43 +273,42 @@ const ReportGenerator = () => {
           </>
         )}
 
-{reportScope === "subDirections" && (
-  <>
-    <Checkbox.Group
-      options={[
-        { label: "Sous-direction 1", value: "1" },
-        { label: "Sous-direction 2", value: "2" },
-        { label: "Sous-direction 1", value: "3" },
-        { label: "Sous-direction 2", value: "4" },
-        { label: "Sous-direction 1", value: "5" },
-        { label: "Sous-direction 2", value: "6" },
-        { label: "Sous-direction 1", value: "7" },
-        { label: "Sous-direction 2", value: "8" },
-        { label: "Sous-direction 1", value: "9" },
-        { label: "Sous-direction 2", value: "10" },
-      ]}
-      value={subDirections}
-      onChange={(checkedValues) => setSubDirections(checkedValues)}
-      style={{ marginBottom: "16px" }}
-    />
-    <ActivityTypeSelect
-      filtered={false}
-      style={{ width: "100%", marginBottom: "16px" }}
-      activityType={activityType}
-      setActivityType={setActivityType}
-      setDateFilter={setDateFilter}
-    />
-    {activityType === "weekly" && (
-      <WeeklyFilters
-        style={{ width: "100%", marginBottom: "16px" }}
-        dateFilter={dateFilter}
-        setDateFilter={setDateFilter}
-        getWeeksInMonth={getWeeksInMonthWithOverflow}
-      />
-    )}
-  </>
-)}
-
+        {reportScope === "subDirections" && (
+          <>
+            <Checkbox.Group
+              options={[
+                { label: "Sous-direction 1", value: "1" },
+                { label: "Sous-direction 2", value: "2" },
+                { label: "Sous-direction 1", value: "3" },
+                { label: "Sous-direction 2", value: "4" },
+                { label: "Sous-direction 1", value: "5" },
+                { label: "Sous-direction 2", value: "6" },
+                { label: "Sous-direction 1", value: "7" },
+                { label: "Sous-direction 2", value: "8" },
+                { label: "Sous-direction 1", value: "9" },
+                { label: "Sous-direction 2", value: "10" },
+              ]}
+              value={subDirections}
+              onChange={(checkedValues) => setSubDirections(checkedValues)}
+              style={{ marginBottom: "16px" }}
+            />
+            <ActivityTypeSelect
+              filtered={false}
+              style={{ width: "100%", marginBottom: "16px" }}
+              activityType={activityType}
+              setActivityType={setActivityType}
+              setDateFilter={setDateFilter}
+            />
+            {activityType === "weekly" && (
+              <WeeklyFilters
+                style={{ width: "100%", marginBottom: "16px" }}
+                dateFilter={dateFilter}
+                setDateFilter={setDateFilter}
+                getWeeksInMonth={getWeeksInMonthWithOverflow}
+              />
+            )}
+          </>
+        )}
 
         <div style={{ textAlign: "right" }}>
           <Button
@@ -338,7 +334,7 @@ const ReportGenerator = () => {
       {/* Section 3 : Rapports acceptés */}
       <Card title="Rapports Acceptés" style={{ width: "100%" }}>
         <Table
-         style={tableStyle}
+          style={tableStyle}
           dataSource={acceptedReports}
           columns={acceptedReportColumns}
           pagination={{ pageSize: 5 }}
@@ -347,16 +343,14 @@ const ReportGenerator = () => {
       </Card>
 
       <DeleteRequestModal
-  visible={isModalVisible}
-  onClose={handleModalClose}
-  onCancel={handleModalClose}
-  onConfirm={handleRejectConfirm}
-  comment={rejectComment}
-  setComment={setRejectComment}
-/>
+        visible={isModalVisible}
+        onClose={handleModalClose}
+        onCancel={handleModalClose}
+        onConfirm={handleRejectConfirm}
+        comment={rejectComment}
+        setComment={setRejectComment}
+      />
     </div>
-
-    
   );
 };
 

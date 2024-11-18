@@ -20,7 +20,9 @@ const DeleteRequestModal = ({
         disabled: !comment.trim(), // Désactiver si le commentaire est vide ou espace blanc
       }}
     >
-      <p>Veuillez indiquer la raison pour laquelle cette demande est refusée :</p>
+      <p>
+        Veuillez indiquer la raison pour laquelle cette demande est refusée :
+      </p>
       <Input.TextArea
         rows={4}
         value={comment}
