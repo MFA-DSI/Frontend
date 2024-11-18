@@ -1,27 +1,85 @@
-import React, { useEffect, useState } from "react";
-import { Select, Button, Card, Divider } from "antd";
-import { getWeeksInMonthWithOverflow } from "../Table/utils/DateUtils";
-import { useFilesContext } from "../../providers/context/FilesContext";
-import { useAuthStore } from "../../hooks";
+import React, { useState } from "react";
+import { Select, Button, Card, Checkbox, Table } from "antd";
 import { ActivityTypeSelect } from "../DropDown/ActivityTypeSelect";
 import { WeeklyFilters } from "../DropDown/WeeklyFilters";
-import { MonthlyFilters } from "../DropDown/MonthlyFilter";
-import { QuarterlyFilters } from "../DropDown/QuarterlyFilter";
+import { useFilesContext } from "../../providers/context/FilesContext";
+import { useAuthStore } from "../../hooks";
+import { getWeeksInMonthWithOverflow } from "../Table/utils/DateUtils";
+import DeleteRequestModal from "../Modal/RejectedDemand";
+
+const { Option } = Select;
 
 const ReportGenerator = () => {
-  const {
-    fetchWeeklyReportMissionXLS,
-    fetchMonthlyReportMissionXLS,
-    fetchQuarterlyReportMissionXLS,
-  } = useFilesContext();
+  const { fetchWeeklyReportMissionXLS } = useFilesContext();
   const directionId = useAuthStore.getState().directionId;
+
+  const [reportScope, setReportScope] = useState("myDirection");
   const [activityType, setActivityType] = useState("weekly");
+  const [subDirections, setSubDirections] = useState([]);
   const [dateFilter, setDateFilter] = useState({
     month: null,
     week: null,
     year: null,
-    quarter: null,
   });
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [rejectComment, setRejectComment] = useState("");
+  const [rejectRecordId, setRejectRecordId] = useState(null);
+  
+  // Ouvrir la modal
+  const handleReject = (id) => {
+    setRejectRecordId(id);
+    setIsModalVisible(true);
+  };
+  
+  // Fermer la modal
+  const handleModalClose = () => {
+    setIsModalVisible(false);
+    setRejectComment("");
+    setRejectRecordId(null);
+  };
+  
+  // Gérer le refus
+  const handleRejectConfirm = () => {
+    console.log("Refusé avec le commentaire :", rejectComment);
+    console.log("ID de la demande refusée :", rejectRecordId);
+  
+    // Logique pour envoyer le commentaire au backend
+  
+    handleModalClose(); // Ferme la modal après action
+  };
+  // Example data for the tables
+  const reportRequests = [
+    { key: 1, title: "Demande 1", status: "En attente" },
+    { key: 2, title: "Demande 2", status: "En attente" },
+  ];
+
+  const acceptedReports = [
+    { key: 1, title: "Rapport 1", status: "Accepté" },
+    { key: 2, title: "Rappodqsjdqlkjshdlkqgdkjqghsdkhfsldkjfhsldjgfskjdgfksjdgjgkjhlkqjshdklqjshdlqkhrt 2", status: "Accepté" },
+  ];
+
+  const tableStyle = {
+    width: "100%",
+    overflowX: "auto", // Pour éviter les débordements
+  };
+  
+  const columnStyle = {
+    whiteSpace: "normal", // Autorise le wrapping du texte
+    wordWrap: "break-word", // Coupe le texte si nécessaire
+    wordBreak: "break-word", // Prend en charge les longues chaînes sans espaces
+  };
+  
+
+
+  const handleRemindReport = (record) => {
+    console.log(`Rappeler la demande de rapport pour : ${record.title}`);
+    // Ajoutez ici la logique pour relancer la demande de rapport
+  };
+
+  const handleExportToExcel = (record) => {
+    console.log(`Exporter en Excel : ${record.title}`);
+    // Ajoutez ici la logique pour exporter le rapport en Excel
+  };
 
   const [pageSize, setPageSize] = useState("50"); // Example page size
 
@@ -101,78 +159,204 @@ const ReportGenerator = () => {
       console.error("Erreur lors de la génération du rapport :", error);
     }
   };
+  
 
-  const style = {
-    width: "100%",
-    marginTop: "10px",
-    marginBottom: "10px",
-  };
+  const reportRequestColumns = [
+    { title: "Titre", dataIndex: "title", key: "title" },
+    {
+      title: "Direction demandeur",
+      dataIndex: "requestingDirection",
+      key: "requestingDirection",
+      render: (text) => <div style={columnStyle}>{text}</div>,
+    },
+    {
+      title: "Date d'acceptation",
+      dataIndex: "acceptedDate",
+      key: "acceptedDate",
+      render: (text) => <div style={columnStyle}>{text}</div>,
+    },
+   
+    { title: "Statut", dataIndex: "status", key: "status" },
+   
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <div style={{ display: "flex", gap: "8px" }}>
+          <Button
+            type="primary"
+            onClick={() => handleApprove(record.id)}
+          >
+            Approuver
+          </Button>
+          <Button
+            type="danger"
+            onClick={() => handleReject(record.id)}
+          >
+            Refuser
+          </Button>
+
+          <Button type="primary-outlined" onClick={() => handleReminder(record.id)}>
+          Rappeler
+        </Button>
+        </div>
+      ),
+    },
+  ];
+
+  const acceptedReportColumns = [
+    { title: "Titre", dataIndex: "title", key: "title" },
+    { title: "Statut", dataIndex: "status", key: "status" },
+    {
+      title: "Direction demandée",
+      dataIndex: "requestedDirection",
+      key: "requestedDirection",
+      render: (text) => <div style={columnStyle}>{text}</div>,
+    },
+    {
+      title: "Date de création",
+      dataIndex: "createdDate",
+      key: "createdDate",
+      render: (text) => <div style={columnStyle}>{text}</div>,
+    },
+   
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <Button type="primary" onClick={() => handleExport(record.id)}>
+          Exporter en Excel
+        </Button>
+      ),
+    },
+  ];
+
+  
 
   return (
     <div
       style={{
         display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "87vh",
-        overflow: "hidden",
-        margin: 0,
-        padding: 0,
+        flexDirection: "column",
+        width: "100%",
+        height: "100%",
+        overflowY: "auto",
+        gap: "16px",
+        padding: "16px",
       }}
     >
-      <Card title="Générateur de Rapport" style={{ width: 400 }}>
-        <h2>Choisissez les options de rapport</h2>
-        <Divider />
-        <ActivityTypeSelect
-          filtered={false}
-          style={style}
-          activityType={activityType}
-          setActivityType={setActivityType}
-          setDateFilter={setDateFilter}
-        />
-
-        {activityType === "weekly" && (
-          <WeeklyFilters
-            style={style}
-            dateFilter={dateFilter}
-            setDateFilter={setDateFilter}
-            getWeeksInMonth={getWeeksInMonthWithOverflow}
-          />
-        )}
-
-        {activityType === "monthly" && (
-          <MonthlyFilters
-            style={style}
-            dateFilter={dateFilter}
-            setDateFilter={setDateFilter}
-          />
-        )}
-
-        {activityType === "quarterly" && (
-          <QuarterlyFilters
-            style={style}
-            dateFilter={dateFilter}
-            setDateFilter={setDateFilter}
-          />
-        )}
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginTop: "16px",
-          }}
+      {/* Section 1 : Générateur de rapport */}
+      <Card title="Générateur de Rapport" style={{ width: "100%" }}>
+        <Select
+          value={reportScope}
+          onChange={(value) => setReportScope(value)}
+          style={{ width: "100%", marginBottom: "16px" }}
         >
+          <Option value="myDirection">Ma direction</Option>
+          <Option value="subDirections">Mes sous-directions</Option>
+        </Select>
+
+        {reportScope === "myDirection" && (
+          <>
+            <ActivityTypeSelect
+              filtered={false}
+              style={{ width: "100%", marginBottom: "16px" }}
+              activityType={activityType}
+              setActivityType={setActivityType}
+              setDateFilter={setDateFilter}
+            />
+            {activityType === "weekly" && (
+              <WeeklyFilters
+                style={{ width: "100%", marginBottom: "16px" }}
+                dateFilter={dateFilter}
+                setDateFilter={setDateFilter}
+                getWeeksInMonth={getWeeksInMonthWithOverflow}
+              />
+            )}
+          </>
+        )}
+
+{reportScope === "subDirections" && (
+  <>
+    <Checkbox.Group
+      options={[
+        { label: "Sous-direction 1", value: "1" },
+        { label: "Sous-direction 2", value: "2" },
+        { label: "Sous-direction 1", value: "3" },
+        { label: "Sous-direction 2", value: "4" },
+        { label: "Sous-direction 1", value: "5" },
+        { label: "Sous-direction 2", value: "6" },
+        { label: "Sous-direction 1", value: "7" },
+        { label: "Sous-direction 2", value: "8" },
+        { label: "Sous-direction 1", value: "9" },
+        { label: "Sous-direction 2", value: "10" },
+      ]}
+      value={subDirections}
+      onChange={(checkedValues) => setSubDirections(checkedValues)}
+      style={{ marginBottom: "16px" }}
+    />
+    <ActivityTypeSelect
+      filtered={false}
+      style={{ width: "100%", marginBottom: "16px" }}
+      activityType={activityType}
+      setActivityType={setActivityType}
+      setDateFilter={setDateFilter}
+    />
+    {activityType === "weekly" && (
+      <WeeklyFilters
+        style={{ width: "100%", marginBottom: "16px" }}
+        dateFilter={dateFilter}
+        setDateFilter={setDateFilter}
+        getWeeksInMonth={getWeeksInMonthWithOverflow}
+      />
+    )}
+  </>
+)}
+
+
+        <div style={{ textAlign: "right" }}>
           <Button
             type="primary"
-            disabled={isButtonDisabled()}
             onClick={handleGenerateReport}
+            disabled={reportScope === "myDirection" && !dateFilter.week}
           >
             Générer le rapport
           </Button>
         </div>
       </Card>
+
+      {/* Section 2 : Demandes de rapport */}
+      <Card title="Demandes de Rapport" style={{ width: "100%" }}>
+        <Table
+          dataSource={reportRequests}
+          columns={reportRequestColumns}
+          pagination={{ pageSize: 5 }}
+          scroll={{ x: true }}
+        />
+      </Card>
+
+      {/* Section 3 : Rapports acceptés */}
+      <Card title="Rapports Acceptés" style={{ width: "100%" }}>
+        <Table
+         style={tableStyle}
+          dataSource={acceptedReports}
+          columns={acceptedReportColumns}
+          pagination={{ pageSize: 5 }}
+          scroll={{ x: true }}
+        />
+      </Card>
+
+      <DeleteRequestModal
+  visible={isModalVisible}
+  onClose={handleModalClose}
+  onCancel={handleModalClose}
+  onConfirm={handleRejectConfirm}
+  comment={rejectComment}
+  setComment={setRejectComment}
+/>
     </div>
+
+    
   );
 };
 
