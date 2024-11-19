@@ -1,18 +1,28 @@
-import React, { useState } from "react";
-import { Select, Button, Card, Checkbox, Table } from "antd";
+import React, { useEffect, useState } from "react";
+import { Select, Button, Card, Checkbox, Table, Badge } from "antd";
 import { ActivityTypeSelect } from "../DropDown/ActivityTypeSelect";
 import { WeeklyFilters } from "../DropDown/WeeklyFilters";
 import { useFilesContext } from "../../providers/context/FilesContext";
 import { useAuthStore } from "../../hooks";
 import { getWeeksInMonthWithOverflow } from "../Table/utils/DateUtils";
 import DeleteRequestModal from "../Modal/RejectedDemand";
-
+import { useDirectionsContext, useMissionContext } from "../../providers";
+import {
+  FilePdfOutlined,
+  FileExcelOutlined,
+  FileWordOutlined,
+} from "@ant-design/icons";
 const { Option } = Select;
 
 const ReportGenerator = () => {
   const { fetchWeeklyReportMissionXLS } = useFilesContext();
+  const {fetchAllSubDirections ,isSubDirectionLoading
+  } = useDirectionsContext();
+  const {requestReport,respondToDirectionReportRequest, fetchAllRequests,
+    fetchAllTargets} = useMissionContext();
   const directionId = useAuthStore.getState().directionId;
 
+  
   const [reportScope, setReportScope] = useState("myDirection");
   const [activityType, setActivityType] = useState("weekly");
   const [subDirections, setSubDirections] = useState([]);
@@ -24,7 +34,7 @@ const ReportGenerator = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [rejectComment, setRejectComment] = useState("");
   const [rejectRecordId, setRejectRecordId] = useState(null);
-
+  
   // Ouvrir la modal
   const handleReject = (id) => {
     setRejectRecordId(id);
@@ -47,21 +57,14 @@ const ReportGenerator = () => {
 
     handleModalClose(); // Ferme la modal après action
   };
-  // Example data for the tables
-  const reportRequests = [
-    { key: 1, title: "Demande 1", status: "En attente" },
-    { key: 2, title: "Demande 2", status: "En attente" },
-  ];
+  const data = fetchAllSubDirections;
+ 
 
-  const acceptedReports = [
-    { key: 1, title: "Rapport 1", status: "Accepté" },
-    {
-      key: 2,
-      title:
-        "Rappodqsjdqlkjshdlkqgdkjqghsdkhfsldkjfhsldjgfskjdgfksjdgjgkjhlkqjshdklqjshdlqkhrt 2",
-      status: "Accepté",
-    },
-  ];
+
+  const options = data.map(subDirection => ({
+    label: subDirection.acronym, // 'name' est le nom de la sous-direction
+    value: subDirection.id, // 'id' est l'identifiant de la sous-direction
+  }));
 
   const tableStyle = {
     width: "100%",
@@ -73,7 +76,11 @@ const ReportGenerator = () => {
     wordWrap: "break-word", // Coupe le texte si nécessaire
     wordBreak: "break-word", // Prend en charge les longues chaînes sans espaces
   };
-
+  const localeSettings = {
+    filterConfirm: "Filtrer ", // Remplace "OK" par "Valider"
+    filterReset: "Réinitialiser", // Remplace "Reset" par "Réinitialiser"
+    emptyText: "Aucune demande correpondante",
+  };
   const handleRemindReport = (record) => {
     console.log(`Rappeler la demande de rapport pour : ${record.title}`);
     // Ajoutez ici la logique pour relancer la demande de rapport
@@ -162,74 +169,239 @@ const ReportGenerator = () => {
       console.error("Erreur lors de la génération du rapport :", error);
     }
   };
-
   const reportRequestColumns = [
-    { title: "Titre", dataIndex: "title", key: "title" },
+    { title: "Titre", dataIndex: "description", key: "description" }, // Utilise "description" pour le titre
+    
     {
       title: "Direction demandeur",
-      dataIndex: "requestingDirection",
-      key: "requestingDirection",
-      render: (text) => <div style={columnStyle}>{text}</div>,
-    },
-    {
-      title: "Date d'acceptation",
-      dataIndex: "acceptedDate",
-      key: "acceptedDate",
-      render: (text) => <div style={columnStyle}>{text}</div>,
-    },
-
-    { title: "Statut", dataIndex: "status", key: "status" },
-
-    {
-      title: "Action",
-      key: "action",
-      render: (_, record) => (
-        <div style={{ display: "flex", gap: "8px" }}>
-          <Button type="primary" onClick={() => handleApprove(record.id)}>
-            Approuver
-          </Button>
-          <Button type="danger" onClick={() => handleReject(record.id)}>
-            Refuser
-          </Button>
-
-          <Button
-            type="primary-outlined"
-            onClick={() => handleReminder(record.id)}
-          >
-            Rappeler
-          </Button>
-        </div>
+      dataIndex: "requesterDirection", // Correspond à DirectionNameDTO
+      key: "requesterDirection",
+      render: (direction) => (
+        <div style={columnStyle}>{direction?.acronym || "N/A"}</div>
       ),
     },
-  ];
-
-  const acceptedReportColumns = [
-    { title: "Titre", dataIndex: "title", key: "title" },
-    { title: "Statut", dataIndex: "status", key: "status" },
+    
     {
-      title: "Direction demandée",
-      dataIndex: "requestedDirection",
-      key: "requestedDirection",
-      render: (text) => <div style={columnStyle}>{text}</div>,
+      title: "Direction cible",
+      dataIndex: "targetDirection", // Correspond également à DirectionNameDTO
+      key: "targetDirection",
+      render: (direction) => (
+        <div style={columnStyle}>{direction?.acronym || "N/A"}</div>
+      ),
     },
+  
     {
       title: "Date de création",
-      dataIndex: "createdDate",
-      key: "createdDate",
-      render: (text) => <div style={columnStyle}>{text}</div>,
-    },
-
-    {
-      title: "Action",
-      key: "action",
-      render: (_, record) => (
-        <Button type="primary" onClick={() => handleExport(record.id)}>
-          Exporter en Excel
-        </Button>
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (date) => (
+        <div style={columnStyle}>{date ? new Date(date).toLocaleDateString() : "N/A"}</div>
       ),
     },
-  ];
+  
+    {
+      title: "Statut",
+      dataIndex: "status",
+      key: "status",
+      filters: [
+        { text: "En attente", value: "PENDING" },
+        { text: "Approuvé", value: "APPROVED" },
+        { text: "Rejeté", value: "REJECTED" },
+      ],
+      onFilter: (value, record) => record.status === value,
+      render: (status) => {
+        let color;
+        let label;
+  
+        // Détermine la couleur et le label basé sur le statut
+        switch (status) {
+          case "PENDING":
+            color = "orange";
+            label = "En attente";
+            break;
+          case "APPROVED":
+            color = "green";
+            label = "Approuvé";
+            break;
+          case "REJECTED":
+            color = "red";
+            label = "Rejeté";
+            break;
+          default:
+            color = "gray";
+            label = "Inconnu";
+        }
+        return (
+          <Badge color={color} text={label} />
+        )
+      }},
+  
+      {
+        title: "Action",
+        key: "action",
+        render: (_, record) => {
+          
+          const isRequestingDirection = directionId === record.requesterDirection.id;
+          const isTargetDirection = directionId === record.targetDirection.id;
+    
+          // Si la direction correspond à la demandeur, afficher "Rappeler" ou "Annuler"
+          if (isRequestingDirection) {
+            return (
+              <div style={{ display: "flex", gap: "8px" }}>
+  {record.status === "APPROVED" ? (
+    <>
+    <Button  icon={<FileExcelOutlined style={{ color: "green" }} />}color="green" onClick={() => handleExport(record.id)}>
+      Exporter
+    </Button>
+    <Button danger   color="danger"
+                     variant="filled"  onClick={() => handleExport(record.id)}>
+      Supprimer
+    </Button>
+    </>
+    
+    
+  ) : (
+    <>
+      <Button  type="primary" variant="dashed" onClick={() => handleReminder(record.id)}>
+        Rappeler
+      </Button>
+      <Button  color="danger"
+                     variant="filled" onClick={() => handleCancel(record.id)}>
+        Annuler
+      </Button>
+    </>
+  )}
+</div>
 
+            );
+          }
+    
+          // Si la direction correspond à la cible, afficher "Approuver" et "Refuser"
+          if (isTargetDirection) {
+            return (
+              <div style={{ display: "flex", gap: "8px" }}>
+                <Button type="primary" onClick={() => handleApprove(record.id)}>
+                  Approuver
+                </Button>
+                <Button  color="danger"
+                     variant="filled"  onClick={() => handleReject(record.id)}>
+                  Refuser
+                </Button>
+              </div>
+            );
+          }
+    
+          // Si aucune des deux directions ne correspond, afficher une Badge
+          return <Badge color="gray" text="Aucune action disponible" />;
+        },
+      },
+  ];
+  
+
+  const acceptedReportColumns = [
+    { title: "Titre", dataIndex: "description", key: "description" }, // Utilise "description" pour le titre
+    
+    {
+      title: "Direction demandeur",
+      dataIndex: "requesterDirection", // Correspond à DirectionNameDTO
+      key: "requesterDirection",
+      render: (direction) => (
+        <div style={columnStyle}>{direction?.acronym || "N/A"}</div>
+      ),
+    },
+    
+  
+    {
+      title: "Date de création",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (date) => (
+        <div style={columnStyle}>{date ? new Date(date).toLocaleDateString() : "N/A"}</div>
+      ),
+    },
+  
+   
+    {
+      title: "Statut",
+      dataIndex: "status",
+      key: "status",
+      render: (status) => {
+        let color;
+        let label;
+  
+        // Détermine la couleur et le label basé sur le statut
+        switch (status) {
+          case "PENDING":
+            color = "orange";
+            label = "En attente";
+            break;
+          case "APPROVED":
+            color = "green";
+            label = "Approuvé";
+            break;
+          case "REJECTED":
+            color = "red";
+            label = "Rejeté";
+            break;
+          default:
+            color = "gray";
+            label = "Inconnu";
+        }
+        return (
+          <Badge color={color} text={label} />
+        )
+      }},
+  
+      {
+        title: "Action",
+        key: "action",
+        render: (_, record) => {
+          const directionId = localStorage.getItem("directionId"); // Remplacez par l'ID de la direction actuelle (par exemple, venant du contexte ou de props)
+          const isRequestingDirection = directionId === record.requesterDirection.id;
+          const isTargetDirection = directionId === record.targetDirection.id;
+    
+          // Si la direction correspond à la demandeur, afficher "Rappeler" ou "Annuler"
+          if (isRequestingDirection) {
+            return (
+              <div style={{ display: "flex", gap: "8px" }}>
+                <Button type="primary-outlined" onClick={() => handleReminder(record.id)}>
+                  Rappeler
+                </Button>
+                <Button type="danger" onClick={() => handleCancel(record.id)}>
+                  Annuler
+                </Button>
+              </div>
+            );
+          }
+    
+          // Si la direction correspond à la cible, afficher "Approuver" et "Refuser"
+          if (isTargetDirection) {
+            return (
+              <div style={{ display: "flex", gap: "8px" }}>
+                <Button type="primary" onClick={() => handleApprove(record.id)}>
+                  Approuver
+                </Button>
+                <Button type="danger" onClick={() => handleReject(record.id)}>
+                  Refuser
+                </Button>
+              </div>
+            );
+          }
+    
+          // Si aucune des deux directions ne correspond, afficher une Badge
+          return <Badge color="gray" text="Aucune action disponible" />;
+        },
+      },
+  ];
+  useEffect(() => {}, [
+    reportScope,
+    activityType,
+    directionId,
+  ]);
+
+  
+
+  if (isSubDirectionLoading) return <p>Loading sub-directions...</p>;
   return (
     <div
       style={{
@@ -250,7 +422,10 @@ const ReportGenerator = () => {
           style={{ width: "100%", marginBottom: "16px" }}
         >
           <Option value="myDirection">Ma direction</Option>
-          <Option value="subDirections">Mes sous-directions</Option>
+          
+          {fetchAllSubDirections?.length > 0 && (
+        <Option value="subDirections">Mes sous-directions</Option>
+      )}
         </Select>
 
         {reportScope === "myDirection" && (
@@ -274,24 +449,17 @@ const ReportGenerator = () => {
         )}
 
         {reportScope === "subDirections" && (
-          <>
-            <Checkbox.Group
-              options={[
-                { label: "Sous-direction 1", value: "1" },
-                { label: "Sous-direction 2", value: "2" },
-                { label: "Sous-direction 1", value: "3" },
-                { label: "Sous-direction 2", value: "4" },
-                { label: "Sous-direction 1", value: "5" },
-                { label: "Sous-direction 2", value: "6" },
-                { label: "Sous-direction 1", value: "7" },
-                { label: "Sous-direction 2", value: "8" },
-                { label: "Sous-direction 1", value: "9" },
-                { label: "Sous-direction 2", value: "10" },
-              ]}
-              value={subDirections}
-              onChange={(checkedValues) => setSubDirections(checkedValues)}
-              style={{ marginBottom: "16px" }}
-            />
+         <>
+         
+           <Checkbox.Group
+             options={options}
+             value={subDirections}
+             onChange={(checkedValues) => setSubDirections(checkedValues)}
+             style={{ marginBottom: "16px" }}
+           />
+         
+       
+            
             <ActivityTypeSelect
               filtered={false}
               style={{ width: "100%", marginBottom: "16px" }}
@@ -314,7 +482,7 @@ const ReportGenerator = () => {
           <Button
             type="primary"
             onClick={handleGenerateReport}
-            disabled={reportScope === "myDirection" && !dateFilter.week}
+            disabled={reportScope === "myDirection" && !dateFilter.week || reportScope !== "mydirection" && activityType!=="weekly"}
           >
             Générer le rapport
           </Button>
@@ -322,22 +490,25 @@ const ReportGenerator = () => {
       </Card>
 
       {/* Section 2 : Demandes de rapport */}
+      {fetchAllSubDirections?.length > 0 && (
       <Card title="Demandes de Rapport" style={{ width: "100%" }}>
         <Table
-          dataSource={reportRequests}
+          dataSource={fetchAllRequests}
           columns={reportRequestColumns}
           pagination={{ pageSize: 5 }}
           scroll={{ x: true }}
+          locale={localeSettings}
         />
       </Card>
-
+      )}
       {/* Section 3 : Rapports acceptés */}
       <Card title="Rapports Acceptés" style={{ width: "100%" }}>
         <Table
           style={tableStyle}
-          dataSource={acceptedReports}
+          dataSource={fetchAllTargets}
           columns={acceptedReportColumns}
           pagination={{ pageSize: 5 }}
+          locale={localeSettings}
           scroll={{ x: true }}
         />
       </Card>

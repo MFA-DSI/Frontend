@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
 import { useMissions } from "../../hooks/useMissions";
+import { fetchAllRequests } from "../mission-provider";
 
 const MissionContext = createContext();
 
@@ -15,6 +16,10 @@ export const MissionProvider = ({ children }) => {
     getQuarterlyMissions,
     saveMission,
     updateMission,
+    requestReport,
+    respondToDirectionReportRequest,
+    fetchAllRequests,
+    fetchAllTargets
   } = useMissions();
 
   const [filterType, setFilterType] = useState("all");
@@ -70,6 +75,10 @@ export const MissionProvider = ({ children }) => {
         deleteMission,
         saveMission,
         updateMission,
+        requestReport,
+        respondToDirectionReportRequest,
+        fetchAllRequests,
+        fetchAllTargets,
         isLoading,
         setFilterType,
         setSearchTerm,

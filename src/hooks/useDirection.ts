@@ -1,12 +1,10 @@
 // useDirections.ts
 import { useQuery } from "@tanstack/react-query";
 import {
-  addReponsibleToDirection,
-  addUserToDirection,
-  approveUserToDirection,
   fetchDirectionName,
   fetchDirections,
   fetchDirectionServices,
+  fetchSubDirections,
 } from "../providers/direction-provider";
 import { useMutation, useQueryClient } from "react-query";
 import {
@@ -51,12 +49,24 @@ export const useDirections = () => {
       queryClient.invalidateQueries("user");
     },
   });
+ 
+
+  const fetchAllSubDirectionsBydirectionId = useQuery({
+    queryKey: ["subDirections"],
+    queryFn: () => fetchSubDirections(localStorage.getItem("directionId")!),
+    enabled: !!localStorage.getItem("directionId"),
+  });
+  
+
+ 
 
   return {
     fetchDirections: fetchAllDirections.data,
     fetchServices: fetchServiceByDirectionId.data,
     fetchActualDirection: fetchActualDirectionName,
     fetchUserInformation: fetchDirectionUserInformation.data,
+    fetchAllSubDirectionsBydirectionId: fetchAllSubDirectionsBydirectionId.data,
+    isSubDirectionLoading: fetchAllSubDirectionsBydirectionId.isLoading,
     updateUserInformation,
     isLoading: fetchAllDirections.isLoading,
     isUserLoading: fetchDirectionUserInformation.isLoading,

@@ -9,6 +9,10 @@ import {
   getWeeklyActivityByDirectionId,
   getMonthlyActivityByDirectionId,
   getQuarterlyActivityByDirectionId,
+  createReportRequests,
+  respondToRequest,
+  fetchAllRequests,
+  fetchAllTargetedRequests,
 } from "../providers/mission-provider";
 
 export const useMissions = () => {
@@ -18,6 +22,8 @@ export const useMissions = () => {
     queryKey: ["missions"],
     queryFn: fetchMissions,
   });
+
+  const directionId = localStorage.getItem("directionId");
 
   const directionIdQuery = () =>
     useQuery({
@@ -73,6 +79,37 @@ export const useMissions = () => {
     },
   });
 
+  const requestReportToDirection = useMutation(createReportRequests, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("report");
+    },
+  });
+
+  const respondToDirectionRequest = useMutation(respondToRequest, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("report");
+    },
+  });
+
+  const fetchAllRequestsByDirectionId = 
+    useQuery({
+      queryKey: ["report", "allRequests", directionId],
+      queryFn: () => fetchAllRequests(localStorage.getItem("directionId")! ),
+      enabled: !!directionId, 
+    });
+  
+    const fetchAllTargetedRequestsByDirectionId = 
+      useQuery({
+        queryKey: ["report", "allTargetedRequests", directionId],
+        queryFn: () => fetchAllTargetedRequests(localStorage.getItem("directionId")!),
+        enabled: !!directionId, 
+      });
+    
+
+ 
+
+
+
   return {
     missions: missionsQuery.data,
     directionIdQuery,
@@ -83,6 +120,10 @@ export const useMissions = () => {
     deleteMission: deleteMissionMutation.mutate,
     updateMission: updateMissionMutation.mutate,
     saveMission: saveMissionMutation.mutate,
+    requestReport: requestReportToDirection.mutateAsync,
+    respondToDirectionReportRequest: respondToDirectionRequest.mutateAsync,
+    fetchAllRequests :fetchAllRequestsByDirectionId.data,
+    fetchAllTargets : fetchAllTargetedRequestsByDirectionId.data,
     isLoading: missionsQuery.isLoading,
     error: missionsQuery.error,
   };

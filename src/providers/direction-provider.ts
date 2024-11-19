@@ -10,6 +10,11 @@ import { errorTranslations } from "./utils/translator/translator";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
+
+export interface FetchSubDirectionsParams {
+  directionId?: string;
+}
+
 const fetchData = async <T>(
   url: string,
   options: RequestInit,
@@ -65,6 +70,22 @@ export const fetchDirectionServices = async (
     )) || []
   );
 };
+
+export const fetchSubDirections = async (
+  params: string
+): Promise<unknown> => {
+  
+  const url = `${API_URL}/direction/sub_direction?directionId=${params}`;
+
+  return (
+    (await fetchData<unknown>(
+      url,
+      { method: "GET" },
+      "Erreur lors de la récupération des sous-directions"
+    )) || []
+  );
+};
+
 
 export const fetchDirectionName = async (
   directionId,

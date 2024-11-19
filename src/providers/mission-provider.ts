@@ -51,6 +51,23 @@ interface MissionFilterQuarter {
   pageSize: number;
 }
 
+
+export interface RespondToRequestParams {
+  requestId: string;
+  targetDirectionId: string;
+  status: string;
+  comment?: string;
+}
+
+
+export interface CreateReportRequestParams {
+  requesterDirectionId: string;
+  responsibleId: string;
+  subDirectionIds: string[];
+  weekStartDate: string; 
+  page : number,
+  pageSize : number
+}
 // Base API URL
 const BASE_URL = environment.apiBaseUrl;
 
@@ -192,5 +209,64 @@ export const getQuarterlyActivityByDirectionId = async (
     url,
     { method: "GET" },
     "Erreur lors de la récupération des missions par trimestre",
+  );
+};
+
+export const createReportRequests = async (
+ params : CreateReportRequestParams
+): Promise<any> => {
+  const url = `${BASE_URL}/direction/report/other_direction/create?requesterDirectionId=${params.requesterDirectionId}&responsibleId=${params.responsibleId}&weekStartDate=${params.weekStartDate}&page=${params.page}&pageSize=${params.pageSize}`;
+
+  return fetchData<any>(
+    url,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(params.subDirectionIds),
+    },
+    "Erreur lors de la création des demandes de rapport",
+  );
+};
+
+
+export const respondToRequest = async (
+  params: RespondToRequestParams
+): Promise<unknown> => {
+  const url = `${BASE_URL}/report/${params.requestId}/respond?targetDirectionId=${params.targetDirectionId}&status=${params.status}`;
+
+  return fetchData<unknown>(
+    url,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(params.comment),
+    },
+    "Erreur lors de la réponse à la demande de rapport",
+  );
+};
+
+export const fetchAllRequests = async (
+  params: string
+): Promise<unknown> => {
+  
+  const url = `${BASE_URL}/direction/report/all_request?directionId=${params}`;
+
+  return await fetchData(
+    url,
+    { method: "GET" },
+    "Erreur lors de la récupération des demandes"
+  );
+};
+
+export const fetchAllTargetedRequests = async (
+  params: string
+): Promise<unknown> => {
+
+  const url = `${BASE_URL}/direction/report/all_targeted?directionId=${params}`;
+
+  return await fetchData<unknown>(
+    url,
+    { method: "GET" },
+    "Erreur lors de la récupération des demandes ciblées"
   );
 };
