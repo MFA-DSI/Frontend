@@ -19,7 +19,7 @@ export const MissionProvider = ({ children }) => {
     requestReport,
     respondToDirectionReportRequest,
     fetchAllRequests,
-    fetchAllTargets
+    fetchAllTargets,
   } = useMissions();
 
   const [filterType, setFilterType] = useState("all");

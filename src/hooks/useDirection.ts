@@ -49,16 +49,12 @@ export const useDirections = () => {
       queryClient.invalidateQueries("user");
     },
   });
- 
 
   const fetchAllSubDirectionsBydirectionId = useQuery({
     queryKey: ["subDirections"],
     queryFn: () => fetchSubDirections(localStorage.getItem("directionId")!),
     enabled: !!localStorage.getItem("directionId"),
   });
-  
-
- 
 
   return {
     fetchDirections: fetchAllDirections.data,

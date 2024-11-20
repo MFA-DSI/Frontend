@@ -91,24 +91,18 @@ export const useMissions = () => {
     },
   });
 
-  const fetchAllRequestsByDirectionId = 
-    useQuery({
-      queryKey: ["report", "allRequests", directionId],
-      queryFn: () => fetchAllRequests(localStorage.getItem("directionId")! ),
-      enabled: !!directionId, 
-    });
-  
-    const fetchAllTargetedRequestsByDirectionId = 
-      useQuery({
-        queryKey: ["report", "allTargetedRequests", directionId],
-        queryFn: () => fetchAllTargetedRequests(localStorage.getItem("directionId")!),
-        enabled: !!directionId, 
-      });
-    
+  const fetchAllRequestsByDirectionId = useQuery({
+    queryKey: ["report", "allRequests", directionId],
+    queryFn: () => fetchAllRequests(localStorage.getItem("directionId")!),
+    enabled: !!directionId,
+  });
 
- 
-
-
+  const fetchAllTargetedRequestsByDirectionId = useQuery({
+    queryKey: ["report", "allTargetedRequests", directionId],
+    queryFn: () =>
+      fetchAllTargetedRequests(localStorage.getItem("directionId")!),
+    enabled: !!directionId,
+  });
 
   return {
     missions: missionsQuery.data,
@@ -122,8 +116,8 @@ export const useMissions = () => {
     saveMission: saveMissionMutation.mutate,
     requestReport: requestReportToDirection.mutateAsync,
     respondToDirectionReportRequest: respondToDirectionRequest.mutateAsync,
-    fetchAllRequests :fetchAllRequestsByDirectionId.data,
-    fetchAllTargets : fetchAllTargetedRequestsByDirectionId.data,
+    fetchAllRequests: fetchAllRequestsByDirectionId.data,
+    fetchAllTargets: fetchAllTargetedRequestsByDirectionId.data,
     isLoading: missionsQuery.isLoading,
     error: missionsQuery.error,
   };

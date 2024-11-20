@@ -14,7 +14,7 @@ export const DirectionProvider = ({ children }) => {
     isLoading,
     isError,
     isUserLoading,
-    isSubDirectionLoading
+    isSubDirectionLoading,
   } = useDirections();
 
   return (

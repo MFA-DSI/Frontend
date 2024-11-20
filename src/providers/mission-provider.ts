@@ -51,7 +51,6 @@ interface MissionFilterQuarter {
   pageSize: number;
 }
 
-
 export interface RespondToRequestParams {
   requestId: string;
   targetDirectionId: string;
@@ -59,14 +58,13 @@ export interface RespondToRequestParams {
   comment?: string;
 }
 
-
 export interface CreateReportRequestParams {
   requesterDirectionId: string;
   responsibleId: string;
   subDirectionIds: string[];
-  weekStartDate: string; 
-  page : number,
-  pageSize : number
+  weekStartDate: string;
+  page: number;
+  pageSize: number;
 }
 // Base API URL
 const BASE_URL = environment.apiBaseUrl;
@@ -213,9 +211,9 @@ export const getQuarterlyActivityByDirectionId = async (
 };
 
 export const createReportRequests = async (
- params : CreateReportRequestParams
+  params: CreateReportRequestParams,
 ): Promise<any> => {
-  const url = `${BASE_URL}/direction/report/other_direction/create?requesterDirectionId=${params.requesterDirectionId}&responsibleId=${params.responsibleId}&weekStartDate=${params.weekStartDate}&page=${params.page}&pageSize=${params.pageSize}`;
+  const url = `${BASE_URL}/direction/report/other_direction/create?requesterDirectionId=${params.requesterDirectionId}&responsibleId=${params.responsibleId}&weekStartDate=${params.weekStartDate}&page=1&pageSize=100`;
 
   return fetchData<any>(
     url,
@@ -228,11 +226,10 @@ export const createReportRequests = async (
   );
 };
 
-
 export const respondToRequest = async (
-  params: RespondToRequestParams
+  params: RespondToRequestParams,
 ): Promise<unknown> => {
-  const url = `${BASE_URL}/report/${params.requestId}/respond?targetDirectionId=${params.targetDirectionId}&status=${params.status}`;
+  const url = `${BASE_URL}/direction/report/${params.requestId}/respond?targetDirectionId=${params.targetDirectionId}&status=${params.status}`;
 
   return fetchData<unknown>(
     url,
@@ -245,28 +242,24 @@ export const respondToRequest = async (
   );
 };
 
-export const fetchAllRequests = async (
-  params: string
-): Promise<unknown> => {
-  
+export const fetchAllRequests = async (params: string): Promise<unknown> => {
   const url = `${BASE_URL}/direction/report/all_request?directionId=${params}`;
 
   return await fetchData(
     url,
     { method: "GET" },
-    "Erreur lors de la récupération des demandes"
+    "Erreur lors de la récupération des demandes",
   );
 };
 
 export const fetchAllTargetedRequests = async (
-  params: string
+  params: string,
 ): Promise<unknown> => {
-
   const url = `${BASE_URL}/direction/report/all_targeted?directionId=${params}`;
 
   return await fetchData<unknown>(
     url,
     { method: "GET" },
-    "Erreur lors de la récupération des demandes ciblées"
+    "Erreur lors de la récupération des demandes ciblées",
   );
 };
