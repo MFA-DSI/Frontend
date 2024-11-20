@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Select, Button, Card, Checkbox, Table, Badge } from "antd";
+import { Select, Button, Card, Checkbox, Table, Badge, Typography } from "antd";
 import { ActivityTypeSelect } from "../DropDown/ActivityTypeSelect";
 import { WeeklyFilters } from "../DropDown/WeeklyFilters";
 import { useFilesContext } from "../../providers/context/FilesContext";
@@ -17,7 +17,7 @@ import { QuarterlyFilters } from "../DropDown/QuarterlyFilter";
 const { Option } = Select;
 
 const ReportGenerator = () => {
-  const { fetchWeeklyReportMissionXLS } = useFilesContext();
+  const { fetchWeeklyReportMissionXLS,fetchMonthlyReportMissionXLS,fetchQuarterlyReportMissionXLS } = useFilesContext();
   const { fetchAllSubDirections, isSubDirectionLoading } =
     useDirectionsContext();
   const {
@@ -44,7 +44,7 @@ const ReportGenerator = () => {
   const weeklyDropDownStyle = { width: 240, marginRight: "8px" };
   const monthlyDropDownStyle = { width: 100 };
   // Ouvrir la modal
-  const handleReject = (id,status) => {
+  const handleReject = (id) => {
     setRejectRecordId(id);
     setIsModalVisible(true);
   };
@@ -128,8 +128,6 @@ const ReportGenerator = () => {
       status : status, // Statut (par ex. "approved" ou "rejected")
       comment: null // Commentaire (optionnel)
     };   
-  
-    console.log(requestDetails);
     
     try {
       // Appel à respondToDirectionReportRequest avec les détails
@@ -431,9 +429,12 @@ const ReportGenerator = () => {
     },
 
     {
-      title: "Action",
+      title: "Observation",
       key: "action",
       render: (_, record) => {
+
+       
+        
         const directionId = localStorage.getItem("directionId"); // Remplacez par l'ID de la direction actuelle (par exemple, venant du contexte ou de props)
         const isRequestingDirection =
           directionId === record.requesterDirection.id;
@@ -454,11 +455,7 @@ const ReportGenerator = () => {
               </Button>
             </div>
           );
-        }
-
-
-        console.log(record);
-        
+        }       
         // Si la direction correspond à la cible, afficher "Approuver" et "Refuser"
         if (isTargetDirection & record.status === "PENDING") {
           return (
@@ -480,11 +477,14 @@ const ReportGenerator = () => {
           )
         
         }else{
-          return <Badge color="gray" text="Aucune action disponible" />;
-        }
-
-        // Si aucune des deux directions ne correspond, afficher une Badge
-       
+          return (
+            <>
+              <i>
+              {record.comment ? record.comment : "Aucun commentaire"}
+              </i>
+            </>
+          )
+        }       
       },
     },
   ];
@@ -584,8 +584,7 @@ const ReportGenerator = () => {
             type="primary"
             onClick={handleGenerateReport}
             disabled={
-              (reportScope === "myDirection" && !dateFilter.week) ||
-              (reportScope !== "mydirection" && activityType !== "weekly")
+              (reportScope === "myDirection" && !dateFilter.week) 
             }
           >
             Générer le rapport
@@ -618,7 +617,7 @@ const ReportGenerator = () => {
       </Card>
 
       <DeleteRequestModal
-        
+        value={rejectRecordId}
         visible={isModalVisible}
         onClose={handleModalClose}
         onCancel={handleModalClose}

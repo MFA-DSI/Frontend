@@ -230,7 +230,8 @@ export const respondToRequest = async (
   params: RespondToRequestParams,
 ): Promise<unknown> => {
   const url = `${BASE_URL}/direction/report/${params.requestId}/respond?targetDirectionId=${params.targetDirectionId}&status=${params.status}`;
-
+  console.log(params);
+  
   return fetchData<unknown>(
     url,
     {
