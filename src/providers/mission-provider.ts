@@ -253,6 +253,7 @@ export const fetchAllRequests = async (params: string): Promise<unknown> => {
   );
 };
 
+
 export const fetchAllTargetedRequests = async (
   params: string,
 ): Promise<unknown> => {
@@ -264,3 +265,23 @@ export const fetchAllTargetedRequests = async (
     "Erreur lors de la récupération des demandes ciblées",
   );
 };
+
+export const deleteReportById = async (reportId: string): Promise<unknown> => {
+  const url = `${BASE_URL}/direction/delete/reports/${reportId}`;
+
+  return await fetchData(
+    url,
+    { method: "DELETE" },
+    "Erreur lors de la suppression du rapport"
+  );
+};
+export const recallReportById = async (reportId: string): Promise<unknown> => {
+  const url = `${BASE_URL}/direction/recall/report/${reportId}`;
+
+  return await fetchData(
+    url,
+    { method: "POST" },
+    "Erreur lors du rappel du rapport"
+  );
+};
+

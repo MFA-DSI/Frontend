@@ -18,6 +18,8 @@ export const MissionProvider = ({ children }) => {
     updateMission,
     requestReport,
     respondToDirectionReportRequest,
+    deleteDirectionReport,
+    recallDirectionReport,
     fetchAllRequests,
     fetchAllTargets,
   } = useMissions();
@@ -77,6 +79,8 @@ export const MissionProvider = ({ children }) => {
         updateMission,
         requestReport,
         respondToDirectionReportRequest,
+        deleteDirectionReport,
+        recallDirectionReport,
         fetchAllRequests,
         fetchAllTargets,
         isLoading,

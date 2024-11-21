@@ -13,6 +13,8 @@ import {
   respondToRequest,
   fetchAllRequests,
   fetchAllTargetedRequests,
+  deleteReportById,
+  recallReportById,
 } from "../providers/mission-provider";
 
 export const useMissions = () => {
@@ -104,6 +106,17 @@ export const useMissions = () => {
     enabled: !!directionId,
   });
 
+  const deleteReport = useMutation(deleteReportById, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("report");
+    },
+  });
+
+  const recallReport = useMutation(recallReportById, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("report");
+    },
+  });
   return {
     missions: missionsQuery.data,
     directionIdQuery,
@@ -116,6 +129,8 @@ export const useMissions = () => {
     saveMission: saveMissionMutation.mutate,
     requestReport: requestReportToDirection.mutateAsync,
     respondToDirectionReportRequest: respondToDirectionRequest.mutateAsync,
+    deleteDirectionReport : deleteReport.mutate,
+    recallDirectionReport : recallReport.mutate,
     fetchAllRequests: fetchAllRequestsByDirectionId.data,
     fetchAllTargets: fetchAllTargetedRequestsByDirectionId.data,
     isLoading: missionsQuery.isLoading,

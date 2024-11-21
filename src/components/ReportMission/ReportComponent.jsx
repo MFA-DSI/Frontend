@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Select, Button, Card, Checkbox, Table, Badge, Typography } from "antd";
+import { Select, Button, Card, Checkbox, Table, Badge, Typography, message } from "antd";
 import { ActivityTypeSelect } from "../DropDown/ActivityTypeSelect";
 import { WeeklyFilters } from "../DropDown/WeeklyFilters";
 import { useFilesContext } from "../../providers/context/FilesContext";
@@ -30,6 +30,8 @@ const ReportGenerator = () => {
     respondToDirectionReportRequest,
     fetchAllRequests,
     fetchAllTargets,
+    recallDirectionReport,
+    deleteDirectionReport
   } = useMissionContext();
   const directionId = useAuthStore.getState().directionId;
   const userId = useAuthStore.getState().userId;
@@ -104,7 +106,7 @@ const ReportGenerator = () => {
     // Appeler la fonction fetchOtherDirectionRepport avant l'exportation
     try {
       const response = await fetchOtherDirectionRepport(params);
-      console.log("Données récupérées pour le rapport :", response);
+      
   
       // Ajoutez ici la logique pour exporter le rapport en Excel
       console.log("Exportation en cours...");
@@ -152,84 +154,133 @@ const ReportGenerator = () => {
     }
   };
 
+
+  const handleReminder = async(id)=>{
+    try {
+      await  recallDirectionReport(id)
+    } catch (error) {
+      message.error("une erreur est survenue lors du rappel")
+    }
+  }
+
+  const handleDelete= async(id)=>{
+    try {
+      await deleteDirectionReport(id);
+    } catch (error) {
+      message.error("une erreur est survenue lors de la suppression")
+    }
+  }
+
+
   const handleGenerateReport = async () => {
     let date = "";
+  
     if (reportScope === "subDirections") {
       const reportDetails = {
         requesterDirectionId: directionId,
-        subDirectionIds: subDirections, // Utilise le paramètre direction du demandeur
-        responsibleId: userId, // Utilise l'identifiant du responsable
-        weekStartDate: date || extractFirstDateFromString(dateFilter.week), // Utilise la semaine ou extrait si nécessaire
+        subDirectionIds: subDirections, // Liste des sous-directions
+        responsibleId: userId, // Identifiant du responsable
+        weekStartDate: date || extractFirstDateFromString(dateFilter.week), // Semaine sélectionnée ou extraite
       };
-
-      console.log(reportDetails);
-
+  
+      console.log("Détails du rapport : ", reportDetails);
+  
       try {
-        await requestReport(reportDetails); // Appel de la fonction avec les paramètres
-        console.log("Rapport généré avec succès pour les sous-directions !");
+        // Appel de l'API pour générer les rapports
+        const response = await requestReport(reportDetails);
+  
+        // Vérifier si une réponse détaillée est retournée
+        if (response && Array.isArray(response)) {
+          // Trier les résultats pour succès et erreurs
+          const successes = response.filter((res) => res.status === "SUCCESS");
+          const errors = response.filter((res) => res.status === "ERROR");
+  
+          // Afficher les succès
+          if (successes.length > 0) {
+            console.log(
+              "Rapports générés avec succès :",
+              successes.map((s) => ({
+                subDirectionId: s.subDirectionId,
+                data: s.data,
+              }))
+            );
+          }
+  
+          // Afficher les erreurs
+          if (errors.length > 0) {
+            errors.forEach((error) => {
+              message.error(
+                `Erreur pour la sous-direction ${error.message}`,
+                10 // Durée en secondes
+              );
+            });
+          }
+        } else {
+          // Succès global sans réponse détaillée
+          message.success("Rapport généré avec succès pour les sous-directions !");
+        }
       } catch (error) {
+        // Erreurs globales non spécifiques
         console.error(
           "Erreur lors de la génération du rapport pour les sous-directions :",
-          error,
+          error
         );
       }
       return;
     }
-
+  
     if (activityType === "weekly") {
       const weekString = dateFilter.week;
       date = extractFirstDateFromString(weekString); // Extraire la première date de la semaine
     } else if (activityType === "monthly") {
-      // Appel spécifique pour "monthly"
       const reportDetailsForMonth = {
         directionId,
         year: dateFilter.year, // Utilise l'année sélectionnée
         month: dateFilter.month + 1, // Mois dans le bon format (commence à 1)
         pageSize,
       };
-
+  
       try {
         await fetchMonthlyReportMissionXLS(reportDetailsForMonth);
+        console.log("Rapport mensuel généré avec succès !");
       } catch (error) {
-        console.error(
-          "Erreur lors de la génération du rapport mensuel :",
-          error,
-        );
+        console.error("Erreur lors de la génération du rapport mensuel :", error);
       }
       return;
     } else if (activityType === "quarterly") {
-      // Appel spécifique pour "quarterly"
       const reportDetailsForQuarter = {
         directionId,
         year: dateFilter.year, // Utilise l'année sélectionnée
         quarter: dateFilter.quarter, // Trimestre sélectionné
         pageSize,
       };
-
+  
       try {
         await fetchQuarterlyReportMissionXLS(reportDetailsForQuarter);
         console.log("Rapport trimestriel généré avec succès !");
       } catch (error) {
         console.error(
           "Erreur lors de la génération du rapport trimestriel :",
-          error,
+          error
         );
       }
       return;
     }
-
+  
     const reportDetails = {
       directionId,
       date,
       pageSize,
     };
-
+  
     try {
       await fetchWeeklyReportMissionXLS(reportDetails);
+      console.log("Rapport hebdomadaire généré avec succès !");
     } catch (error) {
       console.error("Erreur lors de la génération du rapport :", error);
     }
   };
+  
   const reportRequestColumns = [
     { title: "Titre", dataIndex: "description", key: "description" }, // Utilise "description" pour le titre
 
@@ -325,7 +376,7 @@ const ReportGenerator = () => {
                         danger
                         color="danger"
                         variant="filled"
-                        onClick={() => handleExport(record.id)}
+                        onClick={() => handleDelete(record.id)}
                       >
                         Supprimer
                       </Button>
@@ -344,7 +395,7 @@ const ReportGenerator = () => {
                       <Button
                         color="danger"
                         variant="filled"
-                        onClick={() => handleCancel(record.id)}
+                        onClick={() => handleDelete(record.id)}
                       >
                         Annuler
                       </Button>
@@ -474,7 +525,7 @@ const ReportGenerator = () => {
               >
                 Rappeler
               </Button>
-              <Button type="danger" onClick={() => handleCancel(record.id)}>
+              <Button type="danger" onClick={() => handleDelete(record.id)}>
                 Annuler
               </Button>
             </div>
