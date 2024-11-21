@@ -26,6 +26,10 @@ interface ReportDetailsForQuarter {
   pageSize: string;
 }
 
+interface ReportForOtherDirection{
+  requestId: string
+}
+
 // Utility function to handle fetch requests and download files
 const fetchAndDownloadFile = async (
   url: string,
@@ -141,3 +145,12 @@ export const exportActivityToXLS = async (id: string[]) =>
     id,
     "Génération du rapport d'activités en cours...",
   );
+
+  export const exportReportToXLS = async (id: ReportForOtherDirection) =>
+    fetchAndDownloadFile(
+      buildUrl("/direction/other_direction/mission/export/week/excel", { directionId: id.requestId }),
+      id,
+      "Génération du rapport d'activités en cours..."
+    );
+  
+  

@@ -17,7 +17,12 @@ import { QuarterlyFilters } from "../DropDown/QuarterlyFilter";
 const { Option } = Select;
 
 const ReportGenerator = () => {
-  const { fetchWeeklyReportMissionXLS,fetchMonthlyReportMissionXLS,fetchQuarterlyReportMissionXLS } = useFilesContext();
+  const {
+    fetchWeeklyReportMissionXLS,
+    fetchMonthlyReportMissionXLS,
+    fetchQuarterlyReportMissionXLS,
+    fetchOtherDirectionRepport
+  } = useFilesContext();
   const { fetchAllSubDirections, isSubDirectionLoading } =
     useDirectionsContext();
   const {
@@ -91,11 +96,23 @@ const ReportGenerator = () => {
     console.log(`Rappeler la demande de rapport pour : ${record.title}`);
     // Ajoutez ici la logique pour relancer la demande de rapport
   };
-
-  const handleExportToExcel = (record) => {
-    console.log(`Exporter en Excel : ${record.title}`);
-    // Ajoutez ici la logique pour exporter le rapport en Excel
+  const handleExportToExcel = async (record) => {
+    console.log(`Exporter en Excel : ${record}`);
+    const params = {
+      requestId : record
+    }
+    // Appeler la fonction fetchOtherDirectionRepport avant l'exportation
+    try {
+      const response = await fetchOtherDirectionRepport(params);
+      console.log("Données récupérées pour le rapport :", response);
+  
+      // Ajoutez ici la logique pour exporter le rapport en Excel
+      console.log("Exportation en cours...");
+    } catch (error) {
+      console.error("Erreur lors de la récupération du rapport :", error);
+    }
   };
+  
 
   const [pageSize, setPageSize] = useState("50"); // Example page size
 
@@ -118,49 +135,46 @@ const ReportGenerator = () => {
     return match ? match[0] : null; // Return the matched date or null if not found
   };
 
-
-  const handleApprove = async (record,status) => {
-
+  const handleApprove = async (record, status) => {
     // Construction des détails pour l'approbation
     const requestDetails = {
       requestId: record.id, // Identifiant de la demande
       targetDirectionId: record.targetDirection.id, // Direction cible
-      status : status, // Statut (par ex. "approved" ou "rejected")
-      comment: null // Commentaire (optionnel)
-    };   
-    
+      status: status, // Statut (par ex. "approved" ou "rejected")
+      comment: null, // Commentaire (optionnel)
+    };
+
     try {
       // Appel à respondToDirectionReportRequest avec les détails
       await respondToDirectionReportRequest(requestDetails);
-     
     } catch (error) {
       console.error(`Erreur lors du traitement de la demande ${id} :`, error);
     }
   };
-  
 
   const handleGenerateReport = async () => {
     let date = "";
     if (reportScope === "subDirections") {
       const reportDetails = {
-        requesterDirectionId : directionId,
-        subDirectionIds :  subDirections,// Utilise le paramètre direction du demandeur
-        responsibleId : userId, // Utilise l'identifiant du responsable
+        requesterDirectionId: directionId,
+        subDirectionIds: subDirections, // Utilise le paramètre direction du demandeur
+        responsibleId: userId, // Utilise l'identifiant du responsable
         weekStartDate: date || extractFirstDateFromString(dateFilter.week), // Utilise la semaine ou extrait si nécessaire
       };
-  
 
       console.log(reportDetails);
-      
+
       try {
         await requestReport(reportDetails); // Appel de la fonction avec les paramètres
         console.log("Rapport généré avec succès pour les sous-directions !");
       } catch (error) {
-        console.error("Erreur lors de la génération du rapport pour les sous-directions :", error);
+        console.error(
+          "Erreur lors de la génération du rapport pour les sous-directions :",
+          error,
+        );
       }
       return;
     }
-
 
     if (activityType === "weekly") {
       const weekString = dateFilter.week;
@@ -203,7 +217,6 @@ const ReportGenerator = () => {
       }
       return;
     }
-   
 
     const reportDetails = {
       directionId,
@@ -304,7 +317,7 @@ const ReportGenerator = () => {
                       <Button
                         icon={<FileExcelOutlined style={{ color: "green" }} />}
                         color="green"
-                        onClick={() => handleExport(record.id)}
+                        onClick={() => handleExportToExcel(record.id)}
                       >
                         Exporter
                       </Button>
@@ -341,19 +354,18 @@ const ReportGenerator = () => {
                   return (
                     <>
                       <i>
-                      {record.comment ? record.comment : "Aucun commentaire"}
+                        {record.comment ? record.comment : "Aucun commentaire"}
                       </i>
                     </>
-                  )
+                  );
                 }
               })()}
             </div>
           );
         }
-        
 
         // Si la direction correspond à la cible, afficher "Approuver" et "Refuser"
-        if (isTargetDirection && record.status==="PENDING") {
+        if (isTargetDirection && record.status === "PENDING") {
           return (
             <div style={{ display: "flex", gap: "8px" }}>
               <Button type="primary" onClick={() => handleApprove(record.id)}>
@@ -368,14 +380,14 @@ const ReportGenerator = () => {
               </Button>
             </div>
           );
-        }else if(isRequestingDirection && record.status==="APPROVED"){
+        } else if (isRequestingDirection && record.status === "APPROVED") {
           <Button
-                color="danger"
-                variant="filled"
-                onClick={() => handleReject(record.id)}
-              >
-                Refuser
-              </Button>
+            color="danger"
+            variant="filled"
+            onClick={() => handleReject(record.id)}
+          >
+            Refuser
+          </Button>;
         }
 
         // Si aucune des deux directions ne correspond, afficher une Badge
@@ -446,7 +458,7 @@ const ReportGenerator = () => {
     {
       title: "Observation",
       key: "action",
-      render: (_, record) => {        
+      render: (_, record) => {
         const directionId = localStorage.getItem("directionId"); // Remplacez par l'ID de la direction actuelle (par exemple, venant du contexte ou de props)
         const isRequestingDirection =
           directionId === record.requesterDirection.id;
@@ -467,36 +479,38 @@ const ReportGenerator = () => {
               </Button>
             </div>
           );
-        }       
+        }
         // Si la direction correspond à la cible, afficher "Approuver" et "Refuser"
-        if (isTargetDirection & record.status === "PENDING") {
+        if (isTargetDirection & (record.status === "PENDING")) {
           return (
             <div style={{ display: "flex", gap: "8px" }}>
-              <Button type="primary" onClick={(id) => handleApprove(record,"APPROVED")}>
+              <Button
+                type="primary"
+                onClick={(id) => handleApprove(record, "APPROVED")}
+              >
                 Approuver
               </Button>
-              <Button type="danger" onClick={() => handleReject(record ,"REJECTED")}>
+              <Button
+                type="danger"
+                onClick={() => handleReject(record, "REJECTED")}
+              >
                 Refuser
               </Button>
             </div>
           );
-        }else if (isTargetDirection && record.status === "APPROVED"){
-
-          return(
+        } else if (isTargetDirection && record.status === "APPROVED") {
+          return (
             <Button danger type="danger-outlined">
-            Supprimer
-          </Button>
-          )
-        
-        }else{
+              Supprimer
+            </Button>
+          );
+        } else {
           return (
             <>
-              <i>
-              {record.comment ? record.comment : "Aucun commentaire"}
-              </i>
+              <i>{record.comment ? record.comment : "Aucun commentaire"}</i>
             </>
-          )
-        }       
+          );
+        }
       },
     },
   ];
@@ -595,9 +609,7 @@ const ReportGenerator = () => {
           <Button
             type="primary"
             onClick={handleGenerateReport}
-            disabled={
-              (reportScope === "myDirection" && !dateFilter.week) 
-            }
+            disabled={reportScope === "myDirection" && !dateFilter.week}
           >
             Générer le rapport
           </Button>

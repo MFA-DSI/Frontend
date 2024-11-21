@@ -2,19 +2,15 @@ import React, { useState } from "react";
 import { Modal, Input, message } from "antd";
 import { useMissionContext } from "../../providers";
 
-const DeleteRequestModal = ({
-  visible,
-  onCancel,
-  onConfirm,
-  value,
-}) => {
+const DeleteRequestModal = ({ visible, onCancel, onConfirm, value }) => {
   const { respondToDirectionReportRequest } = useMissionContext();
-  const [comment,setComment]= useState("");
+  const [comment, setComment] = useState("");
   // Fonction asynchrone pour gérer l'envoi
   const handleConfirm = async () => {
-
-    if(!comment.trim()){
-      message.warning("une rapport réfusé doit obligatoirement avoir une commentaire")
+    if (!comment.trim()) {
+      message.warning(
+        "une rapport réfusé doit obligatoirement avoir une commentaire",
+      );
       return;
     }
     try {
@@ -43,7 +39,9 @@ const DeleteRequestModal = ({
         disabled: !comment.trim(), // Désactiver si le commentaire est vide ou espace blanc
       }}
     >
-      <p>Veuillez indiquer la raison pour laquelle cette demande est refusée :</p>
+      <p>
+        Veuillez indiquer la raison pour laquelle cette demande est refusée :
+      </p>
       <Input.TextArea
         rows={4}
         value={comment}
