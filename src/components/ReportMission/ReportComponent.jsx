@@ -297,45 +297,60 @@ const ReportGenerator = () => {
         if (isRequestingDirection) {
           return (
             <div style={{ display: "flex", gap: "8px" }}>
-              {record.status === "APPROVED" ? (
-                <>
-                  <Button
-                    icon={<FileExcelOutlined style={{ color: "green" }} />}
-                    color="green"
-                    onClick={() => handleExport(record.id)}
-                  >
-                    Exporter
-                  </Button>
-                  <Button
-                    danger
-                    color="danger"
-                    variant="filled"
-                    onClick={() => handleExport(record.id)}
-                  >
-                    Supprimer
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button
-                    type="primary"
-                    variant="dashed"
-                    onClick={() => handleReminder(record.id)}
-                  >
-                    Rappeler
-                  </Button>
-                  <Button
-                    color="danger"
-                    variant="filled"
-                    onClick={() => handleCancel(record.id)}
-                  >
-                    Annuler
-                  </Button>
-                </>
-              )}
+              {(() => {
+                if (record.status === "APPROVED") {
+                  return (
+                    <>
+                      <Button
+                        icon={<FileExcelOutlined style={{ color: "green" }} />}
+                        color="green"
+                        onClick={() => handleExport(record.id)}
+                      >
+                        Exporter
+                      </Button>
+                      <Button
+                        danger
+                        color="danger"
+                        variant="filled"
+                        onClick={() => handleExport(record.id)}
+                      >
+                        Supprimer
+                      </Button>
+                    </>
+                  );
+                } else if (record.status === "PENDING") {
+                  return (
+                    <>
+                      <Button
+                        type="primary"
+                        variant="dashed"
+                        onClick={() => handleReminder(record.id)}
+                      >
+                        Rappeler
+                      </Button>
+                      <Button
+                        color="danger"
+                        variant="filled"
+                        onClick={() => handleCancel(record.id)}
+                      >
+                        Annuler
+                      </Button>
+                    </>
+                  );
+                } else {
+                  return (
+                    <>
+                      <i>
+                      {record.comment ? record.comment : "Aucun commentaire"}
+                      </i>
+                    </>
+                  )
+                }
+              })()}
             </div>
           );
         }
+        
 
         // Si la direction correspond à la cible, afficher "Approuver" et "Refuser"
         if (isTargetDirection && record.status==="PENDING") {
@@ -431,10 +446,7 @@ const ReportGenerator = () => {
     {
       title: "Observation",
       key: "action",
-      render: (_, record) => {
-
-       
-        
+      render: (_, record) => {        
         const directionId = localStorage.getItem("directionId"); // Remplacez par l'ID de la direction actuelle (par exemple, venant du contexte ou de props)
         const isRequestingDirection =
           directionId === record.requesterDirection.id;
@@ -605,7 +617,7 @@ const ReportGenerator = () => {
         </Card>
       )}
       {/* Section 3 : Rapports acceptés */}
-      <Card title="Rapports Acceptés" style={{ width: "100%" }}>
+      <Card title="Rapports de ma direction" style={{ width: "100%" }}>
         <Table
           style={tableStyle}
           dataSource={fetchAllTargets}

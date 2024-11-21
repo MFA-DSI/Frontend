@@ -73,7 +73,7 @@ const BASE_URL = environment.apiBaseUrl;
 const handleError = async (response: Response, defaultMessage: string) => {
   const errorData = await response.json();
   const errorMessage = errorData.message || defaultMessage;
-  message.error("une erreur s'est produite");
+  message.error(errorMessage);
   throw new Error(errorMessage);
 };
 

@@ -199,7 +199,7 @@ const NotificationCardDynamicIcons = () => {
                       textOverflow: "ellipsis",
                     }}
                   >
-                    {notification.description}
+                    {notification.responsibleDirection}
                   </Text>
                 }
               />
