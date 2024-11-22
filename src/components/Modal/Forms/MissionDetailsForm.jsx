@@ -79,25 +79,39 @@ export const ActivityDetailsForm = ({
     </Form>
   );
 };
-
-export const TaskForm = ({ tasks, setTasks }) => {
+export const TaskForm = ({ tasks, setTasks, activity }) => {
   const [taskDescription, setTaskDescription] = useState("");
-  const [taskDueDate, setTaskDueDate] = useState(null);
+  const [taskDueDate, setTaskDueDate] = useState(null); // Gérer en tant que moment directement
 
   const handleAddTask = () => {
     if (taskDescription.trim() === "") {
       message.error("La description de la tâche ne peut pas être vide.");
-      return; // Empêche l'ajout de la tâche si la description est vide
+      return;
     }
 
-    if (taskDueDate === null) {
+    if (!taskDueDate) {
       message.error("La date limite ne peut pas être vide.");
-      return; // Empêche l'ajout de la tâche si la date limite est null
+      return;
     }
-    const newTask = { description: taskDescription, dueDatetime: taskDueDate };
+
+    // Vérification que la date de la tâche n'est pas avant la date de l'activité
+    const activityDate = moment(activity.startDate); // Supposons que l'activité a une propriété `startDate`
+    if (taskDueDate.isBefore(activityDate, "day")) {
+      message.error(
+        "La date de la tâche ne peut pas être avant la date de début de l'activité."
+      );
+      return;
+    }
+
+    // Ajout de la tâche
+    const newTask = {
+      description: taskDescription,
+      dueDatetime: taskDueDate.toISOString(), // Sauvegarde au format ISO 8601
+    };
+
     setTasks([...tasks, newTask]);
     setTaskDescription("");
-    setTaskDueDate(null);
+    setTaskDueDate(null); // Réinitialiser la sélection après ajout
   };
 
   return (
@@ -112,17 +126,21 @@ export const TaskForm = ({ tasks, setTasks }) => {
       <ConfigProvider locale={frLocale}>
         <Form.Item label="Date de la Tâche">
           <DatePicker
-            value={taskDueDate}
+            value={taskDueDate} // La valeur doit être un moment
             disabledDate={(current) =>
-              current && current.isBefore(moment(), "day")
+              current &&
+              (current.isBefore(moment(), "day") || 
+               current.isBefore(moment(activity.startDate), "day"))
             }
-            onChange={(date) => setTaskDueDate(date)}
+            onChange={(date) => setTaskDueDate(date)} // Mettre à jour avec l'objet moment
           />
         </Form.Item>
       </ConfigProvider>
+
       <Button type="primary" onClick={handleAddTask}>
-        Enregister cette Tâche
+        Enregistrer cette Tâche
       </Button>
+
       <ul>
         {tasks.map((task, index) => (
           <li key={index}>
@@ -138,29 +156,46 @@ export const TaskForm = ({ tasks, setTasks }) => {
   );
 };
 
-export const NextTaskForm = ({ nextTasks, setNextTasks }) => {
+
+export const NextTaskForm = ({ nextTasks, setNextTasks, tasks }) => {
   const [nextTaskDescription, setNextTaskDescription] = useState("");
-  const [nextTaskDueDate, setNextTaskDueDate] = useState(null);
+  const [nextTaskDueDate, setNextTaskDueDate] = useState(null); // Moment ou null
 
   const handleAddNextTask = () => {
     if (nextTaskDescription.trim() === "") {
       message.error(
-        "La description de la prochaine tâche ne peut pas être vide.",
+        "La description de la prochaine tâche ne peut pas être vide."
       );
-      return; // Empêche l'ajout de la prochaine tâche si la description est vide
+      return;
     }
 
-    if (nextTaskDueDate === null) {
+    if (!nextTaskDueDate) {
       message.error("La date limite ne peut pas être vide.");
-      return; // Empêche l'ajout de la prochaine tâche si la date limite est null
+      return;
     }
+
+    // Vérification que toutes les dates des tâches existantes sont avant la prochaine tâche
+    const taskDates = tasks.map((task) => moment(task.dueDatetime));
+    const isAnyTaskDateAfter = taskDates.some((date) =>
+      date.isBefore(nextTaskDueDate, "day")
+    );
+
+    if (isAnyTaskDateAfter) {
+      message.error(
+        "La date de la prochaine tâche doit être postérieure à toutes les dates des tâches existantes."
+      );
+      return;
+    }
+
+    // Création de la prochaine tâche
     const newNextTask = {
       description: nextTaskDescription,
-      dueDatetime: nextTaskDueDate,
+      dueDatetime: nextTaskDueDate.toISOString(), // Format ISO 8601 pour stockage
     };
+
     setNextTasks([...nextTasks, newNextTask]);
     setNextTaskDescription("");
-    setNextTaskDueDate(null);
+    setNextTaskDueDate(null); // Réinitialisation après ajout
   };
 
   return (
@@ -175,17 +210,26 @@ export const NextTaskForm = ({ nextTasks, setNextTasks }) => {
       <ConfigProvider locale={frLocale}>
         <Form.Item label="Date de la Tâche Prochaine">
           <DatePicker
-            value={nextTaskDueDate}
-            disabledDate={(current) =>
-              current && current.isBefore(moment(), "day")
-            }
-            onChange={(date) => setNextTaskDueDate(date)}
+            value={nextTaskDueDate} // Utiliser directement `nextTaskDueDate` (moment ou null)
+            disabledDate={(current) => {
+              const maxTaskDate = tasks.length
+                ? moment.max(tasks.map((task) => moment(task.dueDatetime)))
+                : null;
+              return (
+                current &&
+                (current.isBefore(moment(), "day") || // Pas avant aujourd'hui
+                 (maxTaskDate && current.isBefore(maxTaskDate, "day"))) // Pas avant les tâches existantes
+              );
+            }}
+            onChange={(date) => setNextTaskDueDate(date)} // Mettre à jour avec l'objet moment
           />
         </Form.Item>
       </ConfigProvider>
+
       <Button type="primary" onClick={handleAddNextTask}>
         Enregistrer cette Tâche Prochaine
       </Button>
+
       <ul>
         {nextTasks.map((nextTask, index) => (
           <li key={index}>
@@ -300,6 +344,7 @@ export const CombinedTaskForm = ({
   setTasks,
   nextTasks,
   setNextTasks,
+  activity
 }) => {
   return (
     <div
@@ -315,7 +360,7 @@ export const CombinedTaskForm = ({
     >
       <div style={{ flex: 1, marginRight: "10px" }}>
         <h2>Ajouter des tâches</h2>
-        <TaskForm tasks={tasks} setTasks={setTasks} />
+        <TaskForm tasks={tasks} setTasks={setTasks} activity={activity} />
       </div>
       <div style={{ flex: 1, marginLeft: "10px" }}>
         <h2>Ajouter des prochaines tâches</h2>
@@ -323,6 +368,7 @@ export const CombinedTaskForm = ({
           nextTasks={nextTasks}
           setNextTasks={setNextTasks}
           tasks={tasks}
+          
         />
       </div>
     </div>

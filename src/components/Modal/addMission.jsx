@@ -274,6 +274,7 @@ const AddMissionModal = ({ visible, onCancel }) => {
           setTasks={setTasks}
           nextTasks={nextTasks}
           setNextTasks={setNextTasks}
+          activity={activity}
         />
       ),
     },

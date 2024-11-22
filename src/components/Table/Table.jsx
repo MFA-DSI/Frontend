@@ -330,7 +330,7 @@ const TableComponent = ({
                   : "Aucun indicateur"}
                 {activityCount > 0 && (
                   <Badge
-                    count={`${performanceRealizations.length} autre(s)`}
+                    count={`${activityCount} autre(s)`}
                     color={"blue"}
                     style={{ marginLeft: 8 }}
                   />
@@ -354,7 +354,7 @@ const TableComponent = ({
                   : "Aucune réalisation"}
                 {activityCount > 0 && (
                   <Badge
-                    count={`${performanceRealizations.length} autre(s)`}
+                    count={`${activityCount} autre(s)`}
                     color={"yellow"}
                     style={{ marginLeft: 8 }}
                   />
