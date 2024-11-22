@@ -115,6 +115,7 @@ const MissionModal = ({ visible, onCancel, mission, onDelete, mode }) => {
                 <List
                   itemLayout="vertical"
                   dataSource={editedMission.activityList}
+                  locale={{ emptyText: "Aucune activité à afficher" }}
                   renderItem={(activity) => (
                     <List.Item key={activity.id}>
                       <List.Item.Meta
