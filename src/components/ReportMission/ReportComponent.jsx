@@ -551,7 +551,7 @@ const ReportGenerator = () => {
           );
         } else if (isTargetDirection && record.status === "APPROVED") {
           return (
-            <Button danger type="danger-outlined">
+            <Button danger type="danger-outlined" onClick={() => handleDelete(record.id)}>
               Supprimer
             </Button>
           );
