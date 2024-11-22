@@ -317,21 +317,36 @@ const TableComponent = ({
           title: "Indicateur",
           dataIndex: "activityList",
           render: (activityList) => {
-            const performanceRealizations =
-              activityList[0]?.performanceRealization;
-            const otherIndicatorsCount = performanceRealizations
-              ? performanceRealizations.length - 1
-              : 0;
-
+            if (!activityList || activityList.length === 0) {
+              return "Aucun indicateur";
+            }
+        
+            // Récupérer les réalisations de la première activité
+            const primaryPerformanceRealizations =
+              activityList[0]?.performanceRealization || [];
+        
+            // Nombre total d'indicateurs dans toutes les activités
+            const totalIndicators = activityList.reduce((total, activity) => {
+              const performanceRealizations = activity?.performanceRealization || [];
+              return total + performanceRealizations.length;
+            }, 0);
+        
+            // Calcul du nombre d'indicateurs restants
+            const otherIndicatorsCount =
+              totalIndicators - primaryPerformanceRealizations.length;
+        
             return (
               <div>
-                {performanceRealizations
-                  ? performanceRealizations[0].realization
+                {/* Affichage des indicateurs de la première activité */}
+                {primaryPerformanceRealizations.length > 0
+                  ? primaryPerformanceRealizations[0]?.realization
                   : "Aucun indicateur"}
-                {activityCount > 0 && (
+        
+                {/* Badge pour le reste des indicateurs */}
+                {otherIndicatorsCount > 0 && (
                   <Badge
-                    count={`${activityCount} autre(s)`}
-                    color={"blue"}
+                    count={`${otherIndicatorsCount} autre(s)`}
+                    color="blue"
                     style={{ marginLeft: 8 }}
                   />
                 )}
@@ -340,22 +355,47 @@ const TableComponent = ({
           },
           width: 250,
         },
+        
+        
         {
           title: "Réalisation",
           dataIndex: "activityList",
           render: (activityList) => {
-            const performanceRealizations =
-              activityList[0]?.performanceRealization;
-
+            if (!activityList || activityList.length === 0) {
+              return "Aucune réalisation";
+            }
+        
+            // Récupérer les réalisations de la première activité
+            const primaryPerformanceRealizations =
+              activityList[0]?.performanceRealization || [];
+        
+            // Nombre total de réalisations
+            const totalRealizations = activityList.reduce((total, activity) => {
+              const performanceRealizations = activity?.performanceRealization || [];
+              return total + performanceRealizations.length;
+            }, 0);
+        
+            // Calcul du nombre de réalisations restantes
+            const otherRealizationsCount =
+              totalRealizations - primaryPerformanceRealizations.length;
+        
             return (
               <div>
-                {performanceRealizations && performanceRealizations.length > 0
-                  ? `${performanceRealizations[0].indicators}${performanceRealizations[0].realizationType == "percentage" ? "%" : ""}`
+                {/* Affichage de la première réalisation de la première activité */}
+                {primaryPerformanceRealizations.length > 0
+                  ? `${primaryPerformanceRealizations[0]?.indicators}${
+                      primaryPerformanceRealizations[0]?.realizationType ===
+                      "percentage"
+                        ? "%"
+                        : ""
+                    }`
                   : "Aucune réalisation"}
-                {activityCount > 0 && (
+        
+                {/* Badge pour le reste des réalisations */}
+                {otherRealizationsCount > 0 && (
                   <Badge
-                    count={`${activityCount} autre(s)`}
-                    color={"yellow"}
+                    count={`${otherRealizationsCount} autre(s)`}
+                    color="yellow"
                     style={{ marginLeft: 8 }}
                   />
                 )}
@@ -364,6 +404,7 @@ const TableComponent = ({
           },
           width: 150,
         },
+        
         {
           title: "Voir Plus",
           dataIndex: "id",
