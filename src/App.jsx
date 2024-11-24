@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -23,6 +23,7 @@ import StaffWrapper, {
   AdminWrapper,
   RoleWrapper,
 } from "./components/Auth/admin-wrapper";
+import NProgress from "./conf/nprogress-config";
 
 const queryClient = new QueryClient();
 
@@ -30,7 +31,13 @@ function App() {
   const location = useLocation();
   const role = useAuthStore.getState().role;
   const isStaff = useAuthStore.getState().isStaff;
+  useEffect(() => {
+    // Commencer la barre de progression
+    NProgress.start();
 
+    // Arrêter la barre une fois le composant chargé
+    NProgress.done();
+  }, [location]);
   return (
     <QueryClientProvider client={queryClient}>
       <HackWebProviders>

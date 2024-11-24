@@ -50,7 +50,7 @@ export const ActivityDetailsForm = ({
         />
       </Form.Item>
 
-      <Form.Item label="Prédiction" name="prediction">
+      <Form.Item label="Prévision" name="prediction">
         <Input
           value={prediction}
           onChange={(e) =>
@@ -60,10 +60,10 @@ export const ActivityDetailsForm = ({
       </Form.Item>
       <ConfigProvider locale={frLocale}>
         <Form.Item
-          label="Date d'échéance *"
+          label="Date de début *"
           name="dueDatetime"
           rules={[
-            { required: true, message: "La date d'échéance est obligatoire" },
+            { required: true, message: "La date de début est obligatoire" },
           ]}
         >
           <DatePicker
@@ -98,7 +98,7 @@ export const TaskForm = ({ tasks, setTasks, activity }) => {
     const activityDate = moment(activity.startDate); // Supposons que l'activité a une propriété `startDate`
     if (taskDueDate.isBefore(activityDate, "day")) {
       message.error(
-        "La date de la tâche ne peut pas être avant la date de début de l'activité."
+        "La date de la tâche ne peut pas être avant la date de début de l'activité.",
       );
       return;
     }
@@ -129,8 +129,8 @@ export const TaskForm = ({ tasks, setTasks, activity }) => {
             value={taskDueDate} // La valeur doit être un moment
             disabledDate={(current) =>
               current &&
-              (current.isBefore(moment(), "day") || 
-               current.isBefore(moment(activity.startDate), "day"))
+              (current.isBefore(moment(), "day") ||
+                current.isBefore(moment(activity.startDate), "day"))
             }
             onChange={(date) => setTaskDueDate(date)} // Mettre à jour avec l'objet moment
           />
@@ -156,7 +156,6 @@ export const TaskForm = ({ tasks, setTasks, activity }) => {
   );
 };
 
-
 export const NextTaskForm = ({ nextTasks, setNextTasks, tasks }) => {
   const [nextTaskDescription, setNextTaskDescription] = useState("");
   const [nextTaskDueDate, setNextTaskDueDate] = useState(null); // Moment ou null
@@ -164,7 +163,7 @@ export const NextTaskForm = ({ nextTasks, setNextTasks, tasks }) => {
   const handleAddNextTask = () => {
     if (nextTaskDescription.trim() === "") {
       message.error(
-        "La description de la prochaine tâche ne peut pas être vide."
+        "La description de la prochaine tâche ne peut pas être vide.",
       );
       return;
     }
@@ -177,12 +176,12 @@ export const NextTaskForm = ({ nextTasks, setNextTasks, tasks }) => {
     // Vérification que toutes les dates des tâches existantes sont avant la prochaine tâche
     const taskDates = tasks.map((task) => moment(task.dueDatetime));
     const isAnyTaskDateAfter = taskDates.some((date) =>
-      date.isBefore(nextTaskDueDate, "day")
+      date.isBefore(nextTaskDueDate, "day"),
     );
 
     if (isAnyTaskDateAfter) {
       message.error(
-        "La date de la prochaine tâche doit être postérieure à toutes les dates des tâches existantes."
+        "La date de la prochaine tâche doit être postérieure à toutes les dates des tâches existantes.",
       );
       return;
     }
@@ -218,7 +217,7 @@ export const NextTaskForm = ({ nextTasks, setNextTasks, tasks }) => {
               return (
                 current &&
                 (current.isBefore(moment(), "day") || // Pas avant aujourd'hui
-                 (maxTaskDate && current.isBefore(maxTaskDate, "day"))) // Pas avant les tâches existantes
+                  (maxTaskDate && current.isBefore(maxTaskDate, "day"))) // Pas avant les tâches existantes
               );
             }}
             onChange={(date) => setNextTaskDueDate(date)} // Mettre à jour avec l'objet moment
@@ -344,7 +343,7 @@ export const CombinedTaskForm = ({
   setTasks,
   nextTasks,
   setNextTasks,
-  activity
+  activity,
 }) => {
   return (
     <div
@@ -368,7 +367,6 @@ export const CombinedTaskForm = ({
           nextTasks={nextTasks}
           setNextTasks={setNextTasks}
           tasks={tasks}
-          
         />
       </div>
     </div>

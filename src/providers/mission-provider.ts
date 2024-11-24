@@ -253,7 +253,6 @@ export const fetchAllRequests = async (params: string): Promise<unknown> => {
   );
 };
 
-
 export const fetchAllTargetedRequests = async (
   params: string,
 ): Promise<unknown> => {
@@ -272,7 +271,7 @@ export const deleteReportById = async (reportId: string): Promise<unknown> => {
   return await fetchData(
     url,
     { method: "DELETE" },
-    "Erreur lors de la suppression du rapport"
+    "Erreur lors de la suppression du rapport",
   );
 };
 export const recallReportById = async (reportId: string): Promise<unknown> => {
@@ -281,7 +280,6 @@ export const recallReportById = async (reportId: string): Promise<unknown> => {
   return await fetchData(
     url,
     { method: "POST" },
-    "Erreur lors du rappel du rapport"
+    "Erreur lors du rappel du rapport",
   );
 };
-

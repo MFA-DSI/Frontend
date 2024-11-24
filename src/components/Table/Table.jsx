@@ -320,28 +320,29 @@ const TableComponent = ({
             if (!activityList || activityList.length === 0) {
               return "Aucun indicateur";
             }
-        
+
             // Récupérer les réalisations de la première activité
             const primaryPerformanceRealizations =
               activityList[0]?.performanceRealization || [];
-        
+
             // Nombre total d'indicateurs dans toutes les activités
             const totalIndicators = activityList.reduce((total, activity) => {
-              const performanceRealizations = activity?.performanceRealization || [];
+              const performanceRealizations =
+                activity?.performanceRealization || [];
               return total + performanceRealizations.length;
             }, 0);
-        
+
             // Calcul du nombre d'indicateurs restants
             const otherIndicatorsCount =
               totalIndicators - primaryPerformanceRealizations.length;
-        
+
             return (
               <div>
                 {/* Affichage des indicateurs de la première activité */}
                 {primaryPerformanceRealizations.length > 0
                   ? primaryPerformanceRealizations[0]?.realization
                   : "Aucun indicateur"}
-        
+
                 {/* Badge pour le reste des indicateurs */}
                 {otherIndicatorsCount > 0 && (
                   <Badge
@@ -355,8 +356,7 @@ const TableComponent = ({
           },
           width: 250,
         },
-        
-        
+
         {
           title: "Réalisation",
           dataIndex: "activityList",
@@ -364,21 +364,22 @@ const TableComponent = ({
             if (!activityList || activityList.length === 0) {
               return "Aucune réalisation";
             }
-        
+
             // Récupérer les réalisations de la première activité
             const primaryPerformanceRealizations =
               activityList[0]?.performanceRealization || [];
-        
+
             // Nombre total de réalisations
             const totalRealizations = activityList.reduce((total, activity) => {
-              const performanceRealizations = activity?.performanceRealization || [];
+              const performanceRealizations =
+                activity?.performanceRealization || [];
               return total + performanceRealizations.length;
             }, 0);
-        
+
             // Calcul du nombre de réalisations restantes
             const otherRealizationsCount =
               totalRealizations - primaryPerformanceRealizations.length;
-        
+
             return (
               <div>
                 {/* Affichage de la première réalisation de la première activité */}
@@ -390,7 +391,7 @@ const TableComponent = ({
                         : ""
                     }`
                   : "Aucune réalisation"}
-        
+
                 {/* Badge pour le reste des réalisations */}
                 {otherRealizationsCount > 0 && (
                   <Badge
@@ -404,7 +405,7 @@ const TableComponent = ({
           },
           width: 150,
         },
-        
+
         {
           title: "Voir Plus",
           dataIndex: "id",

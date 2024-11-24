@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Select, Button, Card, Checkbox, Table, Badge, Typography, message } from "antd";
+import {
+  Select,
+  Button,
+  Card,
+  Checkbox,
+  Table,
+  Badge,
+  Typography,
+  message,
+} from "antd";
 import { ActivityTypeSelect } from "../DropDown/ActivityTypeSelect";
 import { WeeklyFilters } from "../DropDown/WeeklyFilters";
 import { useFilesContext } from "../../providers/context/FilesContext";
@@ -21,7 +30,7 @@ const ReportGenerator = () => {
     fetchWeeklyReportMissionXLS,
     fetchMonthlyReportMissionXLS,
     fetchQuarterlyReportMissionXLS,
-    fetchOtherDirectionRepport
+    fetchOtherDirectionRepport,
   } = useFilesContext();
   const { fetchAllSubDirections, isSubDirectionLoading } =
     useDirectionsContext();
@@ -31,7 +40,7 @@ const ReportGenerator = () => {
     fetchAllRequests,
     fetchAllTargets,
     recallDirectionReport,
-    deleteDirectionReport
+    deleteDirectionReport,
   } = useMissionContext();
   const directionId = useAuthStore.getState().directionId;
   const userId = useAuthStore.getState().userId;
@@ -101,20 +110,18 @@ const ReportGenerator = () => {
   const handleExportToExcel = async (record) => {
     console.log(`Exporter en Excel : ${record}`);
     const params = {
-      requestId : record
-    }
+      requestId: record,
+    };
     // Appeler la fonction fetchOtherDirectionRepport avant l'exportation
     try {
       const response = await fetchOtherDirectionRepport(params);
-      
-  
+
       // Ajoutez ici la logique pour exporter le rapport en Excel
       console.log("Exportation en cours...");
     } catch (error) {
       console.error("Erreur lors de la récupération du rapport :", error);
     }
   };
-  
 
   const [pageSize, setPageSize] = useState("50"); // Example page size
 
@@ -154,27 +161,25 @@ const ReportGenerator = () => {
     }
   };
 
-
-  const handleReminder = async(id)=>{
+  const handleReminder = async (id) => {
     try {
-      await  recallDirectionReport(id)
+      await recallDirectionReport(id);
     } catch (error) {
-      message.error("une erreur est survenue lors du rappel")
+      message.error("une erreur est survenue lors du rappel");
     }
-  }
+  };
 
-  const handleDelete= async(id)=>{
+  const handleDelete = async (id) => {
     try {
       await deleteDirectionReport(id);
     } catch (error) {
-      message.error("une erreur est survenue lors de la suppression")
+      message.error("une erreur est survenue lors de la suppression");
     }
-  }
-
+  };
 
   const handleGenerateReport = async () => {
     let date = "";
-  
+
     if (reportScope === "subDirections") {
       const reportDetails = {
         requesterDirectionId: directionId,
@@ -182,53 +187,64 @@ const ReportGenerator = () => {
         responsibleId: userId, // Identifiant du responsable
         weekStartDate: date || extractFirstDateFromString(dateFilter.week), // Semaine sélectionnée ou extraite
       };
-  
+
       console.log("Détails du rapport : ", reportDetails);
-  
+
       try {
         // Appel de l'API pour générer les rapports
         const response = await requestReport(reportDetails);
-  
+        setSubDirections([]);
+        setActivityType("all");
         // Vérifier si une réponse détaillée est retournée
         if (response && Array.isArray(response)) {
           // Trier les résultats pour succès et erreurs
           const successes = response.filter((res) => res.status === "SUCCESS");
           const errors = response.filter((res) => res.status === "ERROR");
-  
+
           // Afficher les succès
           if (successes.length > 0) {
-            console.log(
-              "Rapports générés avec succès :",
-              successes.map((s) => ({
-                subDirectionId: s.subDirectionId,
-                data: s.data,
-              }))
-            );
+            message.success({
+              content: (
+                <>
+                  <strong>Rapports générés avec succès :</strong>
+                  <ul>
+                    {successes.map((s, index) => (
+                      <li key={index}>
+                        {s.data.description} enoyée avec succées
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              ),
+              duration: 8, // Durée en secondes pour l'affichage du message
+            });
           }
-  
+
           // Afficher les erreurs
           if (errors.length > 0) {
             errors.forEach((error) => {
               message.error(
                 `Erreur pour la sous-direction ${error.message}`,
-                10 // Durée en secondes
+                10, // Durée en secondes
               );
             });
           }
         } else {
           // Succès global sans réponse détaillée
-          message.success("Rapport généré avec succès pour les sous-directions !");
+          message.success(
+            "Rapport généré avec succès pour les sous-directions !",
+          );
         }
       } catch (error) {
         // Erreurs globales non spécifiques
         console.error(
           "Erreur lors de la génération du rapport pour les sous-directions :",
-          error
+          error,
         );
       }
       return;
     }
-  
+
     if (activityType === "weekly") {
       const weekString = dateFilter.week;
       date = extractFirstDateFromString(weekString); // Extraire la première date de la semaine
@@ -239,12 +255,15 @@ const ReportGenerator = () => {
         month: dateFilter.month + 1, // Mois dans le bon format (commence à 1)
         pageSize,
       };
-  
+
       try {
         await fetchMonthlyReportMissionXLS(reportDetailsForMonth);
         console.log("Rapport mensuel généré avec succès !");
       } catch (error) {
-        console.error("Erreur lors de la génération du rapport mensuel :", error);
+        console.error(
+          "Erreur lors de la génération du rapport mensuel :",
+          error,
+        );
       }
       return;
     } else if (activityType === "quarterly") {
@@ -254,25 +273,25 @@ const ReportGenerator = () => {
         quarter: dateFilter.quarter, // Trimestre sélectionné
         pageSize,
       };
-  
+
       try {
         await fetchQuarterlyReportMissionXLS(reportDetailsForQuarter);
         console.log("Rapport trimestriel généré avec succès !");
       } catch (error) {
         console.error(
           "Erreur lors de la génération du rapport trimestriel :",
-          error
+          error,
         );
       }
       return;
     }
-  
+
     const reportDetails = {
       directionId,
       date,
       pageSize,
     };
-  
+
     try {
       await fetchWeeklyReportMissionXLS(reportDetails);
       console.log("Rapport hebdomadaire généré avec succès !");
@@ -280,7 +299,7 @@ const ReportGenerator = () => {
       console.error("Erreur lors de la génération du rapport :", error);
     }
   };
-  
+
   const reportRequestColumns = [
     { title: "Titre", dataIndex: "description", key: "description" }, // Utilise "description" pour le titre
 
@@ -551,7 +570,11 @@ const ReportGenerator = () => {
           );
         } else if (isTargetDirection && record.status === "APPROVED") {
           return (
-            <Button danger type="danger-outlined" onClick={() => handleDelete(record.id)}>
+            <Button
+              danger
+              type="danger-outlined"
+              onClick={() => handleDelete(record.id)}
+            >
               Supprimer
             </Button>
           );
@@ -656,11 +679,14 @@ const ReportGenerator = () => {
           </>
         )}
 
-        <div style={{ textAlign: "right" }}>
+        <div style={{ textAlign: "right", marginTop: "12px" }}>
           <Button
             type="primary"
             onClick={handleGenerateReport}
-            disabled={reportScope === "myDirection" && !dateFilter.week}
+            disabled={
+              (reportScope === "myDirection" && !dateFilter.week) ||
+              activityType == "all"
+            }
           >
             Générer le rapport
           </Button>
