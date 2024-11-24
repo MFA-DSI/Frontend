@@ -234,7 +234,7 @@ const TableComponent = ({
           width: 250,
         },
         {
-          title: "Tâche Prochaine",
+          title: "Tâches Prochaine",
           dataIndex: "nextTask",
           render: (nextTaskList) => (
             <div>
@@ -314,7 +314,7 @@ const TableComponent = ({
           width: 240,
         },
         {
-          title: "Indicateur",
+          title: "Indicateurs",
           dataIndex: "activityList",
           render: (activityList) => {
             if (!activityList || activityList.length === 0) {
@@ -358,7 +358,7 @@ const TableComponent = ({
         },
 
         {
-          title: "Réalisation",
+          title: "Réalisations",
           dataIndex: "activityList",
           render: (activityList) => {
             if (!activityList || activityList.length === 0) {
