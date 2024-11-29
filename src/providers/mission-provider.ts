@@ -82,14 +82,27 @@ const fetchData = async <T>(
   url: string,
   options: RequestInit,
   errorMessage: string,
-  succesMessage?: string,
+  successMessage?: string,
 ): Promise<T> => {
   const response = await fetch(url, options);
+
   if (!response.ok) {
     await handleError(response, errorMessage);
   }
 
-  return response.json();
+  const data = await response.json();
+
+  // Vérifie si une clé "message" existe dans la réponse et l'utilise comme message de succès
+  if (response.ok) {
+    const responseMessage = (data as any)?.message; // Vérifie si "message" est présent dans la réponse
+    if (responseMessage) {
+      message.success(responseMessage); // Affiche le message depuis la réponse
+    } else if (successMessage) {
+      message.success(successMessage); // Utilise le successMessage passé en paramètre si fourni
+    }
+  }
+
+  return data;
 };
 
 // Fetch all missions
