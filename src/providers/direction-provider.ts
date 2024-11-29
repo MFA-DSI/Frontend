@@ -19,19 +19,27 @@ const fetchData = async <T>(
   options: RequestInit,
   errorMessage: string,
 ): Promise<T | null> => {
+  const token = localStorage.getItem("token"); // Récupérer le token Bearer
+
+  // Ajouter le token dans l'en-tête Authorization si disponible
+  const headers = {
+    "Content-Type": "application/json",
+    ...(token ? { "Authorization": `Bearer ${token}` } : {}),
+  };
+
   try {
-    const response = await fetch(url, options);
+    const response = await fetch(url, { ...options, headers });
 
     if (!response.ok) throw new Error(errorMessage);
 
     return await response.json();
   } catch (error: any) {
-    const language = "fr"; // Adjust dynamically if needed
+    const language = "fr"; // Ajustez dynamiquement si nécessaire
 
     let translatedError =
       errorTranslations[language][errorMessage] || errorMessage;
 
-    // Check if the error contains an email address dynamically
+    // Vérifier si l'erreur contient un email dynamiquement
     const emailRegex = /User with the email address: (.+) already exists/;
     const emailMatch = error.message.match(emailRegex);
 
@@ -59,7 +67,7 @@ export const fetchDirections = async (): Promise<Direction[]> => {
 };
 
 export const fetchDirectionServices = async (
-  directionId,
+  directionId: string,
 ): Promise<Service[]> => {
   return (
     (await fetchData<Service[]>(
@@ -83,7 +91,7 @@ export const fetchSubDirections = async (params: string): Promise<unknown> => {
 };
 
 export const fetchDirectionName = async (
-  directionId,
+  directionId: string,
 ): Promise<Direction | null> => {
   return fetchData<Direction>(
     `${API_URL}/direction/name/${directionId}`,
@@ -98,10 +106,18 @@ const postData = async <T>(
   successMessage: string,
   errorMessage: string,
 ): Promise<T | null> => {
+  const token = localStorage.getItem("token"); // Récupérer le token Bearer
+
+  // Ajouter le token dans l'en-tête Authorization si disponible
+  const headers = {
+    "Content-Type": "application/json",
+    ...(token ? { "Authorization": `Bearer ${token}` } : {}),
+  };
+
   try {
     const response = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify(data),
     });
 
@@ -125,7 +141,7 @@ export const addUserToDirection = (userToAdd: User): Promise<User | null> =>
   postData<User>(
     `${API_URL}/users/createUser`,
     userToAdd,
-    "Utilisateur créée avec succées",
+    "Utilisateur créé avec succès",
     "Une erreur s'est produite lors de la création de l'utilisateur",
   );
 
@@ -135,7 +151,7 @@ export const addResponsibleToDirection = (
   postData<NewResponsible>(
     `${API_URL}/users/createAdmin`,
     userToAdd,
-    "Responsable créée avec succées",
+    "Responsable créé avec succès",
     "Une erreur s'est produite lors de la création de l'utilisateur",
   );
 

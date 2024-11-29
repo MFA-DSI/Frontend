@@ -8,10 +8,19 @@ interface DeleteNotificationParams {
   id: string;
   userId: string;
 }
-export const fetchNotification = async (userId): Promise<Notification[]> => {
+
+// Fonction utilitaire pour récupérer le token d'authentification
+const getAuthToken = (): string | null => {
+  return localStorage.getItem("token"); // ou utilisez votre gestionnaire d'état pour le token
+};
+
+// Récupère les notifications pour un utilisateur
+export const fetchNotification = async (userId: string): Promise<Notification[]> => {
   if (!userId) {
     throw new Error("User ID is not available in session storage");
   }
+
+  const token = getAuthToken(); // Récupère le token d'authentification
 
   try {
     const url = new URL(`${API_URL}/direction/notification/user`);
@@ -19,6 +28,9 @@ export const fetchNotification = async (userId): Promise<Notification[]> => {
 
     const response = await fetch(url.toString(), {
       method: "GET",
+      headers: {
+        "Authorization": token ? `Bearer ${token}` : "", // Ajouter le token dans l'en-tête Authorization
+      },
     });
 
     if (!response.ok) {
@@ -33,12 +45,15 @@ export const fetchNotification = async (userId): Promise<Notification[]> => {
   }
 };
 
-export const updateNotificationStatus = async (id: string) => {
+// Met à jour le statut de la notification
+export const updateNotificationStatus = async (id: string): Promise<void> => {
   const directionId = localStorage.getItem("directionId");
 
   if (!directionId) {
     throw new Error("Direction ID is not available in session storage");
   }
+
+  const token = getAuthToken(); // Récupère le token d'authentification
 
   try {
     const url = new URL(`${API_URL}/direction/notification/update`);
@@ -46,12 +61,14 @@ export const updateNotificationStatus = async (id: string) => {
 
     const response = await fetch(url.toString(), {
       method: "PUT",
+      headers: {
+        "Authorization": token ? `Bearer ${token}` : "", // Ajouter le token dans l'en-tête Authorization
+        "Content-Type": "application/json",
+      },
     });
 
     if (!response.ok) {
-      throw new Error(
-        `Error updating notification status: ${response.statusText}`,
-      );
+      throw new Error(`Error updating notification status: ${response.statusText}`);
     }
 
     const data = await response.json();
@@ -61,25 +78,30 @@ export const updateNotificationStatus = async (id: string) => {
     throw error;
   }
 };
-export const deleteNotification = async (id: DeleteNotificationParams) => {
+
+// Supprime une notification
+export const deleteNotification = async (id: DeleteNotificationParams): Promise<unknown> => {
+  const token = getAuthToken(); // Récupère le token d'authentification
+
   try {
     const url = new URL(
-      `${API_URL}/direction/notification/delete?id=${id.id}&userId=${id.userId}`,
+      `${API_URL}/direction/notification/delete?id=${id.id}&userId=${id.userId}`
     );
     const response = await fetch(url.toString(), {
       method: "POST",
+      headers: {
+        "Authorization": token ? `Bearer ${token}` : "", // Ajouter le token dans l'en-tête Authorization
+      },
     });
 
     if (!response.ok) {
-      throw new Error(
-        `Error updating notification status: ${response.statusText}`,
-      );
+      throw new Error(`Error deleting notification: ${response.statusText}`);
     }
 
-    message.success("notification supprimé avec succées");
+    message.success("Notification supprimée avec succès");
     return null;
   } catch (error) {
-    console.error("Failed to update notification status", error);
+    console.error("Failed to delete notification", error);
     throw error;
   }
 };

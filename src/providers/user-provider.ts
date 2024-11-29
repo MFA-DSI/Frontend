@@ -6,6 +6,7 @@ import { message } from "antd";
 
 const API_URL: string = import.meta.env.VITE_API_URL;
 
+// Interface de nouvelle information utilisateur
 interface NewUserInformation {
   firstname: string;
   lastname: string;
@@ -15,11 +16,13 @@ interface NewUserInformation {
   phoneNumbers: string;
 }
 
+// Interface pour mettre à jour l'utilisateur
 interface updateUser {
   userId: string;
   userInfoUpdate: NewUserInformation;
 }
 
+// Interface pour les responsables de direction
 interface DirectionResponsible {
   id: string;
   firstName: string;
@@ -28,12 +31,16 @@ interface DirectionResponsible {
   function: string;
 }
 
+// Fonction pour récupérer les informations de l'utilisateur
 export const getUserInformation = async (id: string): Promise<User | void> => {
+  const token = localStorage.getItem("token"); // Récupérer le token Bearer du localStorage
+
   try {
     const response = await fetch(`${API_URL}/user/information?id=${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": token ? `Bearer ${token}` : "",  // Ajouter le token dans l'en-tête
       },
     });
 
@@ -42,16 +49,18 @@ export const getUserInformation = async (id: string): Promise<User | void> => {
     }
 
     const data = await response.json();
-
     return data;
   } catch (error) {
     handleAxiosError(error);
   }
 };
 
+// Fonction pour récupérer les responsables de direction
 export const getDirectionResponsiblesInformation = async (
-  directionId,
+  directionId: string,
 ): Promise<DirectionResponsible | void> => {
+  const token = localStorage.getItem("token");
+
   try {
     const response = await fetch(
       `${API_URL}/direction/responsible?directionId=${directionId}`,
@@ -59,6 +68,7 @@ export const getDirectionResponsiblesInformation = async (
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": token ? `Bearer ${token}` : "", // Ajouter le token dans l'en-tête
         },
       },
     );
@@ -68,23 +78,28 @@ export const getDirectionResponsiblesInformation = async (
     }
 
     const data = await response.json();
-
     return data;
   } catch (error) {
     handleAxiosError(error);
   }
 };
+
+// Fonction pour ajouter un nouvel utilisateur
 export const PostNewUser = async (
-  user,
+  user: DirectionResponsible,
 ): Promise<DirectionResponsible | void> => {
+  const token = localStorage.getItem("token");
+
   try {
     const response = await fetch(
-      `${API_URL}/direction/responsible?directionId=${directionId}`,
+      `${API_URL}/direction/responsible?directionId=${user.id}`,
       {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": token ? `Bearer ${token}` : "", // Ajouter le token dans l'en-tête
         },
+        body: JSON.stringify(user),
       },
     );
 
@@ -93,21 +108,25 @@ export const PostNewUser = async (
     }
 
     const data = await response.json();
-    message.success("utilisateur ajouter avec succées");
-
+    message.success("Utilisateur ajouté avec succès");
     return data;
   } catch (error) {
     handleAxiosError(error);
   }
 };
+
+// Fonction pour mettre à jour un utilisateur
 export const udpdateUser = async (
   user: updateUser,
 ): Promise<updateUser | void> => {
+  const token = localStorage.getItem("token");
+
   try {
     const response = await fetch(`${API_URL}/user/modify?id=${user.userId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": token ? `Bearer ${token}` : "",  // Ajouter le token dans l'en-tête
       },
       body: JSON.stringify(user.userInfoUpdate),
     });
@@ -117,8 +136,7 @@ export const udpdateUser = async (
     }
 
     const data = await response.json();
-    message.success("utilisateur modifié avec succées");
-
+    message.success("Utilisateur modifié avec succès");
     return data;
   } catch (error) {
     handleAxiosError(error);

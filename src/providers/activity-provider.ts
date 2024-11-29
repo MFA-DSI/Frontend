@@ -1,3 +1,4 @@
+import axios, { AxiosRequestConfig } from "axios";
 import { toast } from "react-toastify";
 import { message } from "antd";
 import environment from "../conf/environment";
@@ -37,271 +38,224 @@ interface RecommendationUpdate {
   committerId: string;
   description: string;
 }
+
 export interface FetchActivitiesForDirectionParams {
   weekStartDate: string;
-  page?: number; // Paramètre optionnel
-  pageSize?: number; // Paramètre optionnel
+  page?: number;
+  pageSize?: number;
 }
 
 export interface FetchOwnDirectionStatisticsParams {
   directionId: string;
-  year: number; // Utilisation de string pour simplifier la gestion des dates au niveau de l'API
-  page?: number; // Paramètre optionnel, par défaut 1
-  pageSize?: number; // Paramètre optionnel, par défaut 15
+  year: number;
+  page?: number;
+  pageSize?: number;
 }
 
 const BASE_URL = environment.apiBaseUrl || "http://localhost:8080";
 
-const handleErrorResponse = async (
-  response: Response,
-  defaultMessage: string,
-) => {
-  const errorData = await response.json();
-  const errorMessage = errorData.message || defaultMessage;
-  message.error("une erreur s'est produite");
+/**
+ * Centralise la gestion des erreurs pour les réponses HTTP.
+ */
+const handleErrorResponse = (error: any, defaultMessage: string) => {
+  const errorMessage = error.response?.data?.message || defaultMessage;
+  message.error(errorMessage || "Une erreur s'est produite");
   throw new Error(errorMessage);
 };
 
+/**
+ * Fonction utilitaire pour effectuer des requêtes HTTP avec un Bearer Token.
+ */
+const httpRequest = async <T>(
+  url: string,
+  options: AxiosRequestConfig,
+  errorMessage: string,
+  successMessage?: string
+): Promise<T> => {
+  const token = localStorage.getItem("token");
+
+  try {
+    const response = await axios({
+      url,
+      ...options,
+      headers: {
+        ...options.headers,
+        Authorization: token ? `Bearer ${token}` : "", // Ajout du Bearer Token
+      },
+    });
+
+    if (successMessage) {
+      message.success(successMessage);
+    }
+
+    return response.data;
+  } catch (error) {
+    handleErrorResponse(error, errorMessage);
+  }
+};
+
+/**
+ * Récupère toutes les activités.
+ */
 export const fetchActivities = async (): Promise<Activity[]> => {
-  try {
-    const response = await fetch(
-      `${BASE_URL}/direction/activities/all?page=1&page_size=1000`,
-    );
-    if (!response.ok)
-      await handleErrorResponse(
-        response,
-        "Erreur lors de la récupération des activités",
-      );
-    return await response.json();
-  } catch (error) {
-    message.error("Une erreur inattendue est survenue.");
-    throw error instanceof Error ? error : new Error("Erreur inconnue");
-  }
+  return httpRequest(
+    `${BASE_URL}/direction/activities/all?page=1&page_size=1000`,
+    { method: "GET" },
+    "Erreur lors de la récupération des activités"
+  );
 };
 
-export const getActivityByDirectionId = async (
-  directionId: string,
-): Promise<Activity[]> => {
-  try {
-    const response = await fetch(
-      `${BASE_URL}/direction/activity/direction?directionId=${directionId}&page=1&page_size=1000`,
-    );
-    if (!response.ok)
-      await handleErrorResponse(
-        response,
-        "Erreur lors de la récupération des missions par direction",
-      );
-    return await response.json();
-  } catch (error) {
-    message.error("Une erreur inattendue est survenue.");
-    throw error instanceof Error ? error : new Error("Erreur inconnue");
-  }
+/**
+ * Récupère les activités associées à une direction donnée.
+ */
+export const getActivityByDirectionId = async (directionId: string): Promise<Activity[]> => {
+  return httpRequest(
+    `${BASE_URL}/direction/activity/direction?directionId=${directionId}&page=1&page_size=1000`,
+    { method: "GET" },
+    "Erreur lors de la récupération des missions par direction"
+  );
 };
 
+/**
+ * Récupère une activité par son ID.
+ */
 export const getActivityById = async (id: string): Promise<Activity> => {
-  try {
-    const response = await fetch(`${BASE_URL}/direction/activity?id=${id}`);
-    if (!response.ok)
-      await handleErrorResponse(
-        response,
-        "Erreur lors de la récupération de l'activité",
-      );
-    return await response.json();
-  } catch (error) {
-    message.error("Une erreur inattendue est survenue.");
-    throw error instanceof Error ? error : new Error("Erreur inconnue");
-  }
+  return httpRequest(
+    `${BASE_URL}/direction/activity?id=${id}`,
+    { method: "GET" },
+    "Erreur lors de la récupération de l'activité"
+  );
 };
 
+/**
+ * Met à jour une activité.
+ */
 export const updateActivity = async (activity: Activity): Promise<Activity> => {
-  try {
-    const response = await fetch(`${BASE_URL}/direction/activity/update`, {
+  return httpRequest(
+    `${BASE_URL}/direction/activity/update`,
+    {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(activity),
-    });
-    if (!response.ok)
-      await handleErrorResponse(
-        response,
-        "Erreur lors de la mise à jour de l'activité",
-      );
-    return await response.json();
-  } catch (error) {
-    message.error("Une erreur inattendue est survenue.");
-    throw error instanceof Error ? error : new Error("Erreur inconnue");
-  }
+      data: JSON.stringify(activity),
+    },
+    "Erreur lors de la mise à jour de l'activité"
+  );
 };
 
+/**
+ * Supprime une activité par son ID.
+ */
 export const deleteActivity = async (id: string): Promise<void> => {
-  try {
-    const userId = localStorage.getItem("userId");
-    const response = await fetch(
-      `${BASE_URL}/direction/activity/delete?userId=${userId}&activityId=${id}`,
-      { method: "DELETE" },
-    );
-    if (!response.ok)
-      await handleErrorResponse(
-        response,
-        "Erreur lors de la suppression de l'activité",
-      );
-    message.success("Activité supprimée avec succès !");
-  } catch (error) {
-    throw error instanceof Error ? error : new Error("Erreur inconnue");
-  }
+  const userId = localStorage.getItem("userId");
+  return httpRequest(
+    `${BASE_URL}/direction/activity/delete?userId=${userId}&activityId=${id}`,
+    { method: "DELETE" },
+    "Erreur lors de la suppression de l'activité",
+    "Activité supprimée avec succès !"
+  );
 };
 
-export const addTaskToActivity = async (
-  taskDetails: UpdateActivityItem,
-): Promise<void> => {
-  try {
-    const type = taskDetails.type === "task" ? "task" : "nextTask";
-    const response = await fetch(
-      `${BASE_URL}/direction/${type}?activityId=${taskDetails.id}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify([taskDetails.task]),
-      },
-    );
-    if (!response.ok)
-      await handleErrorResponse(response, "Erreur lors de l'ajout de la tâche");
-  } catch (error) {
-    message.error("Une erreur inattendue est survenue.");
-    throw error instanceof Error ? error : new Error("Erreur inconnue");
-  }
+/**
+ * Ajoute une tâche à une activité.
+ */
+export const addTaskToActivity = async (taskDetails: UpdateActivityItem): Promise<void> => {
+  const type = taskDetails.type === "task" ? "task" : "nextTask";
+  return httpRequest(
+    `${BASE_URL}/direction/${type}?activityId=${taskDetails.id}`,
+    {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      data: JSON.stringify([taskDetails.task]),
+    },
+    "Erreur lors de l'ajout de la tâche"
+  );
 };
 
+/**
+ * Supprime une tâche d'une activité.
+ */
 export const detachTaskFromActivity = async (taskId: string): Promise<void> => {
-  try {
-    const response = await fetch(
-      `${BASE_URL}/direction/nextTask/delete?id=${taskId}`,
-      { method: "DELETE" },
-    );
-    if (!response.ok)
-      await handleErrorResponse(
-        response,
-        "Erreur lors de la suppression de la tâche",
-      );
-  } catch (error) {
-    message.error("Une erreur inattendue est survenue.");
-    throw error instanceof Error ? error : new Error("Erreur inconnue");
-  }
+  return httpRequest(
+    `${BASE_URL}/direction/nextTask/delete?id=${taskId}`,
+    { method: "DELETE" },
+    "Erreur lors de la suppression de la tâche"
+  );
 };
 
-export const addPerformanceToActivity = async (
-  performance: UpdatePerformance,
-): Promise<void> => {
-  try {
-    const response = await fetch(
-      `${BASE_URL}/direction/performanceRealization?activityId=${performance.id}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify([performance.performance]),
-      },
-    );
-    if (!response.ok)
-      await handleErrorResponse(
-        response,
-        "Erreur lors de l'ajout de la performance",
-      );
-    message.success("Performance ajoutée avec succès !");
-  } catch (error) {
-    message.error("Une erreur inattendue est survenue.");
-    throw error instanceof Error ? error : new Error("Erreur inconnue");
-  }
+/**
+ * Ajoute une performance à une activité.
+ */
+export const addPerformanceToActivity = async (performance: UpdatePerformance): Promise<void> => {
+  return httpRequest(
+    `${BASE_URL}/direction/performanceRealization?activityId=${performance.id}`,
+    {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      data: JSON.stringify([performance.performance]),
+    },
+    "Erreur lors de l'ajout de la performance",
+    "Performance ajoutée avec succès !"
+  );
 };
 
-export const detachPerformanceFromActivity = async (
-  id: string,
-): Promise<void> => {
-  try {
-    const response = await fetch(
-      `${BASE_URL}/direction/performanceRealization/delete?id=${id}`,
-      { method: "DELETE" },
-    );
-    if (!response.ok)
-      await handleErrorResponse(
-        response,
-        "Erreur lors de la suppression de la performance",
-      );
-  } catch (error) {
-    message.error("Une erreur inattendue est survenue.");
-    throw error instanceof Error ? error : new Error("Erreur inconnue");
-  }
+/**
+ * Supprime une performance d'une activité.
+ */
+export const detachPerformanceFromActivity = async (id: string): Promise<void> => {
+  return httpRequest(
+    `${BASE_URL}/direction/performanceRealization/delete?id=${id}`,
+    { method: "DELETE" },
+    "Erreur lors de la suppression de la performance"
+  );
 };
 
+/**
+ * Ajoute une recommandation à une activité.
+ */
 export const addRecommendationToActivity = async (
-  recommendation: RecommendationUpdate,
+  recommendation: RecommendationUpdate
 ): Promise<void> => {
-  try {
-    const response = await fetch(
-      `${BASE_URL}/direction/activity/recommendation?activityId=${recommendation.activityId}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          description: recommendation.description,
-          committerId: recommendation.committerId,
-        }),
-      },
-    );
-    if (!response.ok)
-      await handleErrorResponse(
-        response,
-        "Erreur lors de l'ajout de la recommandation",
-      );
-    message.success("Recommandation envoyée avec succès !");
-  } catch (error) {
-    message.error("Une erreur inattendue est survenue.");
-    throw error instanceof Error ? error : new Error("Erreur inconnue");
-  }
+  return httpRequest(
+    `${BASE_URL}/direction/activity/recommendation?activityId=${recommendation.activityId}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: JSON.stringify({
+        description: recommendation.description,
+        committerId: recommendation.committerId,
+      }),
+    },
+    "Erreur lors de l'ajout de la recommandation",
+    "Recommandation envoyée avec succès !"
+  );
 };
 
+/**
+ * Récupère des statistiques des activités d'une direction.
+ */
 export const fetchActivitiesStatistics = async (
-  params: FetchActivitiesForDirectionParams,
+  params: FetchActivitiesForDirectionParams
 ): Promise<Activity[]> => {
   const { weekStartDate, page = 1, pageSize = 15 } = params;
 
-  try {
-    const response = await fetch(
-      `${BASE_URL}/direction/activities/top?weekStartDate=${weekStartDate}&page=${page}&pageSize=${pageSize}`,
-    );
-
-    if (!response.ok)
-      await handleErrorResponse(
-        response,
-        "Erreur lors de la récupération des activités",
-      );
-
-    return await response.json();
-  } catch (error) {
-    message.error("Une erreur inattendue est survenue.");
-    throw error instanceof Error ? error : new Error("Erreur inconnue");
-  }
+  return httpRequest(
+    `${BASE_URL}/direction/activities/top?weekStartDate=${weekStartDate}&page=${page}&pageSize=${pageSize}`,
+    { method: "GET" },
+    "Erreur lors de la récupération des activités"
+  );
 };
 
+/**
+ * Récupère des statistiques pour une direction spécifique.
+ */
 export const fetchOwnDirectionStatistics = async (
-  params: FetchOwnDirectionStatisticsParams,
+  params: FetchOwnDirectionStatisticsParams
 ): Promise<any> => {
   const { directionId, year, page = 1, pageSize = 15 } = params;
 
-  try {
-    const response = await fetch(
-      `${BASE_URL}/direction/activities/statistics?year=${year}&directionId=${directionId}&page=${page}&pageSize=${pageSize}`,
-    );
-
-    if (!response.ok)
-      await handleErrorResponse(
-        response,
-        "Erreur lors de la récupération des statistiques",
-      );
-    const data = await response.json();
-    console.log(data);
-
-    return data;
-  } catch (error) {
-    toast.error("Une erreur inattendue est survenue.");
-    throw error instanceof Error ? error : new Error("Erreur inconnue");
-  }
+  return httpRequest(
+    `${BASE_URL}/direction/activities/statistics?year=${year}&directionId=${directionId}&page=${page}&pageSize=${pageSize}`,
+    { method: "GET" },
+    "Erreur lors de la récupération des statistiques"
+  );
 };

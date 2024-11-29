@@ -80,11 +80,26 @@ const handleError = async (response: Response, defaultMessage: string) => {
 // Helper function to fetch data with error handling
 const fetchData = async <T>(
   url: string,
-  options: RequestInit,
+  options: RequestInit = {}, // Options de requête par défaut
   errorMessage: string,
   successMessage?: string,
 ): Promise<T> => {
-  const response = await fetch(url, options);
+  // Récupération du token depuis localStorage
+  const token = localStorage.getItem('token');
+
+  // Ajout de l'en-tête Authorization avec le Bearer token
+
+  // Création des options complètes de la requête
+  const requestOptions: RequestInit = {
+    ...options,
+    headers: {
+      ...options.headers,
+      Authorization: token ? `Bearer ${token}` : "", // Ajout du Bearer Token
+    },
+  };
+
+  // Exécution de la requête
+  const response = await fetch(url, requestOptions);
 
   if (!response.ok) {
     await handleError(response, errorMessage);
@@ -104,7 +119,6 @@ const fetchData = async <T>(
 
   return data;
 };
-
 // Fetch all missions
 export const fetchMissions = async (): Promise<Mission[]> => {
   const url = `${BASE_URL}/direction/mission/all?page=1&page_size=100`;
