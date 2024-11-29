@@ -223,8 +223,8 @@ const ReportGenerator = () => {
           // Afficher les erreurs
           if (errors.length > 0) {
             errors.forEach((error) => {
-              message.error(
-                `Erreur pour la sous-direction ${error.message}`,
+              message.info(
+                `Information pour la sous-direction ${error.message}`,
                 10, // Durée en secondes
               );
             });

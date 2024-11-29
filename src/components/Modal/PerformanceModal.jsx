@@ -35,9 +35,9 @@ const PerformanceModal = ({
   const handleRealizationChange = (value) => {
     if (realizationType === "percentage" && value > 100) {
       message.error("Le pourcentage ne peut pas dépasser 100.");
-      setRealization("");
+      setIndicator("");
     } else {
-      setRealization(value);
+      setIndicator(value);
     }
   };
 
@@ -45,7 +45,7 @@ const PerformanceModal = ({
     if (
       realization === null ||
       realizationType === null ||
-      realizationType === null
+      !realization.trim()
     ) {
       message.error(
         "Veuillez vous assurer que toutes les valeurs sont renseignées.",
@@ -85,6 +85,12 @@ const PerformanceModal = ({
     }
   }, [performance, activityId]);
 
+
+  const handleChangeRealizationType = (value)=>{
+    setRealizationType(value)
+    setIndicator("")
+    setRealization("")
+  }
   return (
     <Modal visible={visible} onCancel={onCancel} footer={null}>
       <h2>
@@ -94,30 +100,30 @@ const PerformanceModal = ({
       </h2>
 
       <div>
-        <h3>Type de Réalisation:</h3>
+        <h3>Type de Réalisation :</h3>
         <Select
           value={realizationType}
-          onChange={(value) => setRealizationType(value)}
+          onChange={handleChangeRealizationType}
           style={{ width: 200 }}
         >
-          <Option value="chiffre">Chiffre</Option>
+          <Option value="number">Chiffre</Option>
           <Option value="percentage">Pourcentage</Option>
         </Select>
       </div>
 
       <div style={{ marginTop: "16px" }}>
-        <h3> Indicateurs:</h3>
-        <Input
-          value={indicator}
-          onChange={(e) => setIndicator(e.target.value)}
-          placeholder="Entrez un indicateur"
+        <h3> Indicateur :</h3>
+       <Input
+          value={realization}
+          onChange={(e) => setRealization(e.target.value)}
+          pl aceholder="Entrez un indicateur"
         />
       </div>
 
       <div style={{ marginTop: "16px" }}>
         <h3>Réalisation :</h3>
         <InputNumber
-          value={realization}
+          value={indicator}
           min={0}
           type="number"
           onChange={handleRealizationChange}
