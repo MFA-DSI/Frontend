@@ -85,12 +85,11 @@ const PerformanceModal = ({
     }
   }, [performance, activityId]);
 
-
-  const handleChangeRealizationType = (value)=>{
-    setRealizationType(value)
-    setIndicator("")
-    setRealization("")
-  }
+  const handleChangeRealizationType = (value) => {
+    setRealizationType(value);
+    setIndicator("");
+    setRealization("");
+  };
   return (
     <Modal visible={visible} onCancel={onCancel} footer={null}>
       <h2>
@@ -113,10 +112,11 @@ const PerformanceModal = ({
 
       <div style={{ marginTop: "16px" }}>
         <h3> Indicateur :</h3>
-       <Input
+        <Input
           value={realization}
           onChange={(e) => setRealization(e.target.value)}
-          pl aceholder="Entrez un indicateur"
+          pl
+          aceholder="Entrez un indicateur"
         />
       </div>
 

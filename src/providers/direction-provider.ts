@@ -24,7 +24,7 @@ const fetchData = async <T>(
   // Ajouter le token dans l'en-tête Authorization si disponible
   const headers = {
     "Content-Type": "application/json",
-    ...(token ? { "Authorization": `Bearer ${token}` } : {}),
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
   try {
@@ -111,7 +111,7 @@ const postData = async <T>(
   // Ajouter le token dans l'en-tête Authorization si disponible
   const headers = {
     "Content-Type": "application/json",
-    ...(token ? { "Authorization": `Bearer ${token}` } : {}),
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
   try {

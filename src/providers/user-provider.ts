@@ -40,7 +40,7 @@ export const getUserInformation = async (id: string): Promise<User | void> => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": token ? `Bearer ${token}` : "",  // Ajouter le token dans l'en-tête
+        Authorization: token ? `Bearer ${token}` : "", // Ajouter le token dans l'en-tête
       },
     });
 
@@ -68,7 +68,7 @@ export const getDirectionResponsiblesInformation = async (
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": token ? `Bearer ${token}` : "", // Ajouter le token dans l'en-tête
+          Authorization: token ? `Bearer ${token}` : "", // Ajouter le token dans l'en-tête
         },
       },
     );
@@ -97,7 +97,7 @@ export const PostNewUser = async (
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": token ? `Bearer ${token}` : "", // Ajouter le token dans l'en-tête
+          Authorization: token ? `Bearer ${token}` : "", // Ajouter le token dans l'en-tête
         },
         body: JSON.stringify(user),
       },
@@ -126,7 +126,7 @@ export const udpdateUser = async (
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": token ? `Bearer ${token}` : "",  // Ajouter le token dans l'en-tête
+        Authorization: token ? `Bearer ${token}` : "", // Ajouter le token dans l'en-tête
       },
       body: JSON.stringify(user.userInfoUpdate),
     });

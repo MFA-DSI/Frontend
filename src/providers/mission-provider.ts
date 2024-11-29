@@ -85,7 +85,7 @@ const fetchData = async <T>(
   successMessage?: string,
 ): Promise<T> => {
   // Récupération du token depuis localStorage
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
 
   // Ajout de l'en-tête Authorization avec le Bearer token
 

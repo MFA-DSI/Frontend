@@ -70,7 +70,7 @@ const httpRequest = async <T>(
   url: string,
   options: AxiosRequestConfig,
   errorMessage: string,
-  successMessage?: string
+  successMessage?: string,
 ): Promise<T> => {
   const token = localStorage.getItem("token");
 
@@ -101,18 +101,20 @@ export const fetchActivities = async (): Promise<Activity[]> => {
   return httpRequest(
     `${BASE_URL}/direction/activities/all?page=1&page_size=1000`,
     { method: "GET" },
-    "Erreur lors de la récupération des activités"
+    "Erreur lors de la récupération des activités",
   );
 };
 
 /**
  * Récupère les activités associées à une direction donnée.
  */
-export const getActivityByDirectionId = async (directionId: string): Promise<Activity[]> => {
+export const getActivityByDirectionId = async (
+  directionId: string,
+): Promise<Activity[]> => {
   return httpRequest(
     `${BASE_URL}/direction/activity/direction?directionId=${directionId}&page=1&page_size=1000`,
     { method: "GET" },
-    "Erreur lors de la récupération des missions par direction"
+    "Erreur lors de la récupération des missions par direction",
   );
 };
 
@@ -123,7 +125,7 @@ export const getActivityById = async (id: string): Promise<Activity> => {
   return httpRequest(
     `${BASE_URL}/direction/activity?id=${id}`,
     { method: "GET" },
-    "Erreur lors de la récupération de l'activité"
+    "Erreur lors de la récupération de l'activité",
   );
 };
 
@@ -138,7 +140,7 @@ export const updateActivity = async (activity: Activity): Promise<Activity> => {
       headers: { "Content-Type": "application/json" },
       data: JSON.stringify(activity),
     },
-    "Erreur lors de la mise à jour de l'activité"
+    "Erreur lors de la mise à jour de l'activité",
   );
 };
 
@@ -151,14 +153,16 @@ export const deleteActivity = async (id: string): Promise<void> => {
     `${BASE_URL}/direction/activity/delete?userId=${userId}&activityId=${id}`,
     { method: "DELETE" },
     "Erreur lors de la suppression de l'activité",
-    "Activité supprimée avec succès !"
+    "Activité supprimée avec succès !",
   );
 };
 
 /**
  * Ajoute une tâche à une activité.
  */
-export const addTaskToActivity = async (taskDetails: UpdateActivityItem): Promise<void> => {
+export const addTaskToActivity = async (
+  taskDetails: UpdateActivityItem,
+): Promise<void> => {
   const type = taskDetails.type === "task" ? "task" : "nextTask";
   return httpRequest(
     `${BASE_URL}/direction/${type}?activityId=${taskDetails.id}`,
@@ -167,7 +171,7 @@ export const addTaskToActivity = async (taskDetails: UpdateActivityItem): Promis
       headers: { "Content-Type": "application/json" },
       data: JSON.stringify([taskDetails.task]),
     },
-    "Erreur lors de l'ajout de la tâche"
+    "Erreur lors de l'ajout de la tâche",
   );
 };
 
@@ -178,14 +182,16 @@ export const detachTaskFromActivity = async (taskId: string): Promise<void> => {
   return httpRequest(
     `${BASE_URL}/direction/nextTask/delete?id=${taskId}`,
     { method: "DELETE" },
-    "Erreur lors de la suppression de la tâche"
+    "Erreur lors de la suppression de la tâche",
   );
 };
 
 /**
  * Ajoute une performance à une activité.
  */
-export const addPerformanceToActivity = async (performance: UpdatePerformance): Promise<void> => {
+export const addPerformanceToActivity = async (
+  performance: UpdatePerformance,
+): Promise<void> => {
   return httpRequest(
     `${BASE_URL}/direction/performanceRealization?activityId=${performance.id}`,
     {
@@ -194,18 +200,20 @@ export const addPerformanceToActivity = async (performance: UpdatePerformance): 
       data: JSON.stringify([performance.performance]),
     },
     "Erreur lors de l'ajout de la performance",
-    "Performance ajoutée avec succès !"
+    "Performance ajoutée avec succès !",
   );
 };
 
 /**
  * Supprime une performance d'une activité.
  */
-export const detachPerformanceFromActivity = async (id: string): Promise<void> => {
+export const detachPerformanceFromActivity = async (
+  id: string,
+): Promise<void> => {
   return httpRequest(
     `${BASE_URL}/direction/performanceRealization/delete?id=${id}`,
     { method: "DELETE" },
-    "Erreur lors de la suppression de la performance"
+    "Erreur lors de la suppression de la performance",
   );
 };
 
@@ -213,7 +221,7 @@ export const detachPerformanceFromActivity = async (id: string): Promise<void> =
  * Ajoute une recommandation à une activité.
  */
 export const addRecommendationToActivity = async (
-  recommendation: RecommendationUpdate
+  recommendation: RecommendationUpdate,
 ): Promise<void> => {
   return httpRequest(
     `${BASE_URL}/direction/activity/recommendation?activityId=${recommendation.activityId}`,
@@ -226,7 +234,7 @@ export const addRecommendationToActivity = async (
       }),
     },
     "Erreur lors de l'ajout de la recommandation",
-    "Recommandation envoyée avec succès !"
+    "Recommandation envoyée avec succès !",
   );
 };
 
@@ -234,14 +242,14 @@ export const addRecommendationToActivity = async (
  * Récupère des statistiques des activités d'une direction.
  */
 export const fetchActivitiesStatistics = async (
-  params: FetchActivitiesForDirectionParams
+  params: FetchActivitiesForDirectionParams,
 ): Promise<Activity[]> => {
   const { weekStartDate, page = 1, pageSize = 15 } = params;
 
   return httpRequest(
     `${BASE_URL}/direction/activities/top?weekStartDate=${weekStartDate}&page=${page}&pageSize=${pageSize}`,
     { method: "GET" },
-    "Erreur lors de la récupération des activités"
+    "Erreur lors de la récupération des activités",
   );
 };
 
@@ -249,13 +257,13 @@ export const fetchActivitiesStatistics = async (
  * Récupère des statistiques pour une direction spécifique.
  */
 export const fetchOwnDirectionStatistics = async (
-  params: FetchOwnDirectionStatisticsParams
+  params: FetchOwnDirectionStatisticsParams,
 ): Promise<any> => {
   const { directionId, year, page = 1, pageSize = 15 } = params;
 
   return httpRequest(
     `${BASE_URL}/direction/activities/statistics?year=${year}&directionId=${directionId}&page=${page}&pageSize=${pageSize}`,
     { method: "GET" },
-    "Erreur lors de la récupération des statistiques"
+    "Erreur lors de la récupération des statistiques",
   );
 };
