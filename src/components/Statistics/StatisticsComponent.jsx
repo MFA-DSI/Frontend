@@ -49,97 +49,12 @@ const StatisticsComponents = () => {
       }
     }
   };
-
-  // Function to fetch statistics for all directions based on the selected date
-  const fetchAllDirectionStatistics = async () => {
-    if (selectedDate) {
-      try {
-        const params = {
-          weekStartDate: formatDateToLocalDate(selectedDate),
-          page,
-          pageSize,
-        };
-        console.log(params.weekStartDate);
-
-        const response = await allDirectionStatistics(params);
-        console.log(response);
-
-        setAllDirectionData(response || []);
-      } catch (error) {
-        console.error(
-          "Erreur lors de la récupération des statistiques interdirections",
-          error,
-        );
-      }
-    }
-  };
-
   useEffect(() => {}, [directionId, selectedYear, selectedDate, page]);
 
   return (
     <div style={{ padding: 20 }}>
       <h2>Statistiques des Activités</h2>
 
-      {/* Table for all-direction statistics, shown only to SUPER_ADMIN */}
-      {role === "SUPER_ADMIN" && (
-        <Card title="Directions les plus actives" style={{ marginBottom: 20 }}>
-          <DatePicker
-            placeholder="Sélectionner une date"
-            onChange={setSelectedDate}
-            format="DD-MM-YYYY"
-            style={{ marginBottom: 20, marginRight: 12 }}
-          />
-          <Button
-            type="default"
-            onClick={fetchAllDirectionStatistics}
-            disabled={!selectedDate}
-            style={{ marginBottom: 20 }}
-          >
-            Obtenir les statistiques interdirections
-          </Button>
-
-          <Table
-            dataSource={allDirectionData.sort(
-              (a, b) => b.totalActivities - a.totalActivities,
-            )}
-            columns={[
-              {
-                title: "Direction",
-                dataIndex: "directionName",
-                key: "directionName",
-              },
-              {
-                title: "Total des Activités",
-                dataIndex: "totalActivities",
-                key: "totalActivities",
-              },
-              {
-                title: "Terminées",
-                dataIndex: "completedActivities",
-                key: "completedActivities",
-              },
-              {
-                title: "En Cours",
-                dataIndex: "ongoingActivities",
-                key: "ongoingActivities",
-              },
-              {
-                title: "Efficacité (%)",
-                dataIndex: "efficiencyPercentage",
-                key: "efficiencyPercentage",
-              },
-              {
-                title: "Indicateur Moyenne de Performance",
-                dataIndex: "averagePerformanceIndicator",
-                key: "averagePerformanceIndicator",
-              },
-            ]}
-            rowKey="directionId"
-            pagination={false}
-            scroll={{ y: 300 }}
-          />
-        </Card>
-      )}
 
       {/* Own Direction Statistics */}
       {isStaff === "true" && (

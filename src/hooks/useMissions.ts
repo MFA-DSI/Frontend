@@ -23,6 +23,7 @@ export const useMissions = () => {
   const missionsQuery = useQuery({
     queryKey: ["missions"],
     queryFn: fetchMissions,
+    enabled: !!localStorage.getItem("directionId")
   });
 
   const directionId = localStorage.getItem("directionId");
@@ -32,13 +33,14 @@ export const useMissions = () => {
       queryKey: ["mission"],
       queryFn: () =>
         getByDirectionId(localStorage.getItem("directionId") || ""),
-      enabled: !!localStorage.getItem("userId"),
+      enabled: !!localStorage.getItem("userId") && !!localStorage.getItem("directionId"),
     });
 
   const directionMissionsName = (id) =>
     useQuery({
       queryKey: ["mission"],
       queryFn: () => fetchMissionsName(id),
+      enabled: !!localStorage.getItem("directionId")
     });
 
   const deleteMissionMutation = useMutation(deleteMission, {

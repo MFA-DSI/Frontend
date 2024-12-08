@@ -40,6 +40,7 @@ const ActivityModal = ({
   const [isRecommendationVisible, setIsRecommendationVisible] = useState(null);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const role = useAuthStore.getState().role;
+
   useEffect(() => {
     if (activity) {
       setEditedActivity({
@@ -111,6 +112,7 @@ const ActivityModal = ({
   };
   const handlePerformanceSave = () => {
     setIsPerformanceModalVisible(false);
+    onSave()
   };
 
   const handleRecommendationSave = () => {

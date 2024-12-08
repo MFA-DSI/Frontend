@@ -18,6 +18,7 @@ export const useActivities = () => {
   const activitiesQuery = useQuery({
     queryKey: ["activities"],
     queryFn: fetchActivities,
+    enabled: !!localStorage.getItem("userId")  && !!localStorage.getItem("directionId"),
   });
 
   const directionIdQuery = () =>
@@ -25,12 +26,14 @@ export const useActivities = () => {
       queryKey: ["activity"],
       queryFn: () =>
         getActivityByDirectionId(localStorage.getItem("directionId") || ""),
+      enabled: !!localStorage.getItem("directionId")
     });
 
   const activityIdQuery = (id: string) =>
     useQuery({
       queryKey: ["activity"],
       queryFn: () => getActivityById(id),
+      enabled: !!localStorage.getItem("directionId")
     });
 
   const deleteActivityMutation = useMutation(deleteActivity, {

@@ -64,7 +64,6 @@ const MissionModal = ({ visible, onCancel, mission, onDelete, mode }) => {
       setIsEditing(false);
       onCancel();
       onDelete(editedMission);
-      message.success("Mission modifiée avec succès !");
       setEditedMission(mission || { description: "", activityList: [] });
     } catch (error) {
       message.error(

@@ -166,7 +166,7 @@ export const saveMission = async (mission: CreateMission): Promise<Mission> => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(mission),
     },
-    "Erreur lors de l'enregistrement de la mission",
+    "mission enregistrée avec succès",
   );
 };
 
@@ -197,7 +197,7 @@ export const updateMission = async (mission: MissionName): Promise<Mission> => {
       body: JSON.stringify(mission),
     },
     "mission à jours",
-    "Erreur lors de la mise à jour de la mission",
+    " Mission mise à jour avec succès",
   );
 };
 

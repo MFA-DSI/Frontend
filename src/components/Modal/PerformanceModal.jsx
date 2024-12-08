@@ -48,7 +48,7 @@ const PerformanceModal = ({
       !realization.trim()
     ) {
       message.error(
-        "Veuillez vous assurer que toutes les valeurs sont renseignées.",
+        "Veuillez assurer que toutes les valeurs sont renseignées.",
       );
       return;
     }
@@ -56,17 +56,17 @@ const PerformanceModal = ({
       const performanceData = {
         id: activityId.id,
         performance: {
-          indicators: realization,
-          realization: indicator,
+          id: performance.id,
+          indicators: indicator,
+          realization: realization,
           realizationType: realizationType,
         },
       };
 
       try {
         await addPerformance(performanceData);
-
-        onSave(performanceData);
         onCancel();
+       
       } catch (error) {
         message.error(
           "Une erreur s'est produite lors de la modification de cette activité",
