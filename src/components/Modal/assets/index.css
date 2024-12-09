@@ -1,0 +1,10 @@
+.performance-recommendations {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.performance-indicators,
+.recommendations {
+  width: 45%;
+}
