@@ -37,11 +37,14 @@ const fetchAndDownloadFile = async (
   toastMessage: string,
 ) => {
   const loadingToastId = toast.loading(toastMessage);
+  const token = localStorage.getItem("token"); // Récupérer le token Bearer
+
+  
 
   try {
     const response = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json","Authorization": `Bearer ${token}` },
       body: JSON.stringify(requestData),
     });
 
