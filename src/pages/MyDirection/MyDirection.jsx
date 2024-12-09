@@ -1,13 +1,15 @@
 // MyDirection.js
 import React, { useState, lazy } from "react";
 import { Button } from "antd";
+import MainLayout from "../Layout/MainLayout";
 
 import AddMissionModal from "../../components/Modal/AddMission";
 import { useActivitiesContext, useMissionContext } from "../../providers";
 import { DirectionName } from "../../components";
 
 const TableComponent = lazy(() => import("../../components/Table/Table"));
-const MainLayout = lazy(() => import("../Layout/MainLayout"));
+
+
 const MyDirection = () => {
   const [isAddMissionModalVisible, setIsAddMissionModalVisible] =
     useState(false);

@@ -1,8 +1,9 @@
 import React, { lazy, useEffect, useState } from "react";
 import { useActivitiesContext, useMissionContext } from "../../providers";
+import MainLayout from "../Layout/MainLayout";
 
 const TableComponent = lazy(() => import("../../components/Table/Table"));
-const MainLayout = lazy(() => import("../Layout/MainLayout"));
+
 const HomePage = () => {
   const { filteredMissions } = useMissionContext();
   const { filteredActivities } = useActivitiesContext();
