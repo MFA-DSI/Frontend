@@ -24,7 +24,6 @@ import { EditableField } from "../Modal/Forms/ActivityDetails";
 import { validateEmail } from "../Modal/utils/validateEmail";
 import { Note } from "../Note/Note";
 
-
 const ProfileComponent = () => {
   const {
     fetchActualUserInformation,
@@ -254,232 +253,234 @@ const ProfileComponent = () => {
 
   return (
     <>
-   
-    <div style={{ maxWidth: "100%", padding: "24px" }}>
-      {isUserLoading ? (
-        <Spin size="large" />
-      ) : (
-        <Card
-          style={{
-            width: "100%",
-            marginBottom: "24px",
-            borderRadius: "8px",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-          }}
-        >
-          <Button
-            onClick={!isEditing ? handleToggleEdit : handleSave}
-            style={{ float: "right", marginBottom: "16px" }}
+      <div style={{ maxWidth: "100%", padding: "24px" }}>
+        {isUserLoading ? (
+          <Spin size="large" />
+        ) : (
+          <Card
+            style={{
+              width: "100%",
+              marginBottom: "24px",
+              borderRadius: "8px",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+            }}
           >
-            {isEditing ? "Sauvegarder" : "Modifier"}
-          </Button>
-          <Row align="middle" gutter={16}>
-            <Col span={4} style={{ textAlign: "center" }}>
-              <Avatar
-                size={100}
-                icon={<UserOutlined />}
-                style={{ backgroundColor: "#87d068" }}
-              />
-            </Col>
-            <Col span={20}>
-              <Row>
-                <Col
-                  span={12}
-                  style={{ display: "flex", flexDirection: "column" }}
-                >
-                  <EditableField
-                    editable={true}
-                    label="Grade"
-                    value={userInfo.grade}
-                    isEditing={isEditing}
-                    mode="mydirection"
-                    onChange={(e) => handleFieldChange("grade", e.target.value)}
-                  />
-                  <EditableField
-                    editable={true}
-                    label="Nom"
-                    value={userInfo.firstname}
-                    isEditing={isEditing}
-                    mode="mydirection"
-                    onChange={(e) => {
-                      handleFieldChange(
-                        "firstname",
-                        e.target.value || userInfo.firstname,
-                      );
-                    }}
-                  />
-                  <EditableField
-                    editable={true}
-                    label="Prénom"
-                    value={userInfo.lastname}
-                    isEditing={isEditing}
-                    required={false}
-                    mode="mydirection"
-                    onChange={(e) => {
-                      handleFieldChange("lastname", e.target.value);
-                    }}
-                  />
-                  <EditableField
-                    editable={true}
-                    label="Email"
-                    value={userInfo.mail}
-                    isEditing={isEditing}
-                    mode="mydirection"
-                    onChange={(e) => handleFieldChange("mail", e.target.value)}
-                  />{" "}
-                </Col>
-
-                <Col
-                  span={12}
-                  style={{ display: "flex", flexDirection: "column" }}
-                >
-                  <EditableField
-                    label="Direction"
-                    value={userInfo.direction}
-                    isEditing={isEditing}
-                    mode="mydirection"
-                    onChange={(e) =>
-                      handleFieldChange("direction", e.target.value)
-                    }
-                  />
-                  <EditableField
-                    editable={true}
-                    label="Téléphone (WhatsApp)"
-                    value={userInfo.phoneNumbers}
-                    isEditing={isEditing}
-                    mode="mydirection"
-                    onChange={(e) =>
-                      handleFieldChange("phoneNumbers", e.target.value)
-                    }
-                    validate={validatePhoneNumber}
-                  />
-                  <EditableField
-                    editable={true}
-                    label="Fonction"
-                    value={userInfo.fonction}
-                    isEditing={isEditing}
-                    mode="mydirection"
-                    onChange={(e) =>
-                      handleFieldChange("fonction", e.target.value)
-                    }
-                  />
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Card>
-      )}
-
-      {isResponsibleLoading ? (
-        <Spin size="large" />
-      ) : (
-        <Card
-          style={{
-            width: "100%",
-            borderRadius: "8px",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-          }}
-        >
-          <div>
-            {role === "SUPER_ADMIN" ? (
-              <h3>
-                Personnels de la {name} et administrateurs de la MFA-ACTION :
-              </h3>
-            ) : (
-              <h3>Personnels de la {name}</h3>
-            )}
-          </div>
-
-          <Button
-            type="primary"
-            style={buttonStyle}
-            onClick={() => setIsUserModalVisible(true)}
-          >
-            Ajouter un utilisateur
-          </Button>
-
-          {role === "SUPER_ADMIN" && (
             <Button
-              type="primary"
-              style={{ ...buttonStyle, marginLeft: "8px" }}
-              onClick={() => setIsResponsableModalVisible(true)}
+              onClick={!isEditing ? handleToggleEdit : handleSave}
+              style={{ float: "right", marginBottom: "16px" }}
             >
-              Ajouter un responsable direction
+              {isEditing ? "Sauvegarder" : "Modifier"}
             </Button>
-          )}
+            <Row align="middle" gutter={16}>
+              <Col span={4} style={{ textAlign: "center" }}>
+                <Avatar
+                  size={100}
+                  icon={<UserOutlined />}
+                  style={{ backgroundColor: "#87d068" }}
+                />
+              </Col>
+              <Col span={20}>
+                <Row>
+                  <Col
+                    span={12}
+                    style={{ display: "flex", flexDirection: "column" }}
+                  >
+                    <EditableField
+                      editable={true}
+                      label="Grade"
+                      value={userInfo.grade}
+                      isEditing={isEditing}
+                      mode="mydirection"
+                      onChange={(e) =>
+                        handleFieldChange("grade", e.target.value)
+                      }
+                    />
+                    <EditableField
+                      editable={true}
+                      label="Nom"
+                      value={userInfo.firstname}
+                      isEditing={isEditing}
+                      mode="mydirection"
+                      onChange={(e) => {
+                        handleFieldChange(
+                          "firstname",
+                          e.target.value || userInfo.firstname,
+                        );
+                      }}
+                    />
+                    <EditableField
+                      editable={true}
+                      label="Prénom"
+                      value={userInfo.lastname}
+                      isEditing={isEditing}
+                      required={false}
+                      mode="mydirection"
+                      onChange={(e) => {
+                        handleFieldChange("lastname", e.target.value);
+                      }}
+                    />
+                    <EditableField
+                      editable={true}
+                      label="Email"
+                      value={userInfo.mail}
+                      isEditing={isEditing}
+                      mode="mydirection"
+                      onChange={(e) =>
+                        handleFieldChange("mail", e.target.value)
+                      }
+                    />{" "}
+                  </Col>
 
-          <Table
-            columns={columns}
-            dataSource={allDirection}
-            locale={localeSettings}
-            rowKey="id"
-          />
-        </Card>
-      )}
+                  <Col
+                    span={12}
+                    style={{ display: "flex", flexDirection: "column" }}
+                  >
+                    <EditableField
+                      label="Direction"
+                      value={userInfo.direction}
+                      isEditing={isEditing}
+                      mode="mydirection"
+                      onChange={(e) =>
+                        handleFieldChange("direction", e.target.value)
+                      }
+                    />
+                    <EditableField
+                      editable={true}
+                      label="Téléphone (WhatsApp)"
+                      value={userInfo.phoneNumbers}
+                      isEditing={isEditing}
+                      mode="mydirection"
+                      onChange={(e) =>
+                        handleFieldChange("phoneNumbers", e.target.value)
+                      }
+                      validate={validatePhoneNumber}
+                    />
+                    <EditableField
+                      editable={true}
+                      label="Fonction"
+                      value={userInfo.fonction}
+                      isEditing={isEditing}
+                      mode="mydirection"
+                      onChange={(e) =>
+                        handleFieldChange("fonction", e.target.value)
+                      }
+                    />
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          </Card>
+        )}
 
-      {/* Modals */}
-      <AddUserModal
-        visible={isUserModalVisible}
-        onCancel={() => setIsUserModalVisible(false)}
-      />
+        {isResponsibleLoading ? (
+          <Spin size="large" />
+        ) : (
+          <Card
+            style={{
+              width: "100%",
+              borderRadius: "8px",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+            }}
+          >
+            <div>
+              {role === "SUPER_ADMIN" ? (
+                <h3>
+                  Personnels de la {name} et administrateurs de la MFA-ACTION :
+                </h3>
+              ) : (
+                <h3>Personnels de la {name}</h3>
+              )}
+            </div>
 
-      <AddResponsableDirectionModal
-        visible={isResponsableModalVisible}
-        onCancel={() => setIsResponsableModalVisible(false)}
-      />
-
-      {/* Approve User Modal */}
-      {selectedUser && (
-        <Modal
-          visible={isApproveModalVisible}
-          title="Détails de l'utilisateur"
-          onCancel={() => setIsApproveModalVisible(false)}
-          footer={[
-            <Button key="reject" onClick={() => handleApprovalAction(false)}>
-              Refuser
-            </Button>,
             <Button
-              key="approve"
               type="primary"
-              onClick={() => handleApprovalAction(true)}
+              style={buttonStyle}
+              onClick={() => setIsUserModalVisible(true)}
             >
-              Approuver
-            </Button>,
-          ]}
-        >
-          <Typography.Text strong>Nom: </Typography.Text>{" "}
-          {selectedUser.firstName} {selectedUser.lastName}
-          <br />
-          <Typography.Text strong>Grade: </Typography.Text> {selectedUser.grade}
-          <br />
-          <Typography.Text strong>Fonction: </Typography.Text>{" "}
-          {selectedUser.function}
-        </Modal>
-      )}
+              Ajouter un utilisateur
+            </Button>
 
-      {responseData && (
-        <ApprobateUserModal
-          title={`Nouveau Responsable du ${responseData?.directionName}`}
-          visible={responseModalVisible}
-          onCancel={handleCloseModal}
-          responseData={responseData}
-        >
-          <div>
-            <p>Direction : {responseData?.directionName}</p>
-            <p>Identifiant : {responseData?.identity}</p>
-            <p>Mot de passe : {responseData?.password}</p>
-            <p>
-              Les informations d'identification ont été enregistrées dans un
-              fichier Excel nommé
-              <strong>{responseData?.name}.xlsx</strong>.
-            </p>
-          </div>
-        </ApprobateUserModal>
-      )}
-     
+            {role === "SUPER_ADMIN" && (
+              <Button
+                type="primary"
+                style={{ ...buttonStyle, marginLeft: "8px" }}
+                onClick={() => setIsResponsableModalVisible(true)}
+              >
+                Ajouter un responsable direction
+              </Button>
+            )}
 
-    </div>
-   <Note/>
+            <Table
+              columns={columns}
+              dataSource={allDirection}
+              locale={localeSettings}
+              rowKey="id"
+            />
+          </Card>
+        )}
+
+        {/* Modals */}
+        <AddUserModal
+          visible={isUserModalVisible}
+          onCancel={() => setIsUserModalVisible(false)}
+        />
+
+        <AddResponsableDirectionModal
+          visible={isResponsableModalVisible}
+          onCancel={() => setIsResponsableModalVisible(false)}
+        />
+
+        {/* Approve User Modal */}
+        {selectedUser && (
+          <Modal
+            visible={isApproveModalVisible}
+            title="Détails de l'utilisateur"
+            onCancel={() => setIsApproveModalVisible(false)}
+            footer={[
+              <Button key="reject" onClick={() => handleApprovalAction(false)}>
+                Refuser
+              </Button>,
+              <Button
+                key="approve"
+                type="primary"
+                onClick={() => handleApprovalAction(true)}
+              >
+                Approuver
+              </Button>,
+            ]}
+          >
+            <Typography.Text strong>Nom: </Typography.Text>{" "}
+            {selectedUser.firstName} {selectedUser.lastName}
+            <br />
+            <Typography.Text strong>Grade: </Typography.Text>{" "}
+            {selectedUser.grade}
+            <br />
+            <Typography.Text strong>Fonction: </Typography.Text>{" "}
+            {selectedUser.function}
+          </Modal>
+        )}
+
+        {responseData && (
+          <ApprobateUserModal
+            title={`Nouveau Responsable du ${responseData?.directionName}`}
+            visible={responseModalVisible}
+            onCancel={handleCloseModal}
+            responseData={responseData}
+          >
+            <div>
+              <p>Direction : {responseData?.directionName}</p>
+              <p>Identifiant : {responseData?.identity}</p>
+              <p>Mot de passe : {responseData?.password}</p>
+              <p>
+                Les informations d'identification ont été enregistrées dans un
+                fichier Excel nommé
+                <strong>{responseData?.name}.xlsx</strong>.
+              </p>
+            </div>
+          </ApprobateUserModal>
+        )}
+      </div>
+      <Note />
     </>
   );
 };

@@ -46,7 +46,7 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
         lastname: values?.lastname || "",
         email: contactType === "email" ? values.contactValue : null,
         phoneNumbers: contactType === "phone" ? values.contactValue : null,
-        isStaff: isStaff,
+        isStaff: values.isStaff,
         grade: personnelType !== "PC" ? values.grade : "PC",
         function: values.fonction,
         directionId: values.direction,
