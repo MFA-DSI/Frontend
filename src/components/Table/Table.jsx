@@ -265,17 +265,7 @@ const TableComponent = ({
       ];
     } else {
       return [
-        {
-          title: "",
-          dataIndex: "id",
-          render: (id) => (
-            <Checkbox
-              onChange={() => handleSelectChange(id)}
-              checked={selectedIds.includes(id)}
-            />
-          ),
-          width: 50,
-        },
+       
         {
           title: "Missions",
           dataIndex: "description",
