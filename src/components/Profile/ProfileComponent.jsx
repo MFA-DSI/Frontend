@@ -22,6 +22,8 @@ import { useAuthStore } from "../../hooks";
 import { useResponsiblesContext } from "../../providers/context/ReponsibleContext";
 import { EditableField } from "../Modal/Forms/ActivityDetails";
 import { validateEmail } from "../Modal/utils/validateEmail";
+import { Note } from "../Note/Note";
+
 
 const ProfileComponent = () => {
   const {
@@ -251,6 +253,8 @@ const ProfileComponent = () => {
   };
 
   return (
+    <>
+   
     <div style={{ maxWidth: "100%", padding: "24px" }}>
       {isUserLoading ? (
         <Spin size="large" />
@@ -379,7 +383,7 @@ const ProfileComponent = () => {
           <div>
             {role === "SUPER_ADMIN" ? (
               <h3>
-                Personnel de la {name} et administrateurs de la MFA-ACTION :
+                Personnels de la {name} et administrateurs de la MFA-ACTION :
               </h3>
             ) : (
               <h3>Personnels de la {name}</h3>
@@ -472,7 +476,11 @@ const ProfileComponent = () => {
           </div>
         </ApprobateUserModal>
       )}
+     
+
     </div>
+   <Note/>
+    </>
   );
 };
 

@@ -66,7 +66,6 @@ const PerformanceModal = ({
       try {
         await addPerformance(performanceData);
         onCancel();
-       
       } catch (error) {
         message.error(
           "Une erreur s'est produite lors de la modification de cette activité",

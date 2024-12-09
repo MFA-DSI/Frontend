@@ -18,6 +18,7 @@ import {
   dateFormatter,
   formatDateToLocalDate,
 } from "../Modal/utils/dateFormatter";
+import { Note } from "../Note/Note";
 
 const StatisticsComponents = () => {
   const { fetchActualDirectionName } = useDirectionsContext();
@@ -52,9 +53,10 @@ const StatisticsComponents = () => {
   useEffect(() => {}, [directionId, selectedYear, selectedDate, page]);
 
   return (
+    <>
+  
     <div style={{ padding: 20 }}>
       <h2>Statistiques des Activités</h2>
-
 
       {/* Own Direction Statistics */}
       {isStaff === "true" && (
@@ -112,6 +114,8 @@ const StatisticsComponents = () => {
         </Card>
       )}
     </div>
+      <Note/>
+    </>
   );
 };
 

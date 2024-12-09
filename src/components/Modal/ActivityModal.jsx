@@ -112,7 +112,7 @@ const ActivityModal = ({
   };
   const handlePerformanceSave = () => {
     setIsPerformanceModalVisible(false);
-    onSave()
+    onSave();
   };
 
   const handleRecommendationSave = () => {

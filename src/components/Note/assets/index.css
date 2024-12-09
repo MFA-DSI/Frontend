@@ -1,0 +1,13 @@
+.footer-text {
+    position: static;
+    bottom: 0; /* Ajuste la distance du bas si nécessaire */
+    right: 0; /* Ajuste la distance de la droite si nécessaire */
+    font-size: 14px; /* Taille du texte */
+    color: #555; /* Couleur du texte */
+    background-color: rgba(255, 255, 255, 0.8); /* Fond légèrement transparent */
+    padding: 5px 10px; /* Espacement interne */
+    border-radius: 5px; /* Coins arrondis */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Légère ombre */
+    z-index: 1000; /* Assure que l'élément est au-dessus d'autres contenus */
+  }
+  
