@@ -24,6 +24,7 @@ export const useDirections = () => {
   const fetchAllDirections = useQuery({
     queryKey: ["directions"],
     queryFn: fetchDirections,
+    enabled: !!localStorage.getItem("token"),
   });
 
   const fetchServiceByDirectionId = useQuery({
