@@ -1,96 +1,571 @@
-import React, {useState} from "react";
-import {Space, Switch, Table} from "antd";
-import Dropdown from "./Dropdown/DropDown";
-import DropdownComponent from "./Dropdown/DropDown";
+import React, { useEffect, useState } from "react";
+import { Table, Select, Spin, Button, Checkbox, Badge, message } from "antd";
+import { useActivitiesContext } from "../../providers/context/ActivitiesContext";
+import { useMissionContext } from "../../providers/context/MissionsContext";
+import {
+  FilePdfOutlined,
+  FileExcelOutlined,
+  FileWordOutlined,
+} from "@ant-design/icons";
+import ActivityModal from "../Modal/ActivityModal";
+import MissionModal from "../Modal/MissionModal";
 
-const columns = [
-  {
-    title: "Name",
-    dataIndex: "name",
-    width: 150,
-  },
-  {
-    title: "Age",
-    dataIndex: "age",
-    width: 150,
-    sorter: {
-      compare: (a, b) => a.chinese - b.chinese,
-      multiple: 3,
-    },
-  },
-  {
-    title: "Address",
-    dataIndex: "address",
-    sorter: {
-      compare: (a, b) => a.math - b.math,
-      multiple: 2,
-    },
-  },
-];
-const data = [];
-for (let i = 0; i < 100; i++) {
-  data.push({
-    key: i,
-    name: `Edward King ${i}`,
-    age: 32,
-    address: `London, Park Lane no. ${i}`,
+import "./assets/index.css";
+import {
+  extractFirstDateFromString,
+  getWeeksInMonthWithOverflow,
+} from "./utils/DateUtils";
+import { useFilesContext } from "../../providers/context/FilesContext";
+import { toast } from "react-toastify";
+import { useDirectionsContext } from "../../providers";
+import { ActivityTypeSelect } from "../DropDown/ActivityTypeSelect";
+import { DirectionSelect } from "../DropDown/DirectionSelect";
+import { WeeklyFilters } from "../DropDown/WeeklyFilters";
+import { MonthlyFilters } from "../DropDown/MonthlyFilter";
+import { QuarterlyFilters } from "../DropDown/QuarterlyFilter";
+
+const TableComponent = ({
+  mode,
+  dataMission,
+  dataActivities,
+  onFilter,
+  filterData,
+  onReset,
+  filtered,
+}) => {
+  const { isLoading: isActivityLoading } = useActivitiesContext();
+  const {
+    isLoading: isMissionLoading,
+    getMonthMissions,
+    getQuarterlyMissions,
+    getWeeklyMissions,
+    setFilterType,
+  } = useMissionContext();
+
+  const directionId = localStorage.getItem("directionId");
+
+  const { fetchMissionXLS, directionActivitiesToXLS } = useFilesContext();
+  const [activityType, setActivityType] = useState("all");
+  const [dateFilter, setDateFilter] = useState({
+    month: null,
+    week: null,
+    year: null,
+    quarter: null,
   });
-}
 
-const rowSelection = {
-  onChange: (selectedRowKeys, selectedRows) => {
-    console.log(
-      `selectedRowKeys: ${selectedRowKeys}`,
-      "selectedRows: ",
-      selectedRows
-    );
-  },
-  onSelect: (record, selected, selectedRows) => {
-    console.log(record, selected, selectedRows);
-  },
-  onSelectAll: (selected, selectedRows, changeRows) => {
-    console.log(selected, selectedRows, changeRows);
-  },
-};
+  const [selectedActivity, setSelectedActivity] = useState(null);
+  const [selectedMission, setSelectedMission] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isMissionModalVisible, setIsMissionModalVisible] = useState(false);
+  const [pageSize, setPageSize] = useState(20);
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [directionIdFilter, setDirectionIdFilter] = useState("all");
+  const [activityFilterType, setActivityFilterType] = useState("all");
+  const [activityCount, setActivityCount] = useState(0);
+  useEffect(() => {}, [
+    mode,
+    activityFilterType,
+    activityType,
+    directionIdFilter,
+    activityCount,
+  ]);
 
-const TableComponent = () => {
-  const [checkStrictly, setCheckStrictly] = useState(false);
-
-  const onChange = (pagination, filters, sorter, extra) => {
-    console.log("params", pagination, filters, sorter, extra);
+  const showModal = (activity) => {
+    setSelectedActivity(activity);
+    setIsModalVisible(true);
   };
+
+  const showMissionModal = (mission) => {
+    setSelectedMission(mission);
+    setIsMissionModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setSelectedActivity(null);
+  };
+
+  const handleActivitySave = () => {
+    setIsModalVisible(false);
+    setTimeout(() => {
+      setIsModalVisible(true);
+    }, 500);
+  };
+
+  const handleMissionCancel = () => {
+    setIsMissionModalVisible(false);
+    setIsModalVisible(false);
+    setTimeout(() => {
+      setIsModalVisible(true);
+    }, 500);
+    setSelectedMission(null);
+  };
+
+  const handleSelectChange = (id) => {
+    setSelectedIds((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((prevId) => prevId !== id);
+      } else {
+        return [...prev, id];
+      }
+    });
+  };
+
+  const handleExport = async (type) => {
+    if (type === "XLS") {
+      try {
+        // Check if the activity type is "weekly" before calling the appropriate function
+        if (activityType === "weekly") {
+          await directionActivitiesToXLS(selectedIds);
+        } else {
+          await fetchMissionXLS(selectedIds);
+        }
+        setSelectedIds([]);
+      } catch (error) {
+        message.error("une erreur s'est produite");
+      }
+    }
+  };
+
+  const handleFilter = async () => {
+    switch (activityType) {
+      case "weekly":
+        const weeklyParams = {
+          directionId: mode === "mydirection" ? directionId : directionIdFilter,
+          weekStartDate: extractFirstDateFromString(dateFilter.week),
+          page: 1,
+          pageSize: 20,
+        };
+        try {
+          const weeklyResponse = await getWeeklyMissions(weeklyParams);
+
+          onFilter(weeklyResponse);
+        } catch (error) {
+          console.error(
+            "Erreur lors de la récupération des missions hebdomadaires",
+            error,
+          );
+        }
+        break;
+
+      case "monthly":
+        const monthlyParams = {
+          directionId: mode === "mydirection" ? directionId : directionIdFilter,
+          month: dateFilter.month + 1,
+          year: parseInt(dateFilter.year),
+          page: 1,
+          pageSize: 20,
+        };
+        try {
+          console.log(monthlyParams);
+
+          const monthlyResponse = await getMonthMissions(monthlyParams);
+
+          onFilter(monthlyResponse);
+        } catch (error) {
+          console.error(
+            "Erreur lors de la récupération des missions mensuelles",
+            error,
+          );
+        }
+        break;
+
+      case "quarterly":
+        const quarterParams = {
+          directionId: mode === "mydirection" ? directionId : directionIdFilter,
+          quarter: dateFilter.quarter,
+          year: parseInt(dateFilter.year),
+          page: 1,
+          pageSize: 20,
+        };
+        try {
+          const quarterResponse = await getQuarterlyMissions(quarterParams);
+          console.log("response is", quarterResponse);
+          onFilter(quarterResponse);
+        } catch (error) {
+          console.error(
+            "Erreur lors de la récupération des missions trimestrielles",
+            error,
+          );
+        }
+        break;
+
+      default:
+        console.warn("Type d'activité non pris en charge");
+        break;
+    }
+  };
+
+  const onDelete = (content) => {
+    console.log(content);
+  };
+
+  const getColumns = () => {
+    if (activityType === "weekly") {
+      return [
+        {
+          title: "",
+          dataIndex: "id",
+          render: (id) => (
+            <Checkbox
+              onChange={() => handleSelectChange(id)}
+              checked={selectedIds.includes(id)}
+            />
+          ),
+          width: 50,
+        },
+        {
+          title: "Activités Mensuelles Prévues",
+          dataIndex: "description",
+          width: 250,
+        },
+        {
+          title: "Tâches Hebdomadaires",
+          dataIndex: "task",
+          render: (taskList) => (
+            <div>
+              {taskList.length > 0
+                ? taskList.map((task) => (
+                    <div key={task.id}>- {task.description}</div>
+                  ))
+                : "Aucune tâche"}
+            </div>
+          ),
+          width: 250,
+        },
+        {
+          title: "Tâches Prochaine",
+          dataIndex: "nextTask",
+          render: (nextTaskList) => (
+            <div>
+              {nextTaskList.length > 0
+                ? nextTaskList.map((task) => (
+                    <div key={task.id}>- {task.description}</div>
+                  ))
+                : "Aucune tâche prochaine"}
+            </div>
+          ),
+          width: 250,
+        },
+        {
+          title: "Observations",
+          dataIndex: "observation",
+          width: 150,
+        },
+        {
+          title: "Voir Plus",
+          dataIndex: "id",
+          render: (id, record) => (
+            <Button onClick={() => showModal(record)} type="link">
+              Voir Plus
+            </Button>
+          ),
+          width: 100,
+        },
+      ];
+    } else {
+      return [
+        {
+          title: "Missions",
+          dataIndex: "description",
+          render: (description, record) => (
+            <div>
+              {description}{" "}
+              <Badge
+                count={`${record.directionName}/${record.service.acronym}`}
+                style={{ marginLeft: 10 }}
+                color="green"
+              ></Badge>
+            </div>
+          ),
+          width: 240,
+        },
+        {
+          title: "Activités",
+          dataIndex: "activityList",
+          render: (activityList) => {
+            const firstActivity = activityList[0];
+            const otherActivitiesCount = activityList.length - 1;
+            setActivityCount(otherActivitiesCount);
+            return (
+              <div>
+                {firstActivity ? firstActivity.description : "Aucune activité"}
+                {otherActivitiesCount > 0 && (
+                  <Badge
+                    count={`${otherActivitiesCount} autre(s)`}
+                    color={"green"}
+                    style={{ marginLeft: 8 }}
+                  />
+                )}
+              </div>
+            );
+          },
+          width: 240,
+        },
+        {
+          title: "Indicateurs",
+          dataIndex: "activityList",
+          render: (activityList) => {
+            if (!activityList || activityList.length === 0) {
+              return "Aucun indicateur";
+            }
+
+            // Récupérer les réalisations de la première activité
+            const primaryPerformanceRealizations =
+              activityList[0]?.performanceRealization || [];
+
+            // Nombre total d'indicateurs dans toutes les activités
+            const totalIndicators = activityList.reduce((total, activity) => {
+              const performanceRealizations =
+                activity?.performanceRealization || [];
+              return total + performanceRealizations.length;
+            }, 0);
+
+            // Calcul du nombre d'indicateurs restants
+            const otherIndicatorsCount =
+              totalIndicators - primaryPerformanceRealizations.length;
+
+            return (
+              <div>
+                {/* Affichage des indicateurs de la première activité */}
+                {primaryPerformanceRealizations.length > 0
+                  ? primaryPerformanceRealizations[0]?.realization
+                  : "Aucun indicateur"}
+
+                {/* Badge pour le reste des indicateurs */}
+                {otherIndicatorsCount > 0 && (
+                  <Badge
+                    count={`${otherIndicatorsCount} autre(s)`}
+                    color="blue"
+                    style={{ marginLeft: 8 }}
+                  />
+                )}
+              </div>
+            );
+          },
+          width: 250,
+        },
+
+        {
+          title: "Réalisations",
+          dataIndex: "activityList",
+          render: (activityList) => {
+            if (!activityList || activityList.length === 0) {
+              return "Aucune réalisation";
+            }
+
+            // Récupérer les réalisations de la première activité
+            const primaryPerformanceRealizations =
+              activityList[0]?.performanceRealization || [];
+
+            // Nombre total de réalisations
+            const totalRealizations = activityList.reduce((total, activity) => {
+              const performanceRealizations =
+                activity?.performanceRealization || [];
+              return total + performanceRealizations.length;
+            }, 0);
+
+            // Calcul du nombre de réalisations restantes
+            const otherRealizationsCount =
+              totalRealizations - primaryPerformanceRealizations.length;
+
+            return (
+              <div>
+                {/* Affichage de la première réalisation de la première activité */}
+                {primaryPerformanceRealizations.length > 0
+                  ? `${primaryPerformanceRealizations[0]?.indicators}${
+                      primaryPerformanceRealizations[0]?.realizationType ===
+                      "percentage"
+                        ? "%"
+                        : ""
+                    }`
+                  : "Aucune réalisation"}
+
+                {/* Badge pour le reste des réalisations */}
+                {otherRealizationsCount > 0 && (
+                  <Badge
+                    count={`${otherRealizationsCount} autre(s)`}
+                    color="yellow"
+                    style={{ marginLeft: 8 }}
+                  />
+                )}
+              </div>
+            );
+          },
+          width: 150,
+        },
+
+        {
+          title: "Voir Plus",
+          dataIndex: "id",
+          render: (id, record) => (
+            <Button onClick={() => showMissionModal(record)} type="link">
+              Voir Plus
+            </Button>
+          ),
+          width: 100,
+        },
+      ];
+    }
+  };
+
+  if (isMissionLoading || (activityType === "weekly" && isActivityLoading))
+    return <Spin />;
+
+  let dataSource;
+  switch (activityType) {
+    case "weekly":
+      dataSource = dataActivities.map((item) => ({
+        ...item,
+        key: item.id, // Utilisation de `id` comme clé
+      }));
+      break;
+    case "filtered":
+      dataSource = filterData.map((item) => ({
+        ...item,
+        key: item.id || item.uniqueIdentifier, // Utilisation d'une autre clé si nécessaire
+      }));
+      break;
+    default:
+      dataSource = dataMission.map((item) => ({
+        ...item,
+        key: item.id, // Utilisation de `id` comme clé par défaut
+      }));
+  }
+
+  const activityDropdownStyle = { width: 120, marginRight: "5px" };
+
+  const weeklyDropDownStyle = { width: 240, marginRight: "8px" };
+  const monthlyDropDownStyle = { width: 100 };
 
   return (
     <>
-      <div>
-        <DropdownComponent></DropdownComponent>
-        <DropdownComponent></DropdownComponent>
-      </div>
+      <div className="activity-container">
+        <div className="activity-header">
+          <h2 style={{ marginTop: mode === "mydirection" ? 30 : 0 }}>
+            Liste des Activités
+          </h2>
+          <div
+            className="activity-controls"
+            style={{ marginTop: mode === "mydirection" ? 30 : 0 }}
+          >
+            <ActivityTypeSelect
+              style={activityDropdownStyle}
+              activityType={activityType}
+              setActivityType={setActivityType}
+              filtered={filtered}
+              setFilterType={setFilterType}
+              setDateFilter={setDateFilter}
+              setActivityTypeFilter={setActivityFilterType}
+            />
 
-      <Space
-        align="center"
-        style={{
-          marginBottom: 16,
-        }}
-      >
-        <div>
-          <p>Liste des rapports</p>
+            {mode !== "mydirection" && (
+              <DirectionSelect
+                value={directionIdFilter}
+                setDirection={setDirectionIdFilter}
+              />
+            )}
+
+            {activityType === "weekly" && (
+              <WeeklyFilters
+                style={weeklyDropDownStyle}
+                dateFilter={dateFilter}
+                setDateFilter={setDateFilter}
+                getWeeksInMonth={getWeeksInMonthWithOverflow}
+              />
+            )}
+
+            {activityType === "monthly" && (
+              <MonthlyFilters
+                style={monthlyDropDownStyle}
+                dateFilter={dateFilter}
+                setDateFilter={setDateFilter}
+              />
+            )}
+
+            {activityType === "quarterly" && (
+              <QuarterlyFilters
+                style={weeklyDropDownStyle}
+                dateFilter={dateFilter}
+                setDateFilter={setDateFilter}
+              />
+            )}
+
+            <Button
+              type="primary"
+              className="activity-buttons"
+              onClick={() => handleFilter()}
+            >
+              Filtrer
+            </Button>
+
+            <Button
+              type="default"
+              className="activity-buttons"
+              onClick={() => {
+                onReset();
+                setActivityType("all");
+                setDirectionIdFilter("all");
+                setDateFilter({
+                  month: null,
+                  week: null,
+                  year: null,
+                  quarter: null,
+                });
+              }}
+            >
+              Réinitialiser
+            </Button>
+          </div>
         </div>
-      </Space>
-      <Table
-        columns={columns}
-        dataSource={data}
-        rowSelection={{
-          ...rowSelection,
-          checkStrictly,
-        }}
-        pagination={{
-          pageSize: 50,
-        }}
-        scroll={{
-          y: 240,
-        }}
-        onChange={onChange}
+        <div className="activity-export">
+          {selectedIds.length > 0 && (
+            <>
+              <span style={{ marginRight: "8px", alignSelf: "center" }}>
+                Exporter en :
+              </span>
+
+              <Button
+                color="green"
+                icon={<FileExcelOutlined style={{ color: "green" }} />}
+                className="activity-export-button"
+                onClick={() => handleExport("XLS")}
+              >
+                Excel
+              </Button>
+            </>
+          )}
+        </div>
+      </div>
+      <div className="activity-table-container custom-ant-table">
+        <Table
+          columns={getColumns()}
+          dataSource={dataSource}
+          pagination={{
+            pageSize,
+            pageSizeOptions: ["10", "20", "50", "100"],
+          }}
+          scroll={{
+            x: 500, // Largeur minimale pour activer le scroll horizontal
+            y: mode === "all" ? 263.5 : 250, // Scroll vertical existant
+          }}
+          locale={{ emptyText: "Aucune donnée à afficher" }}
+        />
+      </div>
+      <ActivityModal
+        mode={mode}
+        onDelete={onDelete}
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        onSave={handleActivitySave}
+        activity={selectedActivity}
+      />
+      <MissionModal
+        mode={mode}
+        visible={isMissionModalVisible}
+        onDelete={onDelete}
+        onCancel={handleMissionCancel}
+        mission={selectedMission}
       />
     </>
   );

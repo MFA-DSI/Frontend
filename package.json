@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -13,20 +13,30 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.52.2",
-    "antd": "^5.20.1",
+    "antd": "^5.20.5",
     "autoprefixer": "^10.4.20",
     "dotenv": "^16.4.5",
+    "jwt-decode": "^4.0.0",
+    "moment": "^2.30.1",
+    "node-xlsx": "^0.24.0",
+    "nprogress": "^0.2.0",
     "postcss": "^8.4.41",
+    "rc-virtual-list": "^3.14.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-error-boundary": "^4.0.13",
     "react-hook-form": "^7.52.2",
     "react-icons": "^5.3.0",
     "react-router-dom": "^6.26.1",
-    "tailwindcss": "^3.4.10"
+    "react-toastify": "^10.0.5",
+    "react-transition-group": "^4.4.5",
+    "recharts": "^2.13.0",
+    "tailwindcss": "^3.4.10",
+    "zustand": "^4.5.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",
+    "@types/file-saver": "^2.0.7",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
@@ -35,11 +45,13 @@
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",
+    "file-saver": "^2.0.5",
     "globals": "^15.9.0",
     "prettier": "3.3.3",
     "react-query": "^3.39.3",
     "sass": "^1.77.8",
     "typescript": "^5.5.4",
     "vite": "^5.4.0"
-  }
+  },
+  "proxy": "http://192.168.x.x:8080"
 }
