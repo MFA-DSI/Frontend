@@ -47,8 +47,7 @@ const SearchBar: React.FC = () => {
   };
 
   const handleButtonClick = () => {
-    console.log("Search button clicked with value:", searchValue);
-    // You can implement any additional search logic here
+    console.log("handleButtonClick", searchValue);
   };
 
   return (

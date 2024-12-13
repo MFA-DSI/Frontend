@@ -60,7 +60,7 @@ const MainLayout = ({ children }) => {
         ]
       : []),
     {
-      key: "",
+      key: "/",
       icon: <CloudOutlined />,
       label: (
         <span style={{ color: "white", fontFamily: "Quicksand, sans-serif" }}>

@@ -9,7 +9,6 @@ import { DirectionName } from "../../components";
 
 const TableComponent = lazy(() => import("../../components/Table/Table"));
 
-
 const MyDirection = () => {
   const [isAddMissionModalVisible, setIsAddMissionModalVisible] =
     useState(false);

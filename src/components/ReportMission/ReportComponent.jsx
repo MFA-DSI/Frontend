@@ -74,9 +74,6 @@ const ReportGenerator = () => {
 
   // Gérer le refus
   const handleRejectConfirm = () => {
-    console.log("Refusé avec le commentaire :", rejectComment);
-    console.log("ID de la demande refusée :", rejectRecordId);
-
     // Logique pour envoyer le commentaire au backend
 
     handleModalClose(); // Ferme la modal après action
@@ -104,20 +101,15 @@ const ReportGenerator = () => {
     emptyText: "Aucune demande correpondante",
   };
   const handleRemindReport = (record) => {
-    console.log(`Rappeler la demande de rapport pour : ${record.title}`);
     // Ajoutez ici la logique pour relancer la demande de rapport
   };
   const handleExportToExcel = async (record) => {
-    console.log(`Exporter en Excel : ${record}`);
     const params = {
       requestId: record,
     };
     // Appeler la fonction fetchOtherDirectionRepport avant l'exportation
     try {
       const response = await fetchOtherDirectionRepport(params);
-
-      // Ajoutez ici la logique pour exporter le rapport en Excel
-      console.log("Exportation en cours...");
     } catch (error) {
       console.error("Erreur lors de la récupération du rapport :", error);
     }
@@ -187,8 +179,6 @@ const ReportGenerator = () => {
         responsibleId: userId, // Identifiant du responsable
         weekStartDate: date || extractFirstDateFromString(dateFilter.week), // Semaine sélectionnée ou extraite
       };
-
-      console.log("Détails du rapport : ", reportDetails);
 
       try {
         // Appel de l'API pour générer les rapports

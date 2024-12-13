@@ -265,7 +265,6 @@ const TableComponent = ({
       ];
     } else {
       return [
-       
         {
           title: "Missions",
           dataIndex: "description",
@@ -416,13 +415,22 @@ const TableComponent = ({
   let dataSource;
   switch (activityType) {
     case "weekly":
-      dataSource = dataActivities;
+      dataSource = dataActivities.map((item) => ({
+        ...item,
+        key: item.id, // Utilisation de `id` comme clé
+      }));
       break;
     case "filtered":
-      dataSource = filterData;
+      dataSource = filterData.map((item) => ({
+        ...item,
+        key: item.id || item.uniqueIdentifier, // Utilisation d'une autre clé si nécessaire
+      }));
       break;
     default:
-      dataSource = dataMission;
+      dataSource = dataMission.map((item) => ({
+        ...item,
+        key: item.id, // Utilisation de `id` comme clé par défaut
+      }));
   }
 
   const activityDropdownStyle = { width: 120, marginRight: "5px" };

@@ -238,8 +238,6 @@ const AddMissionModal = ({ visible, onCancel }) => {
               <Select
                 value={selectedServices}
                 onChange={(value) => {
-                  console.log(value);
-
                   setSelectedServices(value);
                 }}
                 placeholder="Sélectionner les services rattachés"
