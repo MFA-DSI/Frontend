@@ -80,7 +80,7 @@ const MissionModal = ({ visible, onCancel, mission, onDelete, mode }) => {
     <>
       <Modal
         title="Détails de la Mission"
-        visible={visible}
+        open={visible}
         onCancel={onCancel}
         footer={null}
         width={800}

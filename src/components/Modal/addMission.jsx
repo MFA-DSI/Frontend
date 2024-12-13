@@ -292,7 +292,7 @@ const AddMissionModal = ({ visible, onCancel }) => {
   return (
     <Modal
       title="Ajouter une activité"
-      visible={visible}
+      open={visible}
       onCancel={onCancel}
       width={900}
       footer={[

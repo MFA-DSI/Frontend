@@ -80,7 +80,7 @@ const AddResponsableDirectionModal = ({ visible, onCancel, onSave }) => {
   return (
     <>
       <Modal
-        visible={visible}
+        open={visible}
         title="Ajouter un Responsable de Direction"
         onCancel={() => {
           form.resetFields();

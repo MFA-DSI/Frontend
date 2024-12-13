@@ -30,7 +30,7 @@ const DeleteModal = ({
   return (
     <Modal
       title={`Confirmer la suppression`}
-      visible={visible}
+      open={visible}
       onCancel={() => {
         resetModal();
         onCancel();

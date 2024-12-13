@@ -49,7 +49,7 @@ const RecommendationModal = ({
 
   return (
     <Modal
-      visible={visible}
+      open={visible}
       title={`Recommandation pour l'activité: ${activityTitle}`}
       onCancel={onCancel}
       footer={[

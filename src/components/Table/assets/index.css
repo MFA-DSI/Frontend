@@ -41,7 +41,7 @@
   margin-bottom: 5px;
   background-color: #f9f9f9;
   border-radius: 5px;
-  position: relative;
+  position: static;
 }
 
 .activity-header {

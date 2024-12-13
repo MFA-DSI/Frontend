@@ -68,7 +68,7 @@ const AddUserModal = ({ visible, onCancel }) => {
 
   return (
     <Modal
-      visible={visible}
+      open={visible}
       title="Ajouter un utilisateur"
       onCancel={() => {
         form.resetFields();

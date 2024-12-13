@@ -17,7 +17,7 @@ const ApprobateUserModal = ({
   return (
     <Modal
       title={title}
-      visible={visible}
+      open={visible}
       onCancel={onCancel}
       footer={[
         <Button key="export" onClick={handleExport} disabled={!responseData}>

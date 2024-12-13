@@ -78,7 +78,7 @@ const TaskModal = ({
   return (
     <Modal
       title={task ? `Modifier la ${title}` : `Ajouter une ${title}`}
-      visible={visible}
+      open={visible}
       onCancel={onCancel}
       onOk={handleSave}
       okText={task ? "Sauvegarder" : "Ajouter"}

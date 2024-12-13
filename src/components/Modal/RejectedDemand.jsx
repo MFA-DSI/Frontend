@@ -30,7 +30,7 @@ const DeleteRequestModal = ({ visible, onCancel, onConfirm, value }) => {
   return (
     <Modal
       title="Refuser la demande"
-      visible={visible}
+      open={visible}
       onCancel={onCancel}
       onOk={handleConfirm} // Remplacez par handleConfirm
       okText="Envoyer"
