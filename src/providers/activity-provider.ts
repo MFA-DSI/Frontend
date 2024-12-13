@@ -52,7 +52,7 @@ export interface FetchOwnDirectionStatisticsParams {
   pageSize?: number;
 }
 
-const BASE_URL = environment.apiBaseUrl || "http://localhost:8080";
+const BASE_URL = environment.apiBaseUrl || "";
 
 /**
  * Centralise la gestion des erreurs pour les réponses HTTP.

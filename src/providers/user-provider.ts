@@ -1,6 +1,5 @@
 import { User } from "../types/User";
 import { handleAxiosError } from "../lib/handleAxiosError";
-import { Direction } from "readline";
 import { DirectionName } from "../components";
 import { message } from "antd";
 

@@ -537,7 +537,10 @@ const TableComponent = ({
             pageSize,
             pageSizeOptions: ["10", "20", "50", "100"],
           }}
-          scroll={mode === "all" ? { y: 263.5 } : { y: 250 }}
+          scroll={{
+            x: 500, // Largeur minimale pour activer le scroll horizontal
+            y: mode === "all" ? 263.5 : 250, // Scroll vertical existant
+          }}
           locale={{ emptyText: "Aucune donnée à afficher" }}
         />
       </div>
